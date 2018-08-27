@@ -4,7 +4,20 @@
   <h2>Login</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+      <label for="{{ form.username.auto_id }}">Email:</label>
+      <input type="text"
+             name="{{ form.username.html_name }}"
+             id="{{ form.username.auto_id }}"
+             autofocus
+             required
+      >
+
+      <label for="{{ form.password.auto_id }}">Password:</label>
+      <input type="password"
+             name="{{ form.password.html_name }}"
+             id="{{ form.password.auto_id }}"
+             required
+      >
     <button type="submit">Login</button>
   </form>
 {% endblock %}

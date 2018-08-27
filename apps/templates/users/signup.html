@@ -4,7 +4,26 @@
   <h2>Register</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <label for="{{ form.email.auto_id }}">Email:</label>
+    <input type="text"
+           name="{{ form.email.html_name }}"
+           id="{{ form.email.auto_id }}"
+           autofocus
+           required
+    >
+
+    <label for="{{ form.password1.auto_id }}">Password1:</label>
+    <input type="password"
+           name="{{ form.password1.html_name }}"
+           id="{{ form.password1.auto_id }}"
+           required
+    >
+    <label for="{{ form.password2.auto_id }}">Password2:</label>
+    <input type="password"
+           name="{{ form.password2.html_name }}"
+           id="{{ form.password2.auto_id }}"
+           required
+    >
     <button type="submit">Register</button>
   </form>
 {% endblock %}
