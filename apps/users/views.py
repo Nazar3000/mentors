@@ -25,7 +25,7 @@ class SignUpStep0View(FormView):
 class SignUpStep1View(CreateView):
     template_name = 'users/signup_step1.html'
     form_class = SignUpStep1Form
-    success_url = reverse_lazy('users:unregistered_guideline')  # TODO: specify correct success_url
+    success_url = reverse_lazy('users:signup_step2')
 
     def form_valid(self, form):
         user = form.save()
@@ -36,6 +36,10 @@ class SignUpStep1View(CreateView):
         else:
             return redirect('users:signup_step0')
         return HttpResponseRedirect(self.get_success_url())
+
+
+class SignUpStep2View(TemplateView):
+    template_name = 'users/signup_step2.html'
 
 
 class UnregisteredGuidelineView(TemplateView):
