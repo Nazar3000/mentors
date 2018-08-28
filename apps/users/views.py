@@ -2,10 +2,10 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, CreateView
 
 from .models import Mentor
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form, VolunteerForm
 
 
 class UnregisteredGuidelineView(TemplateView):
@@ -47,6 +47,7 @@ class SignUpStep2View(TemplateView):
 
 
 class SignUpStep3View(FormView):
+    # TODO: complete this view
     template_name = 'users/signup_step3.html'
     form_class = SignUpStep3Form
     success_url = '/'
@@ -54,3 +55,10 @@ class SignUpStep3View(FormView):
 
 class MentorRoadmap(TemplateView):
     template_name = 'users/mentor_roadmap.html'
+
+
+class VolunteerSignUpView(CreateView):
+    # TODO: find what to do with absent password fields
+    template_name = 'users/volunteer_signup.html'
+    form_class = VolunteerForm
+    success_url = '/'

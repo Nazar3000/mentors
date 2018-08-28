@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .constants import UserTypes
-from .models import Mentor
+from .models import Mentor, Volunteer
 
 User = get_user_model()
 
@@ -44,3 +44,21 @@ class SignUpStep1Form(forms.ModelForm):
 
 class SignUpStep3Form(forms.Form):
     pass
+
+
+class VolunteerForm(forms.ModelForm):
+    class Meta:
+        model = Volunteer
+        fields = (
+            'first_name',
+            'last_name',
+            'phone_number',
+            'city',
+            'mentoring_popularization',
+            'master_classes_names',
+            'profession_name',
+            'profession_company_name',
+            'profession_company_address',
+            'financial_support',
+            'another_assistance_ways_names',
+        )

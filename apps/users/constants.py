@@ -5,7 +5,7 @@ class UserTypes:
     PUBLIC_SERVICE = 3
     INSTITUTION = 4
     CHILD_SERVICE = 5
-    PROJECT_ASSISTANT = 6
+    VOLUNTEER = 6
 
     USER_TYPE_CHOICES = (
         (GOVERN_USER, 'govern_user'),
@@ -14,5 +14,5 @@ class UserTypes:
         (PUBLIC_SERVICE, 'public_service'),
         (INSTITUTION, 'institution'),
         (CHILD_SERVICE, 'child_service'),
-        (PROJECT_ASSISTANT, 'project_assistant'),
+        (VOLUNTEER, 'volunteer'),
     )

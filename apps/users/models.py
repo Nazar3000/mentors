@@ -86,5 +86,24 @@ class ChildService(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
 
 
-class ProjectAssistant(models.Model):
+class Volunteer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    first_name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
+
+    phone_regex = RegexValidator(regex=r'\+?1?\d$')
+    phone_number = models.CharField(max_length=17, validators=[phone_regex])
+
+    city = models.CharField(max_length=64)
+
+    mentoring_popularization = models.BooleanField(default=True)
+
+    master_classes_names = models.CharField(max_length=512)
+
+    profession_name = models.CharField(max_length=128)
+    profession_company_name = models.CharField(max_length=128)
+    profession_company_address = models.CharField(max_length=256)
+
+    financial_support = models.BooleanField(default=True)
+
+    another_assistance_ways_names = models.CharField(max_length=512)
