@@ -4,10 +4,19 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+from .constants import UserTypes
+from .models import Mentor
+
 User = get_user_model()
 
 
-class SignUpForm(forms.ModelForm):
+class SignUpStep0Form(forms.ModelForm):
+    class Meta:
+        model = Mentor
+        fields = ('first_name', 'middle_name', 'phone_number',)
+
+
+class SignUpStep1Form(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput)
 
@@ -28,5 +37,6 @@ class SignUpForm(forms.ModelForm):
         user = super().save(commit)
         user.set_password(self.cleaned_data['password1'])
         if commit:
+            user.user_type = UserTypes.MENTOR
             user.save()
         return user

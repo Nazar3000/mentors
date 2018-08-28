@@ -2,8 +2,11 @@ import uuid
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from .constants import UserTypes
 
 
 class UserManager(BaseUserManager):
@@ -47,6 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
+    user_type = models.PositiveSmallIntegerField(choices=UserTypes.USER_TYPE_CHOICES)
 
     USERNAME_FIELD = 'email'
 
@@ -59,6 +63,11 @@ class GovernUser(models.Model):
 
 class Mentor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    first_name = models.CharField(max_length=32)
+    middle_name = models.CharField(max_length=32)
+
+    phone_regex = RegexValidator(regex=r'^\+?1?\d$')
+    phone_number = models.CharField(max_length=17, validators=[phone_regex])
 
 
 class SocialServiceCenter(models.Model):

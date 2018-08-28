@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+  <h2>Register Step0</h2>
+  <form method="post">
+    {% csrf_token %}
+    <label for="{{ form.first_name.auto_id }}">Email:</label>
+    <input type="text"
+           name="{{ form.first_name.html_name }}"
+           id="{{ form.first_name.auto_id }}"
+           autofocus
+           required
+    >
+
+    <label for="{{ form.middle_name.auto_id }}">Password1:</label>
+    <input type="text"
+           name="{{ form.middle_name.html_name }}"
+           id="{{ form.middle_name.auto_id }}"
+           required
+    >
+    <label for="{{ form.phone_number.auto_id }}">Password2:</label>
+    <input type="password"
+           name="{{ form.phone_number.html_name }}"
+           id="{{ form.phone_number.auto_id }}"
+           required
+    >
+    <button type="submit">{% trans 'Registration' %}</button>
+  </form>
+{% endblock %}
