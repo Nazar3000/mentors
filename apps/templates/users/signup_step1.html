@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
   <h2>Register Step1</h2>
@@ -24,6 +25,6 @@
            id="{{ form.password2.auto_id }}"
            required
     >
-    <button type="submit">Register</button>
+    <button type="submit">{% trans 'Next' %}</button>
   </form>
 {% endblock %}

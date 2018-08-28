@@ -5,7 +5,6 @@ from django.contrib.auth import views as auth_views
 
 
 app_name = 'users'
-
 urlpatterns = [
     path('login/',
          views.SignInView.as_view(),
@@ -15,6 +14,8 @@ urlpatterns = [
          auth_views.LogoutView.as_view(),
          {'next_page': 'login'},
          name='logout'),
-    path('register/', views.SignUpStep1View.as_view(), name='signup_step1'),
+    path('register/', views.SignUpStep0View.as_view(), name='signup_step0'),
+    path('register-step1/', views.SignUpStep1View.as_view(), name='signup_step1'),
     path('', views.UnregisteredGuidelineView.as_view(), name='unregistered_guideline')
 ]
+

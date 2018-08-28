@@ -34,9 +34,9 @@ class SignUpStep1Form(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-        user = super().save(commit)
-        user.set_password(self.cleaned_data['password1'])
+        user = super().save(commit=False)
         if commit:
+            user.set_password(self.cleaned_data['password1'])
             user.user_type = UserTypes.MENTOR
             user.save()
         return user

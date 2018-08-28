@@ -66,7 +66,7 @@ class Mentor(models.Model):
     first_name = models.CharField(max_length=32)
     middle_name = models.CharField(max_length=32)
 
-    phone_regex = RegexValidator(regex=r'^\+?1?\d$')
+    phone_regex = RegexValidator(regex=r'\+?1?\d$')
     phone_number = models.CharField(max_length=17, validators=[phone_regex])
 
 
