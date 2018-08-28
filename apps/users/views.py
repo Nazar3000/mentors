@@ -2,10 +2,14 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, TemplateView, FormView
+from django.views.generic import TemplateView, FormView
 
 from .models import Mentor
-from .forms import SignUpStep0Form, SignUpStep1Form
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
+
+
+class UnregisteredGuidelineView(TemplateView):
+    template_name = 'users/guideline.html'
 
 
 class SignInView(LoginView):
@@ -22,7 +26,7 @@ class SignUpStep0View(FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class SignUpStep1View(CreateView):
+class SignUpStep1View(FormView):
     template_name = 'users/signup_step1.html'
     form_class = SignUpStep1Form
     success_url = reverse_lazy('users:signup_step2')
@@ -42,5 +46,11 @@ class SignUpStep2View(TemplateView):
     template_name = 'users/signup_step2.html'
 
 
-class UnregisteredGuidelineView(TemplateView):
-    template_name = 'users/guideline.html'
+class SignUpStep3View(FormView):
+    template_name = 'users/signup_step3.html'
+    form_class = SignUpStep3Form
+    success_url = '/'
+
+
+class MentorRoadmap(TemplateView):
+    template_name = 'users/mentor_roadmap.html'

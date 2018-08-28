@@ -40,3 +40,7 @@ class SignUpStep1Form(forms.ModelForm):
             user.user_type = UserTypes.MENTOR
             user.save()
         return user
+
+
+class SignUpStep3Form(forms.Form):
+    pass
