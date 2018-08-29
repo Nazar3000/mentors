@@ -11,9 +11,11 @@ User = get_user_model()
 
 
 class SignUpStep0Form(forms.ModelForm):
+    email = forms.EmailField()
+
     class Meta:
         model = Mentor
-        fields = ('first_name', 'middle_name', 'phone_number',)
+        fields = ('first_name', 'last_name', 'phone_number',)
 
 
 class SignUpStep1Form(forms.ModelForm):

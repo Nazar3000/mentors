@@ -64,7 +64,7 @@ class GovernUser(models.Model):
 class Mentor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=32)
-    middle_name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
 
     phone_regex = RegexValidator(regex=r'\+?1?\d$')
     phone_number = models.CharField(max_length=17, validators=[phone_regex])

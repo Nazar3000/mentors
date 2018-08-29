@@ -10,7 +10,7 @@ from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 class SignUpStep0View(FormView):
     template_name = 'mentors/signup_step0.html'
     form_class = SignUpStep0Form
-    success_url = reverse_lazy('users:signup_step1')
+    success_url = reverse_lazy('mentors:signup_step1')
 
     def form_valid(self, form):
         self.request.session['mentor_data'] = form.cleaned_data
@@ -20,7 +20,14 @@ class SignUpStep0View(FormView):
 class SignUpStep1View(FormView):
     template_name = 'mentors/signup_step1.html'
     form_class = SignUpStep1Form
-    success_url = reverse_lazy('users:signup_step2')
+    success_url = reverse_lazy('mentors:signup_step2')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        if 'mentor_data' in self.request.session.keys():
+            print(self.request.session['mentor_data']['email'])
+            initial['email'] = self.request.session['mentor_data']['email']
+        return initial
 
     def form_valid(self, form):
         user = form.save()
@@ -29,7 +36,7 @@ class SignUpStep1View(FormView):
             mentor.user = user
             mentor.save()
         else:
-            return redirect('users:signup_step0')
+            return redirect('mentors:signup_step0')
         return HttpResponseRedirect(self.get_success_url())
 
 

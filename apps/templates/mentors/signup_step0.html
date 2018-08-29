@@ -12,11 +12,16 @@
            autofocus
            required
     >
-
-    <label for="{{ form.middle_name.auto_id }}">{% trans 'Middle Name' %}</label>
+    <label for="{{ form.last_name.auto_id }}">{% trans 'Last Name' %}</label>
     <input type="text"
-           name="{{ form.middle_name.html_name }}"
-           id="{{ form.middle_name.auto_id }}"
+           name="{{ form.last_name.html_name }}"
+           id="{{ form.last_name.auto_id }}"
+           required
+    >
+    <label for="{{ form.email.auto_id }}">Email</label>
+    <input type="text"
+           name="{{ form.email.html_name }}"
+           id="{{ form.email.auto_id }}"
            required
     >
     <label for="{{ form.phone_number.auto_id }}">{% trans 'Phone Number' %}</label>
