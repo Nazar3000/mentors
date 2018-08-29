@@ -17,6 +17,12 @@ class SignUpStep0Form(forms.ModelForm):
         model = Mentor
         fields = ('first_name', 'last_name', 'phone_number',)
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(_("User with given email is already registered."))
+        return email
+
 
 class SignUpStep1Form(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput)

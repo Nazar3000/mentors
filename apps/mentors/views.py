@@ -1,8 +1,11 @@
+import rstr
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView, DetailView
 
+from .models import MentorLicenceKey
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -25,8 +28,8 @@ class SignUpStep1View(FormView):
     def get_initial(self):
         initial = super().get_initial()
         if 'mentor_data' in self.request.session.keys():
-            print(self.request.session['mentor_data']['email'])
             initial['email'] = self.request.session['mentor_data']['email']
+            del self.request.session['mentor_data']['email']
         return initial
 
     def form_valid(self, form):
@@ -35,6 +38,10 @@ class SignUpStep1View(FormView):
             mentor = Mentor(**self.request.session['mentor_data'])
             mentor.user = user
             mentor.save()
+
+            # TODO: ask how to relate this key with specific SocialServiceCenter
+            licence_key = MentorLicenceKey.objects\
+                .create(mentor=mentor, key=rstr.xeger(MentorLicenceKey.key_validator.regex))
         else:
             return redirect('mentors:signup_step0')
         return HttpResponseRedirect(self.get_success_url())

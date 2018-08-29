@@ -5,27 +5,42 @@
   <h2>Register Step1</h2>
   <form method="post">
     {% csrf_token %}
-    <label for="{{ form.email.auto_id }}">Email:</label>
-    <input type="text"
-           name="{{ form.email.html_name }}"
-           id="{{ form.email.auto_id }}"
-           value="{{ form.email.value }}"
-           autofocus
-           required
-    >
-
-    <label for="{{ form.password1.auto_id }}">Password1:</label>
-    <input type="password"
-           name="{{ form.password1.html_name }}"
-           id="{{ form.password1.auto_id }}"
-           required
-    >
-    <label for="{{ form.password2.auto_id }}">Password2:</label>
-    <input type="password"
-           name="{{ form.password2.html_name }}"
-           id="{{ form.password2.auto_id }}"
-           required
-    >
+    {% if form.non_field_errors %}
+      <div class="non-field-errors">
+        {% for err in form.non_field_errors %}
+          <p class="form-error">{{ err }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <div>
+        <label for="{{ form.email.auto_id }}">Email:</label>
+        <input type="text"
+               name="{{ form.email.html_name }}"
+               id="{{ form.email.auto_id }}"
+               value="{{ form.email.value }}"
+               autofocus
+               required
+        >
+        {{ form.email.errors }}
+    </div>
+    <div>
+        <label for="{{ form.password1.auto_id }}">Password1:</label>
+        <input type="password"
+               name="{{ form.password1.html_name }}"
+               id="{{ form.password1.auto_id }}"
+               required
+        >
+        {{ form.password1.errors }}
+    </div>
+    <div>
+        <label for="{{ form.password2.auto_id }}">Password2:</label>
+        <input type="password"
+               name="{{ form.password2.html_name }}"
+               id="{{ form.password2.auto_id }}"
+               required
+        >
+        {{ form.password2.errors }}
+    </div>
     <button type="submit">{% trans 'Next' %}</button>
   </form>
 {% endblock %}

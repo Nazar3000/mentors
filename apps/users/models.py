@@ -72,6 +72,10 @@ class Mentor(models.Model):
 
 class SocialServiceCenter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    mentor_license_key = models.ForeignKey(
+        to='mentors.MentorLicenceKey',
+        on_delete=models.SET_NULL,
+        null=True)
 
 
 class PublicService(models.Model):

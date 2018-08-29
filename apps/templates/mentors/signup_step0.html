@@ -5,31 +5,52 @@
   <h2>Register Step0</h2>
   <form method="post">
     {% csrf_token %}
-    <label for="{{ form.first_name.auto_id }}">{% trans 'First Name' %}</label>
-    <input type="text"
-           name="{{ form.first_name.html_name }}"
-           id="{{ form.first_name.auto_id }}"
-           autofocus
-           required
-    >
-    <label for="{{ form.last_name.auto_id }}">{% trans 'Last Name' %}</label>
-    <input type="text"
-           name="{{ form.last_name.html_name }}"
-           id="{{ form.last_name.auto_id }}"
-           required
-    >
-    <label for="{{ form.email.auto_id }}">Email</label>
-    <input type="text"
-           name="{{ form.email.html_name }}"
-           id="{{ form.email.auto_id }}"
-           required
-    >
-    <label for="{{ form.phone_number.auto_id }}">{% trans 'Phone Number' %}</label>
-    <input type="text"
-           name="{{ form.phone_number.html_name }}"
-           id="{{ form.phone_number.auto_id }}"
-           required
-    >
+      {% if form.non_field_errors %}
+        <div class="non-field-errors">
+          {% for err in form.non_field_errors %}
+            <p class="form-error">{{ err }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div>
+          <label for="{{ form.first_name.auto_id }}">{% trans 'First Name' %}</label>
+          <input type="text"
+                 name="{{ form.first_name.html_name }}"
+                 id="{{ form.first_name.auto_id }}"
+                 autofocus
+                 required
+          >
+          {{ form.first_name.errors }}
+      </div>
+
+    <div>
+        <label for="{{ form.last_name.auto_id }}">{% trans 'Last Name' %}</label>
+        <input type="text"
+               name="{{ form.last_name.html_name }}"
+               id="{{ form.last_name.auto_id }}"
+               required
+        >
+        {{ form.last_name.errors }}
+    </div>
+    <div>
+        <label for="{{ form.email.auto_id }}">Email</label>
+        <input type="text"
+               name="{{ form.email.html_name }}"
+               id="{{ form.email.auto_id }}"
+               required
+        >
+        {{ form.email.errors }}
+    </div>
+    <div>
+        <label for="{{ form.phone_number.auto_id }}">{% trans 'Phone Number' %}</label>
+        <input type="text"
+               name="{{ form.phone_number.html_name }}"
+               id="{{ form.phone_number.auto_id }}"
+               required
+        >
+        {{ form.phone_number.errors }}
+    </div>
+
     <button type="submit">{% trans 'Registration' %}</button>
   </form>
 {% endblock %}
