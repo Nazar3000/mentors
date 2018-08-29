@@ -1,0 +1,14 @@
+from django.urls import path
+
+from . import views
+
+app_name = 'mentors'
+
+urlpatterns = [
+    path('register/', views.SignUpStep0View.as_view(), name='signup_step0'),
+    path('register-step1/', views.SignUpStep1View.as_view(), name='signup_step1'),
+    path('register-step2/', views.SignUpStep2View.as_view(), name='signup_step2'),
+    path('register-step3/', views.SignUpStep3View.as_view(), name='signup_step3'),
+    path('roadmap/', views.MentorRoadmap.as_view(), name='mentor_roadmap'),
+    path('office/<uuid:pk>/', views.MentorOfficeView.as_view(), name='volunteer_signup'),
+]

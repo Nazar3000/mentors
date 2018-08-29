@@ -68,6 +68,7 @@ target/
 
 local_settings.py
 *.sh
+env_vars.json
 node_modules
 
 apps/staticfiles
