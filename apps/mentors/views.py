@@ -14,6 +14,9 @@ from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
 
 class SignUpStepsAccessMixin(AccessMixin):
+    """
+    Mixin to forbid users to skip registration steps.
+    """
 
     def test_session_mentor_data(self):
         return ('mentor_data' in self.request.session.keys()) or self.request.user.is_authenticated
@@ -79,7 +82,7 @@ class MentorRoadmap(TemplateView):
 
 
 class MentorOfficeView(UserPassesTestMixin, DetailView):
-    # TODO: complete this view
+    # TODO: ask if we're going to be able to watch another people profiles
     template_name = 'mentors/mentor_office.html'
     model = Mentor
 

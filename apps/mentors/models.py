@@ -1,6 +1,8 @@
 from django.core.validators import RegexValidator
 from django.db import models
 
+from .constants import Regions
+
 
 class MentorLicenceKey(models.Model):
     key_validator = RegexValidator(r'[a-zA-z]{2}\d{3}[a-zA-z]{3}\d{2}')
@@ -22,7 +24,7 @@ class Mentoree(models.Model):
         on_delete=models.SET_NULL,
         null=True)
     address = models.CharField(max_length=128)
-    profile_image = models.ImageField(upload_to='mentorees/profile_images')
+    profile_image = models.ImageField(upload_to='mentorees/profile')
 
     hygiene = models.CharField(max_length=64)
     will_help_to_became_independent = models.CharField(max_length=64)
@@ -36,7 +38,7 @@ class Mentoree(models.Model):
 class StoryImage(models.Model):
     # TODO: find out how many images should be available to upload
     mentoree = models.ForeignKey(to=Mentoree, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='mentorees/story_images')
+    image = models.ImageField(upload_to='mentorees/story')
 
 
 class Meeting(models.Model):
@@ -50,4 +52,18 @@ class Meeting(models.Model):
 class MeetingImage(models.Model):
     # TODO: find out how many images should be available to upload
     meeting = models.ForeignKey(to=Meeting, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='mentorees/meeting_images')
+    image = models.ImageField(upload_to='mentorees/meeting')
+
+
+class Post(models.Model):
+    author = models.OneToOneField(to='users.Mentor', on_delete=models.CASCADE)
+    region = models.CharField(max_length=16, choices=Regions.choices())
+    image = models.ImageField(upload_to='mentorees/post')
+    likes = models.PositiveSmallIntegerField(default=0)
+
+
+class PostComment(models.Model):
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='comments')
+    datetime = models.DateTimeField(auto_now=True)
+    author = models.OneToOneField(to='users.Mentor', on_delete=models.CASCADE)
+    content = models.TextField()
