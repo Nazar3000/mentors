@@ -52,13 +52,12 @@ class SignUpStep1View(SignUpStepsAccessMixin, FormView):
         if 'mentor_data' in self.request.session.keys():
             mentor = Mentor(**self.request.session['mentor_data'])
             mentor.user = user
+            mentor.licence_key = MentorLicenceKey.objects\
+                .create(mentor=mentor, key=rstr.xeger(MentorLicenceKey.key_validator.regex))
             mentor.save()
 
             login(self.request, user)
 
-            # TODO: ask how to relate this key with specific SocialServiceCenter
-            licence_key = MentorLicenceKey.objects\
-                .create(mentor=mentor, key=rstr.xeger(MentorLicenceKey.key_validator.regex))
         else:
             return redirect('mentors:signup_step0')
         return HttpResponseRedirect(self.get_success_url())

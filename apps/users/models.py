@@ -69,6 +69,10 @@ class Mentor(models.Model):
     phone_regex = RegexValidator(regex=r'\+?1?\d$')
     phone_number = models.CharField(max_length=17, validators=[phone_regex])
     mentoree = models.OneToOneField(to='mentors.Mentoree', on_delete=models.SET_NULL, null=True)
+    licence_key = models.OneToOneField(
+        to='mentors.MentorLicenceKey',
+        on_delete=models.SET_NULL,
+        null=True)
 
 
 class SocialServiceCenter(models.Model):
