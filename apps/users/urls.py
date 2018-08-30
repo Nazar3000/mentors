@@ -12,7 +12,6 @@ urlpatterns = [
          name='signin'),
     path('logout/',
          auth_views.LogoutView.as_view(),
-         {'next_page': 'login'},
          name='logout'),
     path('', views.UnregisteredGuidelineView.as_view(), name='unregistered_guideline')
 ]

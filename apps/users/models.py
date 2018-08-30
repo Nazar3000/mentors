@@ -83,15 +83,17 @@ class PublicService(models.Model):
 
 
 class Institution(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    pass
 
 
 class ChildService(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    pass
 
 
 class Volunteer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
 
