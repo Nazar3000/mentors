@@ -42,6 +42,10 @@ class StoryImage(models.Model):
 
 
 class Meeting(models.Model):
+    performer = models.ForeignKey(
+        to='users.Mentor',
+        on_delete=models.CASCADE,
+        related_name='meetings')
     title = models.CharField(max_length=16)
     date = models.DateField()
     description = models.TextField()
@@ -56,7 +60,11 @@ class MeetingImage(models.Model):
 
 
 class Post(models.Model):
-    author = models.OneToOneField(to='users.Mentor', on_delete=models.CASCADE)
+    author = models.ForeignKey(to='users.Mentor', on_delete=models.CASCADE)
+    related_user = models.ForeignKey(
+        to='users.Mentor',
+        on_delete=models.CASCADE,
+        related_name='posts')
     region = models.CharField(max_length=16, choices=Regions.choices())
     image = models.ImageField(upload_to='mentorees/post')
     likes = models.PositiveSmallIntegerField(default=0)
@@ -65,5 +73,5 @@ class Post(models.Model):
 class PostComment(models.Model):
     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name='comments')
     datetime = models.DateTimeField(auto_now=True)
-    author = models.OneToOneField(to='users.Mentor', on_delete=models.CASCADE)
+    author = models.ForeignKey(to='users.Mentor', on_delete=models.CASCADE)
     content = models.TextField()

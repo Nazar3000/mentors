@@ -3,7 +3,7 @@ class UserTypes:
     MENTOR = 1
     SOCIAL_SERVICE_CENTER = 2
     PUBLIC_SERVICE = 3
-    INSTITUTION = 4
+    ORGANIZATION = 4
     CHILD_SERVICE = 5
     VOLUNTEER = 6
 
@@ -12,7 +12,7 @@ class UserTypes:
         (MENTOR, 'mentor'),
         (SOCIAL_SERVICE_CENTER, 'social_service_center'),
         (PUBLIC_SERVICE, 'public_service'),
-        (INSTITUTION, 'institution'),
+        (ORGANIZATION, 'organization'),
         (CHILD_SERVICE, 'child_service'),
         (VOLUNTEER, 'volunteer'),
     )

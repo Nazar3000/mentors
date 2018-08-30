@@ -3,7 +3,6 @@ from enum import Enum
 
 class Regions(Enum):
     # TODO: complete the list of regions
-    UKRAINE = 'Ukraine'
     KYIV = 'Kyiv'
     ZHYTOMYR = 'Zhytomyr'
 

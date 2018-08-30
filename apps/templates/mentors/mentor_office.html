@@ -3,7 +3,21 @@
 
 {% block content %}
     <div class="child-data">
-        Child: {{ mentor.mentoree }} <br>
+        Child: <br>
+        {{ mentor.mentoree }} <br>
         <a href="#">{% trans 'Detail' %}</a>
+    </div>
+    <div class="posts-data">
+        Posts: <br>
+        {% for post in mentor.posts.all %}
+            {{ post }} <br>
+            {% for comment in post.comments.all %}
+                {{ comment }}
+            {% endfor %}
+            <br>
+        {% endfor %}
+    </div>
+    <div class="meetings-data">
+        {{ mentor.meetings.all }}
     </div>
 {% endblock %}

@@ -17,7 +17,6 @@ class SignUpStepsAccessMixin(AccessMixin):
     """
     Mixin to forbid users to skip registration steps.
     """
-
     def test_session_mentor_data(self):
         return ('mentor_data' in self.request.session.keys()) or self.request.user.is_authenticated
 
