@@ -5,7 +5,7 @@
     <div class="child-data">
         Child: <br>
         {{ mentor.mentoree }} <br>
-        <a href="#">{% trans 'Detail' %}</a>
+        <a href="{% url 'mentors:mentoree_detail' pk=mentor.mentoree.id %}">{% trans 'Detail' %}</a>
     </div>
     <div class="posts-data">
         Posts: <br>

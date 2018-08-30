@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView, DetailView
 
 from users.constants import UserTypes
-from .models import MentorLicenceKey
+from .models import MentorLicenceKey, Mentoree
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -80,10 +80,26 @@ class MentorRoadmap(TemplateView):
     template_name = 'mentors/mentor_roadmap.html'
 
 
-class MentorOfficeView(UserPassesTestMixin, DetailView):
+class CheckIfUserIsMentorMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.user_type == UserTypes.MENTOR
+
+
+class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
     # TODO: ask if we're going to be able to watch another people profiles
     template_name = 'mentors/mentor_office.html'
     model = Mentor
 
-    def test_func(self):
-        return self.request.user.user_type == UserTypes.MENTOR
+
+class MentoreeDetailView(CheckIfUserIsMentorMixin, AccessMixin, DetailView):
+    template_name = 'mentors/mentoree_detail.html'
+    model = Mentoree
+
+    def test_allowed_to_watch(self):
+        return Mentor.objects.get(pk=self.request.user.pk).mentoree == self.get_object()
+
+    def dispatch(self, request, *args, **kwargs):
+        test_allowed_to_watch_result = self.test_allowed_to_watch()
+        if not test_allowed_to_watch_result:
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
