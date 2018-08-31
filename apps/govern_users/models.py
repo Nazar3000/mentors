@@ -15,3 +15,4 @@ class MentorSchoolVideoExtraMaterial(models.Model):
 class MentorTip(models.Model):
     title = models.CharField(max_length=32)
     content = models.TextField()
+    image = models.ImageField('govern_users/mentor_tips')

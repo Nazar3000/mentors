@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% for video in object_list %}
+    {{ video.title }}
+    {{ video.video }}
+    {% if mentor in video.watched_by.all %}
+      True
+    {% endif %} <br>
+  {% endfor %}
+{% endblock %}

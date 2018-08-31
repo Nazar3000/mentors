@@ -31,4 +31,14 @@
           {{ meeting.date|date:'d.m.Y' }} {{ meeting.title }} <br>
         {% endfor %}
     </div>
+    <div class="mentor-school">
+      {% for video in mentor_school_videos %}
+        {{ video.title }} <br>
+      {% endfor %}
+    </div>
+    <div class="mentor-tip">
+      {{ mentor_tip.title }}
+      {{ mentor_tip.content }}
+      {{ mentor_tip.image }}
+    </div>
 {% endblock %}

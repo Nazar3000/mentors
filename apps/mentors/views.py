@@ -5,8 +5,9 @@ from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView, DetailView
+from django.views.generic import TemplateView, FormView, DetailView, ListView
 
+from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
 from .models import MentorLicenceKey, Mentoree
 from users.models import Mentor
@@ -91,6 +92,23 @@ class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
 
     def get_object(self, queryset=None):
         return Mentor.objects.get(pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mentor_school_videos'] = \
+            MentorSchoolVideo.objects.all()[:2]
+        context['mentor_tip'] = MentorTip.objects.order_by('?').first()
+        return context
+
+
+class MentorSchoolVideoListView(ListView):
+    template_name = 'mentors/mentor_school_video.html'
+    queryset = MentorSchoolVideo.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mentor'] = Mentor.objects.get(pk=self.request.user.pk)
+        return context
 
 
 class MentoreeDetailView(CheckIfUserIsMentorMixin, DetailView):
