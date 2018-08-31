@@ -44,7 +44,8 @@ INSTALLED_APPS = [
 
     'users',
     'mentors',
-    'volunteers'
+    'volunteers',
+    'govern_users'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -94,7 +94,6 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -115,7 +114,6 @@ AUTH_USER_MODEL = 'users.User'
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'uk'
 
@@ -129,13 +127,19 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(APPS_ROOT, 'static')]
 
 STATIC_ROOT = os.path.join(APPS_ROOT, 'staticfiles')
+
+
+# Media files
+
+MEDIA_ROOT = os.path.join(APPS_ROOT, 'media')
+
+MEDIA_URL = '/media/'
 
 
 # Auth

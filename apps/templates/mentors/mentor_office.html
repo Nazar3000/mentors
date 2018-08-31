@@ -4,7 +4,16 @@
 {% block content %}
     <div class="child-data">
         Child: <br>
-        {{ mentor.mentoree }} <br>
+        {% with mentor.mentoree as m%}
+          {{ m.first_name }} <br>
+          {{ m.last_name }} <br>
+          {{ m.date_of_birth|date:'d.m.Y' }} <br>
+          {{ m.dream }} <br>
+          {{ m.want_to_become }} <br>
+          {{ m.fears }} <br>
+          {{ m.loves }} <br>
+          {{ m.hates }} <br>
+        {% endwith %}
         <a href="{% url 'mentors:mentoree_detail' %}">{% trans 'Detail' %}</a>
     </div>
     <div class="posts-data">
@@ -18,6 +27,8 @@
         {% endfor %}
     </div>
     <div class="meetings-data">
-        {{ mentor.meetings.all }}
+        {% for meeting in mentor.meetings.all %}
+          {{ meeting.date|date:'d.m.Y' }} {{ meeting.title }} <br>
+        {% endfor %}
     </div>
 {% endblock %}
