@@ -1,1 +1,6 @@
-Анкета кандидата в наставники
+{% extends 'base.html' %}
+
+{% block content %}
+  Анкета кандидата в наставники
+  <a href="{% url 'mentors:mentor_roadmap' %}">Ок, я зрозумів. Ідемо далі</a>
+{% endblock %}

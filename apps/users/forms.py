@@ -29,7 +29,7 @@ class SignUpStep1Form(forms.ModelForm):
         password1 = cleaned_data['password1']
         password2 = cleaned_data['password2']
         if password1 != password2:
-            raise ValidationError({'password1': _("Passwords didn't match.")})
+            raise ValidationError({'password1': 'Паролі не співпадають'})
         validate_password(password1)
         return cleaned_data
 

@@ -86,20 +86,16 @@ class CheckIfUserIsMentorMixin(UserPassesTestMixin):
 
 
 class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
-    # TODO: ask if we're going to be able to watch another people profiles
     template_name = 'mentors/mentor_office.html'
     model = Mentor
 
+    def get_object(self, queryset=None):
+        return Mentor.objects.get(pk=self.request.user.pk)
 
-class MentoreeDetailView(CheckIfUserIsMentorMixin, AccessMixin, DetailView):
+
+class MentoreeDetailView(CheckIfUserIsMentorMixin, DetailView):
     template_name = 'mentors/mentoree_detail.html'
     model = Mentoree
 
-    def test_allowed_to_watch(self):
-        return Mentor.objects.get(pk=self.request.user.pk).mentoree == self.get_object()
-
-    def dispatch(self, request, *args, **kwargs):
-        test_allowed_to_watch_result = self.test_allowed_to_watch()
-        if not test_allowed_to_watch_result:
-            return self.handle_no_permission()
-        return super().dispatch(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        return Mentor.objects.get(pk=self.request.user.pk).mentoree

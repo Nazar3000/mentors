@@ -10,13 +10,10 @@
             <div class="register-new-form">
               <form method="post">
                 {% csrf_token %}
-                {% if form.non_field_errors %}
-                  <div class="non-field-errors">
-                    {% for err in form.non_field_errors %}
-                      <p class="form-error">{{ err }}</p>
-                    {% endfor %}
-                  </div>
-                {% endif %}
+
+                {% for err in form.non_field_errors %}
+                  <span class="error-form">{{ err }}</span>
+                {% endfor %}
 
                 <input type="text"
                        name="{{ form.email.html_name }}"
@@ -26,7 +23,9 @@
                        autofocus
                        required
                 >
-                {{ form.email.errors }}
+                {% for err in form.email.errors %}
+                  <span class="error-form">{{ err }}</span>
+                {% endfor %}
 
                 <input type="password"
                        name="{{ form.password1.html_name }}"
@@ -34,7 +33,9 @@
                        placeholder="Пароль"
                        required
                 >
-                {{ form.password1.errors }}
+                {% for err in form.password1.errors %}
+                  <span class="error-form">{{ err }}</span>
+                {% endfor %}
 
                 <input type="password"
                        name="{{ form.password2.html_name }}"
@@ -42,7 +43,9 @@
                        placeholder="Підтвердіть пароль"
                        required
                 >
-                {{ form.password2.errors }}
+                {% for err in form.password2.errors %}
+                  <span class="error-form">{{ err }}</span>
+                {% endfor %}
 
                 <button type="submit">Далі</button>
                 <div class="register-new-line"></div><a href="#">Забули свій пароль?</a>

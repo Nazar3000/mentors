@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 from users.constants import UserTypes
 from users.models import Mentor
@@ -20,7 +19,7 @@ class SignUpStep0Form(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise ValidationError(_("User with given email is already registered."))
+            raise ValidationError('Користувач з цією електронною адресою вже зареєстрований.')
         return email
 
 
@@ -37,7 +36,7 @@ class SignUpStep1Form(forms.ModelForm):
         password1 = cleaned_data['password1']
         password2 = cleaned_data['password2']
         if password1 != password2:
-            raise ValidationError({'password1': _("Passwords didn't match.")})
+            raise ValidationError({'password1': 'Паролі не співпадають.'})
         validate_password(password1)
         return cleaned_data
 

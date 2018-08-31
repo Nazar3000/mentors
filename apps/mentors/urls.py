@@ -11,6 +11,6 @@ urlpatterns = [
     path('register-step2/', views.SignUpStep2View.as_view(), name='signup_step2'),
     path('register-step3/', views.SignUpStep3View.as_view(), name='signup_step3'),
     path('roadmap/', login_required(views.MentorRoadmap.as_view()), name='mentor_roadmap'),
-    path('office/<uuid:pk>/', login_required(views.MentorOfficeView.as_view()), name='mentor_office'),
-    path('mentoree/<int:pk>/', login_required(views.MentoreeDetailView.as_view()), name='mentoree_detail'),
+    path('office/', login_required(views.MentorOfficeView.as_view()), name='mentor_office'),
+    path('mentoree/', login_required(views.MentoreeDetailView.as_view()), name='mentoree_detail'),
 ]

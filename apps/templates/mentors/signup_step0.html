@@ -23,13 +23,10 @@
           <div class="register-block-right">
             <form method="post">
               {% csrf_token %}
-              {% if form.non_field_errors %}
-                <div class="non-field-errors">
-                  {% for err in form.non_field_errors %}
-                    <p class="form-error">{{ err }}</p>
-                  {% endfor %}
-                </div>
-              {% endif %}
+
+              {% for err in form.non_field_errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
 
               <input type="text"
                      name="{{ form.first_name.html_name }}"
@@ -38,7 +35,9 @@
                      autofocus
                      required
               >
-              {{ form.first_name.errors }}
+              {% for err in form.first_name.errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
 
               <input type="text"
                      name="{{ form.last_name.html_name }}"
@@ -46,7 +45,9 @@
                      placeholder="Прізвище"
                      required
               >
-              {{ form.last_name.errors }}
+              {% for err in form.last_name.errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
 
               <input type="text"
                      name="{{ form.email.html_name }}"
@@ -54,7 +55,9 @@
                      placeholder="Email"
                      required
               >
-              {{ form.email.errors }}
+              {% for err in form.email.errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
 
               <input type="text"
                      name="{{ form.phone_number.html_name }}"
@@ -62,7 +65,9 @@
                      placeholder="Телефон"
                      required
               >
-              {{ form.phone_number.errors }}
+              {% for err in form.phone_number.errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
 
               <button type="submit">Реєстрація</button>
               <a href="#">Реєстрація через Facebook</a>
