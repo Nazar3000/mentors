@@ -1,46 +1,56 @@
 {% extends 'base.html' %}
-{% load i18n %}
 
 {% block content %}
-  <h2>Register Step1</h2>
-  <form method="post">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-      <div class="non-field-errors">
-        {% for err in form.non_field_errors %}
-          <p class="form-error">{{ err }}</p>
-        {% endfor %}
+  <div class="content">
+    <section class="register-new">
+      <div class="container">
+        <div class="register-new-wrapp">
+          <div class="register-new-content">
+            <h3><span>Реєстрація</span><br> Перший крок</h3>
+            <div class="register-new-form">
+              <form method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                  <div class="non-field-errors">
+                    {% for err in form.non_field_errors %}
+                      <p class="form-error">{{ err }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <input type="text"
+                       name="{{ form.email.html_name }}"
+                       id="{{ form.email.auto_id }}"
+                       value="{{ form.email.value }}"
+                       placeholder="User@gmail.com"
+                       autofocus
+                       required
+                >
+                {{ form.email.errors }}
+
+                <input type="password"
+                       name="{{ form.password1.html_name }}"
+                       id="{{ form.password1.auto_id }}"
+                       placeholder="Пароль"
+                       required
+                >
+                {{ form.password1.errors }}
+
+                <input type="password"
+                       name="{{ form.password2.html_name }}"
+                       id="{{ form.password2.auto_id }}"
+                       placeholder="Підтвердіть пароль"
+                       required
+                >
+                {{ form.password2.errors }}
+
+                <button type="submit">Далі</button>
+                <div class="register-new-line"></div><a href="#">Забули свій пароль?</a>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-    {% endif %}
-    <div>
-        <label for="{{ form.email.auto_id }}">Email:</label>
-        <input type="text"
-               name="{{ form.email.html_name }}"
-               id="{{ form.email.auto_id }}"
-               value="{{ form.email.value }}"
-               autofocus
-               required
-        >
-        {{ form.email.errors }}
-    </div>
-    <div>
-        <label for="{{ form.password1.auto_id }}">Password1:</label>
-        <input type="password"
-               name="{{ form.password1.html_name }}"
-               id="{{ form.password1.auto_id }}"
-               required
-        >
-        {{ form.password1.errors }}
-    </div>
-    <div>
-        <label for="{{ form.password2.auto_id }}">Password2:</label>
-        <input type="password"
-               name="{{ form.password2.html_name }}"
-               id="{{ form.password2.auto_id }}"
-               required
-        >
-        {{ form.password2.errors }}
-    </div>
-    <button type="submit">{% trans 'Next' %}</button>
-  </form>
+    </section>
+  </div>
 {% endblock %}

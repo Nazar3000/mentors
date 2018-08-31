@@ -1,0 +1,20 @@
+{% load static %}
+
+<header class="header">
+  <div class="container">
+    <nav class="header-wrapp">
+      <div class="header-logo">
+        <a href="{% url 'users:unregistered_guideline' %}">
+          <img src="{% static 'img/header-logo.png' %}" alt="">
+        </a>
+      </div>
+      <a class="header-trigger" href="#"><i class="fas fa-bars"></i></a>
+      <ul class="header-wrapp-link">
+        <li><a class="header-link" href="#">Про<br>наставництво</a></li>
+        <li><a class="header-link" href="#">Спеціалістам<br> з наставництва<span><i class="fas fa-caret-down"></i></span></a></li>
+        <li class="header-dropp"><a class="header-link" href="#">Допомогти<br>наставництву</a></li>
+      </ul>
+      <div class="header-btn"><a class="header-link header-login" href="#">Вхід<br> для наставників</a><a class="header-link header-donate" href="#">Допомогти<br> фінансово</a></div>
+    </nav>
+  </div>
+</header>

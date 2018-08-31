@@ -1,7 +1,215 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block content %}
-    <a href="{% url 'mentors:signup_step0' %}">{% trans 'Bacame a Mentor' %}</a>
-    <a href="{% url 'volunteers:volunteer_signup' %}">{% trans 'Assist Mentoring' %}</a>
+  <div class="content content-font">
+    <section class="main-mentor">
+      <div class="container">
+        <div class="main-mentor-wrapp">
+          <h1 class="main-title">наставництво</h1>
+          <div class="main-video">
+            <iframe width="466" height="255" src="https://www.youtube.com/embed/lGhk0DfcN0M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+          </div>
+        </div>
+        <div class="main-mentor-interactiv">
+          <div class="main-mentor-interactiv-item">
+            <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
+          </div>
+          <div class="main-mentor-interactiv-item">
+            <div class="wrapp-numb">
+              <div class="numb">0</div>
+              <div class="numb">0</div>
+              <div class="numb">4</div>
+              <div class="numb">7</div>
+            </div><span>Дітей мають наставників</span>
+          </div>
+          <div class="main-mentor-interactiv-item"><a href="{% url 'mentors:signup_step0' %}">Стати наставником</a></div>
+        </div>
+      </div>
+    </section>
+    <section class="main-one">
+      <div class="container">
+        <div class="main-one-wrapp">
+          <div class="main-one-description">
+            <p>Виходячи з інтернату,<span>90% випускників</span> не готові до самостійного життя.<br>           Вони часто падають на дно соціуму і стають для нього загрозою.<br><br>           У дорослому житті вихованці інтернатів схильні до ранніх статевих<br>           стосунків / вагітності, скоєння злочинів, спроб самогубства, алкоголізму та наркоманії.<br><br><span>Їх діти часто також потрапляють до інтернатних закладів.</span></p>
+            <h3>Хто розірве це замкнене коло?</h3>
+          </div>
+          <div class="main-one-img"><img src="{% static 'img/one.png' %}" alt=""></div>
+        </div>
+      </div>
+    </section>
+    <section class="main-help">
+      <div class="container">
+        <h2>саме ти можеш<br>цьому запобігти</h2>
+        <div class="main-help-wrapp">
+          <div class="main-help-img"><img class="w-100" src="{% static 'img/friend.png' %}" alt=""></div>
+          <div class="main-help-priority">
+            <h3>наставництво це:</h3>
+            <ul>
+              <li class="main-check">Дружба між одним дорослим і однією дитиною</li>
+              <li class="main-check">Регулярні зустрічі як на території установи, так і поза неї</li>
+              <li class="main-check">Це ефективна допомога дітям з інтернатних установ в соціалізації<br>і адаптації їх до самостійного життя</li>
+            </ul><span>Стань наставником</span><a href="{% url 'mentors:signup_step0' %}">Змінити життя дитини</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="main-history">
+      <div class="container">
+        <h2>реальні історії<br>наставництва</h2>
+        <div class="main-history-wrapp">
+          <div class="main-history-carousel">
+            <div class="owl-carousel">
+              <div class="main-history-card">
+                <div class="main-history-card-about">
+                  <div class="main-history-card-img"><img src="{% static 'img/family.jpg' %}" alt=""></div>
+                  <div class="main-history-card-title">
+                    <h3>Оля та Аня</h3>
+                    <p>Дитина після смерті батьків зовсім<br>не розмовляла з оточуючими. Зараз вчиться на диктора.</p>
+                  </div>
+                </div>
+                <div class="main-history-card-subtitle">
+                  <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+                </div>
+              </div>
+              <div class="main-history-card">
+                <div class="main-history-card-about">
+                  <div class="main-history-card-img"><img src="{% static 'img/family.jpg' %}" alt=""></div>
+                  <div class="main-history-card-title">
+                    <h3>Оля та Аня</h3>
+                    <p>Дитина після смерті батьків зовсім<br>не розмовляла з оточуючими. Зараз вчиться на диктора.</p>
+                  </div>
+                </div>
+                <div class="main-history-card-subtitle">
+                  <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+                </div>
+              </div>
+              <div class="main-history-card">
+                <div class="main-history-card-about">
+                  <div class="main-history-card-img"><img src="{% static 'img/family.jpg' %}" alt=""></div>
+                  <div class="main-history-card-title">
+                    <h3>Оля та Аня</h3>
+                    <p>Дитина після смерті батьків зовсім<br>не розмовляла з оточуючими. Зараз вчиться на диктора.</p>
+                  </div>
+                </div>
+                <div class="main-history-card-subtitle">
+                  <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="main-history-interactiv">
+          <p>В твоїх руках створити ще<br> одну щасливу історію дитини!</p><a href="{% url 'mentors:signup_step0' %}">Ставай наставником</a>
+        </div>
+      </div>
+    </section>
+    <section class="main-donate">
+      <div class="container">
+        <h2>наставництво це<br>не спонсорство!</h2>
+        <div class="main-donate-wrapp">
+          <div class="main-donate-title">
+            <p>Наставники допомагають дітям відчувати себе особистістю, визначити інтереси і здібності дитини, вибрати професію, придбати моральні цінності, вчать робити вибір, вирішувати повсякденні проблеми і спілкуватися з людьми.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="main-new-mentor">
+      <div class="container">
+        <div class="main-new-mentor-wrapp">
+          <h2>як стати наставником</h2>
+          <div class="main-new-mentor-circle">
+            <div class="main-new-mentor-item">
+              <p class="local-img">Звернись<br>до Центру соц. служб</p>
+              <div class="main-new-mentor-icon"><img src="{% static 'img/local.png' %}" alt=""></div>
+            </div>
+            <div class="main-new-mentor-item">
+              <p class="file-img">Збери необхідні<br>документи</p>
+              <div class="main-new-mentor-icon"><img src="{% static 'img/file.png' %}" alt=""></div>
+            </div>
+            <div class="main-new-mentor-item">
+              <p class="book-img">Пройди<br>навчання</p>
+              <div class="main-new-mentor-icon"><img src="{% static 'img/book.png' %}" alt=""></div>
+            </div>
+            <div class="main-new-mentor-item">
+              <p class="filepen-img">Підпиши<br>договір</p>
+              <div class="main-new-mentor-icon"><img src="{% static 'img/filepen.png' %}" alt=""></div>
+            </div>
+            <div class="main-new-mentor-item">
+              <p class="family-img">Ти наставник<br>для дитини!</p>
+              <div class="main-new-mentor-icon-blue"><img src="{% static 'img/fami.png' %}" alt=""></div>
+            </div>
+          </div>
+          <div class="main-new-mentor-btn"><a href="{% url 'mentors:signup_step0' %}">Стати наставником</a><span>Після реєстрації ми будемо<br>супроводжувати тебе на<br>кожному етапі, не вагайся!</span></div>
+        </div>
+      </div>
+    </section>
+    <section class="main-be-mentor">
+      <div class="container">
+        <h2>перевір, чи можеш ти<br>стати наставником</h2>
+        <div class="main-be-mentor-wrapp">
+          <div class="main-be-mentor-line">
+            <p class="block-left">нi</p>
+            <p class="block-center">Тобі є 18 років?</p>
+            <p class="block-right">так</p>
+          </div>
+          <div class="main-be-mentor-line-top">
+            <p class="block-left">Ти готовий<br> допомогати не<br> конкретній дитині,<br> а наставництву<br> вцілому</p>
+            <p class="block-center">так</p>
+            <div>
+              <p class="block-right">Ти був засуджений?</p>
+              <p class="block-right-bottom">нi</p>
+            </div>
+          </div>
+          <div class="main-be-mentor-line-bottom">
+            <div>
+              <p class="block-left">так</p>
+              <p class="block-left-bottom">нi</p>
+            </div>
+            <p class="block-center">Ти можешь бути<br> корисним дітям<br> не будучи<br>наставником</p>
+            <p class="block-middle">нi</p>
+            <p class="block-right">Ти готовий<br> приділяти дитині<br> принаймні 3-4<br> години на<br> тиждень?</p>
+          </div>
+          <div class="main-be-mentor-line-text">
+            <p class="block-left">Нажаль, ти не можеш<br> стати наставником,<br> але ти можеш<br>розповісти про<br> наставництво іншим<br>прямо зараз!</p>
+            <p class="block-middle">так</p>
+            <p class="block-right">Вітаємо! наразі<br> немає перепон для<br> того, щоб ти став<br> наставником!</p>
+          </div>
+          <div class="main-be-mentor-line-btn">
+            <div class="link-wrapp"><a class="link-wrapp-face" href=""><i class="fab fa-facebook-f"></i></a><a class="link-wrapp-tweet" href=""><i class="fab fa-twitter"></i></a><a class="link-wrapp-google" href=""><i class="fab fa-google-plus-g"></i></a></div><a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a><a class="link-wrapp-btn-yellow" href="{% url 'mentors:signup_step0' %}">Стати наставником</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="main-mentor-issues">
+      <div class="container">
+        <h2>найчастіше запитання</h2>
+        <div class="issues">
+          <h3 class="issues-title">Чи можу я сам обрати дитину?</h3>
+          <div class="issues-content">
+            <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+          </div>
+        </div>
+        <div class="issues">
+          <h3 class="issues-title">Чи можу я сам обрати дитину?</h3>
+          <div class="issues-content">
+            <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+          </div>
+        </div>
+        <div class="issues">
+          <h3 class="issues-title">Чи можу я сам обрати дитину?</h3>
+          <div class="issues-content">
+            <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+          </div>
+        </div>
+        <div class="issues">
+          <h3 class="issues-title">Чи можу я сам обрати дитину?</h3>
+          <div class="issues-content">
+            <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
+          </div>
+        </div><a href="{% url 'mentors:signup_step0' %}">Стати наставником</a>
+      </div>
+    </section>
+  </div>
 {% endblock %}

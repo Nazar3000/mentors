@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load static %}
 
 {% block content %}
-    <a href="{% url 'mentors:signup_step3' %}">{% trans "Ok, I get it. Let's go forward" %}</a>
+  <div class="content">
+    <section class="video-mentor">
+      <div class="container">
+        <div class="video-mentor-wrapp">
+          <h3>Коротко про Наставництво.<br>Як стати наставником. Що це за особистий кабінет.</h3>
+          <div class="video-mentor-video">
+            <iframe width="720" height="453" src="https://www.youtube.com/embed/yovVWXkhaX4" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+          </div><a href="{% url 'mentors:signup_step3' %}">Ок, я зрозумів. Ідемо далі</a>
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock %}
