@@ -96,20 +96,25 @@ class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['mentor_school_videos'] = \
-            MentorSchoolVideo.objects.all()[:2]
+            MentorSchoolVideo.objects.order_by('?')[:2]
         context['mentor_tip'] = MentorTip.objects.order_by('?').first()
         context['last_post'] = self.object.posts.last()
         return context
 
 
 class MentorSchoolVideoListView(ListView):
-    template_name = 'mentors/mentor_school_video.html'
+    template_name = 'mentors/mentor_school_video_list.html'
     queryset = MentorSchoolVideo.objects.all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['mentor'] = Mentor.objects.get(pk=self.request.user.pk)
         return context
+
+
+class MentorSchoolVideoDetailView(DetailView):
+    template_name = 'mentors/mentor_school_video_detail.html'
+    model = MentorSchoolVideo
 
 
 class MentoreeDetailView(CheckIfUserIsMentorMixin, DetailView):

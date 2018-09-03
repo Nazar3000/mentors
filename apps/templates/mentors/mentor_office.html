@@ -51,7 +51,7 @@
           <div class="admin-left">
             {% with mentor.mentoree as m %}
             <div class="admin-card">
-              <div class="admin-card-info"><img src="{% static 'img/child-card.png' %}" alt="">
+              <div class="admin-card-info"><img src="{{ m.profile_image.url }}" alt="">
                 <div>
                   <h2 class="admin-card-name">{{ m.first_name }}<br>{{ m.last_name }}</h2>
                   <p class="admin-card-birth">Дата народження</p>
@@ -72,7 +72,8 @@
               </div>
               <div class="admin-card-line"></div>
               <div class="admin-card-post">
-                <p>Твоя задача не досягти якихось цілей, а допомогти дититні!</p><a href="">Детальніше</a>
+                <p>Твоя задача не досягти якихось цілей, а допомогти дититні!</p>
+                <a href="{% url 'mentors:mentoree_detail' %}">Детальніше</a>
               </div>
             </div>
             {% endwith %}
@@ -80,29 +81,26 @@
               <h2 class="admin-school-title">Школа наставника</h2>
               <div class="admin-school-line"></div>
               <div class="admin-school-video">
-                <div class="admin-school-video-item"><img src="" alt="">
-                  <div class="admin-school-video-title">
-                    <p>Тренінг наставників</p><a href="">Дивитись</a>
+                {% for video in mentor_school_videos %}
+                  <div class="admin-school-video-item"><img src="" alt="">
+                    <div class="admin-school-video-title">
+                      <p>{{ video.title }}</p><a href="{% url 'mentors:school_video' pk=video.pk %}">Дивитись</a>
+                    </div>
                   </div>
-                </div>
-                <div class="admin-school-video-item"><img src="" alt="">
-                  <div class="admin-school-video-title">
-                    <p>Як впоратись з маніпуляцією дитини</p><a href="">Дивитись</a>
-                  </div>
-                </div>
-              </div><a href="">Всі відео</a>
+                {% endfor %}
+              </div><a href="{% url 'mentors:school_videos' %}">Всі відео</a>
             </div>
             <div class="admin-walk">
               <h2 class="admin-walk-title">Що робити з вихованцем</h2>
               <div class="admin-walk-line"></div>
               <div class="admin-walk-wrapp">
-                <div class="admin-walk-place"><img src="{% static 'img/tiger.png' %}" alt="">
+                <div class="admin-walk-place"><img src="{{ mentor_tip.image.url }}" alt="">
                   <div class="admin-walk-desc">
-                    <h4>Відвідайте зоопарк</h4>
-                    <p>Ви можете в процесі походу пограти<br>у гру “на кого з людей схожі ці тварини”. Уважно прислухайтесь до відповідей дитини і задавайте уточнюючі запитання.</p>
+                    <h4>{{ mentor_tip.title }}</h4>
+                    <p>{{ mentor_tip.content }}</p>
                   </div>
                 </div>
-              </div><a href="">Ще поради</a>
+              </div><a href="#">Ще поради</a>
             </div>
           </div>
           <div class="admin-right">
@@ -126,35 +124,31 @@
                 </div>
               </div>
               <div class="admin-social-dialog-line"></div>
-              <div class="admin-social-dialog">
-                <div class="admin-social-dialog-wrapp"><img src="{% static 'img/women.jpg' %}" alt="">
-                  <div class="admin-social-dialog-content">
-                    <p>Ганна Лазаренко</p><span>Вітаю! Віримо що у вас все вдасться ! Чекаємо на добрі новини!</span>
-                  </div>
-                </div><span>30 хв тому</span>
-              </div>
-              <div class="admin-social-dialog">
-                <div class="admin-social-dialog-wrapp"><img src="{% static 'img/women-two.jpg' %}" alt="">
-                  <div class="admin-social-dialog-content">
-                    <p>Елена Романенко</p><span>Ура! Тепер на тобі велика відповідальність!!</span>
-                  </div>
-                </div><span>7 хв тому</span>
-              </div>
+              {% for comment in last_post.comments.all|dictsortreversed:'datetime'|slice:'2' %}
+                <div class="admin-social-dialog">
+                  <div class="admin-social-dialog-wrapp"><img src="{{ comment.author.profile_image.url }}" alt="">
+                    <div class="admin-social-dialog-content">
+                      <p>{{ comment.author.first_name }} {{ comment.author.last_name }}</p>
+                      <span>{{ comment.content }}</span>
+                    </div>
+                  </div><span>{{ comment.datetime }}</span>
+                </div>
+              {% endfor %}
               <div class="admin-social-dialog-line-btn"></div><a class="admin-social-btn" href="">Відкрити всю ленту</a>
             </div>
             <div class="admin-diary">
               <h2 class="admin-diary-title">Щоденник зустрічей</h2>
               <div class="admin-diary-line"></div>
               <div class="admin-diary-wrapp">
-                <div class="admin-diary-item">
-                  <div><span>06.10.2018</span><span>Гуляли в учереждении</span></div><a href="">Детальніше ></a>
-                </div>
-                <div class="admin-diary-item">
-                  <div><span>06.10.2018</span><span>Ходили в Зоопарк</span></div><a href="">Детальніше ></a>
-                </div>
-                <div class="admin-diary-item">
-                  <div><span>06.10.2018</span><span>Ходили в кино</span></div><a href="">Детальніше ></a>
-                </div>
+                {% for meeting in mentor.meetings.all|dictsortreversed:'date'|slice:'3' %}
+                  <div class="admin-diary-item">
+                    <div>
+                      <span>{{ meeting.date|date:'d.m.Y' }}</span>
+                      <span>{{ meeting.title }}</span>
+                    </div>
+                    <a href="">Детальніше ></a>
+                  </div>
+                {% endfor %}
               </div><a class="admin-diary-btn" href="">Усі зустрічі</a>
             </div>
           </div>

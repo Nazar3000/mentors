@@ -75,6 +75,7 @@ class Mentor(models.Model):
         to='mentors.MentorLicenceKey',
         on_delete=models.SET_NULL,
         null=True)
+    profile_image = models.ImageField(upload_to='mentors/profile_images')
 
 
 class SocialServiceCenter(models.Model):
