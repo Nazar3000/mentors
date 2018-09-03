@@ -1,44 +1,165 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load static date_tags %}
 
 {% block content %}
-    <div class="child-data">
-        Child: <br>
-        {% with mentor.mentoree as m%}
-          {{ m.first_name }} <br>
-          {{ m.last_name }} <br>
-          {{ m.date_of_birth|date:'d.m.Y' }} <br>
-          {{ m.dream }} <br>
-          {{ m.want_to_become }} <br>
-          {{ m.fears }} <br>
-          {{ m.loves }} <br>
-          {{ m.hates }} <br>
-        {% endwith %}
-        <a href="{% url 'mentors:mentoree_detail' %}">{% trans 'Detail' %}</a>
-    </div>
-    <div class="posts-data">
-        Posts: <br>
-        {% for post in mentor.posts.all %}
-            {{ post }} <br>
-            {% for comment in post.comments.all %}
-                {{ comment }}
-            {% endfor %}
-            <br>
-        {% endfor %}
-    </div>
-    <div class="meetings-data">
-        {% for meeting in mentor.meetings.all %}
-          {{ meeting.date|date:'d.m.Y' }} {{ meeting.title }} <br>
-        {% endfor %}
-    </div>
-    <div class="mentor-school">
-      {% for video in mentor_school_videos %}
-        {{ video.title }} <br>
-      {% endfor %}
-    </div>
-    <div class="mentor-tip">
-      {{ mentor_tip.title }}
-      {{ mentor_tip.content }}
-      {{ mentor_tip.image }}
-    </div>
+{#    <div class="child-data">#}
+{#        Child: <br>#}
+{#        {% with mentor.mentoree as m%}#}
+{#          {{ m.first_name }} <br>#}
+{#          {{ m.last_name }} <br>#}
+{#          {{ m.date_of_birth|date:'d.m.Y' }} <br>#}
+{#          {{ m.dream }} <br>#}
+{#          {{ m.want_to_become }} <br>#}
+{#          {{ m.fears }} <br>#}
+{#          {{ m.loves }} <br>#}
+{#          {{ m.hates }} <br>#}
+{#        {% endwith %}#}
+{#        <a href="{% url 'mentors:mentoree_detail' %}">{% trans 'Detail' %}</a>#}
+{#    </div>#}
+{#    <div class="posts-data">#}
+{#        Posts: <br>#}
+{#        {% for post in mentor.posts.all %}#}
+{#            {{ post }} <br>#}
+{#            {% for comment in post.comments.all %}#}
+{#                {{ comment }}#}
+{#            {% endfor %}#}
+{#            <br>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#    <div class="meetings-data">#}
+{#        {% for meeting in mentor.meetings.all %}#}
+{#          {{ meeting.date|date:'d.m.Y' }} {{ meeting.title }} <br>#}
+{#        {% endfor %}#}
+{#    </div>#}
+{#    <div class="mentor-school">#}
+{#      {% for video in mentor_school_videos %}#}
+{#        {{ video.title }} <br>#}
+{#      {% endfor %}#}
+{#    </div>#}
+{#    <div class="mentor-tip">#}
+{#      {{ mentor_tip.title }}#}
+{#      {{ mentor_tip.content }}#}
+{#      {{ mentor_tip.image }}#}
+{#    </div>#}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container"><a class="admin-link active" href="">Особистий кабінет наставника ></a><a class="admin-link" href=""> Денис Сверидов</a></div>
+    </section>
+    <section class="admin">
+      <div class="container">
+        <div class="admin-wrapp">
+          <div class="admin-left">
+            {% with mentor.mentoree as m %}
+            <div class="admin-card">
+              <div class="admin-card-info"><img src="{% static 'img/child-card.png' %}" alt="">
+                <div>
+                  <h2 class="admin-card-name">{{ m.first_name }}<br>{{ m.last_name }}</h2>
+                  <p class="admin-card-birth">Дата народження</p>
+                  <p class="admin-card-data">{{ m.date_of_birth|date:'d.m.Y' }} <span class="admin-card-age">({{ m.date_of_birth|get_age }}  років)</span></p>
+                </div><a class="admin-card-bage" href=""><i class="fas fa-pencil-alt"></i></a>
+              </div>
+              <div class="admin-card-line"></div>
+              <div class="admin-card-dream">
+                <div><span class="admin-card-dream-name">Мрія</span>
+                  <p class="admin-card-dream-item">{{ m.dream }}</p><span class="admin-card-dream-name">Боїться</span>
+                  <p class="admin-card-dream-item">{{ m.fears }}</p><span class="admin-card-dream-name">Ненавидить</span>
+                  <p class="admin-card-dream-item">{{ m.hates }}</p>
+                </div>
+                <div><span class="admin-card-dream-name">Хочу стати</span>
+                  <p class="admin-card-dream-item">{{ m.want_to_become }}</p><span class="admin-card-dream-name">Любить</span>
+                  <p class="admin-card-dream-item">{{ m.loves }}</p>
+                </div>
+              </div>
+              <div class="admin-card-line"></div>
+              <div class="admin-card-post">
+                <p>Твоя задача не досягти якихось цілей, а допомогти дититні!</p><a href="">Детальніше</a>
+              </div>
+            </div>
+            {% endwith %}
+            <div class="admin-school">
+              <h2 class="admin-school-title">Школа наставника</h2>
+              <div class="admin-school-line"></div>
+              <div class="admin-school-video">
+                <div class="admin-school-video-item"><img src="" alt="">
+                  <div class="admin-school-video-title">
+                    <p>Тренінг наставників</p><a href="">Дивитись</a>
+                  </div>
+                </div>
+                <div class="admin-school-video-item"><img src="" alt="">
+                  <div class="admin-school-video-title">
+                    <p>Як впоратись з маніпуляцією дитини</p><a href="">Дивитись</a>
+                  </div>
+                </div>
+              </div><a href="">Всі відео</a>
+            </div>
+            <div class="admin-walk">
+              <h2 class="admin-walk-title">Що робити з вихованцем</h2>
+              <div class="admin-walk-line"></div>
+              <div class="admin-walk-wrapp">
+                <div class="admin-walk-place"><img src="{% static 'img/tiger.png' %}" alt="">
+                  <div class="admin-walk-desc">
+                    <h4>Відвідайте зоопарк</h4>
+                    <p>Ви можете в процесі походу пограти<br>у гру “на кого з людей схожі ці тварини”. Уважно прислухайтесь до відповідей дитини і задавайте уточнюючі запитання.</p>
+                  </div>
+                </div>
+              </div><a href="">Ще поради</a>
+            </div>
+          </div>
+          <div class="admin-right">
+            <div class="admin-social">
+              <div class="admin-social-info">
+                <h2 class="admin-social-title">Cтрічка новин<br>співдружності наставників</h2><a class="admin-social-city" href="">Україна<span><i class="fas fa-caret-down"></i></span></a><a class="admin-social-bage" href=""><i class="fas fa-plus"></i></a>
+              </div>
+              <div class="admin-social-line"></div>
+              <div class="admin-social-author"><img src="{% static 'img/ava.png' %}" alt="">
+                <div>
+                  <h4>{{ last_post.author.first_name }} {{ last_post.author.last_name }}</h4><span>{{ last_post.datetime }}</span>
+                </div>
+              </div>
+              <div class="admin-social-description">
+                <p>{{ last_post.content }}</p>
+              </div>
+              <div class="admin-social-image"><img src="{{ last_post.image.url }}" alt="">
+                <div class="admin-social-wrapp-icon">
+                  <div class="admin-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ({{ last_post.comments.count }})</a></div>
+                  <div class="admin-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">({{ last_post.likes }})</a></div>
+                </div>
+              </div>
+              <div class="admin-social-dialog-line"></div>
+              <div class="admin-social-dialog">
+                <div class="admin-social-dialog-wrapp"><img src="{% static 'img/women.jpg' %}" alt="">
+                  <div class="admin-social-dialog-content">
+                    <p>Ганна Лазаренко</p><span>Вітаю! Віримо що у вас все вдасться ! Чекаємо на добрі новини!</span>
+                  </div>
+                </div><span>30 хв тому</span>
+              </div>
+              <div class="admin-social-dialog">
+                <div class="admin-social-dialog-wrapp"><img src="{% static 'img/women-two.jpg' %}" alt="">
+                  <div class="admin-social-dialog-content">
+                    <p>Елена Романенко</p><span>Ура! Тепер на тобі велика відповідальність!!</span>
+                  </div>
+                </div><span>7 хв тому</span>
+              </div>
+              <div class="admin-social-dialog-line-btn"></div><a class="admin-social-btn" href="">Відкрити всю ленту</a>
+            </div>
+            <div class="admin-diary">
+              <h2 class="admin-diary-title">Щоденник зустрічей</h2>
+              <div class="admin-diary-line"></div>
+              <div class="admin-diary-wrapp">
+                <div class="admin-diary-item">
+                  <div><span>06.10.2018</span><span>Гуляли в учереждении</span></div><a href="">Детальніше ></a>
+                </div>
+                <div class="admin-diary-item">
+                  <div><span>06.10.2018</span><span>Ходили в Зоопарк</span></div><a href="">Детальніше ></a>
+                </div>
+                <div class="admin-diary-item">
+                  <div><span>06.10.2018</span><span>Ходили в кино</span></div><a href="">Детальніше ></a>
+                </div>
+              </div><a class="admin-diary-btn" href="">Усі зустрічі</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock %}

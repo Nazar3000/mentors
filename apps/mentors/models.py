@@ -65,9 +65,11 @@ class Post(models.Model):
         to='users.Mentor',
         on_delete=models.CASCADE,
         related_name='posts')
+    content = models.TextField()
     region = models.CharField(max_length=16, choices=Regions.choices())
     image = models.ImageField(upload_to='mentorees/post')
     likes = models.PositiveSmallIntegerField(default=0)
+    datetime = models.DateTimeField(auto_now=True)
 
 
 class PostComment(models.Model):

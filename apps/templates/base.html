@@ -10,6 +10,7 @@
     <link href="{% static 'css/libs.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    {% block extra_css %}{% endblock %}
   </head>
 <body>
   <div class="wrapper">
@@ -23,5 +24,6 @@
   </div>
   <script src="{% static 'js/libs.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
