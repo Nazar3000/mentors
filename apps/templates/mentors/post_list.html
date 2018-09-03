@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load date_tags %}
+{% load static date_tags %}
 
 {% block content %}
   <div class="content">
@@ -31,7 +31,7 @@
               </div>
               <div class="tape-line"></div>
               <div class="tape-dialog">
-                {% for comment in post.comments.all %}
+                {% for comment in post.comments.all|dictsort:'datetime' %}
                   <div class="tape-dialog-wrapp"><img src="{{ comment.author.profile_image.url }}" alt="">
                     <div class="tape-dialog-content">
                       <div class="tape-dialog-header">
@@ -43,11 +43,13 @@
                 {% if post.comments.count > 0 %}
                   <div class="tape-dialog-all"><a href="">Читати всі коментарі</a></div>
                 {% endif %}
-                <div class="tape-dialog-wrapp"><img src="{{ post.related_user.profile_image.url }}" alt="">
+                <div class="tape-dialog-wrapp">
+                  <img src="{{ post.related_user.profile_image.url }}" alt="">
                   <div class="tape-dialog-content">
-                    <textarea name="text" placeholder="Залишити коментар"></textarea>
+                    <textarea name="text" data-post-id="{{ post.id }}" placeholder="Залишити коментар"></textarea>
                   </div>
-                </div><a class="tape-dialog-btn" href="">Надіслати</a>
+                </div>
+                <a class="tape-dialog-btn" href="javascript: void(0)">Надіслати</a>
                 <div class="tape-line"></div>
               </div>
             </div>
@@ -56,4 +58,10 @@
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'scripts/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'scripts/comments.js' %}"></script>
 {% endblock %}

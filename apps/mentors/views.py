@@ -2,14 +2,15 @@ import rstr
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
-from .models import MentorLicenceKey, Mentoree, Post
+from users.templatetags.date_tags import get_time_spent
+from .models import MentorLicenceKey, Mentoree, Post, PostComment
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -130,3 +131,14 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
 
     def get_queryset(self):
         return Post.objects.filter(related_user__pk=self.request.user.pk)
+
+
+def send_post_comment(request):
+    comment = PostComment.objects.create(
+        post_id=request.POST['post_id'],
+        author_id=request.user.id,
+        content=request.POST['comment'])
+    return JsonResponse({
+        'author_full_name': ' '.join([comment.author.first_name, comment.author.last_name]),
+        'author_profile_image': comment.author.profile_image.url,
+        'date_time': get_time_spent(comment.datetime)})
