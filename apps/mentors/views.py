@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, FormView, DetailView, ListView
 
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
-from .models import MentorLicenceKey, Mentoree
+from .models import MentorLicenceKey, Mentoree, Post
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -102,7 +102,7 @@ class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
         return context
 
 
-class MentorSchoolVideoListView(ListView):
+class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/mentor_school_video_list.html'
     queryset = MentorSchoolVideo.objects.all()
 
@@ -112,7 +112,7 @@ class MentorSchoolVideoListView(ListView):
         return context
 
 
-class MentorSchoolVideoDetailView(DetailView):
+class MentorSchoolVideoDetailView(CheckIfUserIsMentorMixin, DetailView):
     template_name = 'mentors/mentor_school_video_detail.html'
     model = MentorSchoolVideo
 
@@ -123,3 +123,10 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, DetailView):
 
     def get_object(self, queryset=None):
         return Mentor.objects.get(pk=self.request.user.pk).mentoree
+
+
+class PostListView(CheckIfUserIsMentorMixin, ListView):
+    template_name = 'mentors/post_list.html'
+
+    def get_queryset(self):
+        return Post.objects.filter(related_user__pk=self.request.user.pk)

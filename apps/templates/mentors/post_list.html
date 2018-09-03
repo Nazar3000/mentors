@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load date_tags %}
+
+{% block content %}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container"><a class="admin-link active" href="">Особистий кабінет наставника ></a><a class="admin-link" href=""> Денис Сверидов</a></div>
+    </section>
+    <section class="tape">
+      <div class="container">
+        <h2 class="tape-title">Стрічка новин співдружності наставників</h2>
+          <div class="tape-wrapp"><a class="tape-bage" href=""><i class="fas fa-plus"></i></a>
+          {% for post in post_list %}
+            <div class="tape-content">
+              <div class="tape-author"><img src="{{ post.author.profile_image.url }}" alt="">
+                <div>
+                  <h4>{{ post.author.first_name }} {{ post.author.last_name }}</h4><span>{{ post.datetime|get_time_spent }}</span>
+                </div>
+              </div>
+              <div class="tape-description">
+                <p>{{ post.content }}</p>
+              </div>
+              <div class="tape-image">
+                {% if post.image %}
+                  <img src="{{ post.image.url }}" alt="">
+                {% endif %}
+                <div class="tape-wrapp-icon">
+                  <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ({{ post.comments.count }})</a></div>
+                  <div class="tape-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">({{ post.likes }})</a></div>
+                </div>
+              </div>
+              <div class="tape-line"></div>
+              <div class="tape-dialog">
+                {% for comment in post.comments.all %}
+                  <div class="tape-dialog-wrapp"><img src="{{ comment.author.profile_image.url }}" alt="">
+                    <div class="tape-dialog-content">
+                      <div class="tape-dialog-header">
+                        <p>{{ comment.author.first_name }} {{ comment.author.last_name }}</p><span>{{ comment.datetime|get_time_spent }}</span>
+                      </div><span>{{ comment.content }}</span>
+                    </div>
+                  </div>
+                {% endfor %}
+                {% if post.comments.count > 0 %}
+                  <div class="tape-dialog-all"><a href="">Читати всі коментарі</a></div>
+                {% endif %}
+                <div class="tape-dialog-wrapp"><img src="{{ post.related_user.profile_image.url }}" alt="">
+                  <div class="tape-dialog-content">
+                    <textarea name="text" placeholder="Залишити коментар"></textarea>
+                  </div>
+                </div><a class="tape-dialog-btn" href="">Надіслати</a>
+                <div class="tape-line"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

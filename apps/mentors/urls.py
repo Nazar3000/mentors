@@ -15,4 +15,5 @@ urlpatterns = [
     path('videos/', login_required(views.MentorSchoolVideoListView.as_view()), name='school_videos'),
     path('videos/<int:pk>/', login_required(views.MentorSchoolVideoDetailView.as_view()), name='school_video'),
     path('mentoree/', login_required(views.MentoreeDetailView.as_view()), name='mentoree_detail'),
+    path('posts/', login_required(views.PostListView.as_view()), name='posts'),
 ]
