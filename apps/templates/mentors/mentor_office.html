@@ -111,7 +111,8 @@
               <div class="admin-social-line"></div>
               <div class="admin-social-author"><img src="{% static 'img/ava.png' %}" alt="">
                 <div>
-                  <h4>{{ last_post.author.first_name }} {{ last_post.author.last_name }}</h4><span>{{ last_post.datetime }}</span>
+                  <h4>{{ last_post.author.first_name }} {{ last_post.author.last_name }}</h4>
+                  <span>{{ last_post.datetime|get_time_spent }}</span>
                 </div>
               </div>
               <div class="admin-social-description">
@@ -131,7 +132,7 @@
                       <p>{{ comment.author.first_name }} {{ comment.author.last_name }}</p>
                       <span>{{ comment.content }}</span>
                     </div>
-                  </div><span>{{ comment.datetime }}</span>
+                  </div><span>{{ comment.datetime|get_time_spent }}</span>
                 </div>
               {% endfor %}
               <div class="admin-social-dialog-line-btn"></div><a class="admin-social-btn" href="">Відкрити всю ленту</a>
