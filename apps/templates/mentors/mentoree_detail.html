@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static date_tags %}
+{% load static date_tags jsonify %}
 
 {% block content %}
   <div class="content">
@@ -51,23 +51,22 @@
             {% endwith %}
           </div>
           <div class="admin-right">
-            <div class="worksheet"><a class="worksheet-bage" href=""><i class="fas fa-plus"></i></a>
-              <div class="worksheet-input"><span>Гігієна:</span>
-                <input type="text">
+            <div class="worksheet" id="extra-data-fields">
+              <a class="worksheet-bage" href=""><i class="fas fa-plus"></i></a>
+              <div class="worksheet-input" v-for="item in Object.entries(dataFields).slice(sliceStart, sliceEnd)">
+                <span>[[ item[0] ]]:</span>
+                <input type="text" :value="item[1]">
               </div>
-              <div class="worksheet-input"><span>Що цій дитині допоможе бути самостійним:</span>
-                <input type="text">
+              <div class="worksheet-page">
+                <template v-for="pageNumber in pageCount">
+                  <a :class="{active: pageNumber === activePageNumber}"
+                     href="javascript: void(0)"
+                     @click="paginate(pageNumber)"
+                  >
+                    [[ pageNumber ]]
+                  </a>
+                </template>
               </div>
-              <div class="worksheet-input"><span>Емоціанально стан дитини:</span>
-                <input type="text">
-              </div>
-              <div class="worksheet-input"><span>Навички спілкування:</span>
-                <input type="text">
-              </div>
-              <div class="worksheet-input"><span>Як орієнтується в просторі (чи є проблеми):</span>
-                <input type="text">
-              </div>
-              <div class="worksheet-page"><a href="">1</a><a href="">2</a><a class="active" href="">3</a><a href="">4</a><a href="">5</a></div>
             </div>
           </div>
         </div>
@@ -83,4 +82,13 @@
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const extraDataFields = '{{ mentoree.extra_data_fields|jsonify }}';
+  </script>
+
+  <script src="{% static 'scripts/vue.js' %}"></script>
+  <script src="{% static 'scripts/extra_mentoree_data.js' %}"></script>
 {% endblock %}

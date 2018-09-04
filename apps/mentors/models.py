@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import HStoreField
 from django.core.validators import RegexValidator
 from django.db import models
 
@@ -26,12 +27,7 @@ class Mentoree(models.Model):
         null=True)
     address = models.CharField(max_length=128)
     profile_image = models.ImageField(upload_to='mentorees/profile')
-
-    hygiene = models.CharField(max_length=64)
-    will_help_to_became_independent = models.CharField(max_length=64)
-    emotional_state = models.CharField(max_length=64)
-    communication_skills = models.CharField(max_length=64)
-    how_orients_in_environment = models.CharField(max_length=64)
+    extra_data_fields = HStoreField(default=dict)
 
     story = models.TextField()
 
