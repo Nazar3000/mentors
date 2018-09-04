@@ -107,10 +107,18 @@ class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/mentor_school_video_list.html'
     queryset = MentorSchoolVideo.objects.all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['mentor'] = Mentor.objects.get(pk=self.request.user.pk)
-        return context
+    def get_queryset(self):
+        nested_videos = []
+        nest_size = 4
+        for index, vid in enumerate(MentorSchoolVideo.objects.all(), 1):
+            if (index + nest_size) % nest_size == 1:
+                nested_videos.append([])
+                nested_videos[index // nest_size].append(vid)
+            else:
+                nested_index = index // nest_size - 1 \
+                    if index // nest_size == 1 else index // nest_size
+                nested_videos[nested_index].append(vid)
+        return nested_videos
 
 
 class MentorSchoolVideoDetailView(CheckIfUserIsMentorMixin, DetailView):

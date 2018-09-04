@@ -4,7 +4,7 @@ from django.db import models
 class MentorSchoolVideo(models.Model):
     title = models.CharField(max_length=32)
     video = models.FileField(upload_to='govern_users/mentor_school_videos')
-    watched_by = models.ManyToManyField(to='users.Mentor')
+    watched_by = models.ManyToManyField(to='users.Mentor', blank=True)
 
 
 class MentorSchoolVideoExtraMaterial(models.Model):

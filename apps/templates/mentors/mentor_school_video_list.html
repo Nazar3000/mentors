@@ -1,11 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  {% for video in object_list %}
-    {{ video.title }}
-    {{ video.video }}
-    {% if mentor in video.watched_by.all %}
-      True
-    {% endif %} <br>
-  {% endfor %}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container"><a class="admin-link active" href="">Особистий кабінет наставника ></a><a class="admin-link" href=""> Денис Сверидов</a></div>
+    </section>
+    <section class="video-all">
+      <div class="container">
+        <div class="owl-carousel">
+          {% for video_chuck in object_list %}
+            <div class="video-all-wrapp">
+              {% for video in video_chuck %}
+                <div class="video-all-card">
+                  <h2>{{ video.title }}</h2>
+                  <div class="video-all-line"></div>
+                  <div class="video-all-content"><img src="{{ video.video.url }}" alt="">
+                    <div class="video-all-link">
+                      <div class="video-all-check">
+                        <input class="with-font" id="box1" type="checkbox" checked="checked">
+                        <label class="video-all-check-name" for="box1">Переглянуто</label>
+                      </div><a href="">Переглянути ще раз</a>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock %}
