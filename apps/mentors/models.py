@@ -18,6 +18,7 @@ class Mentoree(models.Model):
     fears = models.CharField(max_length=128)
     loves = models.CharField(max_length=64)
     hates = models.CharField(max_length=64)
+    strengths = models.CharField(max_length=64)
     extra_data = models.CharField(max_length=128)
     organization = models.OneToOneField(
         to='users.Organization',
@@ -37,7 +38,7 @@ class Mentoree(models.Model):
 
 class StoryImage(models.Model):
     # TODO: find out how many images should be available to upload
-    mentoree = models.ForeignKey(to=Mentoree, on_delete=models.CASCADE)
+    mentoree = models.ForeignKey(to=Mentoree, on_delete=models.CASCADE, related_name='story_images')
     image = models.ImageField(upload_to='mentorees/story')
 
 

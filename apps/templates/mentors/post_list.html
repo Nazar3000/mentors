@@ -40,9 +40,11 @@
                     </div>
                   </div>
                 {% endfor %}
-                {% if post.comments.count > 0 %}
-                  <div class="tape-dialog-all"><a href="">Читати всі коментарі</a></div>
-                {% endif %}
+                  <div class="tape-dialog-all"
+                       style="display: {% if not post.comments.count %}none{% endif %}"
+                  >
+                    <a href="">Читати всі коментарі</a>
+                  </div>
                 <div class="tape-dialog-wrapp">
                   <img src="{{ post.related_user.profile_image.url }}" alt="">
                   <div class="tape-dialog-content">
@@ -63,5 +65,6 @@
 {% block extra_js %}
   <script src="{% static 'scripts/jquery-3.3.1.min.js' %}"></script>
   <script src="{% static 'scripts/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'scripts/ajax_setup.js' %}"></script>
   <script src="{% static 'scripts/comments.js' %}"></script>
 {% endblock %}

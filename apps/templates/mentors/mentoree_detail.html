@@ -1,5 +1,86 @@
 {% extends 'base.html' %}
+{% load static date_tags %}
 
 {% block content %}
-    {{ object }}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container"><a class="admin-link active" href="">Особистий кабінет наставника ></a><a class="admin-link" href=""> Денис Сверидов</a></div>
+    </section>
+    <section class="admin">
+      <div class="container">
+        <div class="admin-wrapp">
+          <div class="admin-left">
+            {% with mentoree as m %}
+              <div class="admin-card">
+                <div class="admin-card-info"><img src="{{ m.profile_image.url }}" alt="">
+                  <div>
+                    <h2 class="admin-card-name">{{ m.first_name }}<br>{{ m.last_name }}</h2>
+                    <p class="admin-card-birth">Дата народження</p>
+                    <p class="admin-card-data">{{ m.date_of_birth|date:'d.m.Y' }} <span class="admin-card-age">({{ m.date_of_birth|get_age }}  років)</span></p>
+                  </div><a class="admin-card-bage" href=""><i class="fas fa-pencil-alt"></i></a>
+                </div>
+                <div class="admin-card-line"></div>
+                <div class="admin-card-dream">
+                  <div><span class="admin-card-dream-name">Мрія</span>
+                    <p class="admin-card-dream-item">{{ m.dream }}</p><span class="admin-card-dream-name">Боїться</span>
+                    <p class="admin-card-dream-item">{{ m.fears }}</p><span class="admin-card-dream-name">Ненавидить</span>
+                    <p class="admin-card-dream-item">{{ m.hates }}</p><span class="admin-card-dream-name">Інше</span>
+                    <p class="admin-card-dream-item">{{ m.extra_data }}</p>
+                  </div>
+                  <div><span class="admin-card-dream-name">Хочу стати</span>
+                    <p class="admin-card-dream-item">{{ m.want_to_become }}</p><span class="admin-card-dream-name">Любить</span>
+                    <p class="admin-card-dream-item">{{ m.loves }}</p><span class="admin-card-dream-name">Сильні сторони</span>
+                    <p class="admin-card-dream-item">{{ m.strengths }}</p>
+                  </div>
+                </div>
+                <div class="admin-card-line"></div>
+                <div class="admin-card-place"><span>Установа:</span>
+                  <p>{{ m.organization.name }}</p>
+                </div>
+                <div class="admin-card-adress">
+                  <div><span>Адреса:</span>
+                    <p>{{ m.organization.address }}</p>
+                  </div>
+                  <div><span>Телефони установи:</span>
+                    {% for number in m.organization.phone_numbers %}
+                      <p>{{ number }}</p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            {% endwith %}
+          </div>
+          <div class="admin-right">
+            <div class="worksheet"><a class="worksheet-bage" href=""><i class="fas fa-plus"></i></a>
+              <div class="worksheet-input"><span>Гігієна:</span>
+                <input type="text">
+              </div>
+              <div class="worksheet-input"><span>Що цій дитині допоможе бути самостійним:</span>
+                <input type="text">
+              </div>
+              <div class="worksheet-input"><span>Емоціанально стан дитини:</span>
+                <input type="text">
+              </div>
+              <div class="worksheet-input"><span>Навички спілкування:</span>
+                <input type="text">
+              </div>
+              <div class="worksheet-input"><span>Як орієнтується в просторі (чи є проблеми):</span>
+                <input type="text">
+              </div>
+              <div class="worksheet-page"><a href="">1</a><a href="">2</a><a class="active" href="">3</a><a href="">4</a><a href="">5</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="worksheet-history-page">
+          <div class="worksheet-history">
+            <h2>Коротка історія дитини</h2>
+            <div class="worksheet-line"></div>
+            <div class="worksheet-wrapp"><img src="{{ mentoree.story_images.first.image.url }}" alt="">
+              <p>{{ mentoree.story }}</p>
+            </div><a href="">Доповнити історію</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock %}
