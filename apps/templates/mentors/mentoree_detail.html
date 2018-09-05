@@ -4,7 +4,9 @@
 {% block content %}
   <div class="content">
     <section class="admin-link-nav">
-      <div class="container"><a class="admin-link active" href="{% url 'mentors:mentor_office' %}">Особистий кабінет наставника ></a><a class="admin-link" href=""> {{ mentoree.first_name }} {{ mentoree.last_name }}</a></div>
+      <div class="container">
+        <a class="admin-link" href="{% url 'mentors:mentor_office' %}">Особистий кабінет наставника ></a>
+        <a class="admin-link active" href=""> {{ mentoree.first_name }} {{ mentoree.last_name }}</a></div>
     </section>
     <section class="admin">
       <div class="container">

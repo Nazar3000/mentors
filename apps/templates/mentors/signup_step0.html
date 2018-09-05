@@ -2,6 +2,25 @@
 {% load static %}
 
 {% block content %}
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId            : '1982494315412009',
+        autoLogAppEvents : true,
+        xfbml            : true,
+        version          : 'v3.1'
+      });
+    };
+
+    (function(d, s, id){
+       let js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  </script>
+
   <div class="content">
     <section class="register">
       <div class="container">
@@ -21,7 +40,7 @@
             </div><span>Дітей мають наставників</span>
           </div>
           <div class="register-block-right">
-            <form method="post">
+            <form method="post" id="fb-signup">
               {% csrf_token %}
 
               {% for err in form.non_field_errors %}
@@ -34,6 +53,7 @@
                      placeholder="Ім’я"
                      autofocus
                      required
+                     v-model="userData.first_name"
               >
               {% for err in form.first_name.errors %}
                 <span class="error-form">{{ err }}</span>
@@ -44,6 +64,7 @@
                      id="{{ form.last_name.auto_id }}"
                      placeholder="Прізвище"
                      required
+                     v-model="userData.last_name"
               >
               {% for err in form.last_name.errors %}
                 <span class="error-form">{{ err }}</span>
@@ -54,6 +75,7 @@
                      id="{{ form.email.auto_id }}"
                      placeholder="Email"
                      required
+                     v-model="userData.email"
               >
               {% for err in form.email.errors %}
                 <span class="error-form">{{ err }}</span>
@@ -70,12 +92,17 @@
               {% endfor %}
 
               <button type="submit">Реєстрація</button>
-              <a href="#">Реєстрація через Facebook</a>
-              <div class="register-line"></div><span>Маєте акаунт?<a href="">Увійдіть</a></span>
+              <a href="javascript: void(0)" @click="fetchFbData()">Реєстрація через Facebook</a>
+              <div class="register-line"></div>
+              <span>Маєте акаунт?<a href="{% url 'users:signin' %}">Увійдіть</a></span>
             </form>
           </div>
         </div>
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/fb_auth.js' %}"></script>
 {% endblock %}
