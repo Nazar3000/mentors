@@ -21,6 +21,7 @@
                         <div class="video-all-check">
                           <input class="with-font"
                                  id="box{{ outerloop_counter }}-{{ forloop.counter }}"
+                                 data-id="{{ video.pk }}"
                                  type="checkbox"
                                  {% if mentor_user in video.watched_by.all %}checked="checked"{% else %}{% endif %}
                           >
@@ -51,5 +52,6 @@
 {% block extra_js %}
     <script src="{% static 'scripts/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'scripts/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'scripts/ajax_setup.js' %}"></script>
     <script src="{% static 'scripts/video_list.js' %}"></script>
 {% endblock %}

@@ -126,6 +126,14 @@ class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
         context['mentor_user'] = Mentor.objects.get(pk=self.request.user.pk)
         return context
 
+    def post(self, *args, **kwargs):
+        video = MentorSchoolVideo.objects.get(id=self.request.POST['video_id'])
+        if self.request.user.pk in video.watched_by.all().values_list('pk', flat=True):
+            video.watched_by.remove(self.request.user.pk)
+        else:
+            video.watched_by.add(self.request.user.pk)
+        return JsonResponse({})
+
 
 class MentorSchoolVideoDetailView(CheckIfUserIsMentorMixin, DetailView):
     template_name = 'mentors/mentor_school_video_detail.html'
