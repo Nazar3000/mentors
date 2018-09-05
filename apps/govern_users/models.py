@@ -23,7 +23,10 @@ class MentorSchoolVideo(models.Model):
 
 
 class MentorSchoolVideoExtraMaterial(models.Model):
-    video = models.ForeignKey(to=MentorSchoolVideo, on_delete=models.CASCADE)
+    video = models.ForeignKey(
+        to=MentorSchoolVideo,
+        on_delete=models.CASCADE,
+        related_name='extra_materials')
     file = models.FileField('govern_users/mentor_school_videos/extra_materials')
 
 

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container">
+        <a class="admin-link" href="{% url 'mentors:mentor_office' %}">Особистий кабінет наставника ></a>
+        <a class="admin-link" href="{% url 'mentors:school_videos' %}"> Відео тренінги ></a>
+        <a class="admin-link active" href=""
+        > {{ object.title }}</a>
+      </div>
+    </section>
+    <section class="video-see">
+      <div class="container">
+        <h2>{{ object.title }}</h2>
+        <div class="video-see-frame">
+          {% if object.video_url %}
+            <iframe width="720"
+                    height="453"
+                    src="{{ object.video_url }}"
+                    frameborder="0"
+                    allow="autoplay; encrypted-media"
+                    allowfullscreen=""
+            ></iframe>
+          {% elif object.video %}
+            <video width="720" height="453" controls>
+              <source src="{{ object.video.url }}">
+            Your browser does not support the video tag.
+            </video>
+          {% endif %}
+        </div>
+        <div class="video-see-download">
+          <p>Матеріали для скачування:</p>
+          {% for material in object.extra_materials.all %}
+            <a href="{{ material.file.url }}" target="_blank">
+              <span><i class="fas fa-paperclip"></i></span>{{ material.file.name }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}
