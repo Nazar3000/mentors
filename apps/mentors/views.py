@@ -1,4 +1,5 @@
 import rstr
+
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
 
@@ -119,6 +120,11 @@ class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
                     if index // nest_size == 1 else index // nest_size
                 nested_videos[nested_index].append(vid)
         return nested_videos
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['mentor_user'] = Mentor.objects.get(pk=self.request.user.pk)
+        return context
 
 
 class MentorSchoolVideoDetailView(CheckIfUserIsMentorMixin, DetailView):

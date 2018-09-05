@@ -1,6 +1,5 @@
 Django==2.1
 django-jsonify==0.3.0
-FFVideo==0.0.13
 Pillow==5.2.0
 psycopg2-binary==2.7.5
 python-dateutil==2.7.3

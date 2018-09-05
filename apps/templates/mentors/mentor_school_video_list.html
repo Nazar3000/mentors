@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
   <div class="content">
@@ -10,24 +11,45 @@
         <div class="owl-carousel">
           {% for video_chuck in object_list %}
             <div class="video-all-wrapp">
-              {% for video in video_chuck %}
-                <div class="video-all-card">
-                  <h2>{{ video.title }}</h2>
-                  <div class="video-all-line"></div>
-                  <div class="video-all-content"><img src="{{ video.video.url }}" alt="">
-                    <div class="video-all-link">
-                      <div class="video-all-check">
-                        <input class="with-font" id="box1" type="checkbox" checked="checked">
-                        <label class="video-all-check-name" for="box1">Переглянуто</label>
-                      </div><a href="">Переглянути ще раз</a>
+              {% with forloop.counter as outerloop_counter %}
+                {% for video in video_chuck %}
+                  <div class="video-all-card">
+                    <h2>{{ video.title }}</h2>
+                    <div class="video-all-line"></div>
+                    <div class="video-all-content"><img src="{{ video.thumbnail.url }}" alt="">
+                      <div class="video-all-link">
+                        <div class="video-all-check">
+                          <input class="with-font"
+                                 id="box{{ outerloop_counter }}-{{ forloop.counter }}"
+                                 type="checkbox"
+                                 {% if mentor_user in video.watched_by.all %}checked="checked"{% else %}{% endif %}
+                          >
+                          <label class="video-all-check-name"
+                                 for="box{{ outerloop_counter }}-{{ forloop.counter }}"
+                          >
+                            Переглянуто
+                          </label>
+                        </div>
+                        {% if mentor_user in video.watched_by.all %}
+                          <a class="video-init-all-btn" href="{% url 'mentors:school_video' pk=video.pk %}">Переглянути ще раз</a>
+                        {% else %}
+                          <a class="video-all-btn" href="{% url 'mentors:school_video' pk=video.pk %}">Переглянути</a>
+                        {% endif %}
+                      </div>
                     </div>
                   </div>
-                </div>
-              {% endfor %}
+                {% endfor %}
+              {% endwith %}
             </div>
           {% endfor %}
         </div>
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'scripts/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'scripts/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'scripts/video_list.js' %}"></script>
 {% endblock %}
