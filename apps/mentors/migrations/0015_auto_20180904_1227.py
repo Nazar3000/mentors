@@ -31,9 +31,4 @@ class Migration(migrations.Migration):
             model_name='mentoree',
             name='will_help_to_became_independent',
         ),
-        migrations.AddField(
-            model_name='mentoree',
-            name='extra_data_fields',
-            field=django.contrib.postgres.fields.hstore.HStoreField(default=dict),
-        ),
     ]

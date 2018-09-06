@@ -52,14 +52,72 @@
               </div>
             {% endwith %}
           </div>
-          <div class="admin-right">
-            <div class="worksheet" id="extra-data-fields">
-              <a class="worksheet-bage" href=""><i class="fas fa-plus"></i></a>
-              <div class="worksheet-input" v-for="item in Object.entries(dataFields).slice(sliceStart, sliceEnd)">
-                <span>[[ item[0] ]]:</span>
-                <input type="text" :value="item[1]">
+          <div class="admin-right" id="extra-data-fields">
+            <div class="worksheet" v-if="viewMode">
+              <a class="worksheet-bage" href="javascript: void(0)" @click="viewMode=false">
+                <i class="fas fa-pencil-alt"></i>
+              </a>
+              <div class="worksheet-input" v-for="item in dataFields.slice(sliceStart, sliceEnd)">
+                <span>[[ Object.keys(item)[0] ]]:</span>
+                <p>[[ Object.values(item)[0] ]]</p>
               </div>
               <div class="worksheet-page">
+                <template v-for="pageNumber in pageCount">
+                  <a :class="{active: pageNumber === activePageNumber}"
+                     href="javascript: void(0)"
+                     @click="paginate(pageNumber)"
+                  >
+                    [[ pageNumber ]]
+                  </a>
+                </template>
+              </div>
+            </div>
+            <div class="setting-worksheet" v-else>
+              <div class="setting-worksheet-sett">
+                <a class="setting-worksheet-bage"
+                   href="javascript: void(0)"
+                   title="Add"
+                   @click="addNewExtraDataField()"
+                ><i class="fas fa-plus"></i>
+                </a>
+                <a class="setting-worksheet-bage"
+                   href="javascript: void(0)"
+                   title="Submit"
+                   @click="saveDataFields()"
+                >
+                  <i class="fas fa-check"></i>
+                </a>
+              </div>
+              <div class="setting-worksheet-input"
+                   v-for="(item, index) in dataFields.slice(sliceStart, sliceEnd)"
+                   :key="Object.keys(item)[0]"
+              >
+                <div class="setting-worksheet-header">
+                  <input class="setting-worksheet-title"
+                         type="text"
+                         :value="Object.keys(item)[0]"
+                         placeholder="Введіть тему"
+                         @input="changeDataFieldThemeData(index, $event.target.value)"
+                  >
+                  <a class="setting-worksheet-clear"
+                     href="javascript: void(0)"
+                     title="Clear"
+                     @click="removeDataField(index + (activePageNumber - 1) * sliceStep)"
+                  ><i class="fas fa-minus"></i>
+                  </a>
+                </div>
+                <span class="error-form" v-if="emptyDataFieldKeyIndexes.includes(index)">Необхідно ввести тему</span>
+
+                <input :class="{'setting-worksheet-item': Object.values(item)[0], 'setting-worksheet-item-new': !Object.values(item)[0]}"
+                       type="text"
+                       :value="Object.values(item)[0]"
+                       placeholder="Введіть текст тут"
+                       @input="changeDataFieldValueData(index, $event.target.value)"
+                >
+                <span class="error-form" v-if="emptyDataFieldValueIndexes.includes(index)">Необхідно ввести текст</span>
+
+              </div>
+              <div class="setting-worksheet-page">
                 <template v-for="pageNumber in pageCount">
                   <a :class="{active: pageNumber === activePageNumber}"
                      href="javascript: void(0)"
@@ -89,6 +147,10 @@
 {% block extra_js %}
   <script>
     const extraDataFields = '{{ mentoree.extra_data_fields|jsonify }}';
+    const userId = '{{ user.pk }}';
   </script>
+  <script src="{% static 'scripts/jquery-3.3.1.min.js' %}"></script>
+  <script src="{% static 'scripts/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'scripts/ajax_setup.js' %}"></script>
   <script src="{% static 'scripts/extra_mentoree_data.js' %}"></script>
 {% endblock %}

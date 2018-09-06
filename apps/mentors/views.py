@@ -1,3 +1,4 @@
+import json
 import rstr
 
 from django.contrib.auth import login
@@ -146,6 +147,13 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, DetailView):
 
     def get_object(self, queryset=None):
         return Mentor.objects.get(pk=self.request.user.pk).mentoree
+
+    def post(self, *args, **kwargs):
+        jdata = json.loads(self.request.POST['data'])
+        mentoree = Mentor.objects.get(pk=self.request.POST['user_id']).mentoree
+        mentoree.extra_data_fields = jdata
+        mentoree.save()
+        return JsonResponse({})
 
 
 class PostListView(CheckIfUserIsMentorMixin, ListView):

@@ -1,4 +1,4 @@
-from django.contrib.postgres.fields import HStoreField
+from django.contrib.postgres.fields import HStoreField, ArrayField
 from django.core.validators import RegexValidator
 from django.db import models
 
@@ -27,7 +27,7 @@ class Mentoree(models.Model):
         null=True)
     address = models.CharField(max_length=128)
     profile_image = models.ImageField(upload_to='mentorees/profile')
-    extra_data_fields = HStoreField(default=dict)
+    extra_data_fields = ArrayField(HStoreField(default=dict), null=True, blank=True)
 
     story = models.TextField()
 
