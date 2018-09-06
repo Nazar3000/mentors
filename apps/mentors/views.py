@@ -3,15 +3,17 @@ import rstr
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
+from django.forms import model_to_dict
 
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
-from users.templatetags.date_tags import get_time_spent
+from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Mentoree, Post, PostComment
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
@@ -141,9 +143,22 @@ class MentorSchoolVideoDetailView(CheckIfUserIsMentorMixin, DetailView):
     model = MentorSchoolVideo
 
 
-class MentoreeDetailView(CheckIfUserIsMentorMixin, DetailView):
+class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
     template_name = 'mentors/mentoree_detail.html'
-    model = Mentoree
+
+    def get(self, *args, **kwargs):
+        if 'get_mentoree_data' in self.request.GET.keys():
+            model_dict = model_to_dict(self.get_object())
+            if model_dict.get('profile_image'):
+                model_dict['profile_image'] = model_dict['profile_image'].url
+            model_dict['organization'] = model_to_dict(
+                self.get_object().organization,
+                fields=['name', 'address', 'phone_numbers'])
+            model_dict['date_of_birth'] = self.get_object().date_of_birth.strftime('%d.%m.%Y')
+            model_dict['age'] = get_age(self.get_object().date_of_birth)
+            print(model_dict['age'])
+            return JsonResponse(model_dict)
+        return super().get(*args, **kwargs)
 
     def get_object(self, queryset=None):
         return Mentor.objects.get(pk=self.request.user.pk).mentoree

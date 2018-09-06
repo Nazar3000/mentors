@@ -1,3 +1,5 @@
+$.get('?get_mentoree_data', function (mentoreeData) {
+
 const extraMentoreeData = new Vue({
   el: '#extra-data-fields',
   delimiters: ['[[', ']]'],
@@ -15,7 +17,7 @@ const extraMentoreeData = new Vue({
     viewMode: true
   },
   created() {
-    this.dataFields = JSON.parse(extraDataFields);
+    this.dataFields = mentoreeData['extra_data_fields'];
     this.sliceEnd += this.sliceStep;
     this.getPageCount()
   },
@@ -66,4 +68,35 @@ const extraMentoreeData = new Vue({
         [dataKey ? dataKey : '']: value};
     }
   }
+});
+
+const mentoreeDetailEdit = new Vue({
+  el: '#mentoree-detail-edit',
+  delimiters: ['[[', ']]'],
+  data: {
+    mentoreeData: mentoreeData,
+    uploadedImageUrl: null,
+    viewMode: true
+  },
+  created() {
+    this.uploadedImageUrl = this.mentoreeData.profile_image;
+  },
+  methods: {
+    changeProfileImage(event) {
+      this.mentoreeData.profile_image = event.target.files[0];
+      this.uploadedImageUrl = URL.createObjectURL(this.profileImage);
+    },
+    updateMentoreeData() {
+
+    },
+    deleteProfileImage() {
+      this.mentoreeData.profile_image = null;
+      this.uploadedImageUrl = null;
+    },
+    submitMentoreeData() {
+      $.post() // TODO: finish
+    }
+  }
+});
+
 });

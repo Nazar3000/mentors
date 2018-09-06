@@ -11,46 +11,101 @@
     <section class="admin">
       <div class="container">
         <div class="admin-wrapp">
-          <div class="admin-left">
-            {% with mentoree as m %}
-              <div class="admin-card">
-                <div class="admin-card-info"><img src="{{ m.profile_image.url }}" alt="">
+          <div class="admin-left" id="mentoree-detail-edit">
+
+              <div class="admin-card" v-if="viewMode">
+                <div class="admin-card-info"><img :src="mentoreeData.profile_image" alt="">
                   <div>
-                    <h2 class="admin-card-name">{{ m.first_name }}<br>{{ m.last_name }}</h2>
+                    <h2 class="admin-card-name">[[ mentoreeData.first_name ]]<br>[[ mentoreeData.last_name ]]</h2>
                     <p class="admin-card-birth">Дата народження</p>
-                    <p class="admin-card-data">{{ m.date_of_birth|date:'d.m.Y' }} <span class="admin-card-age">({{ m.date_of_birth|get_age }}  років)</span></p>
-                  </div><a class="admin-card-bage" href=""><i class="fas fa-pencil-alt"></i></a>
+                    <p class="admin-card-data">[[ mentoreeData.date_of_birth ]] <span class="admin-card-age">([[ mentoreeData.age ]]  років)</span></p>
+                  </div>
+                  <a class="admin-card-bage" href="javascript: void(0)" @click="viewMode=false">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
                 </div>
                 <div class="admin-card-line"></div>
                 <div class="admin-card-dream">
                   <div><span class="admin-card-dream-name">Мрія</span>
-                    <p class="admin-card-dream-item">{{ m.dream }}</p><span class="admin-card-dream-name">Боїться</span>
-                    <p class="admin-card-dream-item">{{ m.fears }}</p><span class="admin-card-dream-name">Ненавидить</span>
-                    <p class="admin-card-dream-item">{{ m.hates }}</p><span class="admin-card-dream-name">Інше</span>
-                    <p class="admin-card-dream-item">{{ m.extra_data }}</p>
+                    <p class="admin-card-dream-item">[[ mentoreeData.dream ]]</p><span class="admin-card-dream-name">Боїться</span>
+                    <p class="admin-card-dream-item">[[ mentoreeData.fears ]]</p><span class="admin-card-dream-name">Ненавидить</span>
+                    <p class="admin-card-dream-item">[[ mentoreeData.hates ]]</p><span class="admin-card-dream-name">Інше</span>
+                    <p class="admin-card-dream-item">[[ mentoreeData.extra_data ]]</p>
                   </div>
                   <div><span class="admin-card-dream-name">Хочу стати</span>
-                    <p class="admin-card-dream-item">{{ m.want_to_become }}</p><span class="admin-card-dream-name">Любить</span>
-                    <p class="admin-card-dream-item">{{ m.loves }}</p><span class="admin-card-dream-name">Сильні сторони</span>
-                    <p class="admin-card-dream-item">{{ m.strengths }}</p>
+                    <p class="admin-card-dream-item">[[ mentoreeData.want_to_become ]]</p><span class="admin-card-dream-name">Любить</span>
+                    <p class="admin-card-dream-item">[[ mentoreeData.loves ]]</p><span class="admin-card-dream-name">Сильні сторони</span>
+                    <p class="admin-card-dream-item">[[ mentoreeData.strengths ]]</p>
                   </div>
                 </div>
                 <div class="admin-card-line"></div>
                 <div class="admin-card-place"><span>Установа:</span>
-                  <p>{{ m.organization.name }}</p>
+                  <p>[[ mentoreeData.organization.name ]]</p>
                 </div>
                 <div class="admin-card-adress">
                   <div><span>Адреса:</span>
-                    <p>{{ m.organization.address }}</p>
+                    <p>[[ mentoreeData.organization.address ]]</p>
                   </div>
                   <div><span>Телефони установи:</span>
-                    {% for number in m.organization.phone_numbers %}
-                      <p>{{ number }}</p>
-                    {% endfor %}
+                      <p v-for="number in mentoreeData.organization.phone_numbers">[[ number ]]</p>
                   </div>
                 </div>
               </div>
-            {% endwith %}
+
+              <div class="setting-card" v-else>
+                <div class="setting-card-info">
+                  <img :src="uploadedImageUrl" alt="" v-if="uploadedImageUrl">
+                  <img src="{% static 'img/user.svg' %}" alt="" v-else>
+                  <div class="setting-card-icon">
+{#                    <a class="add-img" href="" title="Add image"><i class="fas fa-plus"></i></a>#}
+                    <input type="file" @change="changeProfileImage($event)">
+                    <a class="delete-img"
+                       href="javascript: void(0)"
+                       title="Delete image"
+                       @click="deleteProfileImage()"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                  <div>
+                    <div class="setting-card-name">
+                      <input type="text" v-model="mentoreeData.first_name" placeholder="Ім'я">
+                      <input type="text" v-model="mentoreeData.last_name" placeholder="Прізвище">
+                    </div>
+                    <p class="setting-card-birth">Дата народження</p>
+                    <p class="setting-card-data">
+                      <input type="text" v-model="mentoreeData.date_of_birth" placeholder="дд.мм.рррр"><span class="setting-card-age"></span>
+                    </p>
+                  </div><a class="setting-card-bage" href=""><i class="fas fa-check"></i></a>
+                </div>
+                <div class="setting-card-line"></div>
+                <div class="setting-card-dream">
+                  <div class="setting-card-dream-left"><span class="setting-card-dream-name">Мрія</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.dream" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Боїться</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.fears" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Ненавидить</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.hates" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Інше</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.extra_data" placeholder="Введіть текст тут">
+                  </div>
+                  <div class="setting-card-dream-right"><span class="setting-card-dream-name">Хочу стати</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.want_to_become" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Любить</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.loves" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Сильні сторони</span>
+                    <input class="setting-card-dream-item" type="text" v-model="mentoreeData.strengths" placeholder="Введіть текст тут">
+                  </div>
+                </div>
+                <div class="setting-card-line"></div>
+                <div class="setting-card-place"><span>Установа:</span>
+                  <p>[[ mentoreeData.organization.name ]]</p>
+                </div>
+                <div class="setting-card-adress">
+                  <div><span>Адреса:</span>
+                    <p>[[ mentoreeData.organization.address ]]</p>
+                  </div>
+                  <div><span>Телефони установи:</span>
+                      <p v-for="number in mentoreeData.organization.phone_numbers">[[ number ]]</p>
+                  </div>
+                </div>
+              </div>
+
           </div>
           <div class="admin-right" id="extra-data-fields">
             <div class="worksheet" v-if="viewMode">
