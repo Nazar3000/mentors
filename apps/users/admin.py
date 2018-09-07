@@ -8,11 +8,18 @@ from .models import (
     PublicService,
     Organization,
     ChildService,
-    Volunteer)
+    Volunteer,
+)
 
 User = get_user_model()
 
-admin.site.register(User)
+
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    pass
+
+
+# admin.site.register(User)
 admin.site.register(GovernUser)
 admin.site.register(Mentor)
 admin.site.register(SocialServiceCenter)

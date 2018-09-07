@@ -54,7 +54,7 @@ const extraMentoreeData = new Vue({
       if (!hasEmptyFields) {
         this.viewMode = true;
 
-        $.post('', {'data': JSON.stringify(this.dataFields), 'user_id': userId});
+        $.post('', {'extra_fields_data': {'data': JSON.stringify(this.dataFields), 'user_id': userId}});
       }
     },
     changeDataFieldThemeData(index, value) {
@@ -84,7 +84,7 @@ const mentoreeDetailEdit = new Vue({
   methods: {
     changeProfileImage(event) {
       this.mentoreeData.profile_image = event.target.files[0];
-      this.uploadedImageUrl = URL.createObjectURL(this.profileImage);
+      this.uploadedImageUrl = URL.createObjectURL(this.mentoreeData.profile_image);
     },
     updateMentoreeData() {
 
@@ -94,7 +94,28 @@ const mentoreeDetailEdit = new Vue({
       this.uploadedImageUrl = null;
     },
     submitMentoreeData() {
-      $.post() // TODO: finish
+      let formData = new FormData();
+      formData.append('first_name', this.mentoreeData['first_name']);
+      formData.append('last_name', this.mentoreeData['last_name']);
+      formData.append('date_of_birth', this.mentoreeData['date_of_birth']);
+      formData.append('dream', this.mentoreeData['dream']);
+      formData.append('want_to_become', this.mentoreeData['want_to_become']);
+      formData.append('fears', this.mentoreeData['fears']);
+      formData.append('loves', this.mentoreeData['loves']);
+      formData.append('hates', this.mentoreeData['hates']);
+      formData.append('strengths', this.mentoreeData['strengths']);
+      formData.append('extra_data', this.mentoreeData['extra_data']);
+      formData.append('profile_image', this.mentoreeData['profile_image']);
+      console.log(this.mentoreeData['profile_image']);
+
+      $.ajax({
+        url: '',
+        data: formData,
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        type: 'POST'
+      });
     }
   }
 });

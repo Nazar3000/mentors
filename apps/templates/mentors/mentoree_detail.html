@@ -58,7 +58,7 @@
                   <img src="{% static 'img/user.svg' %}" alt="" v-else>
                   <div class="setting-card-icon">
 {#                    <a class="add-img" href="" title="Add image"><i class="fas fa-plus"></i></a>#}
-                    <input type="file" @change="changeProfileImage($event)">
+{#                    <input type="file" @change="changeProfileImage($event)">#}
                     <a class="delete-img"
                        href="javascript: void(0)"
                        title="Delete image"
@@ -76,7 +76,10 @@
                     <p class="setting-card-data">
                       <input type="text" v-model="mentoreeData.date_of_birth" placeholder="дд.мм.рррр"><span class="setting-card-age"></span>
                     </p>
-                  </div><a class="setting-card-bage" href=""><i class="fas fa-check"></i></a>
+                  </div>
+                  <a class="setting-card-bage" href="javascript: void(0)" @click="submitMentoreeData($event)">
+                    <i class="fas fa-check"></i>
+                  </a>
                 </div>
                 <div class="setting-card-line"></div>
                 <div class="setting-card-dream">
@@ -86,6 +89,7 @@
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.hates" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Інше</span>
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.extra_data" placeholder="Введіть текст тут">
                   </div>
+                  <input type="file" @change="changeProfileImage($event)">
                   <div class="setting-card-dream-right"><span class="setting-card-dream-name">Хочу стати</span>
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.want_to_become" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Любить</span>
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.loves" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Сильні сторони</span>

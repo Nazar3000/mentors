@@ -46,14 +46,20 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     # TODO: End up when docs/requirements received
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    email = models.EmailField(db_index=True, unique=True)
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False)
+    email = models.EmailField(
+        db_index=True,
+        unique=True)
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
-    user_type = models.PositiveSmallIntegerField(choices=UserTypes.USER_TYPE_CHOICES)
+    user_type = models.PositiveSmallIntegerField(
+        choices=UserTypes.USER_TYPE_CHOICES)
 
     USERNAME_FIELD = 'email'
 
@@ -61,26 +67,44 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class GovernUser(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        to=User,
+        on_delete=models.CASCADE,
+        primary_key=True)
 
 
 class Mentor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
+    user = models.OneToOneField(
+        to=User,
+        on_delete=models.CASCADE,
+        primary_key=True)
+    first_name = models.CharField(
+        max_length=32)
+    last_name = models.CharField(
+        max_length=32)
 
-    phone_regex = RegexValidator(regex=r'\+?1?\d$')
-    phone_number = models.CharField(max_length=17, validators=[phone_regex])
-    mentoree = models.OneToOneField(to='mentors.Mentoree', on_delete=models.SET_NULL, null=True)
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[phone_regex])
+    mentoree = models.OneToOneField(
+        to='mentors.Mentoree',
+        on_delete=models.SET_NULL,
+        null=True)
     licence_key = models.OneToOneField(
         to='mentors.MentorLicenceKey',
         on_delete=models.SET_NULL,
         null=True)
-    profile_image = models.ImageField(upload_to='mentors/profile_images')
+    profile_image = models.ImageField(
+        upload_to='mentors/profile_images')
 
 
 class SocialServiceCenter(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        to=User,
+        on_delete=models.CASCADE,
+        primary_key=True)
     mentor_license_key = models.ForeignKey(
         to='mentors.MentorLicenceKey',
         on_delete=models.SET_NULL,
@@ -88,14 +112,23 @@ class SocialServiceCenter(models.Model):
 
 
 class PublicService(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        to=User,
+        on_delete=models.CASCADE,
+        primary_key=True)
 
 
 class Organization(models.Model):
-    name = models.CharField(max_length=512)
-    address = models.CharField(max_length=512)
-    phone_regex = RegexValidator(regex=r'\+?1?\d$')
-    phone_numbers = ArrayField(models.CharField(max_length=17, validators=[phone_regex]))
+    name = models.CharField(
+        max_length=512)
+    address = models.CharField(
+        max_length=512)
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_numbers = ArrayField(
+        models.CharField(
+            max_length=17,
+            validators=[phone_regex]))
 
 
 class ChildService(models.Model):
@@ -104,22 +137,35 @@ class ChildService(models.Model):
 
 
 class Volunteer(models.Model):
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
+    first_name = models.CharField(
+        max_length=32)
+    last_name = models.CharField(
+        max_length=32)
 
-    phone_regex = RegexValidator(regex=r'\+?1?\d$')
-    phone_number = models.CharField(max_length=17, validators=[phone_regex])
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[phone_regex])
 
-    city = models.CharField(max_length=64)
+    city = models.CharField(
+        max_length=64)
 
-    mentoring_popularization = models.BooleanField(default=True)
+    mentoring_popularization = models.BooleanField(
+        default=True)
 
-    master_classes_names = models.CharField(max_length=512)
+    master_classes_names = models.CharField(
+        max_length=512)
 
-    profession_name = models.CharField(max_length=128)
-    profession_company_name = models.CharField(max_length=128)
-    profession_company_address = models.CharField(max_length=256)
+    profession_name = models.CharField(
+        max_length=128)
+    profession_company_name = models.CharField(
+        max_length=128)
+    profession_company_address = models.CharField(
+        max_length=256)
 
-    financial_support = models.BooleanField(default=True)
+    financial_support = models.BooleanField(
+        default=True)
 
-    another_assistance_ways_names = models.CharField(max_length=512)
+    another_assistance_ways_names = models.CharField(
+        max_length=512)

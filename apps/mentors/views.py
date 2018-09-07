@@ -100,6 +100,7 @@ class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # TODO: replace ?
         context['mentor_school_videos'] = \
             MentorSchoolVideo.objects.order_by('?')[:2]
         context['mentor_tip'] = MentorTip.objects.order_by('?').first()
@@ -156,7 +157,6 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
                 fields=['name', 'address', 'phone_numbers'])
             model_dict['date_of_birth'] = self.get_object().date_of_birth.strftime('%d.%m.%Y')
             model_dict['age'] = get_age(self.get_object().date_of_birth)
-            print(model_dict['age'])
             return JsonResponse(model_dict)
         return super().get(*args, **kwargs)
 
@@ -164,10 +164,12 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
         return Mentor.objects.get(pk=self.request.user.pk).mentoree
 
     def post(self, *args, **kwargs):
-        jdata = json.loads(self.request.POST['data'])
-        mentoree = Mentor.objects.get(pk=self.request.POST['user_id']).mentoree
-        mentoree.extra_data_fields = jdata
-        mentoree.save()
+        if 'extra_fields_data' in self.request.POST.keys():
+            jdata = json.loads(self.request.POST['data'])
+            mentoree = Mentor.objects.get(pk=self.request.POST['user_id']).mentoree
+            mentoree.extra_data_fields = jdata
+            mentoree.save()
+        print(self.request.POST)
         return JsonResponse({})
 
 
