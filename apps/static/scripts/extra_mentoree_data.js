@@ -54,7 +54,7 @@ const extraMentoreeData = new Vue({
       if (!hasEmptyFields) {
         this.viewMode = true;
 
-        $.post('', {'extra_fields_data': {'data': JSON.stringify(this.dataFields), 'user_id': userId}});
+        $.post('', {'extra_fields_data': JSON.stringify(this.dataFields), 'user_id': userId});
       }
     },
     changeDataFieldThemeData(index, value) {
@@ -95,6 +95,8 @@ const mentoreeDetailEdit = new Vue({
     },
     submitMentoreeData() {
       let formData = new FormData();
+      formData.append('mentoree_data', '');
+      formData.append('user_id', userId);
       formData.append('first_name', this.mentoreeData['first_name']);
       formData.append('last_name', this.mentoreeData['last_name']);
       formData.append('date_of_birth', this.mentoreeData['date_of_birth']);
@@ -106,15 +108,18 @@ const mentoreeDetailEdit = new Vue({
       formData.append('strengths', this.mentoreeData['strengths']);
       formData.append('extra_data', this.mentoreeData['extra_data']);
       formData.append('profile_image', this.mentoreeData['profile_image']);
-      console.log(this.mentoreeData['profile_image']);
 
       $.ajax({
         url: '',
         data: formData,
         processData: false,
         contentType: false,
+        cache: false,
         enctype: 'multipart/form-data',
-        type: 'POST'
+        type: 'POST',
+        success: () => {
+          this.viewMode = true;
+        }
       });
     }
   }

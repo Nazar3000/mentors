@@ -1,20 +1,19 @@
 import json
 import rstr
+from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
 from django.forms import model_to_dict
-
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Mentoree, Post, PostComment
+from .models import MentorLicenceKey, Post, PostComment
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -112,9 +111,12 @@ class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/mentor_school_video_list.html'
     queryset = MentorSchoolVideo.objects.all()
 
-    def get_queryset(self):
+    @staticmethod
+    def nest_queryset(nest_size):
+        """
+        Return list of list with same length
+        """
         nested_videos = []
-        nest_size = 4
         for index, vid in enumerate(MentorSchoolVideo.objects.all(), 1):
             if (index + nest_size) % nest_size == 1:
                 nested_videos.append([])
@@ -124,6 +126,9 @@ class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
                     if index // nest_size == 1 else index // nest_size
                 nested_videos[nested_index].append(vid)
         return nested_videos
+
+    def get_queryset(self):
+        return self.nest_queryset(nest_size=4)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -164,13 +169,32 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
         return Mentor.objects.get(pk=self.request.user.pk).mentoree
 
     def post(self, *args, **kwargs):
+        mentoree = Mentor.objects.get(pk=self.request.POST['user_id']).mentoree
         if 'extra_fields_data' in self.request.POST.keys():
-            jdata = json.loads(self.request.POST['data'])
-            mentoree = Mentor.objects.get(pk=self.request.POST['user_id']).mentoree
+            jdata = json.loads(self.request.POST['extra_fields_data']['data'])
             mentoree.extra_data_fields = jdata
             mentoree.save()
-        print(self.request.POST)
-        return JsonResponse({})
+        elif 'mentoree_data' in self.request.POST.keys():
+            mentoree_data = self.request.POST
+
+            mentoree.first_name = mentoree_data['first_name']
+            mentoree.last_name = mentoree_data['last_name']
+            mentoree.date_of_birth = datetime.strptime(mentoree_data['date_of_birth'], '%d.%m.%Y')
+            mentoree.dream = mentoree_data['dream']
+            mentoree.want_to_become = mentoree_data['want_to_become']
+            mentoree.fears = mentoree_data['fears']
+            mentoree.loves = mentoree_data['loves']
+            mentoree.hates = mentoree_data['hates']
+            mentoree.strengths = mentoree_data['strengths']
+            mentoree.extra_data = mentoree_data['extra_data']
+            if 'profile_image' in self.request.FILES.keys() \
+                    and 'profile_image' not in mentoree_data.keys():
+                mentoree.profile_image.save(
+                    self.request.FILES['profile_image'].name,
+                    self.request.FILES['profile_image'])
+            mentoree.save()
+
+        return JsonResponse({'status': 'success'})
 
 
 class PostListView(CheckIfUserIsMentorMixin, ListView):
