@@ -112,7 +112,12 @@
                     <a href="">Детальніше ></a>
                   </div>
                 {% endfor %}
-              </div><a class="admin-diary-btn" href="">Усі зустрічі</a>
+              </div>
+              <a class="admin-diary-btn"
+                 href="{% url 'mentors:meetings_list' %}"
+              >
+                Усі зустрічі
+              </a>
             </div>
           </div>
         </div>

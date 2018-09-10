@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="content" id="vue-content">
+    <section class="admin-link-nav">
+      <div class="container"><a class="admin-link" href="">Особистий кабінет наставника ></a>
+        <p class="admin-link-title">Денис Сверидов</p>
+      </div>
+    </section>
+    <section class="diary">
+      <div class="container">
+        <App></App>
+      </div>
+    </section>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const userId = '{{ user.pk }}';
+  </script>
+{% endblock %}

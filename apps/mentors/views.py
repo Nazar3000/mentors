@@ -14,7 +14,7 @@ from django.conf import settings
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -231,3 +231,29 @@ def send_post_comment(request):
         'author_full_name': ' '.join([comment.author.first_name, comment.author.last_name]),
         'author_profile_image': comment.author.profile_image.url,
         'date_time': get_time_spent(comment.datetime)})
+
+
+class MeetingListView(CheckIfUserIsMentorMixin, ListView):
+    template_name = 'mentors/meeting_list.html'
+
+    def get_queryset(self):
+        return Meeting.objects.filter(performer__pk=self.request.user.pk)
+
+    def get(self, request, *args, **kwargs):
+        if 'get_meetings_data' in self.request.GET.keys():
+            meeting_query_list = self.get_queryset().values(
+                'id',
+                'title',
+                'date',
+                'description',
+                'observation',
+                'note_for_next_meeting',)
+            meeting_list = []
+            for meeting in meeting_query_list.iterator():
+                meeting['date'] = datetime.strftime(meeting['date'], '%d. %m. %Y')
+                meeting['images'] = []
+                for image in MeetingImage.objects.filter(meeting_id=meeting['id']).iterator():
+                    meeting['images'].append(image.image.url)
+                meeting_list.append(meeting)
+            return JsonResponse(meeting_list, safe=False)
+        return super().get(request, *args, **kwargs)
