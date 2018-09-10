@@ -57,8 +57,8 @@
                   <img :src="uploadedImageUrl" alt="" v-if="uploadedImageUrl">
                   <img src="{% static 'img/user.svg' %}" alt="" v-else>
                   <div class="setting-card-icon">
-{#                    <a class="add-img" href="" title="Add image"><i class="fas fa-plus"></i></a>#}
-{#                    <input type="file" @change="changeProfileImage($event)">#}
+                    <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
+                    <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
                     <a class="delete-img"
                        href="javascript: void(0)"
                        title="Delete image"
@@ -89,7 +89,6 @@
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.hates" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Інше</span>
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.extra_data" placeholder="Введіть текст тут">
                   </div>
-                  <input type="file" @change="changeProfileImage($event)">
                   <div class="setting-card-dream-right"><span class="setting-card-dream-name">Хочу стати</span>
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.want_to_become" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Любить</span>
                     <input class="setting-card-dream-item" type="text" v-model="mentoreeData.loves" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Сильні сторони</span>
@@ -189,15 +188,81 @@
             </div>
           </div>
         </div>
-        <div class="worksheet-history-page">
-          <div class="worksheet-history">
+        <div class="worksheet-history-page" id="mentoree-story">
+
+          <div class="worksheet-history" v-if="viewMode">
             <h2>Коротка історія дитини</h2>
             <div class="worksheet-line"></div>
-            <div class="worksheet-wrapp"><img src="{{ mentoree.story_images.first.image.url }}" alt="">
-              <p>{{ mentoree.story }}</p>
-            </div><a href="">Доповнити історію</a>
+            <div class="worksheet-wrapp">
+              <img :src="typeof currentImage === 'string' ? currentImage : getFileObjectUrl(currentImage)"
+                   alt=""
+              >
+              <div class="setting-worksheet-img-link" v-if="images.length > 1">
+                <a class="setting-worksheet-left"
+                   href="javascript: void(0)"
+                   @click="prevImage()"
+                >
+                  <i class="fas fa-angle-left"></i></a>
+                <a class="setting-worksheet-right"
+                   href="javascript: void(0)"
+                   @click="nextImage()"
+                >
+                  <i class="fas fa-angle-right"></i>
+                </a>
+              </div>
+              <p>[[ story ]]</p>
+            </div><a href="javascript: void(0)" @click="viewMode=false">Доповнити історію</a>
           </div>
+
+
+          <div class="setting-worksheet-history" v-else>
+            <h2>Коротка історія дитини</h2>
+            <div class="setting-worksheet-line"></div>
+            <div class="setting-worksheet-wrapp">
+              <div class="setting-worksheet-img">
+                <img :src="typeof currentImage === 'string' ? currentImage : getFileObjectUrl(currentImage)"
+                     alt=""
+                >
+                <div class="setting-worksheet-img-link" v-if="images.length > 1">
+                  <a class="setting-worksheet-left"
+                     href="javascript: void(0)"
+                     @click="prevImage()"
+                  >
+                    <i class="fas fa-angle-left"></i></a>
+                  <a class="setting-worksheet-right"
+                     href="javascript: void(0)"
+                     @click="nextImage()"
+                  >
+                    <i class="fas fa-angle-right"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="setting-card-icon">
+                <label class="add-img" for="file"><i class="fas fa-plus"></i></label>
+                <input id="file"
+                       style="display:none;"
+                       type="file"
+                       @change="addImage($event)"
+                >
+                <a class="delete-img"
+                   href="javascript: void(0)"
+                   title="Delete image"
+                   @click="deleteImage()"
+                >
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+              <textarea rows="10"
+                        cols="45"
+                        name="text"
+                        placeholder="Ваша історія"
+                        v-model="story"
+              ></textarea>
+            </div><a href="javascript: void(0)" @click="submitStoryData()">Доповнити історію</a>
+          </div>
+
         </div>
+
       </div>
     </section>
   </div>
@@ -205,7 +270,6 @@
 
 {% block extra_js %}
   <script>
-    const extraDataFields = '{{ mentoree.extra_data_fields|jsonify }}';
     const userId = '{{ user.pk }}';
   </script>
   <script src="{% static 'scripts/jquery-3.3.1.min.js' %}"></script>

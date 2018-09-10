@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
     // menu mobile
+
     $('.header-trigger').click(function() {
         $('nav ul').slideToggle(500);
     });
@@ -10,7 +11,7 @@ $(document).ready(function() {
         }
     });
 
-    // accorderon show
+    // accorderon  main page show
 
     $(function($){
         var contents = $('.issues-content');
@@ -23,6 +24,25 @@ $(document).ready(function() {
 
             var content = title.next('.issues-content');
 
+            if (!content.is(':visible')) {
+                content.slideDown(function(){title.addClass('is-opened')});
+            }
+        });
+    });
+
+    // all message
+
+    $(function($){
+        var contents = $('.tape-dialog-all-content');
+        var titles = $('.tape-dialog-all');
+
+        titles.on('click',function(){
+            var title = $(this);
+
+            contents.filter(':visible').slideUp(function(){
+                $(this).siblings('.tape-dialog-all').removeClass('is-opened');
+            });
+            var content = title.siblings('.tape-dialog-all-content');
             if (!content.is(':visible')) {
                 content.slideDown(function(){title.addClass('is-opened')});
             }
@@ -45,6 +65,48 @@ $(document).ready(function() {
         });
     });
 
+    // open diary block
+
+    $('.block-open-more').click(function (event) {
+        event.preventDefault();
+
+        var parent = $(this).parents('.diary-block');
+        var parent_id = parent.data('id');
+
+        parent.slideToggle(400);
+        $('.diary-block-open[data-id='+parent_id+']').slideToggle(400);
+
+    });
+
+    $('.diary-block-close').click(function (event) {
+        event.preventDefault();
+        var parent = $(this).parents('.diary-block-open');
+        var parent_id = parent.data('id');
+
+        $(this).parents('.diary-block-open').slideToggle(400);
+        $('.diary-block[data-id='+parent_id+']').slideToggle(400);
+    });
+
+    // slider diary
+
+    $('#vertical').lightSlider({
+        gallery:true,
+        item:1,
+        vertical:true,
+        verticalHeight:250,
+        vThumbWidth:70,
+        thumbItem:4,
+        thumbMargin:0,
+        slideMargin:0,
+    });
+
+
+    // add img
+
+    $("#files, #file").change(function() {
+        filename = this.files[0].name;
+        console.log(filename);
+    });
 
 });
 

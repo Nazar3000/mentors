@@ -1,6 +1,6 @@
 $.get('?get_mentoree_data', function (mentoreeData) {
 
-const extraMentoreeData = new Vue({
+  const extraMentoreeData = new Vue({
   el: '#extra-data-fields',
   delimiters: ['[[', ']]'],
   data: {
@@ -86,9 +86,6 @@ const mentoreeDetailEdit = new Vue({
       this.mentoreeData.profile_image = event.target.files[0];
       this.uploadedImageUrl = URL.createObjectURL(this.mentoreeData.profile_image);
     },
-    updateMentoreeData() {
-
-    },
     deleteProfileImage() {
       this.mentoreeData.profile_image = null;
       this.uploadedImageUrl = null;
@@ -109,6 +106,86 @@ const mentoreeDetailEdit = new Vue({
       formData.append('extra_data', this.mentoreeData['extra_data']);
       formData.append('profile_image', this.mentoreeData['profile_image']);
 
+      $.ajax({
+        url: '',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+        success: () => {
+          this.viewMode = true;
+        }
+      });
+    }
+  }
+});
+
+const mentoreeStory = new Vue({
+  el: '#mentoree-story',
+  delimiters: ['[[', ']]'],
+  data: {
+    story: mentoreeData.story,
+    images: mentoreeData.story_images,
+    currentImage: '/static/img/user.svg',
+    viewMode: true
+  },
+  created() {
+    if (this.images.length) {
+      this.currentImage = this.images[0];
+    }
+  },
+  methods: {
+    prevImage() {
+      const currImgIndex = this.images.indexOf(this.currentImage);
+      if (currImgIndex > 0) {
+        this.currentImage = this.images[currImgIndex - 1];
+      }
+      else {
+        this.currentImage = this.images[this.images.length - 1];
+      }
+    },
+    nextImage() {
+      const currImgIndex = this.images.indexOf(this.currentImage);
+      if (currImgIndex < this.images.length - 1) {
+        this.currentImage = this.images[currImgIndex + 1];
+      }
+      else {
+        this.currentImage = this.images[0];
+      }
+    },
+    deleteImage() {
+      const currImgIndex = this.images.indexOf(this.currentImage);
+      this.images.splice(currImgIndex, 1);
+      if (!this.images.length) {
+        this.currentImage = '/static/img/user.svg';
+      }
+      else {
+        this.prevImage();
+      }
+    },
+    getFileObjectUrl(fileObject) {
+      return URL.createObjectURL(fileObject)
+    },
+    addImage(event) {
+      this.images.push(event.target.files[0]);
+      this.currentImage = this.images[this.images.length - 1];
+    },
+    submitStoryData() {
+      let formData = new FormData();
+      formData.append('mentoree_story', '');
+      formData.append('user_id', userId);
+      formData.append('story', this.story);
+
+      const oldImages = this.images.filter(i => typeof i === 'string');
+      formData.append('old_images', oldImages);
+      const newImages = this.images.filter(i => i instanceof File);
+      newImages.map((img, index) => {
+        if (img instanceof File) {
+          formData.append(`new_image_${index}`, img);
+        }
+      });
       $.ajax({
         url: '',
         data: formData,

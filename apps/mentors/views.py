@@ -9,11 +9,12 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView, DetailView, ListView
+from django.conf import settings
 
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment
+from .models import MentorLicenceKey, Post, PostComment, StoryImage
 from users.models import Mentor
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
@@ -162,6 +163,8 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
                 fields=['name', 'address', 'phone_numbers'])
             model_dict['date_of_birth'] = self.get_object().date_of_birth.strftime('%d.%m.%Y')
             model_dict['age'] = get_age(self.get_object().date_of_birth)
+            model_dict['story_images'] = list(
+                map(lambda img: img.image.url, (self.get_object().story_images.all())))
             return JsonResponse(model_dict)
         return super().get(*args, **kwargs)
 
@@ -193,6 +196,21 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
                     self.request.FILES['profile_image'].name,
                     self.request.FILES['profile_image'])
             mentoree.save()
+        elif 'mentoree_story' in self.request.POST.keys():
+            mentoree.story = self.request.POST['story']
+            mentoree.save()
+
+            old_images = list(map(
+                lambda img: img.split(settings.MEDIA_URL)[1],
+                self.request.POST['old_images'].split(',')))
+            StoryImage.objects.exclude(
+                image__in=old_images).delete()
+            for i in range(len(self.request.FILES)):
+                story_image = StoryImage(mentoree_id=mentoree.pk)
+                story_image.image.save(
+                    self.request.FILES['new_image_{}'.format(i)].name,
+                    self.request.FILES['new_image_{}'.format(i)],
+                    save=True)
 
         return JsonResponse({'status': 'success'})
 
