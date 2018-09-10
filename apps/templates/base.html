@@ -15,7 +15,7 @@
 <body>
   <div class="wrapper">
     {% if user.is_authenticated and user.user_type == 1 %}
-      {% include 'header.html' %}
+      {% include 'mentor_header.html' %}
     {% else %}
       {% include 'header.html' %}
     {% endif %}

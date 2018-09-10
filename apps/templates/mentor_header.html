@@ -1,0 +1,23 @@
+{% load static %}
+{% load mentor_tags %}
+
+<header class="header-log">
+  <div class="container">
+    <nav class="header-log-wrapp">
+      <div class="header-logo">
+        <a href="{% url 'mentors:mentor_office' %}">
+          <img src="{% static 'img/header-logo.png' %}" alt="">
+        </a>
+      </div>
+      <div class="header-notification"><a class="header-notification-title" href="">Питання?</a><a class="header-notification-icon" href=""><i class="fas fa-bell"></i></a>
+        <div class="admin"><img src="{{ user|get_mentor_data:'profile_image' }}" alt="">
+          <div class="admin-title">
+            <span>Особистий кабінет наставника</span>
+            <a href="">{{ user|get_mentor_data:'first_name' }} {{ user|get_mentor_data:'last_name' }}<i class="fas fa-caret-down"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
