@@ -105,7 +105,12 @@ $(document).ready(function() {
 
     $("#files, #file").change(function() {
         filename = this.files[0].name;
-        console.log(filename);
+        // console.log(filename);
+    });
+
+    $('input[type=file]').change(function(){
+        files = this.files;
+        $('.tape-add-img-name').append(files[0].name);
     });
 
 });

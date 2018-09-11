@@ -1,5 +1,4 @@
 {% load static %}
-{% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -23,11 +22,10 @@
     {% block content %}{% endblock %}
     {% include 'footer.html' %}
   </div>
-{#  <script src="{% static 'js/libs.min.js' %}"></script>#}
-{#  <script src="{% static 'js/main.js' %}"></script>#}
-{#  <script src="{% static 'js/ajax_setup.js' %}"></script>#}
-{#  <script src="{% static 'scripts/index.js' %}"></script>#}
-  {% render_bundle 'index' 'js' %}
+  <script src="{% static 'js/libs.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/ajax_setup.js' %}"></script>
+  <script src="{% static 'js/vue.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

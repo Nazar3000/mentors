@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static date_tags %}
+{% load static date_tags mentor_tags %}
 
 {% block content %}
   <div class="content">
@@ -12,7 +12,84 @@
     <section class="tape">
       <div class="container">
         <h2 class="tape-title">Стрічка новин співдружності наставників</h2>
-          <div class="tape-wrapp"><a class="tape-bage" href=""><i class="fas fa-plus"></i></a>
+          <div class="tape-wrapp" id="news-line">
+            <a class="tape-bage"
+               href="javascript: void(0)"
+               v-if="!addNews"
+               @click="addNews=true"
+            >
+              <i class="fas fa-plus"></i>
+            </a>
+            <div class="tape-content" v-if="addNews">
+              <div class="tape-add">
+                <div class="tape-add-wrapp">
+                  <div class="tape-author"><img src="{{ user|get_mentor_data:'profile_image' }}" alt=""></div>
+                  <div class="tape-add-content">
+                    <textarea name=""
+                              id=""
+                              rows="5"
+                              placeholder="Напишіть Вашу новину тут"
+                              v-model="newPostData.text"
+                    ></textarea>
+                    <div class="tape-add-img">
+                      <label tabindex="0" for="file">
+                        <i class="fas fa-camera"></i>
+                        <span>Додати фото</span>
+                      </label>
+                      <p class="tape-add-img-name"></p>
+                      <input id="file" type="file" name="inputFile" required="">
+                    </div>
+                  </div>
+                </div>
+                <button class="tape-add-btn" @click="sendNewPost()">Поділитися</button>
+              </div>
+            </div>
+
+            <div class="tape-content" v-for="post in newPosts">
+              <div class="tape-author"><img :src="post.author.profile_image" alt="">
+                <div>
+                  <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
+                </div>
+              </div>
+              <div class="tape-description">
+                <p>[[ post.content ]]</p>
+              </div>
+              <div class="tape-image">
+                {% if post.image %}
+                  <img :src="post.image" alt="">
+                {% endif %}
+                <div class="tape-wrapp-icon">
+                  <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ({{ post.comments.count }})</a></div>
+                  <div class="tape-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">({{ post.likes }})</a></div>
+                </div>
+              </div>
+              <div class="tape-line"></div>
+              <div class="tape-dialog">
+                {% for comment in post.comments.all|dictsort:'datetime' %}
+                  <div class="tape-dialog-wrapp"><img :src="comment.author.profile_image.url" alt="">
+                    <div class="tape-dialog-content">
+                      <div class="tape-dialog-header">
+                        <p>[[ comment.author.first_name ]] [[ comment.author.last_name ]]</p><span>{{ comment.datetime|get_time_spent }}</span>
+                      </div><span>{{ comment.content }}</span>
+                    </div>
+                  </div>
+                {% endfor %}
+                  <div class="tape-dialog-all"
+                       style="display: {% if not post.comments.count %}none{% endif %}"
+                  >
+                    <a href="">Читати всі коментарі</a>
+                  </div>
+                <div class="tape-dialog-wrapp">
+                  <img :src="post.related_user.profile_image" alt="">
+                  <div class="tape-dialog-content">
+                    <textarea name="text" data-post-id="[[ post.id ]]" placeholder="Залишити коментар"></textarea>
+                  </div>
+                </div>
+                <a class="tape-dialog-btn" href="javascript: void(0)">Надіслати</a>
+                <div class="tape-line"></div>
+              </div>
+            </div>
+
           {% for post in post_list %}
             <div class="tape-content">
               <div class="tape-author"><img src="{{ post.author.profile_image.url }}" alt="">

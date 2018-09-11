@@ -257,3 +257,8 @@ class MeetingListView(CheckIfUserIsMentorMixin, ListView):
                 meeting_list.append(meeting)
             return JsonResponse(meeting_list, safe=False)
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if 'delete_meeting' in self.request.POST.keys():
+            Meeting.objects.get(id=self.request.POST['meeting_id']).delete()
+        return JsonResponse({'status': 'success'})

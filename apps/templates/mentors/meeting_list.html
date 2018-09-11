@@ -3,15 +3,88 @@
 {% load static %}
 
 {% block content %}
-  <div class="content" id="vue-content">
+  <div class="content">
     <section class="admin-link-nav">
       <div class="container"><a class="admin-link" href="">Особистий кабінет наставника ></a>
         <p class="admin-link-title">Денис Сверидов</p>
       </div>
     </section>
     <section class="diary">
-      <div class="container">
-        <App></App>
+      <div class="container" id="meeting-list">
+        <div class="diary-header">
+          <div class="diary-header-link">
+            <a href=""><i class="fas fa-plus"></i></a><span>Додати зустріч</span>
+          </div>
+        </div>
+        <template v-for="meeting in meetings">
+          <div class="diary-block"
+               data-id="1"
+               :style="{'display': !collapsedView ? 'none' : ''}"
+          >
+            <div class="diary-card">
+              <h2>[[ meeting.title ]]</h2>
+              <div class="diary-line"></div><span>[[ meeting.date ]]</span>
+              <p>[[ meeting.description ]]</p>
+              <a class="block-open-more"
+                 href="javascript: void(0)"
+                 @click="collapsedView=false"
+              >
+                Читати далі
+              </a>
+            </div>
+            <div class="diary-slider">
+              <div class="slider-wrap">
+                <ul id="vertical">
+                  <template v-for="img in meeting.images">
+                    <li :data-thumb="img"><img class="w-100" :src="img"></li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="diary-block-open"
+               data-id="1"
+               :style="{'display': collapsedView ? 'none' : 'block'}"
+          >
+            <div class="diary-block-wrapp">
+              <div class="diary-block-left">
+                <h2>[[ meeting.title ]]</h2>
+                <div class="diary-block-line"></div><span>[[ meeting.date ]]</span>
+              </div>
+              <div class="diary-block-right">
+                <div class="diary-block-link">
+                  <div class="diary-block-link-item" v-if="!meeting.images.length">
+                    <a class="diary-block-frown" href="">
+                      <i class="far fa-frown"></i>
+                    </a>
+                    <span>Фото дня не завантажені</span>
+                  </div>
+                  <div class="diary-block-link-item"><a class="diary-block-img" href=""><i class="fas fa-plus"></i></a><span>Додати фото</span></div>
+                  <div class="diary-block-link-item"><a class="diary-block-edit" href=""><i class="fas fa-pencil-alt"></i></a></div>
+                </div>
+                <div class="diary-block-trash">
+                  <a href="javascript: void(0)" @click="deleteMeeting(meeting.id)">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="diary-block-content">
+              <h4>Опис:</h4>
+              <p>[[ meeting.description ]]</p>
+              <h4>Спостереження за вихованцем:</h4>
+              <p>[[ meeting.observation ]]</p>
+              <h4>Замітка для наступної зустрічі:</h4>
+              <p>[[ meeting.note_for_next_meeting ]]</p>
+              <a class="diary-block-close"
+                 href="javascript: void(0)"
+                 @click="collapsedView=true"
+              >
+                Згорнути
+              </a>
+            </div>
+          </div>
+        </template>
       </div>
     </section>
   </div>
@@ -21,4 +94,5 @@
   <script>
     const userId = '{{ user.pk }}';
   </script>
+  <script src="{% static 'scripts/meeting_list.js' %}"></script>
 {% endblock %}

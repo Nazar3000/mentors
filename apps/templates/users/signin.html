@@ -1,23 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Login</h2>
-  <form method="post">
-    {% csrf_token %}
-      <label for="{{ form.username.auto_id }}">Email:</label>
-      <input type="text"
-             name="{{ form.username.html_name }}"
-             id="{{ form.username.auto_id }}"
-             autofocus
-             required
-      >
-
-      <label for="{{ form.password.auto_id }}">Password:</label>
-      <input type="password"
-             name="{{ form.password.html_name }}"
-             id="{{ form.password.auto_id }}"
-             required
-      >
-    <button type="submit">Login</button>
-  </form>
+  <div class="content">
+    <section class="log-in">
+      <div class="container">
+        <div class="log-in-wrapp">
+          <h2>Увійти<br>до особистого кабінету</h2>
+          <div class="log-in-form">
+            <form type="post">
+              {% csrf_token %}
+              <input type="email"
+                     name="{{ form.username.html_name }}"
+                     id="{{ form.username.auto_id }}"
+                     placeholder="Email"
+                     autofocus
+                     required
+              >
+              <input type="password"
+                     name="{{ form.password.html_name }}"
+                     id="{{ form.password.auto_id }}"
+                     placeholder="Пароль"
+                     required
+              >
+              <button type="submit">Увійти</button>
+            </form>
+            <div class="log-in-line"></div><a href="#">Забули свій пароль?</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 {% endblock %}

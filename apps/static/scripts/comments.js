@@ -1,3 +1,27 @@
+const meetingList = new Vue({
+  el: '#news-line',
+  delimiters: ['[[', ']]'],
+  data: {
+    addNews: false,
+    newPostData: {
+      text: '',
+      image: ''
+    },
+    newPosts: []
+  },
+  methods: {
+    sendNewPost() {
+      const newPost = this.newPostData;
+      newPost['new_post'] = true;
+      $.post('', newPost, (data) => {
+        if (data.status === 'success') {
+          this.newPosts.push(data);
+        }
+      })
+    }
+  }
+});
+
 $(document).ready(function() {
   $('.tape-dialog-btn').on('click', function() {
     const commentParent = $(this).parent();

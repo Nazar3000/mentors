@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
     'jsonify',
     'debug_toolbar',
-    'webpack_loader',
 
     'users',
     'mentors',
@@ -153,13 +152,3 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = 'users:signin'
 LOGOUT_REDIRECT_URL = 'users:signin'
-
-
-# webpack loader
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'dist/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/webpack-stats.json'),
-    }
-}

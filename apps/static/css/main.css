@@ -24,7 +24,8 @@ a:hover {
 button:focus,
 input:focus,
 textarea:focus,
-select:focus {
+select:focus,
+label:focus {
   outline: none;
 }
 
@@ -3582,6 +3583,128 @@ input[type="radio"]:checked:after {
   margin-bottom: 100px;
 }
 
+.tape-add-wrapp {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.tape-add-btn {
+  display: block;
+  margin-left: auto;
+  height: 50px;
+  width: 200px;
+  -webkit-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 2px 5px 10px 0 rgba(0, 0, 0, 0.19);
+  background: #368CCA;
+  color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  letter-spacing: 0.15px;
+  border: 0;
+  cursor: pointer;
+}
+
+.tape-add-btn > a {
+  font-weight: 400;
+}
+
+.tape-add-content {
+  background: rgba(226, 237, 240, 0.37);
+  padding: 25px 25px 15px;
+  width: 100%;
+  -webkit-border-radius: 8px;
+          border-radius: 8px;
+  margin-bottom: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.tape-add-content > textarea {
+  border: 0;
+  background: transparent;
+  width: 100%;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  resize: none;
+  margin-bottom: 10px;
+}
+
+.tape-add-img {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.tape-add-img p {
+  margin: 0 0 0 20px;
+  color: #368CCA;
+  font-size: 10px;
+}
+
+.tape-add-img > label {
+  margin-bottom: 0;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.tape-add-img > label > span {
+  font-size: 10px;
+}
+
+.tape-add-img > label > i {
+  color: #368CCA;
+  margin-right: 10px;
+  font-size: 20px;
+}
+
+.tape-add-img > input {
+  display: none;
+}
+
 .tape-title {
   font-size: 30px;
   font-weight: bold;
@@ -3849,14 +3972,6 @@ input[type="radio"]:checked:after {
   color: #3F4C55;
   font-size: 12px;
   letter-spacing: 0.46px;
-}
-
-.tape-dialog-all {
-  cursor: pointer;
-}
-
-.tape-dialog-all-content {
-  display: none;
 }
 
 .video-all {
