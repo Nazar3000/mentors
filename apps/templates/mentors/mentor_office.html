@@ -122,7 +122,7 @@
                       <span>{{ meeting.date|date:'d.m.Y' }}</span>
                       <span>{{ meeting.title }}</span>
                     </div>
-                    <a href="">Детальніше ></a>
+                    <a href="{% url 'mentors:meetings_list' %}?meeting_id={{ meeting.id }}">Детальніше ></a>
                   </div>
                 {% endfor %}
               </div>

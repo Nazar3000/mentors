@@ -7,8 +7,11 @@
         <div class="log-in-wrapp">
           <h2>Увійти<br>до особистого кабінету</h2>
           <div class="log-in-form">
-            <form type="post">
+            <form method="post">
               {% csrf_token %}
+              {% for err in form.non_field_errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
               <input type="email"
                      name="{{ form.username.html_name }}"
                      id="{{ form.username.auto_id }}"
@@ -16,12 +19,18 @@
                      autofocus
                      required
               >
+              {% for err in form.username.errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
               <input type="password"
                      name="{{ form.password.html_name }}"
                      id="{{ form.password.auto_id }}"
                      placeholder="Пароль"
                      required
               >
+              {% for err in form.password.errors %}
+                <span class="error-form">{{ err }}</span>
+              {% endfor %}
               <button type="submit">Увійти</button>
             </form>
             <div class="log-in-line"></div><a href="#">Забули свій пароль?</a>

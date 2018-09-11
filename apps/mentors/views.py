@@ -155,17 +155,20 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
 
     def get(self, *args, **kwargs):
         if 'get_mentoree_data' in self.request.GET.keys():
-            model_dict = model_to_dict(self.get_object())
-            if model_dict.get('profile_image'):
-                model_dict['profile_image'] = model_dict['profile_image'].url
-            model_dict['organization'] = model_to_dict(
-                self.get_object().organization,
-                fields=['name', 'address', 'phone_numbers'])
-            model_dict['date_of_birth'] = self.get_object().date_of_birth.strftime('%d.%m.%Y')
-            model_dict['age'] = get_age(self.get_object().date_of_birth)
-            model_dict['story_images'] = list(
-                map(lambda img: img.image.url, (self.get_object().story_images.all())))
-            return JsonResponse(model_dict)
+            if self.get_object():
+                model_dict = model_to_dict(self.get_object())
+                if model_dict.get('profile_image'):
+                    model_dict['profile_image'] = model_dict['profile_image'].url
+                model_dict['organization'] = model_to_dict(
+                    self.get_object().organization,
+                    fields=['name', 'address', 'phone_numbers'])
+                model_dict['date_of_birth'] = self.get_object().date_of_birth.strftime('%d.%m.%Y')
+                model_dict['age'] = get_age(self.get_object().date_of_birth)
+                model_dict['story_images'] = list(
+                    map(lambda img: img.image.url, (self.get_object().story_images.all())))
+                return JsonResponse(model_dict)
+            else:
+                return JsonResponse({'status': 'no_related_mentoree_found'})
         return super().get(*args, **kwargs)
 
     def get_object(self, queryset=None):

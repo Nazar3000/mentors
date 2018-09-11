@@ -10,5 +10,8 @@ register = template.Library()
 def get_mentor_data(user, attr):
     mentor = Mentor.objects.get(pk=user.pk)
     if isinstance(getattr(mentor, attr), ImageFieldFile) or isinstance(getattr(mentor, attr), FieldFile):
-        return getattr(mentor, attr).url
+        try:
+            return getattr(mentor, attr).url
+        except ValueError as e:
+            return ''
     return getattr(mentor, attr)

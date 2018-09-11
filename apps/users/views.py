@@ -1,6 +1,5 @@
 from django.contrib.auth.views import LoginView
 from django.shortcuts import resolve_url
-from django.views import View
 from django.views.generic import TemplateView
 
 from .constants import UserTypes

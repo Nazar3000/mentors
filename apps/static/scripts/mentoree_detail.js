@@ -1,4 +1,29 @@
 $.get('?get_mentoree_data', function (mentoreeData) {
+  let newMentoree = false;
+  if (mentoreeData.hasOwnProperty('status')
+    && mentoreeData.status === 'no_related_mentoree_found') {
+    mentoreeData = {
+      address: "",
+      age: "",
+      date_of_birth: "",
+      dream: "",
+      extra_data: "",
+      extra_data_fields: [],
+      fears: "",
+      first_name: "",
+      hates: "",
+      id:  null,
+      last_name: "",
+      loves: "",
+      organization:  {name: "", address: "", phone_numbers: []},
+      profile_image: "",
+      story: "",
+      story_images: [],
+      strengths: "",
+      want_to_become: "",
+    };
+    newMentoree = true;
+  }
 
   const extraMentoreeData = new Vue({
   el: '#extra-data-fields',
@@ -19,7 +44,10 @@ $.get('?get_mentoree_data', function (mentoreeData) {
   created() {
     this.dataFields = mentoreeData['extra_data_fields'];
     this.sliceEnd += this.sliceStep;
-    this.getPageCount()
+    this.getPageCount();
+    if (newMentoree) {
+      this.viewMode = false;
+    }
   },
   methods: {
     getPageCount() {
@@ -80,6 +108,9 @@ const mentoreeDetailEdit = new Vue({
   },
   created() {
     this.uploadedImageUrl = this.mentoreeData.profile_image;
+    if (newMentoree) {
+      this.viewMode = false;
+    }
   },
   methods: {
     changeProfileImage(event) {
@@ -134,6 +165,9 @@ const mentoreeStory = new Vue({
   created() {
     if (this.images.length) {
       this.currentImage = this.images[0];
+    }
+    if (newMentoree) {
+      this.viewMode = false;
     }
   },
   methods: {
