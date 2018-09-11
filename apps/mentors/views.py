@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
 from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.conf import settings
@@ -219,7 +219,60 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/post_list.html'
 
     def get_queryset(self):
-        return Post.objects.filter(related_user__pk=self.request.user.pk)
+        return Post.objects.all().order_by('-datetime')
+
+    def get_queryset_dict_list(self, post_queryset):
+        queryset_dict_list = []
+        for post in post_queryset.iterator():
+            post_dict = model_to_dict(post, fields=('id', 'content',))
+            post_dict['author'] = model_to_dict(
+                post.author,
+                fields=('id', 'first_name', 'last_name',))
+            post_dict['author']['profile_image'] = post.author.profile_image.url
+            post_dict['likes'] = post.likes.count()
+            if post.image:
+                post_dict['image'] = post.image.url
+            post_dict['datetime'] = get_time_spent(post.datetime)
+
+            comments = post.comments.all()
+            post_dict['comments'] = []
+            for comment in comments:
+                comment_dict = model_to_dict(comment, fields=(
+                    'id', 'author', 'datetime', 'content'))
+                comment_dict['datetime'] = get_time_spent(comment.datetime)
+                comment_dict['author'] = model_to_dict(
+                    comment.author,
+                    fields=('first_name', 'last_name',))
+                comment_dict['author']['id'] = comment.author.pk
+                comment_dict['author']['profile_image'] = comment.author.profile_image.url
+                post_dict['comments'].append(comment_dict)
+
+            queryset_dict_list.append(post_dict)
+        return queryset_dict_list
+
+    def get(self, request, *args, **kwargs):
+        if 'get_posts' in request.GET.keys():
+            queryset_dict_list = self.get_queryset_dict_list(self.get_queryset())
+            return JsonResponse(queryset_dict_list, safe=False)
+        return render(request, self.template_name)
+
+    def post(self, request, *args, **kwargs):
+        if 'new_post' in request.POST.keys():
+            post = Post(
+                author_id=request.user.pk,
+                content=request.POST['text']
+            )
+            if 'image' in self.request.FILES:
+                post.image.save(
+                    self.request.FILES['image'].name,
+                    self.request.FILES['image'],
+                    save=False)
+            post.save()
+            post_list = self.get_queryset_dict_list(
+                Post.objects.filter(id=post.id))
+            return JsonResponse(post_list, safe=False)
+
+        return JsonResponse({'status': 'success'})
 
 
 def send_post_comment(request):

@@ -85,19 +85,13 @@ class MeetingImage(models.Model):
 class Post(models.Model):
     author = models.ForeignKey(
         to='users.Mentor',
-        on_delete=models.CASCADE)
-    related_user = models.ForeignKey(
-        to='users.Mentor',
         on_delete=models.CASCADE,
         related_name='posts')
     content = models.TextField()
-    region = models.CharField(
-        max_length=16,
-        choices=Regions.choices())
     image = models.ImageField(
         upload_to='mentorees/post')
-    likes = models.PositiveSmallIntegerField(
-        default=0)
+    likes = models.ManyToManyField(
+        to='users.Mentor')
     datetime = models.DateTimeField(
         auto_now=True)
 

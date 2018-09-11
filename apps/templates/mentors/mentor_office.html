@@ -85,21 +85,23 @@
               <div class="admin-social-image"><img src="{{ last_post.image.url }}" alt="">
                 <div class="admin-social-wrapp-icon">
                   <div class="admin-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ({{ last_post.comments.count }})</a></div>
-                  <div class="admin-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">({{ last_post.likes }})</a></div>
+                  <div class="admin-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">({{ last_post.likes.count }})</a></div>
                 </div>
               </div>
-              <div class="admin-social-dialog-line"></div>
-              {% for comment in last_post.comments.all|dictsortreversed:'datetime'|slice:'2' %}
-                <div class="admin-social-dialog">
-                  <div class="admin-social-dialog-wrapp"><img src="{{ comment.author.profile_image.url }}" alt="">
-                    <div class="admin-social-dialog-content">
-                      <p>{{ comment.author.first_name }} {{ comment.author.last_name }}</p>
-                      <span>{{ comment.content }}</span>
-                    </div>
-                  </div><span>{{ comment.datetime|get_time_spent }}</span>
-                </div>
-              {% endfor %}
-              <div class="admin-social-dialog-line-btn"></div>
+              {% if last_post.comments.count %}
+                <div class="admin-social-dialog-line"></div>
+                {% for comment in last_post.comments.all|dictsortreversed:'datetime'|slice:'2' %}
+                  <div class="admin-social-dialog">
+                    <div class="admin-social-dialog-wrapp"><img src="{{ comment.author.profile_image.url }}" alt="">
+                      <div class="admin-social-dialog-content">
+                        <p>{{ comment.author.first_name }} {{ comment.author.last_name }}</p>
+                        <span>{{ comment.content }}</span>
+                      </div>
+                    </div><span>{{ comment.datetime|get_time_spent }}</span>
+                  </div>
+                {% endfor %}
+                <div class="admin-social-dialog-line-btn"></div>
+              {% endif %}
               <a class="admin-social-btn" href="{% url 'mentors:posts' %}">Відкрити всю ленту</a>
             </div>
             <div class="admin-diary">

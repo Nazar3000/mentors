@@ -5,19 +5,45 @@ const meetingList = new Vue({
     addNews: false,
     newPostData: {
       text: '',
-      image: ''
+      image: '',
     },
-    newPosts: []
+    posts: []
+  },
+  created() {
+    $.get('?get_posts', (data) => {
+      this.posts = data;
+    })
   },
   methods: {
+    addPostImage(event) {
+      this.newPostData.image = event.target.files[0];
+    },
+    getPostImageUrl(image) {
+      return URL.createObjectURL(this.newPostData.image);
+    },
     sendNewPost() {
-      const newPost = this.newPostData;
-      newPost['new_post'] = true;
-      $.post('', newPost, (data) => {
-        if (data.status === 'success') {
-          this.newPosts.push(data);
+      const formData = new FormData();
+      formData.append('text', this.newPostData.text);
+      formData.append('image', this.newPostData.image);
+      formData.append('new_post', '');
+
+      $.ajax({
+        url: '',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+        success: (data) => {
+          this.posts = [...data, ...this.posts];
+          this.addNews = false;
+          this.newPostData = {
+            text: '',
+            image: '',
+          }
         }
-      })
+      });
     }
   }
 });
