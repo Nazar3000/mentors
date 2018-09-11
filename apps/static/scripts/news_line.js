@@ -12,7 +12,10 @@ const meetingList = new Vue({
   created() {
     $.get('?get_posts', (data) => {
       this.posts = data;
-    })
+    });
+    if (window.location.search.substring(1).includes('addPost')) {
+      this.addNews = true;
+    }
   },
   methods: {
     addPostImage(event) {
@@ -44,6 +47,11 @@ const meetingList = new Vue({
           }
         }
       });
+    },
+    likePost(postId) {
+      $.post('/mentor/posts/like-post/', {'post_id': postId}, (data) => {
+        this.posts.find(p => p.id === postId).likes = data.likes;
+      })
     }
   }
 });

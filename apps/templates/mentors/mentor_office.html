@@ -68,7 +68,7 @@
             <div class="admin-social">
               <div class="admin-social-info">
                 <h2 class="admin-social-title">Cтрічка новин<br>співдружності наставників</h2>
-                <a class="admin-social-bage" href="">
+                <a class="admin-social-bage" href="{% url 'mentors:posts' %}?addPost=true">
                   <i class="fas fa-plus"></i>
                 </a>
               </div>
@@ -84,8 +84,16 @@
               </div>
               <div class="admin-social-image"><img src="{{ last_post.image.url }}" alt="">
                 <div class="admin-social-wrapp-icon">
-                  <div class="admin-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ({{ last_post.comments.count }})</a></div>
-                  <div class="admin-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">({{ last_post.likes.count }})</a></div>
+                  <div class="admin-social-icon">
+                    <span><i class="far fa-comment"></i></span>
+                    <a href="">Коментарi ({{ last_post.comments.count }})</a>
+                  </div>
+                  <div class="admin-social-icon like-block" data-id="{{ last_post.id }}">
+                    <span><i class="far fa-thumbs-up"></i></span>
+                    <a href="">
+                      ({{ last_post.likes.count }})
+                    </a>
+                  </div>
                 </div>
               </div>
               {% if last_post.comments.count %}
@@ -129,4 +137,8 @@
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/news_item_like.js' %}"></script>
 {% endblock %}

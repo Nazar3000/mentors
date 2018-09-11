@@ -63,7 +63,10 @@
                 <img :src="post.image" v-if="post.image" alt="">
                 <div class="tape-wrapp-icon">
                   <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ([[ post.comments.length ]])</a></div>
-                  <div class="tape-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">([[ post.likes ]])</a></div>
+                  <div class="tape-social-icon" @click="likePost(post.id)">
+                    <span><i class="far fa-thumbs-up"></i></span>
+                    <a href="javascript: void(0)">([[ post.likes ]])</a>
+                  </div>
                 </div>
               </div>
               <div class="tape-line"></div>
@@ -99,5 +102,6 @@
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{% static 'scripts/comments.js' %}"></script>
+  <script src="{% static 'scripts/news_line.js' %}"></script>
+  <script src="{% static 'scripts/news_item_like.js' %}"></script>
 {% endblock %}

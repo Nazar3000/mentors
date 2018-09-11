@@ -315,3 +315,12 @@ class MeetingListView(CheckIfUserIsMentorMixin, ListView):
         if 'delete_meeting' in self.request.POST.keys():
             Meeting.objects.get(id=self.request.POST['meeting_id']).delete()
         return JsonResponse({'status': 'success'})
+
+
+def like_news_item(request):
+    post = Post.objects.get(id=request.POST['post_id'])
+    if request.user.id in post.likes.all().values_list('user_id', flat=True):
+        post.likes.remove(request.user.id)
+    else:
+        post.likes.add(request.user.id)
+    return JsonResponse({'likes': post.likes.count()})
