@@ -1,7 +1,6 @@
 $.get('?get_mentoree_data', function (mentoreeData) {
   let newMentoree = false;
-  if (mentoreeData.hasOwnProperty('status')
-    && mentoreeData.status === 'no_related_mentoree_found') {
+  if (!mentoreeData.id) {
     mentoreeData = {
       address: "",
       age: "",
@@ -15,7 +14,8 @@ $.get('?get_mentoree_data', function (mentoreeData) {
       id:  null,
       last_name: "",
       loves: "",
-      organization:  {name: "", address: "", phone_numbers: []},
+      organization: "",
+      all_organizations: mentoreeData.all_organizations,
       profile_image: "",
       story: "",
       story_images: [],
@@ -42,7 +42,12 @@ $.get('?get_mentoree_data', function (mentoreeData) {
     viewMode: true
   },
   created() {
-    this.dataFields = mentoreeData['extra_data_fields'];
+    this.dataFields = mentoreeData['extra_data_fields']
+      ? mentoreeData['extra_data_fields']
+      : this.dataFields;
+    this.sliceStep = this.dataFields.length >= this.sliceStep
+      ? this.sliceStep
+      : this.dataFields.length;
     this.sliceEnd += this.sliceStep;
     this.getPageCount();
     if (newMentoree) {
@@ -104,10 +109,17 @@ const mentoreeDetailEdit = new Vue({
   data: {
     mentoreeData: mentoreeData,
     uploadedImageUrl: null,
+    organizationObject: null,
     viewMode: true
   },
   created() {
     this.uploadedImageUrl = this.mentoreeData.profile_image;
+    this.organizationObject = this.mentoreeData.all_organizations.find(o => {
+      return o.id === this.mentoreeData.organization;
+    });
+    this.mentoreeData.organization = this.mentoreeData.organization
+      ? this.mentoreeData.organization
+      : this.mentoreeData.all_organizations[0].id;
     if (newMentoree) {
       this.viewMode = false;
     }
@@ -136,6 +148,7 @@ const mentoreeDetailEdit = new Vue({
       formData.append('strengths', this.mentoreeData['strengths']);
       formData.append('extra_data', this.mentoreeData['extra_data']);
       formData.append('profile_image', this.mentoreeData['profile_image']);
+      formData.append('organization_id', this.mentoreeData['organization']);
 
       $.ajax({
         url: '',
@@ -146,6 +159,9 @@ const mentoreeDetailEdit = new Vue({
         enctype: 'multipart/form-data',
         type: 'POST',
         success: () => {
+          this.organizationObject = this.mentoreeData.all_organizations.find(o => {
+            return o.id === this.mentoreeData.organization;
+          });
           this.viewMode = true;
         }
       });

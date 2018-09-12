@@ -37,8 +37,6 @@ class Mentoree(models.Model):
         to='users.Organization',
         on_delete=models.SET_NULL,
         null=True)
-    address = models.CharField(
-        max_length=128)
     profile_image = models.ImageField(
         upload_to='mentorees/profile')
     extra_data_fields = ArrayField(

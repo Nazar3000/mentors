@@ -14,8 +14,8 @@ from django.conf import settings
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage
-from users.models import Mentor
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
+from users.models import Mentor, Organization
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
 
 
@@ -154,24 +154,30 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
     template_name = 'mentors/mentoree_detail.html'
 
     def get(self, *args, **kwargs):
+        model_dict = dict()
+        model_dict['all_organizations'] = list(
+            Organization.objects.all().values('id', 'name', 'address', 'phone_numbers'))
+
         if 'get_mentoree_data' in self.request.GET.keys():
-            if self.get_object():
-                model_dict = model_to_dict(self.get_object())
-                if model_dict.get('profile_image'):
-                    model_dict['profile_image'] = model_dict['profile_image'].url
-                model_dict['organization'] = model_to_dict(
-                    self.get_object().organization,
-                    fields=['name', 'address', 'phone_numbers'])
-                model_dict['date_of_birth'] = self.get_object().date_of_birth.strftime('%d.%m.%Y')
-                model_dict['age'] = get_age(self.get_object().date_of_birth)
+            mentoree = self.get_object()
+            if mentoree:
+                model_dict.update(model_to_dict(
+                    mentoree,
+                    exclude=('profile_image', 'organization', 'date_of_birth',)))
+                model_dict['profile_image'] = mentoree.profile_image.url
+                if mentoree.organization:
+                    model_dict['organization'] = mentoree.organization.id
+
+                model_dict['date_of_birth'] = mentoree.date_of_birth.strftime('%d.%m.%Y')
+                model_dict['age'] = get_age(mentoree.date_of_birth)
                 model_dict['story_images'] = list(
-                    map(lambda img: img.image.url, (self.get_object().story_images.all())))
+                    map(lambda img: img.image.url, (mentoree.story_images.all())))
                 return JsonResponse(model_dict)
             else:
-                return JsonResponse({'status': 'no_related_mentoree_found'})
+                return JsonResponse(model_dict)
         return super().get(*args, **kwargs)
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         return Mentor.objects.get(pk=self.request.user.pk).mentoree
 
     def post(self, *args, **kwargs):
@@ -181,8 +187,10 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
             mentoree.extra_data_fields = jdata
             mentoree.save()
         elif 'mentoree_data' in self.request.POST.keys():
+            mentoree = mentoree if mentoree else Mentoree()
             mentoree_data = self.request.POST
 
+            mentoree.organization_id = mentoree_data['organization_id']
             mentoree.first_name = mentoree_data['first_name']
             mentoree.last_name = mentoree_data['last_name']
             mentoree.date_of_birth = datetime.strptime(mentoree_data['date_of_birth'], '%d.%m.%Y')
@@ -199,6 +207,9 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
                     self.request.FILES['profile_image'].name,
                     self.request.FILES['profile_image'])
             mentoree.save()
+            mentor = Mentor.objects.get(pk=self.request.POST['user_id'])
+            mentor.mentoree = mentoree
+            mentor.save()
         elif 'mentoree_story' in self.request.POST.keys():
             mentoree.story = self.request.POST['story']
             mentoree.save()
