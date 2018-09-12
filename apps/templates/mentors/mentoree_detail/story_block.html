@@ -1,0 +1,74 @@
+<div class="worksheet-history-page" id="mentoree-story">
+
+  <div class="worksheet-history" v-if="viewMode">
+    <h2>Коротка історія дитини</h2>
+    <div class="worksheet-line"></div>
+    <div class="worksheet-wrapp">
+      <img :src="typeof currentImage === 'string' ? currentImage : getFileObjectUrl(currentImage)"
+           alt=""
+      >
+      <div class="setting-worksheet-img-link" v-if="images.length > 1">
+        <a class="setting-worksheet-left"
+           href="javascript: void(0)"
+           @click="prevImage()"
+        >
+          <i class="fas fa-angle-left"></i></a>
+        <a class="setting-worksheet-right"
+           href="javascript: void(0)"
+           @click="nextImage()"
+        >
+          <i class="fas fa-angle-right"></i>
+        </a>
+      </div>
+      <p>[[ story ]]</p>
+    </div><a href="javascript: void(0)" @click="viewMode=false">Доповнити історію</a>
+  </div>
+
+
+  <div class="setting-worksheet-history" v-else>
+    <h2>Коротка історія дитини</h2>
+    <div class="setting-worksheet-line"></div>
+    <div class="setting-worksheet-wrapp">
+      <div class="setting-worksheet-img">
+        <img :src="typeof currentImage === 'string' ? currentImage : getFileObjectUrl(currentImage)"
+             alt=""
+        >
+        <div class="setting-worksheet-img-link" v-if="images.length > 1">
+          <a class="setting-worksheet-left"
+             href="javascript: void(0)"
+             @click="prevImage()"
+          >
+            <i class="fas fa-angle-left"></i></a>
+          <a class="setting-worksheet-right"
+             href="javascript: void(0)"
+             @click="nextImage()"
+          >
+            <i class="fas fa-angle-right"></i>
+          </a>
+        </div>
+      </div>
+      <div class="setting-card-icon">
+        <label class="add-img" for="file"><i class="fas fa-plus"></i></label>
+        <input id="file"
+               style="display:none;"
+               type="file"
+               @change="addImage($event)"
+        >
+        <a class="delete-img"
+           href="javascript: void(0)"
+           title="Delete image"
+           @click="deleteImage()"
+        >
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+      <textarea rows="10"
+                cols="45"
+                name="text"
+                placeholder="Ваша історія"
+                v-model="story"
+      ></textarea>
+    </div><a href="javascript: void(0)" @click="submitStoryData()">Доповнити історію</a>
+  </div>
+
+</div>

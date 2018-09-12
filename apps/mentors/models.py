@@ -2,8 +2,6 @@ from django.contrib.postgres.fields import HStoreField, ArrayField
 from django.core.validators import RegexValidator
 from django.db import models
 
-from .constants import Regions
-
 
 class MentorLicenceKey(models.Model):
     key_validator = RegexValidator(

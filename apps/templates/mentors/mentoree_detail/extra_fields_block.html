@@ -1,0 +1,82 @@
+<div class="admin-right" id="extra-data-fields">
+  <div class="worksheet" v-if="viewMode">
+    <a class="worksheet-bage" href="javascript: void(0)" @click="viewMode=false">
+      <i class="fas fa-pencil-alt"></i>
+    </a>
+    <template v-if="dataFields.length">
+      <div class="worksheet-input" v-for="item in dataFields.slice(sliceStart, sliceEnd)">
+        <span>[[ Object.keys(item)[0] ]]:</span>
+        <p>[[ Object.values(item)[0] ]]</p>
+      </div>
+      <div class="worksheet-page">
+        <template v-for="pageNumber in pageCount">
+          <a :class="{active: pageNumber === activePageNumber}"
+             href="javascript: void(0)"
+             @click="paginate(pageNumber)"
+          >
+            [[ pageNumber ]]
+          </a>
+        </template>
+      </div>
+    </template>
+  </div>
+  <div class="setting-worksheet" v-else>
+    <div class="setting-worksheet-sett">
+      <a class="setting-worksheet-bage"
+         href="javascript: void(0)"
+         title="Add"
+         @click="addNewExtraDataField()"
+      ><i class="fas fa-plus"></i>
+      </a>
+      <a class="setting-worksheet-bage"
+         href="javascript: void(0)"
+         title="Submit"
+         @click="saveDataFields()"
+      >
+        <i class="fas fa-check"></i>
+      </a>
+    </div>
+
+    <template v-if="dataFields.length">
+      <div class="setting-worksheet-input"
+           v-for="(item, index) in dataFields.slice(sliceStart, sliceEnd)"
+           :key="Object.keys(item)[0]"
+      >
+        <div class="setting-worksheet-header">
+          <input class="setting-worksheet-title"
+                 type="text"
+                 :value="Object.keys(item)[0]"
+                 placeholder="Введіть тему"
+                 @input="changeDataFieldThemeData(index, $event.target.value)"
+          >
+          <a class="setting-worksheet-clear"
+             href="javascript: void(0)"
+             title="Clear"
+             @click="removeDataField(index + (activePageNumber - 1) * sliceStep)"
+          ><i class="fas fa-minus"></i>
+          </a>
+        </div>
+        <span class="error-form" v-if="emptyDataFieldKeyIndexes.includes(index)">Необхідно ввести тему</span>
+
+        <input :class="{'setting-worksheet-item': Object.values(item)[0], 'setting-worksheet-item-new': !Object.values(item)[0]}"
+               type="text"
+               :value="Object.values(item)[0]"
+               placeholder="Введіть текст тут"
+               @input="changeDataFieldValueData(index, $event.target.value)"
+        >
+        <span class="error-form" v-if="emptyDataFieldValueIndexes.includes(index)">Необхідно ввести текст</span>
+      </div>
+    </template>
+
+    <div class="setting-worksheet-page" v-if="dataFields.length">
+      <template v-for="pageNumber in pageCount">
+        <a :class="{active: pageNumber === activePageNumber}"
+           href="javascript: void(0)"
+           @click="paginate(pageNumber)"
+        >
+          [[ pageNumber ]]
+        </a>
+      </template>
+    </div>
+  </div>
+</div>
