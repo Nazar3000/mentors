@@ -1,6 +1,265 @@
+import datetime
+import time
+
 from django.contrib.postgres.fields import HStoreField, ArrayField
+from django.core import validators
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from mentors.constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency
+from .validators import education_item_validator
+
+
+class MentorQuestionnaire(models.Model):
+    mentor = models.OneToOneField(
+        to='users.Mentor',
+        on_delete=models.CASCADE
+    )
+
+    # 1. Common data
+    full_name = models.CharField(
+        max_length=512
+    )
+    date_of_birth = models.DateField()
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$'
+    )
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[phone_regex]
+    )
+    email = models.EmailField()
+    nationality = models.CharField(
+        max_length=265
+    )
+    actual_address = models.CharField(
+        max_length=521
+    )
+    registration_address = models.CharField(
+        max_length=521
+    )
+    religion = models.CharField(
+        max_length=20,
+        choices=Religions.choices()
+    )
+    # required if religion value is not Other
+    local_church_visiting = models.CharField(
+        max_length=256,
+        null=True,
+        blank=True
+    )
+    # required if religion value is not Other
+    local_church_visiting_frequency = models.CharField(
+        max_length=20,
+        choices=Religions.choices(),
+        null=True,
+        blank=True
+    )
+
+    # 2. Health state
+    health_self_estimation = models.CharField(
+        max_length=265
+    )
+    serious_diseases = models.CharField(
+        max_length=265
+    )
+    narcologist = models.BooleanField(
+        default=False
+    )
+    psychiatrist = models.BooleanField(
+        default=False
+    )
+    phthisiatrician = models.BooleanField(
+        default=False
+    )
+    therapist = models.BooleanField(
+        default=False
+    )
+    dermatovenereologist = models.BooleanField(
+        default=False
+    )
+    # required if one of doctors above is True
+    hospital_data = models.CharField(
+        max_length=512,
+        null=True,
+        blank=True
+    )
+    hiv_infected = models.BooleanField(
+        default=False
+    )
+
+    # 3. Education
+    education = ArrayField(
+        HStoreField(
+            default=dict(
+                year_of_admission='',
+                year_of_year_of_graduation='',
+                degree=''),
+            validators=[education_item_validator]
+        ),
+    )
+
+    # 4. Job
+    # See MentorQuestionnaireJob model
+
+    # 5. Interests, hobbies
+    interests_and_hobbies = models.TextField()
+
+    # 6. Marital status
+    marital_status = models.CharField(
+        max_length=20,
+        choices=MaritalStatuses.choices()
+    )
+    # See MentorQuestionnaireFamilyMember
+
+    # 7. Living conditions
+    home_type = models.CharField(
+        max_length=20,
+        choices=HomeTypes.choices()
+    )
+    room_count = models.PositiveSmallIntegerField(
+        default=1
+    )
+    people_per_room = models.PositiveSmallIntegerField(
+        default=1
+    )
+    home_family_members_data = models.TextField()
+    pets_data = models.TextField()
+
+    # 8. Work with children experience
+    # See MentorQuestionnaireChildrenWorkExperience model
+
+    # 9. Want to became a mentor reason
+    join_reason = models.TextField()
+
+    # 10. Helpful specifics
+    helpful_specifics = models.TextField()
+
+    # 11. Self characteristics
+    self_char = models.TextField()
+
+    # 12. Want to help orphan child reason
+    want_to_help_reason = models.TextField()
+
+    # 13. Expectations from child
+    expectations_from_child = models.TextField()
+
+    # 13.1. Mentoring direction
+    socialization = models.BooleanField(
+        default=False
+    )
+    proforientation = models.BooleanField(
+        default=False
+    )
+    help_in_education = models.BooleanField(
+        default=False
+    )
+
+    # 13.2. Able to visit child frequency
+    able_to_visit_frequency = models.CharField(
+        max_length=20,
+        choices=AbleToVisitChildFrequency.choices()
+    )
+
+    # 13.3. Ready for child with disabilities
+    ready_for_child_with_disabilities = models.BooleanField(
+        default=False
+    )
+
+
+MONTHYEAR_INPUT_FORMATS = (
+    '%m-%Y', '%m/%Y', '%m/%y', '%m.%Y'  # '10-2006', '2006/10', '10/06', 10.2006
+)
+
+
+class MonthYearField(models.CharField):
+    default_error_messages = {
+        'invalid': _('Введіть валідний місяць і рік.'),
+    }
+
+    def __init__(self, input_formats=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.input_formats = input_formats
+
+    def clean(self, value):
+        if value in validators.EMPTY_VALUES:
+            return None
+        if isinstance(value, datetime.datetime):
+            return format(value, '%m-%Y')
+        if isinstance(value, datetime.date):
+            return format(value, '%m-%Y')
+        for fmt in self.input_formats or MONTHYEAR_INPUT_FORMATS:
+            try:
+                date = datetime.date(*time.strptime(value, fmt)[:3])
+                return format(date, '%m-%Y')
+            except ValueError:
+                continue
+        raise ValidationError(self.error_messages['invalid'])
+
+
+class MentorQuestionnaireJob(models.Model):
+    questionnaire = models.ForeignKey(
+        to=MentorQuestionnaire,
+        on_delete=models.CASCADE
+    )
+    is_current = models.BooleanField(
+        default=False
+    )
+
+    organization_name = models.CharField(
+        max_length=512
+    )
+    date_since = MonthYearField(input_formats='%m.%Y')
+    date_till = MonthYearField(input_formats='%m.%Y')
+    position = models.CharField(
+        max_length=512
+    )
+    duties = models.CharField(
+        max_length=512
+    )
+    reason_for_leaving = models.CharField(
+        max_length=512
+    )
+
+
+class MentorQuestionnaireFamilyMember(models.Model):
+    questionnaire = models.ForeignKey(
+        to=MentorQuestionnaire,
+        on_delete=models.CASCADE
+    )
+
+    name = models.CharField(
+        max_length=512
+    )
+    gender = models.PositiveSmallIntegerField(
+        choices=Genders
+    )
+    date_of_birth = models.DateField()
+    relation = models.CharField(
+        max_length=64
+    )
+
+
+class MentorQuestionnaireChildrenWorkExperience(models.Model):
+    organization_name = models.CharField(
+        max_length=256
+    )
+    date_since = MonthYearField(input_formats='%m.%Y')
+    date_till = MonthYearField(input_formats='%m.%Y')
+    contact_info = models.CharField(
+        max_length=512
+    )
+    position = models.CharField(
+        max_length=512
+    )
+    duties = models.CharField(
+        max_length=512
+    )
+    children_age_group = models.CharField(
+        max_length=64
+    )
 
 
 class MentorLicenceKey(models.Model):
