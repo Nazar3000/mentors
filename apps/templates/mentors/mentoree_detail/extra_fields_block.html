@@ -68,7 +68,7 @@
       </div>
     </template>
 
-    <div class="setting-worksheet-page" v-if="dataFields.length">
+    <div class="setting-worksheet-page" v-if="dataFields.length && pageCount > 0">
       <template v-for="pageNumber in pageCount">
         <a :class="{active: pageNumber === activePageNumber}"
            href="javascript: void(0)"

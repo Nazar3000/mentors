@@ -32,14 +32,26 @@
                 Читати далі
               </a>
             </div>
-            <div class="diary-slider">
+            <div class="diary-slider" v-if="meeting.images.length">
               <div class="slider-wrap">
                 <ul id="vertical">
                   <template v-for="img in meeting.images">
-                    <li :data-thumb="img"><img class="w-100" :src="img"></li>
+                    <li :data-thumb="getImageUrl(img)"><img class="w-100" :src="getImageUrl(img)"></li>
                   </template>
                 </ul>
               </div>
+            </div>
+            <div class="diary-slider-empty" v-else>
+              <a class="diary-slider-frown" href="">
+                <i class="far fa-frown"></i><span>Фото дня не завантажені</span>
+              </a>
+              <a class="diary-slider-img"
+                 href="javascript: void(0)"
+                 @change="addImage($event, meeting.id)"
+              >
+                <i class="fas fa-plus"></i><span>Додати фото</span>
+              </a>
+              <input type="file" @change="addImage($event, meeting.id)">
             </div>
           </div>
           <div class="diary-block-open"
@@ -59,7 +71,11 @@
                     </a>
                     <span>Фото дня не завантажені</span>
                   </div>
-                  <div class="diary-block-link-item"><a class="diary-block-img" href=""><i class="fas fa-plus"></i></a><span>Додати фото</span></div>
+                  <div class="diary-block-link-item">
+                    <a class="diary-block-img" href=""><i class="fas fa-plus"></i></a>
+                    <span>Додати фото</span>
+                  </div>
+                  <input type="file" @change="addImage($event, meeting.id)">
                   <div class="diary-block-link-item"><a class="diary-block-edit" href=""><i class="fas fa-pencil-alt"></i></a></div>
                 </div>
                 <div class="diary-block-trash">
@@ -95,4 +111,5 @@
     const userId = '{{ user.pk }}';
   </script>
   <script src="{% static 'scripts/meeting_list.js' %}"></script>
+
 {% endblock %}

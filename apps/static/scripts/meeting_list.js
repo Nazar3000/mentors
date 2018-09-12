@@ -18,6 +18,28 @@ const meetingList = new Vue({
           this.meetings.splice(index, 1);
         }
       })
+    },
+    addImage(event, meetingId) {
+      const images = this.meetings.find(m => m.id === meetingId).images;
+      images.push(event.target.files[0]);
+
+      console.log('here');
+      const formData = new FormData();
+      formData.append('image', event.target.files[0]);
+      formData.append('image_data', '');
+      formData.append('meeting_id', meetingId);
+      $.ajax({
+        url: '',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST'
+      });
+    },
+    getImageUrl(img) {
+      return typeof img === 'string' ? img : URL.createObjectURL(img);
     }
   }
 });

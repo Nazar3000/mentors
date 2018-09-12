@@ -16,7 +16,7 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form, MeetingForm
 
 
 class SignUpStepsAccessMixin(AccessMixin):
@@ -183,7 +183,7 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
     def post(self, *args, **kwargs):
         mentoree = Mentor.objects.get(pk=self.request.POST['user_id']).mentoree
         if 'extra_fields_data' in self.request.POST.keys():
-            jdata = json.loads(self.request.POST['extra_fields_data']['data'])
+            jdata = json.loads(self.request.POST['extra_fields_data'])
             mentoree.extra_data_fields = jdata
             mentoree.save()
         elif 'mentoree_data' in self.request.POST.keys():
@@ -214,11 +214,12 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
             mentoree.story = self.request.POST['story']
             mentoree.save()
 
-            old_images = list(map(
-                lambda img: img.split(settings.MEDIA_URL)[1],
-                self.request.POST['old_images'].split(',')))
-            StoryImage.objects.exclude(
-                image__in=old_images).delete()
+            if self.request.POST['old_images']:
+                old_images = list(map(
+                    lambda img: img.split(settings.MEDIA_URL)[1],
+                    self.request.POST['old_images'].split(',')))
+                StoryImage.objects.exclude(
+                    image__in=old_images).delete()
             for i in range(len(self.request.FILES)):
                 story_image = StoryImage(mentoree_id=mentoree.pk)
                 story_image.image.save(
@@ -300,8 +301,9 @@ def send_post_comment(request):
         'date_time': get_time_spent(comment.datetime)})
 
 
-class MeetingListView(CheckIfUserIsMentorMixin, ListView):
+class MeetingListView(CheckIfUserIsMentorMixin, TemplateView):
     template_name = 'mentors/meeting_list.html'
+    form_class = MeetingForm
 
     def get_queryset(self):
         return Meeting.objects.filter(performer__pk=self.request.user.pk)
@@ -328,6 +330,12 @@ class MeetingListView(CheckIfUserIsMentorMixin, ListView):
     def post(self, request, *args, **kwargs):
         if 'delete_meeting' in self.request.POST.keys():
             Meeting.objects.get(id=self.request.POST['meeting_id']).delete()
+        elif 'image_data' in self.request.POST.keys():
+            image = MeetingImage(meeting_id=self.request.POST['meeting_id'])
+            image.image.save(
+                self.request.FILES['image'].name,
+                self.request.FILES['image'])
+
         return JsonResponse({'status': 'success'})
 
 

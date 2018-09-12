@@ -25,7 +25,7 @@ $.get('?get_mentoree_data', function (mentoreeData) {
     newMentoree = true;
   }
 
-  const extraMentoreeData = new Vue({
+const extraMentoreeData = new Vue({
   el: '#extra-data-fields',
   delimiters: ['[[', ']]'],
   data: {
@@ -56,7 +56,9 @@ $.get('?get_mentoree_data', function (mentoreeData) {
   },
   methods: {
     getPageCount() {
-      this.pageCount = Math.ceil(Object.keys(this.dataFields).length / this.sliceStep);
+      this.pageCount = this.sliceStep
+        ? Math.ceil(Object.keys(this.dataFields).length / this.sliceStep)
+        : 0;
     },
     paginate(pageNumber) {
       this.sliceStart = (pageNumber * this.sliceStep) - this.sliceStep;
@@ -65,11 +67,9 @@ $.get('?get_mentoree_data', function (mentoreeData) {
     },
     addNewExtraDataField() {
       this.dataFields.unshift({});
-      this.getPageCount();
     },
     removeDataField(index) {
       this.dataFields.splice(index, 1);
-      this.getPageCount();
     },
     saveDataFields() {
       let hasEmptyFields = false;
@@ -100,7 +100,20 @@ $.get('?get_mentoree_data', function (mentoreeData) {
       this.dataFields[index] = {
         [dataKey ? dataKey : '']: value};
     }
-  }
+  },
+  watch: {
+    dataFields: function (oldDataFields, newDataFields) {
+      if (newDataFields.length > 0 && newDataFields.length < 6) {
+        this.sliceStep = newDataFields.length;
+        this.sliceEnd = newDataFields.length;
+      }
+      else {
+        this.sliceStep = 5;
+        this.sliceEnd += this.sliceStep;
+      }
+      this.getPageCount();
+    }
+  },
 });
 
 const mentoreeDetailEdit = new Vue({

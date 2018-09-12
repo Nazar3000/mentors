@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
+from mentors.models import Meeting, MeetingImage
 from users.constants import UserTypes
 from users.models import Mentor
 
@@ -51,3 +52,21 @@ class SignUpStep1Form(forms.ModelForm):
 
 class SignUpStep3Form(forms.Form):
     pass
+
+
+class MeetingForm(forms.ModelForm):
+    class Meta:
+        model = Meeting
+        fields = (
+            'title',
+            'date',
+            'description',
+            'observation',
+            'note_for_next_meeting',
+        )
+
+
+class MeetingImageForm(forms.ModelForm):
+    class Meta:
+        model = MeetingImage
+        fields = ('image',)
