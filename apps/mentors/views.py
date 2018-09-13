@@ -8,6 +8,7 @@ from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.conf import settings
 
@@ -16,7 +17,7 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Form, MeetingForm
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Forms, MeetingForm
 
 
 class SignUpStepsAccessMixin(AccessMixin):
@@ -75,11 +76,80 @@ class SignUpStep2View(SignUpStepsAccessMixin, TemplateView):
     template_name = 'mentors/signup_step2.html'
 
 
-class SignUpStep3View(SignUpStepsAccessMixin, FormView):
-    # TODO: complete this view
+class MultiFormRelatedBaseViewMixin(View):
+    """
+    Inherit this class in case if you need to submit related models.
+
+    """
+    errors = dict()
+    forms_class = None
+    outer_object = None
+
+    def get_forms_class(self):
+        return self.forms_class
+
+    def get_outer_object(self):
+        return self.outer_object
+
+    def process_forms(self, request, outer_relation_field_name=None,
+                      inner_relation_filed_name=None, *args, **kwargs):
+        """
+        Save related models to db and return main model instance or None.
+        Accepted cases:
+            1. Model A with fields: a1, a2, a3;
+               Model B with fields: inner_relation_filed_name, b1, b2
+               ...
+               Model N with fields: inner_relation_filed_name, n1, n2
+            N <- ... <- B <- A
+            inner_relation_filed_name:
+                is a foreign key relation to model A,
+                note that it is required to have the same foreign key filed name to all related models
+
+            2. Model O with fields: outside_relation_field_name, o1, o2, o3;
+               Model A with fields: a, b, c;
+               Model B with fields: inner_relation_filed_name, b1, b2
+               ...
+               Model N with fields: inner_relation_filed_name, n1, n2
+            N <- ... <- B <- A <- O
+            inner_relation_filed_name:
+                same as in case 1.
+            outer_relation_field_name:
+                is a foreign key relation from model A to model O
+        """
+        forms_object = self.get_forms_class()(request.POST)
+        instance = None
+        if all(form.is_valid() for form in forms_object.forms):
+            for form in forms_object.forms:
+                instance = forms_object.main_form.save(commit=False)
+                if outer_relation_field_name:
+                    setattr(instance, 'mentor', self.get_outer_object())
+                instance.save()
+                if form.__class__.__name__ != forms_object.main_form.__class__.__name__:
+                    subinstance = form.save(commit=False)
+                    if inner_relation_filed_name:
+                        setattr(subinstance, 'questionnaire', instance)
+                    subinstance.save()
+
+        for form in forms_object.forms:
+            self.errors.update(form.errors.items())
+
+        return instance
+
+
+# TODO: add SignUpStepsAccessMixin
+class SignUpStep3View(MultiFormRelatedBaseViewMixin):
     template_name = 'mentors/signup_step3.html'
-    form_class = SignUpStep3Form
+    forms_class = SignUpStep3Forms
     success_url = reverse_lazy('mentors:mentor_roadmap')
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'forms': self.forms_class.forms})
+
+    def get_outer_object(self):
+        return Mentor.objects.get(pk=self.request.user.pk)
+
+    def post(self, request, *args, **kwargs):
+        print(self.process_forms(request, *args, **kwargs))
 
 
 class MentorRoadmap(TemplateView):

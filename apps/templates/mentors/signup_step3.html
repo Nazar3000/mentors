@@ -2,5 +2,12 @@
 
 {% block content %}
   Анкета кандидата в наставники
-  <a href="{% url 'mentors:mentor_roadmap' %}">Ок, я зрозумів. Ідемо далі</a>
+  <form method="post">
+    {% csrf_token %}
+    {% for form in forms %}
+      {{ form.as_p }}
+    {% endfor %}
+    <input type="submit">
+  </form>
+  <a href="{% url 'mentors:mentor_roadmap' %}">Зберегти</a>
 {% endblock %}

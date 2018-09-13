@@ -308,7 +308,8 @@ class MentorQuestionnaireFamilyMember(models.Model):
     name = models.CharField(
         max_length=512
     )
-    gender = models.PositiveSmallIntegerField(
+    gender = models.CharField(
+        max_length=10,
         choices=Genders.choices()
     )
     date_of_birth = models.DateField()

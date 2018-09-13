@@ -3,7 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-from mentors.models import Meeting, MeetingImage
+from mentors.models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
+    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience
 from users.constants import UserTypes
 from users.models import Mentor
 
@@ -50,8 +51,60 @@ class SignUpStep1Form(forms.ModelForm):
         return user
 
 
-class SignUpStep3Form(forms.Form):
-    pass
+class MentorQuestionnaireForm(forms.ModelForm):
+    class Meta:
+        model = MentorQuestionnaire
+        exclude = (
+            'mentor',
+        )
+
+
+class MentorQuestionnaireEducationForm(forms.ModelForm):
+    class Meta:
+        model = MentorQuestionnaireEducation
+        exclude = (
+            'questionnaire',
+        )
+
+
+class MentorQuestionnaireJobForm(forms.ModelForm):
+    class Meta:
+        model = MentorQuestionnaireJob
+        exclude = (
+            'questionnaire',
+        )
+
+
+class MentorQuestionnaireFamilyMemberForm(forms.ModelForm):
+    class Meta:
+        model = MentorQuestionnaireFamilyMember
+        exclude = (
+            'questionnaire',
+        )
+
+
+class MentorQuestionnaireChildrenWorkExperienceForm(forms.ModelForm):
+    class Meta:
+        model = MentorQuestionnaireChildrenWorkExperience
+        exclude = (
+            'questionnaire',
+        )
+
+
+class SignUpStep3Forms:
+    main_form = MentorQuestionnaireForm
+
+    forms = (
+        main_form,
+        MentorQuestionnaireEducationForm,
+        MentorQuestionnaireJobForm,
+        MentorQuestionnaireFamilyMemberForm,
+        MentorQuestionnaireChildrenWorkExperienceForm,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.main_form = self.main_form(*args, **kwargs)
+        self.forms = [form(*args, **kwargs) for form in self.forms]
 
 
 class MeetingForm(forms.ModelForm):

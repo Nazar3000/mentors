@@ -1,5 +1,7 @@
 from enum import Enum
 
+from django.utils.translation import gettext_lazy as _
+
 
 class ChoicesEnum(Enum):
     @classmethod
@@ -8,56 +10,57 @@ class ChoicesEnum(Enum):
 
 
 class Religions(ChoicesEnum):
-    CHRISTIANITY = 'Christianity'
-    CATHOLICISM = 'Catholicism'
-    ORTHODOXY = 'Orthodoxy'
-    PROTESTANTISM = 'Protestantism'
-    JUDAISM = 'Judaism'
-    BUDDHISM = 'Buddhism'
-    OTHER = 'Other'
+    CHRISTIANITY = _('Християнство')
+    CATHOLICISM = _('Католицизм')
+    ORTHODOXY = _('Православ’я')
+    PROTESTANTISM = _('Протестантизм')
+    JUDAISM = _('Іудаїзм')
+    BUDDHISM = _('Буддизм')
+    ISLAM = _('Іслам')
+    OTHER = _('Інше')
 
 
 class LocalChurchVisitingFrequency(ChoicesEnum):
-    ONCE_A_WEEK = 'once_a_week'
-    TWICE_A_MONTH = 'twice_a_month'
-    ONCE_A_YEAR = 'once_a_year'
-    OTHER = 'other'
+    ONCE_A_WEEK = _('раз на тиждень')
+    ONCE_A_MONTH = _('раз на місяць')
+    ONCE_A_YEAR = _('один раз на рік')
+    OTHER = _('інше')
 
 
 class MaritalStatuses(ChoicesEnum):
-    MARRIED = 'married'
-    CIVIL_MARRIAGE = 'civil_marriage'
-    DIVORCED = 'divorced'
-    WIDOW = 'widow'
-    UNMARRIED = 'unmarried'
+    MARRIED = _('Одружений/одружена')
+    CIVIL_MARRIAGE = _('Цивільний шлюб')
+    DIVORCED = _('Розлучений/розлучена')
+    WIDOW = _('Удовець/удова')
+    UNMARRIED = _('Неодружений/неодружена')
 
 
 class Genders(ChoicesEnum):
-    MALE = 0
-    FEMALE = 1
+    MALE = _('чоловіча')
+    FEMALE = _('жіноча')
 
 
 class HomeTypes(ChoicesEnum):
-    APARTMENT = 'apartment'
-    PRIVATE_HOUSE = 'private_house'
-    RENTED = 'rented'
+    APARTMENT = _('квартира')
+    PRIVATE_HOUSE = _('приватний будинок')
+    RENTED = _('орендоване житло')
 
 
 class AbleToVisitChildFrequency(ChoicesEnum):
-    ONCE_A_WEEK = 'once_a_week'
-    TWICE_A_MONTH = 'twice_a_month'
-    ONCE_A_YEAR = 'once_a_year'
-    OTHER = 'other'
+    ONCE_A_WEEK = _('1 раз на тиждень')
+    ONCE_A_TWO_WEEKS = _('1 раз на 2 тижні')
+    ONCE_A_MONTH = _('1 раз на місяць')
+    OTHER = _('інше')
 
 
 class MentoringProgramFindOutPlaces(ChoicesEnum):
-    TV = 'tv'
-    RADIO = 'radio'
-    OTHER_MEDIA = 'other_media'
-    FACEBOOK_OR_OTHER_SOCIAL_NETWORKS = 'facebook_or_other_social_networks'
-    INTERNET = 'internet'
-    FRIENDS_RELATIVES_ACQUAINTANCES = 'friends_relatives_acquaintances'
-    PAPERS = 'papers'
-    PRESENTATION_CONFERENCE = 'presentation_conference'
-    SOCIAL_SERVICE_CENTER = 'social_service_center'
-    CHILD_SERVICE = 'child_service'
+    TV = _('Телебачення')
+    RADIO = _('Радіо')
+    OTHER_MEDIA = _('Інші ЗМІ')
+    FACEBOOK_OR_OTHER_SOCIAL_NETWORKS = _('Facebook або інші соціальні мережі')
+    INTERNET = _('Інтернет')
+    FRIENDS_RELATIVES_ACQUAINTANCES = _('Друзі, рідні, знайомі')
+    PAPERS = _('Друковані матеріали')
+    PRESENTATION_CONFERENCE = _('Презентація/конференція')
+    SOCIAL_SERVICE_CENTER = _('Центр соціальних служб для сім’ї, дітей та молоді (вкажіть район)')
+    CHILD_SERVICE = _('Служба у справах дітей (вкажіть район)')
