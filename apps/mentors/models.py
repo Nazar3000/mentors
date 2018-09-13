@@ -8,8 +8,8 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from mentors.constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency
-from .validators import education_item_validator
+from mentors.constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
+    MentoringProgramFindOutPlaces
 
 
 class MentorQuestionnaire(models.Model):
@@ -91,15 +91,7 @@ class MentorQuestionnaire(models.Model):
     )
 
     # 3. Education
-    education = ArrayField(
-        HStoreField(
-            default=dict(
-                year_of_admission='',
-                year_of_year_of_graduation='',
-                degree=''),
-            validators=[education_item_validator]
-        ),
-    )
+    # See MentorQuestionnaireEducation model
 
     # 4. Job
     # See MentorQuestionnaireJob model
@@ -168,6 +160,87 @@ class MentorQuestionnaire(models.Model):
         default=False
     )
 
+    # 14. Extra data for child safety
+
+    # 14.1. Substances usage
+    drink_alcohol = models.BooleanField(
+        default=False
+    )
+    # required if drink_alcohol == True
+    drink_alcohol_frequency = models.CharField(
+        max_length=64,
+        null=True,
+        blank=True
+    )
+    smoke_cigarettes = models.BooleanField(
+        default=False
+    )
+    psychotropic_substances = models.BooleanField(
+        default=False
+    )
+    # required if psychotropic_substances_names == True
+    psychotropic_substances_names = models.CharField(
+        max_length=256,
+        null=True,
+        blank=True
+    )
+
+    # 14.2. Drug usage
+    drug_usage = models.BooleanField(
+        default=False
+    )
+    # required if drug_usage == True
+    drug_usage_info = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True
+    )
+
+    # 14.3. Have been convicted of crimes related to...?
+    crime_convicted = models.BooleanField(
+        default=False
+    )
+    # required if crime_convicted == True
+    crime_convicted_description = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True
+    )
+
+    # 14.4. Has been previously deprived of parental or guardian rights
+    parental_rights_deprived = models.BooleanField(
+        default=False
+    )
+    # required if parental_rights_deprived == True
+    parental_rights_deprived_description = models.CharField(
+        max_length=128,
+        null=True,
+        blank=True
+    )
+
+    # 15. Allow to use your photos and comments
+    allow_to_use_personal_data = models.BooleanField(
+        default=True
+    )
+
+    # 16. Where the the mentoring program was found out
+    program_found_out_place = models.CharField(
+        max_length=32,
+        choices=MentoringProgramFindOutPlaces.choices()
+    )
+
+
+class MentorQuestionnaireEducation(models.Model):
+    questionnaire = models.ForeignKey(
+        to=MentorQuestionnaire,
+        on_delete=models.CASCADE
+    )
+    year_of_admission = models.PositiveIntegerField()
+    year_of_graduation = models.PositiveIntegerField()
+    degree = models.CharField(
+        max_length=256
+    )
+
 
 MONTHYEAR_INPUT_FORMATS = (
     '%m-%Y', '%m/%Y', '%m/%y', '%m.%Y'  # '10-2006', '2006/10', '10/06', 10.2006
@@ -178,12 +251,14 @@ class MonthYearField(models.CharField):
     default_error_messages = {
         'invalid': _('Введіть валідний місяць і рік.'),
     }
+    max_length = 7
 
     def __init__(self, input_formats=None, *args, **kwargs):
+        kwargs['max_length'] = self.max_length
         super().__init__(*args, **kwargs)
         self.input_formats = input_formats
 
-    def clean(self, value):
+    def clean(self, value, *args):
         if value in validators.EMPTY_VALUES:
             return None
         if isinstance(value, datetime.datetime):
@@ -211,8 +286,8 @@ class MentorQuestionnaireJob(models.Model):
     organization_name = models.CharField(
         max_length=512
     )
-    date_since = MonthYearField(input_formats='%m.%Y')
-    date_till = MonthYearField(input_formats='%m.%Y')
+    date_since = MonthYearField()
+    date_till = MonthYearField()
     position = models.CharField(
         max_length=512
     )
@@ -234,7 +309,7 @@ class MentorQuestionnaireFamilyMember(models.Model):
         max_length=512
     )
     gender = models.PositiveSmallIntegerField(
-        choices=Genders
+        choices=Genders.choices()
     )
     date_of_birth = models.DateField()
     relation = models.CharField(
@@ -246,8 +321,8 @@ class MentorQuestionnaireChildrenWorkExperience(models.Model):
     organization_name = models.CharField(
         max_length=256
     )
-    date_since = MonthYearField(input_formats='%m.%Y')
-    date_till = MonthYearField(input_formats='%m.%Y')
+    date_since = MonthYearField()
+    date_till = MonthYearField()
     contact_info = models.CharField(
         max_length=512
     )

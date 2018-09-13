@@ -48,3 +48,16 @@ class AbleToVisitChildFrequency(ChoicesEnum):
     TWICE_A_MONTH = 'twice_a_month'
     ONCE_A_YEAR = 'once_a_year'
     OTHER = 'other'
+
+
+class MentoringProgramFindOutPlaces(ChoicesEnum):
+    TV = 'tv'
+    RADIO = 'radio'
+    OTHER_MEDIA = 'other_media'
+    FACEBOOK_OR_OTHER_SOCIAL_NETWORKS = 'facebook_or_other_social_networks'
+    INTERNET = 'internet'
+    FRIENDS_RELATIVES_ACQUAINTANCES = 'friends_relatives_acquaintances'
+    PAPERS = 'papers'
+    PRESENTATION_CONFERENCE = 'presentation_conference'
+    SOCIAL_SERVICE_CENTER = 'social_service_center'
+    CHILD_SERVICE = 'child_service'

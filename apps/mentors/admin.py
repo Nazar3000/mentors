@@ -7,12 +7,70 @@ from .models import (
     Meeting,
     MeetingImage,
     Post,
-    PostComment)
+    PostComment,
+    MentorQuestionnaire,
+    MentorQuestionnaireEducation,
+    MentorQuestionnaireJob,
+    MentorQuestionnaireFamilyMember,
+    MentorQuestionnaireChildrenWorkExperience,
+)
 
-admin.site.register(MentorLicenceKey)
-admin.site.register(Mentoree)
-admin.site.register(StoryImage)
-admin.site.register(Meeting)
-admin.site.register(MeetingImage)
-admin.site.register(Post)
-admin.site.register(PostComment)
+
+@admin.register(MentorLicenceKey)
+class MentorLicenceKeyAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Mentoree)
+class MentoreeAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(StoryImage)
+class StoryImageAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Meeting)
+class MeetingAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MeetingImage)
+class MeetingImageAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(PostComment)
+class PostCommentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MentorQuestionnaire)
+class MentorQuestionnaireAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MentorQuestionnaireEducation)
+class MentorQuestionnaireEducationAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MentorQuestionnaireJob)
+class MentorQuestionnaireJobAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MentorQuestionnaireFamilyMember)
+class MentorQuestionnaireFamilyMemberAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MentorQuestionnaireChildrenWorkExperience)
+class MentorQuestionnaireChildrenWorkExperienceAdmin(admin.ModelAdmin):
+    pass
