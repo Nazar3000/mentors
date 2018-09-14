@@ -64,3 +64,9 @@ class MentoringProgramFindOutPlaces(ChoicesEnum):
     PRESENTATION_CONFERENCE = _('Презентація/конференція')
     SOCIAL_SERVICE_CENTER = _('Центр соціальних служб для сім’ї, дітей та молоді (вкажіть район)')
     CHILD_SERVICE = _('Служба у справах дітей (вкажіть район)')
+
+
+class EducationTypes(ChoicesEnum):
+    SCHOOL = _('Загальноосвітня школа')
+    UNIVERSITY = _('Університет, інститут, технікум')
+    EXTRA_EDUCATION = _('Додаткові курси, тренінги, семінари')

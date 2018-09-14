@@ -92,18 +92,15 @@ class MentorQuestionnaireChildrenWorkExperienceForm(forms.ModelForm):
 
 
 class SignUpStep3Forms:
-    main_form = MentorQuestionnaireForm
-
-    forms = (
-        main_form,
-        MentorQuestionnaireEducationForm,
-        MentorQuestionnaireJobForm,
-        MentorQuestionnaireFamilyMemberForm,
-        MentorQuestionnaireChildrenWorkExperienceForm,
-    )
+    forms = {
+        'main': MentorQuestionnaireForm,
+        'education': MentorQuestionnaireEducationForm,
+        'job': MentorQuestionnaireJobForm,
+        'family_member': MentorQuestionnaireFamilyMemberForm,
+        'work_experience': MentorQuestionnaireChildrenWorkExperienceForm,
+    }
 
     def __init__(self, *args, **kwargs):
-        self.main_form = self.main_form(*args, **kwargs)
         self.forms = [form(*args, **kwargs) for form in self.forms]
 
 

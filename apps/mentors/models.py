@@ -8,8 +8,8 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from mentors.constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
-    MentoringProgramFindOutPlaces
+from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
+    MentoringProgramFindOutPlaces, EducationTypes
 
 
 class MentorQuestionnaire(models.Model):
@@ -62,8 +62,8 @@ class MentorQuestionnaire(models.Model):
     health_self_estimation = models.CharField(
         max_length=265
     )
-    serious_diseases = models.CharField(
-        max_length=265
+    serious_diseases = models.BooleanField(
+        default=False
     )
     narcologist = models.BooleanField(
         default=False
@@ -235,6 +235,10 @@ class MentorQuestionnaireEducation(models.Model):
         to=MentorQuestionnaire,
         on_delete=models.CASCADE
     )
+    education_type = models.CharField(
+        max_length=20,
+        choices=EducationTypes.choices()
+    )
     year_of_admission = models.PositiveIntegerField()
     year_of_graduation = models.PositiveIntegerField()
     degree = models.CharField(
@@ -288,6 +292,9 @@ class MentorQuestionnaireJob(models.Model):
     )
     date_since = MonthYearField()
     date_till = MonthYearField()
+    contact_info = models.CharField(
+        max_length=512
+    )
     position = models.CharField(
         max_length=512
     )

@@ -18,6 +18,8 @@ from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Forms, MeetingForm
+from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
+    MentoringProgramFindOutPlaces, EducationTypes
 
 
 class SignUpStepsAccessMixin(AccessMixin):
@@ -119,18 +121,19 @@ class MultiFormRelatedBaseViewMixin(View):
         forms_object = self.get_forms_class()(request.POST)
         instance = None
         if all(form.is_valid() for form in forms_object.forms):
-            for form in forms_object.forms:
-                instance = forms_object.main_form.save(commit=False)
-                if outer_relation_field_name:
-                    setattr(instance, 'mentor', self.get_outer_object())
-                instance.save()
-                if form.__class__.__name__ != forms_object.main_form.__class__.__name__:
+            for form_name, form in forms_object.forms.items():
+                if form_name == 'main':
+                    instance = form.save(commit=False)
+                    if outer_relation_field_name:
+                        setattr(instance, 'mentor', self.get_outer_object())
+                    instance.save()
+                else:
                     subinstance = form.save(commit=False)
                     if inner_relation_filed_name:
                         setattr(subinstance, 'questionnaire', instance)
                     subinstance.save()
 
-        for form in forms_object.forms:
+        for form in forms_object.forms.values():
             self.errors.update(form.errors.items())
 
         return instance
@@ -143,6 +146,16 @@ class SignUpStep3View(MultiFormRelatedBaseViewMixin):
     success_url = reverse_lazy('mentors:mentor_roadmap')
 
     def get(self, request, *args, **kwargs):
+        if 'get_selector_choices' in request.GET.keys():
+            choices_dicts = dict(
+                religions=dict(Religions.choices()),
+                marital_statuses=dict(MaritalStatuses.choices()),
+                genders=dict(Genders.choices()),
+                home_types=dict(HomeTypes.choices()),
+                able_to_visit_child_frequency=dict(AbleToVisitChildFrequency.choices()),
+                mentoring_program_find_out_places=dict(MentoringProgramFindOutPlaces.choices()),
+                education_types=dict(EducationTypes.choices()))
+            return JsonResponse(choices_dicts)
         return render(request, self.template_name, {'forms': self.forms_class.forms})
 
     def get_outer_object(self):
