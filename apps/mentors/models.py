@@ -9,7 +9,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
-    MentoringProgramFindOutPlaces, EducationTypes
+    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
 
 class MentorQuestionnaire(models.Model):
@@ -53,7 +53,7 @@ class MentorQuestionnaire(models.Model):
     # required if religion value is not Other
     local_church_visiting_frequency = models.CharField(
         max_length=20,
-        choices=Religions.choices(),
+        choices=LocalChurchVisitingFrequency.choices(),
         null=True,
         blank=True
     )

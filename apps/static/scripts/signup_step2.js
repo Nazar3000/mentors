@@ -2,6 +2,8 @@ const step2Form = new Vue({
   el: '#step2-form',
   delimiters: ['[[', ']]'],
   data: {
+    choices: {},
+
     full_name: '',
     date_of_birth: '',
     phone_number: '',
@@ -54,7 +56,7 @@ const step2Form = new Vue({
   },
   created() {
     $.get('?get_selector_choices', (data) => {
-      console.log(data);
+      this.choices = data;
     });
   },
   methods: {

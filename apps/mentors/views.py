@@ -19,7 +19,7 @@ from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, Me
 from users.models import Mentor, Organization
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Forms, MeetingForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
-    MentoringProgramFindOutPlaces, EducationTypes
+    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
 
 class SignUpStepsAccessMixin(AccessMixin):
@@ -149,6 +149,7 @@ class SignUpStep3View(MultiFormRelatedBaseViewMixin):
         if 'get_selector_choices' in request.GET.keys():
             choices_dicts = dict(
                 religions=dict(Religions.choices()),
+                local_church_visiting_frequency=dict(LocalChurchVisitingFrequency.choices()),
                 marital_statuses=dict(MaritalStatuses.choices()),
                 genders=dict(Genders.choices()),
                 home_types=dict(HomeTypes.choices()),
