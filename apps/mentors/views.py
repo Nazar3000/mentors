@@ -305,7 +305,8 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
             post_dict['author'] = model_to_dict(
                 post.author,
                 fields=('id', 'first_name', 'last_name',))
-            post_dict['author']['profile_image'] = post.author.profile_image.url
+            if post.author.profile_image:
+                post_dict['author']['profile_image'] = post.author.profile_image.url
             post_dict['likes'] = post.likes.count()
             if post.image:
                 post_dict['image'] = post.image.url
@@ -321,7 +322,8 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
                     comment.author,
                     fields=('first_name', 'last_name',))
                 comment_dict['author']['id'] = comment.author.pk
-                comment_dict['author']['profile_image'] = comment.author.profile_image.url
+                if comment.author.profile_image:
+                    comment_dict['author']['profile_image'] = comment.author.profile_image.url
                 post_dict['comments'].append(comment_dict)
 
             queryset_dict_list.append(post_dict)

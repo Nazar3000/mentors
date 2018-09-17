@@ -74,7 +74,8 @@
               </div>
               {% if last_post %}
                 <div class="admin-social-line"></div>
-                <div class="admin-social-author"><img src="{{ last_post.author.profile_image.url }}" alt="">
+                <div class="admin-social-author">
+                  <img src="{% if last_post.author.profile_image %}{{ last_post.author.profile_image.url }}{% endif %}" alt="">
                   <div>
                     <h4>{{ last_post.author.first_name }} {{ last_post.author.last_name }}</h4>
                     <span>{{ last_post.datetime|get_time_spent }}</span>
@@ -83,7 +84,8 @@
                 <div class="admin-social-description">
                   <p>{{ last_post.content }}</p>
                 </div>
-                <div class="admin-social-image"><img src="{{ last_post.image.url }}" alt="">
+                <div class="admin-social-image">
+                  <img src="{% if last_post.image %}{{ last_post.image.url }}{% endif %}" alt="">
                   <div class="admin-social-wrapp-icon">
                     <div class="admin-social-icon">
                       <span><i class="far fa-comment"></i></span>
