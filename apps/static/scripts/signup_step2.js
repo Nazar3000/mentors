@@ -2,7 +2,16 @@ const step2Form = new Vue({
   el: '#step2-form',
   delimiters: ['[[', ']]'],
   data: {
-    choices: {},
+    choices: {
+      able_to_visit_child_frequency: {},
+      education_types: {},
+      genders: {},
+      home_types: {},
+      local_church_visiting_frequency: {},
+      marital_statuses: {},
+      mentoring_program_find_out_places: {},
+      religions: {},
+    },
 
     full_name: '',
     date_of_birth: '',
@@ -53,13 +62,129 @@ const step2Form = new Vue({
     parental_rights_deprived_description: '',
     allow_to_use_personal_data: '',
     program_found_out_place: '',
+
+    educations: [
+      {
+        education_type: '',
+        year_of_admission: '',
+        year_of_graduation: '',
+        degree: ''
+      },
+    ],
+    jobs: [
+      {
+        is_current: true,
+        organization_name: '',
+        date_since: '',
+        date_till: '',
+        contact_info: '',
+        position: '',
+        duties: '',
+        reason_for_leaving: ''
+      },
+      {
+        is_current: false,
+        organization_name: '',
+        date_since: '',
+        date_till: '',
+        contact_info: '',
+        position: '',
+        duties: '',
+        reason_for_leaving: ''
+      },
+    ],
+    family_members: [
+      {
+        name: '',
+        gender: '',
+        date_of_birth: '',
+        relation: ''
+      },
+      {
+        name: '',
+        gender: '',
+        date_of_birth: '',
+        relation: ''
+      },
+      {
+        name: '',
+        gender: '',
+        date_of_birth: '',
+        relation: ''
+      },
+    ],
+    children_work_experiences: [
+      {
+        organization_name: '',
+        date_since: '',
+        date_till: '',
+        contact_info: '',
+        position: '',
+        duties: '',
+        children_age_group: ''
+      },
+    ]
   },
   created() {
     $.get('?get_selector_choices', (data) => {
       this.choices = data;
+
+      this.educations = Object.keys(this.choices.education_types).map(t => {
+        return {
+          education_type: t,
+          year_of_admission: '',
+          year_of_graduation: '',
+          degree: ''
+        };
+      });
     });
   },
   methods: {
+    getInstitutionName(educationType) {
+      return this.choices.education_types[educationType];
+    },
 
+    addEducationObject() {
+      this.educations.push({
+        education_type: '',
+        year_of_admission: '',
+        year_of_graduation: '',
+        degree: ''
+      })
+    },
+    addJobObject() {
+      this.jobs.push({
+        is_current: false,
+        organization_name: '',
+        date_since: '',
+        date_till: '',
+        contact_info: '',
+        position: '',
+        duties: '',
+        reason_for_leaving: ''
+      })
+    },
+    addFamilyMemberObject() {
+      this.family_members.push({
+        name: '',
+        gender: '',
+        date_of_birth: '',
+        relation: ''
+      })
+    },
+    addChildrenWorkExperienceObject() {
+      this.children_work_experiences.push({
+        organization_name: '',
+        date_since: '',
+        date_till: '',
+        contact_info: '',
+        position: '',
+        duties: '',
+        children_age_group: ''
+      })
+    },
+    submitForm() {
+      console.log('here');
+    }
   }
 });

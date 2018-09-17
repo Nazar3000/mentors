@@ -326,6 +326,11 @@ class MentorQuestionnaireFamilyMember(models.Model):
 
 
 class MentorQuestionnaireChildrenWorkExperience(models.Model):
+    questionnaire = models.ForeignKey(
+        to=MentorQuestionnaire,
+        on_delete=models.CASCADE
+    )
+
     organization_name = models.CharField(
         max_length=256
     )

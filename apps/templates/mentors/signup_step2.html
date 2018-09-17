@@ -135,7 +135,10 @@
             </span>
           </div>
           <div class="page-form-work">
-            <h3>3. Освіта:</h3><a href=""><i class="fas fa-plus"></i><span>Додати таблицю</span></a>
+            <h3>3. Освіта:</h3>
+            <a href="javascript: void(0)" @click="addEducationObject">
+              <i class="fas fa-plus"></i><span>Додати таблицю</span>
+            </a>
           </div>
           <div class="page-form-education">
             <div class="table-education">
@@ -148,50 +151,37 @@
                 <div class="table-line"></div>
                 <div class="table-education-special">Отримана спеціальність, ступінь або інша кваліфікація</div>
               </div>
-              <div class="table-education-line">
-                <div class="table-education-name">Загальноосвітня школа</div>
-                <div class="table-education-input">
-                  <input type="text">
+              <div class="table-education-line" v-for="institution, index in educations">
+                <div class="table-education-name" v-if="index < 3">
+                  [[ getInstitutionName(institution.education_type) ]]
+                </div>
+                <div class="table-education-name" v-else>
+                  <select v-model="institution.education_type">
+                    <option v-for="key, value in choices.education_types" :value="value">
+                      [[ key ]]
+                    </option>
+                  </select>
                 </div>
                 <div class="table-education-input">
-                  <input type="text">
+                  <input type="text" v-model="institution.year_of_admission">
+                </div>
+                <div class="table-education-input">
+                  <input type="text" v-model="institution.year_of_graduation">
                 </div>
                 <div class="table-education-input-last">
-                  <input type="text">
-                </div>
-              </div>
-              <div class="table-education-line">
-                <div class="table-education-name">Університет, інститут, технікум</div>
-                <div class="table-education-input">
-                  <input type="text">
-                </div>
-                <div class="table-education-input">
-                  <input type="text">
-                </div>
-                <div class="table-education-input-last">
-                  <input type="text">
-                </div>
-              </div>
-              <div class="table-education-line">
-                <div class="table-education-name">Додаткові курси, тренінги, семінари</div>
-                <div class="table-education-input">
-                  <input type="text">
-                </div>
-                <div class="table-education-input">
-                  <input type="text">
-                </div>
-                <div class="table-education-input-last">
-                  <input type="text">
+                  <input type="text" v-model="institution.degree">
                 </div>
               </div>
             </div>
           </div>
           <div class="page-form-work">
-            <h3>4. Працевлаштування:</h3><a href=""><i class="fas fa-plus"></i><span>Додати таблицю</span></a>
+            <h3>4. Працевлаштування:</h3>
+            <a href="javascript: void(0)" @click="addJobObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a>
           </div>
-          <div class="table-work">
+          <div class="table-work" v-for="job in jobs">
             <div class="table-work-header">
-              <div class="table-work-main">Місце роботи на цей момент</div>
+              <div class="table-work-main" v-if="job.is_current">Місце роботи на цей момент</div>
+              <div class="table-work-main" v-else>Місце попередньої роботи</div>
               <div class="table-line"></div>
               <div class="table-work-start">З (місяць, рік)</div>
               <div class="table-work-line-vert"></div>
@@ -201,16 +191,16 @@
             </div>
             <div class="table-work-line">
               <div class="table-work-input-main">
-                <input type="text" placeholder="Введіть назву організації">
+                <input type="text" placeholder="Введіть назву організації" v-model="job.organization_name">
               </div>
               <div class="table-work-input-start">
-                <input type="text">
+                <input type="text" v-model="job.date_since">
               </div>
               <div class="table-work-input-end">
-                <input type="text">
+                <input type="text" v-model="job.date_till">
               </div>
               <div class="table-work-input-info">
-                <input type="text">
+                <input type="text" v-model="job.contact_info">
               </div>
             </div>
             <div class="table-work-header">
@@ -222,56 +212,13 @@
             </div>
             <div class="table-work-line">
               <div class="table-work-input-left">
-                <input type="text">
+                <input type="text" v-model="job.position">
               </div>
               <div class="table-work-input-top">
-                <input type="text">
+                <input type="text" v-model="job.duties">
               </div>
               <div class="table-work-input-right">
-                <input type="text">
-              </div>
-            </div>
-          </div>
-          <div class="table-work">
-            <div class="table-work-header">
-              <div class="table-work-main">Місце попередньої роботи</div>
-              <div class="table-line"></div>
-              <div class="table-work-start">З (місяць, рік)</div>
-              <div class="table-work-line-vert"></div>
-              <div class="table-work-end">До (місяць, рік)</div>
-              <div class="table-line"></div>
-              <div class="table-work-info">Контактна інформація (телефон, адреса)</div>
-            </div>
-            <div class="table-work-line">
-              <div class="table-work-input-main">
-                <input type="text" placeholder="Введіть назву організації">
-              </div>
-              <div class="table-work-input-start">
-                <input type="text">
-              </div>
-              <div class="table-work-input-end">
-                <input type="text">
-              </div>
-              <div class="table-work-input-info">
-                <input type="text">
-              </div>
-            </div>
-            <div class="table-work-header">
-              <div class="table-work-left">Посада</div>
-              <div class="table-line"></div>
-              <div class="table-work-top">Виконувані обов’язки</div>
-              <div class="table-line"></div>
-              <div class="table-work-right">Причина звільнення</div>
-            </div>
-            <div class="table-work-line">
-              <div class="table-work-input-left">
-                <input type="text">
-              </div>
-              <div class="table-work-input-top">
-                <input type="text">
-              </div>
-              <div class="table-work-input-right">
-                <input type="text">
+                <input type="text" v-model="job.reason_for_leaving">
               </div>
             </div>
           </div>
@@ -289,7 +236,9 @@
             </option>
           </select>
         </div>
-        <div class="page-form-family-main"><span>* Будь ласка, вкажіть членів вашої сім’ї</span><a href=""><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
+        <div class="page-form-family-main">
+          <span>* Будь ласка, вкажіть членів вашої сім’ї</span>
+          <a href="javascript: void(0)" @click="addFamilyMemberObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
         <div class="table-family">
           <div class="table-family-header">
             <div class="table-family-title">Ім’я</div>
@@ -300,46 +249,18 @@
             <div class="table-line"></div>
             <div class="table-family-title">Характер сімейних стосунків<br>(мати, сестра, син тощо)</div>
           </div>
-          <div class="table-family-line">
+          <div class="table-family-line" v-for="member in family_members">
             <div class="table-family-input">
-              <input type="text">
+              <input type="text" v-model="member.name">
             </div>
             <div class="table-family-input">
-              <input type="text">
+              <input type="text" v-model="member.gender">
             </div>
             <div class="table-family-input">
-              <input type="text">
+              <input type="text" v-model="member.date_of_birth">
             </div>
             <div class="table-family-input">
-              <input type="text">
-            </div>
-          </div>
-          <div class="table-family-line">
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-          </div>
-          <div class="table-family-line">
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-            <div class="table-family-input">
-              <input type="text">
-            </div>
-            <div class="table-family-input">
-              <input type="text">
+              <input type="text" v-model="member.relation">
             </div>
           </div>
         </div>
@@ -364,8 +285,10 @@
           <textarea class="page-form-room-input" rows="3" v-model="pets_data"></textarea>
         </div>
         <h3>8. Досвід роботи з дітьми:</h3>
-        <div class="page-form-child-main"><span>* Будь ласка, вкажіть ваш поточний і попередній досвід роботи з дітьми<br>(оплачувана робота, волонтерська діяльність тощо)</span><a href=""><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
-        <div class="table-child">
+        <div class="page-form-child-main">
+          <span>* Будь ласка, вкажіть ваш поточний і попередній досвід роботи з дітьми<br>(оплачувана робота, волонтерська діяльність тощо)</span>
+          <a href="javascript: void(0)" @click="addChildrenWorkExperienceObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
+        <div class="table-child" v-for="exp in children_work_experiences">
           <div class="table-child-header">
             <div class="table-child-main">Назва організації</div>
             <div class="table-line"></div>
@@ -377,16 +300,16 @@
           </div>
           <div class="table-child-line">
             <div class="table-child-input-main">
-              <input type="text">
+              <input type="text" v-model="exp.organization_name">
             </div>
             <div class="table-child-input-start">
-              <input type="text">
+              <input type="text" v-model="exp.date_since">
             </div>
             <div class="table-child-input-end">
-              <input type="text">
+              <input type="text" v-model="exp.date_till">
             </div>
             <div class="table-child-input-info">
-              <input type="text">
+              <input type="text" v-model="exp.contact_info">
             </div>
           </div>
           <div class="table-child-header">
@@ -398,13 +321,13 @@
           </div>
           <div class="table-child-line">
             <div class="table-child-input-left">
-              <input type="text">
+              <input type="text" v-model="exp.position">
             </div>
             <div class="table-child-input-top">
-              <input type="text">
+              <input type="text" v-model="exp.duties">
             </div>
             <div class="table-child-input-right">
-              <input type="text">
+              <input type="text" v-model="exp.children_age_group">
             </div>
           </div>
         </div>
@@ -496,25 +419,25 @@
         <div class="page-form-wrapp">
           <div class="page-form-wrapp-item">
             <label class="form-check">
-              <input type="radio" name="6" value=""><span class="form-check-label-md">Так</span>
+              <input type="radio" value="Yes" v-model="drug_usage"><span class="form-check-label-md">Так</span>
             </label>
             <label class="form-check">
-              <input type="radio" name="6" value="" checked="checked"><span class="form-check-label-md">Hi</span>
+              <input type="radio" value="No" v-model="drug_usage"><span class="form-check-label-md">Hi</span>
             </label>
           </div><span>Якщо так, вкажіть, як часто?</span>
-          <input type="text">
+          <input type="text" v-model="drug_usage_info">
         </div>
         <h3>14.3. Чи були ви засуджені за злочини, пов’язані з приниженням людської гідності,<br>залученням дітей до незаконної діяльності, жорстоким поводженням з дітьми,<br>сексуальними посяганнями будь-якого роду, зневагою дитини тощо?</h3>
         <div class="page-form-wrapp">
           <div class="page-form-wrapp-item">
             <label class="form-check">
-              <input type="radio" name="7" value=""><span class="form-check-label-md">Так</span>
+              <input type="radio" value="Yes" v-model="crime_convicted"><span class="form-check-label-md">Так</span>
             </label>
             <label class="form-check">
-              <input type="radio" name="7" value="" checked="checked"><span class="form-check-label-md">Hi</span>
+              <input type="radio" value="No" v-model="crime_convicted"><span class="form-check-label-md">Hi</span>
             </label>
           </div><span>Якщо так, будь ласка, поясніть</span>
-          <input type="text">
+          <input type="text" v-model="crime_convicted_description">
         </div>
         <h3>14.4. Чи були ви раніше позбавлені батьківських або опікунських прав?</h3>
         <div class="page-form-wrapp">
@@ -542,7 +465,7 @@
         </div>
         <h3>16. Звідки ви дізналися про програму наставництва?</h3>
         <div class="page-form-select">
-          <select v-model="mentoring_program_find_out_places">
+          <select v-model="program_found_out_place">
             <option></option>
             <option v-for="key, value in choices.mentoring_program_find_out_places" :value="value">
               [[ key ]]
@@ -553,7 +476,7 @@
         <div class="page-form-wrapp">
           <input type="text" v-model="program_found_out_place">
         </div>
-        <button type="button">Зберегти</button>
+        <button type="button" @click="submitForm">Зберегти</button>
       </div>
     </section>
   </div>
