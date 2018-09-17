@@ -91,7 +91,7 @@ class MentorQuestionnaireChildrenWorkExperienceForm(forms.ModelForm):
         )
 
 
-class SignUpStep3Forms:
+class SignUpStep2Forms:
     forms = {
         'main': MentorQuestionnaireForm,
         'education': MentorQuestionnaireEducationForm,

@@ -17,7 +17,7 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep3Forms, MeetingForm
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
@@ -72,10 +72,6 @@ class SignUpStep1View(SignUpStepsAccessMixin, FormView):
         else:
             return redirect('mentors:signup_step0')
         return HttpResponseRedirect(self.get_success_url())
-
-
-class SignUpStep2View(SignUpStepsAccessMixin, TemplateView):
-    template_name = 'mentors/signup_step2.html'
 
 
 class MultiFormRelatedBaseViewMixin(View):
@@ -140,9 +136,9 @@ class MultiFormRelatedBaseViewMixin(View):
 
 
 # TODO: add SignUpStepsAccessMixin
-class SignUpStep3View(MultiFormRelatedBaseViewMixin):
-    template_name = 'mentors/signup_step3.html'
-    forms_class = SignUpStep3Forms
+class SignUpStep2View(MultiFormRelatedBaseViewMixin):
+    template_name = 'mentors/signup_step2.html'
+    forms_class = SignUpStep2Forms
     success_url = reverse_lazy('mentors:mentor_roadmap')
 
     def get(self, request, *args, **kwargs):
@@ -164,6 +160,10 @@ class SignUpStep3View(MultiFormRelatedBaseViewMixin):
 
     def post(self, request, *args, **kwargs):
         print(self.process_forms(request, *args, **kwargs))
+
+
+class SignUpStep3View(SignUpStepsAccessMixin, TemplateView):
+    template_name = 'mentors/signup_step3.html'
 
 
 class MentorRoadmap(TemplateView):
