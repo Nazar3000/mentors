@@ -15,37 +15,51 @@
           <div class="page-form-register">
             <div class="page-form-register-left">
               <span>ПІБ</span>
-              <input type="text" v-model="full_name">
-              <span>Дата народження та ваш вік</span>
-              <input type="text" v-model="date_of_birth">
+              <input type="text" v-model="full_name" :class="{'alert-border': errors['full_name']}">
+              <span class="error-form" v-for="err in errors.full_name">[[ err ]]</span>
+              <span>Дата народження</span>
+              <input type="text" v-model="date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
+              <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
               <span>Контактний телефон</span>
-              <input type="text" v-model="phone_number">
+              <input type="text" v-model="phone_number" :class="{'alert-border': errors['phone_number']}">
+              <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
               <span>Електронна адреса</span>
-              <input type="email" v-model="email">
+              <input type="email" v-model="email" :class="{'alert-border': errors['email']}">
+              <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
             </div>
             <div class="page-form-register-right">
               <span>Національність/Громадянство</span>
-              <input type="text" v-model="nationality">
+              <input type="text" v-model="nationality" :class="{'alert-border': errors['nationality']}">
+              <span class="error-form" v-for="err in errors.nationality">[[ err ]]</span>
+
               <span>Адреса фактичного місця проживання</span>
-              <input type="text" v-model="actual_address">
+              <input type="text" v-model="actual_address" :class="{'alert-border': errors['actual_address']}">
+              <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
+
               <span>Адреса реєстрації</span>
-              <input type="text" v-model="registration_address">
+              <input type="text" v-model="registration_address" :class="{'alert-border': errors['registration_address']}">
+              <span class="error-form" v-for="err in errors.registration_address">[[ err ]]</span>
+
               <span>Віросповідання</span>
-              <select v-model="religion">
+              <select v-model="religion" :class="{'alert-border': errors['religion']}">
                 <option v-for="key, value in choices.religions" :value="value">
                   [[ key ]]
                 </option>
               </select>
+              <span class="error-form" v-for="err in errors.religion">[[ err ]]</span>
+
               <div class="page-form-register-religion">
                 <span>Яку міську церкву ви відвідуєте?</span>
-                <input type="text" v-model="local_church_visiting">
+                <input type="text" v-model="local_church_visiting" :class="{'alert-border': errors['local_church_visiting']}">
+                <span class="error-form" v-for="err in errors.local_church_visiting">[[ err ]]</span>
                 <span>Як часто?</span>
-                <select v-model="local_church_visiting_frequency">
+                <select v-model="local_church_visiting_frequency" :class="{'alert-border': errors['local_church_visiting_frequency']}">
                   <option></option>
                   <option v-for="key, value in choices.local_church_visiting_frequency" :value="value">
                     [[ key ]]
                   </option>
                 </select>
+                <span class="error-form" v-for="err in errors.local_church_visiting_frequency">[[ err ]]</span>
               </div>
             </div>
           </div>
@@ -245,7 +259,7 @@
             <div class="table-line"></div>
             <div class="table-family-title">Стать</div>
             <div class="table-line"></div>
-            <div class="table-family-title">Вік</div>
+            <div class="table-family-title">Дата народження</div>
             <div class="table-line"></div>
             <div class="table-family-title">Характер сімейних стосунків<br>(мати, сестра, син тощо)</div>
           </div>
@@ -474,7 +488,7 @@
         </div>
         <h3>17. В який робочий день та час Вам зручніше всього прийти на консультацію з психологом<br>Центру соціальних служб або Партнерської організації?</h3>
         <div class="page-form-wrapp">
-          <input type="text" v-model="program_found_out_place">
+          <input type="text" v-model="convenient_meeting_conditions">
         </div>
         <button type="button" @click="submitForm">Зберегти</button>
       </div>

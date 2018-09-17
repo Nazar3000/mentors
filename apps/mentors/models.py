@@ -225,8 +225,13 @@ class MentorQuestionnaire(models.Model):
 
     # 16. Where the the mentoring program was found out
     program_found_out_place = models.CharField(
-        max_length=32,
+        max_length=64,
         choices=MentoringProgramFindOutPlaces.choices()
+    )
+
+    # 17.
+    convenient_meeting_conditions = models.CharField(
+        max_length=128
     )
 
 

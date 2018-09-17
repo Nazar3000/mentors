@@ -62,6 +62,7 @@ const step2Form = new Vue({
     parental_rights_deprived_description: '',
     allow_to_use_personal_data: '',
     program_found_out_place: '',
+    convenient_meeting_conditions: '',
 
     educations: [
       {
@@ -123,7 +124,9 @@ const step2Form = new Vue({
         duties: '',
         children_age_group: ''
       },
-    ]
+    ],
+
+    errors: {}
   },
   created() {
     $.get('?get_selector_choices', (data) => {
@@ -184,7 +187,25 @@ const step2Form = new Vue({
       })
     },
     submitForm() {
-      console.log('here');
+      const thisData = this;
+
+      const data = Object.assign({}, this.$data);
+      delete data.choices;
+      delete data.errors;
+
+      $.ajax({
+        url: '',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        type: 'POST',
+        success: (res) => {
+          if (res.status === 'success') {
+            window.location.href = "/mentor/register-step3/";
+          } else {
+            thisData.errors = res;
+          }
+        }
+      });
     }
   }
 });

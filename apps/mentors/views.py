@@ -4,7 +4,7 @@ from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
-from django.forms import model_to_dict
+from django.forms import model_to_dict, formset_factory
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
@@ -74,69 +74,7 @@ class SignUpStep1View(SignUpStepsAccessMixin, FormView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class MultiFormRelatedBaseViewMixin(View):
-    """
-    Inherit this class in case if you need to submit related models.
-
-    """
-    errors = dict()
-    forms_class = None
-    outer_object = None
-
-    def get_forms_class(self):
-        return self.forms_class
-
-    def get_outer_object(self):
-        return self.outer_object
-
-    def process_forms(self, request, outer_relation_field_name=None,
-                      inner_relation_filed_name=None, *args, **kwargs):
-        """
-        Save related models to db and return main model instance or None.
-        Accepted cases:
-            1. Model A with fields: a1, a2, a3;
-               Model B with fields: inner_relation_filed_name, b1, b2
-               ...
-               Model N with fields: inner_relation_filed_name, n1, n2
-            N <- ... <- B <- A
-            inner_relation_filed_name:
-                is a foreign key relation to model A,
-                note that it is required to have the same foreign key filed name to all related models
-
-            2. Model O with fields: outside_relation_field_name, o1, o2, o3;
-               Model A with fields: a, b, c;
-               Model B with fields: inner_relation_filed_name, b1, b2
-               ...
-               Model N with fields: inner_relation_filed_name, n1, n2
-            N <- ... <- B <- A <- O
-            inner_relation_filed_name:
-                same as in case 1.
-            outer_relation_field_name:
-                is a foreign key relation from model A to model O
-        """
-        forms_object = self.get_forms_class()(request.POST)
-        instance = None
-        if all(form.is_valid() for form in forms_object.forms):
-            for form_name, form in forms_object.forms.items():
-                if form_name == 'main':
-                    instance = form.save(commit=False)
-                    if outer_relation_field_name:
-                        setattr(instance, 'mentor', self.get_outer_object())
-                    instance.save()
-                else:
-                    subinstance = form.save(commit=False)
-                    if inner_relation_filed_name:
-                        setattr(subinstance, 'questionnaire', instance)
-                    subinstance.save()
-
-        for form in forms_object.forms.values():
-            self.errors.update(form.errors.items())
-
-        return instance
-
-
-# TODO: add SignUpStepsAccessMixin
-class SignUpStep2View(MultiFormRelatedBaseViewMixin):
+class SignUpStep2View(SignUpStepsAccessMixin, View):
     template_name = 'mentors/signup_step2.html'
     forms_class = SignUpStep2Forms
     success_url = reverse_lazy('mentors:mentor_roadmap')
@@ -155,11 +93,51 @@ class SignUpStep2View(MultiFormRelatedBaseViewMixin):
             return JsonResponse(choices_dicts)
         return render(request, self.template_name, {'forms': self.forms_class.forms})
 
-    def get_outer_object(self):
-        return Mentor.objects.get(pk=self.request.user.pk)
-
     def post(self, request, *args, **kwargs):
-        print(self.process_forms(request, *args, **kwargs))
+        request_body = json.loads(request.body)
+
+        errors = {}
+
+        main_form = self.forms_class.forms['main'](request_body)
+        questionnaire = None
+        if main_form.is_valid():
+            questionnaire = main_form.save(commit=False)
+            questionnaire.mentor = Mentor.objects.filter(pk=request.user.pk)
+            questionnaire.save()
+        else:
+            errors.update(dict(main_form.errors.items()))
+
+        for form_name in [
+                'education',
+                'job',
+                'family_member',
+                'children_work_experience']:
+            error_list = []
+            for i in range(len(request_body[form_name + 's'])):
+                form = self.forms_class.forms[form_name](request_body[form_name + 's'][i])
+                if form.is_valid():
+                    if questionnaire:
+                        q_object = form.save(commit=False)
+                        q_object.questionnaire = questionnaire
+                        q_object.save()
+
+                    error_list.append({})
+                else:
+                    error_list.append(dict(form.errors.items()))
+            errors[form_name + 's'] = error_list
+
+        has_errors = False
+        for value in errors.values():
+            if (type(value) == list and any(len(d) > 0 for d in value)
+                    or type(value) == str and len(value) > 0):
+                has_errors = True
+
+        if has_errors:
+            if questionnaire:
+                questionnaire.delete()
+            return JsonResponse(errors)
+
+        return JsonResponse({'status': 'success'})
 
 
 class SignUpStep3View(SignUpStepsAccessMixin, TemplateView):

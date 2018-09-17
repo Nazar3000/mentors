@@ -97,11 +97,8 @@ class SignUpStep2Forms:
         'education': MentorQuestionnaireEducationForm,
         'job': MentorQuestionnaireJobForm,
         'family_member': MentorQuestionnaireFamilyMemberForm,
-        'work_experience': MentorQuestionnaireChildrenWorkExperienceForm,
+        'children_work_experience': MentorQuestionnaireChildrenWorkExperienceForm,
     }
-
-    def __init__(self, *args, **kwargs):
-        self.forms = [form(*args, **kwargs) for form in self.forms]
 
 
 class MeetingForm(forms.ModelForm):
