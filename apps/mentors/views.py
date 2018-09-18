@@ -17,7 +17,7 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
@@ -214,6 +214,7 @@ class MentorSchoolVideoDetailView(CheckIfUserIsMentorMixin, DetailView):
 
 class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
     template_name = 'mentors/mentoree_detail.html'
+    mentoree_edit_form = MentoreeEditForm
 
     def get(self, *args, **kwargs):
         model_dict = dict()
@@ -249,29 +250,18 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
             mentoree.extra_data_fields = jdata
             mentoree.save()
         elif 'mentoree_data' in self.request.POST.keys():
-            mentoree = mentoree if mentoree else Mentoree()
-            mentoree_data = self.request.POST
+            mentoree_edit_form = self.mentoree_edit_form(self.request.POST, self.request.FILES)
+            if mentoree_edit_form.is_valid():
+                mentoree = mentoree_edit_form.save(commit=False)
+                print(mentoree.first_name)
+                mentoree.organization_id = self.request.POST['organization_id']
+                mentoree.save()
 
-            mentoree.organization_id = mentoree_data['organization_id']
-            mentoree.first_name = mentoree_data['first_name']
-            mentoree.last_name = mentoree_data['last_name']
-            mentoree.date_of_birth = datetime.strptime(mentoree_data['date_of_birth'], '%d.%m.%Y')
-            mentoree.dream = mentoree_data['dream']
-            mentoree.want_to_become = mentoree_data['want_to_become']
-            mentoree.fears = mentoree_data['fears']
-            mentoree.loves = mentoree_data['loves']
-            mentoree.hates = mentoree_data['hates']
-            mentoree.strengths = mentoree_data['strengths']
-            mentoree.extra_data = mentoree_data['extra_data']
-            if 'profile_image' in self.request.FILES.keys() \
-                    and 'profile_image' not in mentoree_data.keys():
-                mentoree.profile_image.save(
-                    self.request.FILES['profile_image'].name,
-                    self.request.FILES['profile_image'])
-            mentoree.save()
-            mentor = Mentor.objects.get(pk=self.request.POST['user_id'])
-            mentor.mentoree = mentoree
-            mentor.save()
+                mentor = Mentor.objects.get(pk=self.request.POST['user_id'])
+                mentor.mentoree = mentoree
+                mentor.save()
+            else:
+                return JsonResponse(dict(mentoree_edit_form.errors.items()))
         elif 'mentoree_story' in self.request.POST.keys():
             mentoree.story = self.request.POST['story']
             mentoree.save()

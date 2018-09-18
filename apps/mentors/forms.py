@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
-from mentors.models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
-    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience
+from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
+    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree
 from users.constants import UserTypes
 from users.models import Mentor
 
@@ -117,3 +117,23 @@ class MeetingImageForm(forms.ModelForm):
     class Meta:
         model = MeetingImage
         fields = ('image',)
+
+
+class MentoreeEditForm(forms.ModelForm):
+    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
+
+    class Meta:
+        model = Mentoree
+        fields = (
+            'first_name',
+            'last_name',
+            'date_of_birth',
+            'dream',
+            'want_to_become',
+            'fears',
+            'loves',
+            'hates',
+            'strengths',
+            'extra_data',
+            'profile_image',
+        )

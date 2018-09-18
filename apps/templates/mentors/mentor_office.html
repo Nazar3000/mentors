@@ -9,35 +9,86 @@
     <section class="admin">
       <div class="container">
         <div class="admin-wrapp">
-          <div class="admin-left">
-            {% with mentor.mentoree as m %}
-              <div class="admin-card">
-                <div class="admin-card-info"><img src="{{ m.profile_image.url }}" alt="">
-                  <div>
-                    <h2 class="admin-card-name">{{ m.first_name }}<br>{{ m.last_name }}</h2>
-                    <p class="admin-card-birth">Дата народження</p>
-                    <p class="admin-card-data">{{ m.date_of_birth|date:'d.m.Y' }} <span class="admin-card-age">({{ m.date_of_birth|get_age }}  років)</span></p>
-                  </div><a class="admin-card-bage" href=""><i class="fas fa-pencil-alt"></i></a>
+          <div class="admin-left" id="mentoree-detail-edit">
+            <div class="admin-card" v-if="viewMode">
+              <div class="admin-card-info">
+                <img :src="uploadedImageUrl" alt="" v-if="uploadedImageUrl">
+                <img src="{% static 'img/user.svg' %}" alt="" v-else>
+                <div>
+                  <h2 class="admin-card-name">[[ mentoreeData.first_name ]]<br>[[ mentoreeData.last_name ]]</h2>
+                  <p class="admin-card-birth">Дата народження</p>
+                  <p class="admin-card-data">[[ mentoreeData.date_of_birth ]] <span class="admin-card-age">([[ mentoreeData.age ]]  років)</span></p>
                 </div>
-                <div class="admin-card-line"></div>
-                <div class="admin-card-dream">
-                  <div><span class="admin-card-dream-name">Мрія</span>
-                    <p class="admin-card-dream-item">{{ m.dream }}</p><span class="admin-card-dream-name">Боїться</span>
-                    <p class="admin-card-dream-item">{{ m.fears }}</p><span class="admin-card-dream-name">Ненавидить</span>
-                    <p class="admin-card-dream-item">{{ m.hates }}</p>
-                  </div>
-                  <div><span class="admin-card-dream-name">Хочу стати</span>
-                    <p class="admin-card-dream-item">{{ m.want_to_become }}</p><span class="admin-card-dream-name">Любить</span>
-                    <p class="admin-card-dream-item">{{ m.loves }}</p>
-                  </div>
+                <a class="admin-card-bage" href="javascript: void(0)" @click="viewMode=false">
+                  <i class="fas fa-pencil-alt"></i>
+                </a>
+              </div>
+              <div class="admin-card-line"></div>
+              <div class="admin-card-dream">
+                <div><span class="admin-card-dream-name">Мрія</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.dream ]]</p><span class="admin-card-dream-name">Боїться</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.fears ]]</p><span class="admin-card-dream-name">Ненавидить</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.hates ]]</p>
                 </div>
-                <div class="admin-card-line"></div>
-                <div class="admin-card-post">
-                  <p>Твоя задача не досягти якихось цілей, а допомогти дититні!</p>
-                  <a href="{% url 'mentors:mentoree_detail' %}">Детальніше</a>
+                <div><span class="admin-card-dream-name">Хочу стати</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.want_to_become ]]</p><span class="admin-card-dream-name">Любить</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.loves ]]</p>
                 </div>
               </div>
-            {% endwith %}
+              <div class="admin-card-line"></div>
+            </div>
+
+            <div class="admin-card" v-else>
+              <div class="setting-card-info">
+                <img :src="uploadedImageUrl" alt="" v-if="uploadedImageUrl">
+                <img src="{% static 'img/user.svg' %}" alt="" v-else>
+                <div class="setting-card-icon">
+                  <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
+                  <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
+                  <a class="delete-img"
+                     href="javascript: void(0)"
+                     title="Delete image"
+                     @click="deleteProfileImage()"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+                <div>
+                  <div class="setting-card-name">
+                    <input type="text" v-model="mentoreeData.first_name" placeholder="Ім'я">
+                    <input type="text" v-model="mentoreeData.last_name" placeholder="Прізвище">
+                  </div>
+                  <p class="setting-card-birth">Дата народження</p>
+                  <p class="setting-card-data">
+                    <input type="text" v-model="mentoreeData.date_of_birth" placeholder="дд.мм.рррр"><span class="setting-card-age"></span>
+                  </p>
+                </div>
+                <a class="setting-card-bage" href="javascript: void(0)" @click="submitMentoreeData($event)">
+                  <i class="fas fa-check"></i>
+                </a>
+              </div>
+              <div class="setting-card-line"></div>
+              <div class="setting-card-dream">
+                <div class="setting-card-dream-left"><span class="setting-card-dream-name">Мрія</span>
+                  <input class="setting-card-dream-item" type="text" v-model="mentoreeData.dream" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Боїться</span>
+                  <input class="setting-card-dream-item" type="text" v-model="mentoreeData.fears" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Ненавидить</span>
+                  <input class="setting-card-dream-item" type="text" v-model="mentoreeData.hates" placeholder="Введіть текст тут">
+                </div>
+                <div class="setting-card-dream-right"><span class="setting-card-dream-name">Хочу стати</span>
+                  <input class="setting-card-dream-item" type="text" v-model="mentoreeData.want_to_become" placeholder="Введіть текст тут"><span class="setting-card-dream-name">Любить</span>
+                  <input class="setting-card-dream-item" type="text" v-model="mentoreeData.loves" placeholder="Введіть текст тут">
+                </div>
+              </div>
+              <div class="setting-card-line"></div>
+              <select v-model="mentoreeData.organization">
+                <option v-for="option in mentoreeData.all_organizations"
+                        :value="option.id"
+                >
+                  [[ option.name ]], [[ option.address ]]
+                </option>
+              </select>
+            </div>
+
             <div class="admin-school">
               <h2 class="admin-school-title">Школа наставника</h2>
               <div class="admin-school-line"></div>
@@ -144,5 +195,9 @@
 {% endblock %}
 
 {% block extra_js %}
+  <script>
+    const userId = '{{ user.pk }}';
+  </script>
   <script src="{% static 'scripts/news_item_like.js' %}"></script>
+  <script src="{% static 'scripts/mentoree_edit.js' %}"></script>
 {% endblock %}

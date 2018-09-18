@@ -380,10 +380,14 @@ class Mentoree(models.Model):
     hates = models.CharField(
         max_length=64)
     strengths = models.CharField(
-        max_length=64)
+        max_length=64,
+        null=True,
+        blank=True)
     extra_data = models.CharField(
-        max_length=128)
-    organization = models.OneToOneField(
+        max_length=128,
+        null=True,
+        blank=True)
+    organization = models.ForeignKey(
         to='users.Organization',
         on_delete=models.SET_NULL,
         null=True)
