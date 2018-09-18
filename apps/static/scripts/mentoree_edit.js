@@ -79,12 +79,15 @@ $.get('/mentor/mentoree/?get_mentoree_data', function (mentoreeData) {
           enctype: 'multipart/form-data',
           type: 'POST',
           success: (res) => {
-            console.log(res);
-            this.viewMode = false;
-            // this.organizationObject = this.mentoreeData.all_organizations.find(o => {
-            //   return o.id === this.mentoreeData.organization;
-            // });
-            // this.viewMode = true;
+            if (res.status === 'success') {
+              this.organizationObject = this.mentoreeData.all_organizations.find(o => {
+                return o.id === this.mentoreeData.organization;
+              });
+              this.viewMode = true;
+            } else {
+              // TODO: display errors
+              console.log(res);
+            }
           }
         });
       }

@@ -250,14 +250,14 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
             mentoree.extra_data_fields = jdata
             mentoree.save()
         elif 'mentoree_data' in self.request.POST.keys():
-            mentoree_edit_form = self.mentoree_edit_form(self.request.POST, self.request.FILES)
+            mentor = Mentor.objects.get(pk=self.request.POST['user_id'])
+            mentoree_edit_form = self.mentoree_edit_form(
+                self.request.POST, self.request.FILES, instance=mentor.mentoree)
             if mentoree_edit_form.is_valid():
                 mentoree = mentoree_edit_form.save(commit=False)
-                print(mentoree.first_name)
                 mentoree.organization_id = self.request.POST['organization_id']
                 mentoree.save()
 
-                mentor = Mentor.objects.get(pk=self.request.POST['user_id'])
                 mentor.mentoree = mentoree
                 mentor.save()
             else:
