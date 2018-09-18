@@ -7,7 +7,8 @@ const meetingList = new Vue({
       text: '',
       image: '',
     },
-    posts: []
+    posts: [],
+    newComments: []
   },
   created() {
     $.get('?get_posts', (data) => {
@@ -52,30 +53,22 @@ const meetingList = new Vue({
       $.post('/mentor/posts/like-post/', {'post_id': postId}, (data) => {
         this.posts.find(p => p.id === postId).likes = data.likes;
       })
-    }
-  }
-});
-
-$(document).ready(function() {
-  $('.tape-dialog-btn').on('click', function() {
-    const commentParent = $(this).parent();
-    const commentContent = commentParent.find('textarea');
-    $(this).attr('disabled', 'disabled');
-
-    if (commentContent.val()) {
+    },
+    addNewComment(value, postId) {
+      if (this.newComments.find(c => c.postId === postId)) {
+        this.newComments.find(c => c.postId === postId).content = value;
+      } else {
+        this.newComments.push({ postId: postId, content: value });
+      }
+    },
+    sendNewComment(postId) {
+      const posts = this.posts;
+      const comment = this.newComments.find(c => c.postId === postId).content;
       $.post('send-comment/',
-        {'post_id': commentContent.attr('data-post-id')[0], 'comment': commentContent.val()}, function (data) {
-          commentParent.find('.tape-dialog-all').before(
-            '<div class="tape-dialog-wrapp"><img src="' + data.author_profile_image + '" alt="">\n' +
-            '<div class="tape-dialog-content">\n' +
-            '<div class="tape-dialog-header">\n' +
-            '<p>' + data.author_full_name + '</p><span>' + data.date_time + '</span>\n' +
-            '</div><span>' + commentContent.val() + '</span>\n' +
-            '</div>\n' +
-            '</div>');
-            $(this).attr('disabled', 'enabled');
-            commentContent.val('');
+        {'post_id': postId, 'comment': comment}, function (data) {
+
+        posts.find(p => p.id === postId).comments.push(data);
       });
     }
-  })
+  }
 });

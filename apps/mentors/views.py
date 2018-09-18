@@ -349,10 +349,14 @@ def send_post_comment(request):
         post_id=request.POST['post_id'],
         author_id=request.user.id,
         content=request.POST['comment'])
-    return JsonResponse({
-        'author_full_name': ' '.join([comment.author.first_name, comment.author.last_name]),
-        'author_profile_image': comment.author.profile_image.url,
-        'date_time': get_time_spent(comment.datetime)})
+    comment_dict = model_to_dict(comment, fields=('content', 'datetime', 'id',))
+    comment_dict['author'] = model_to_dict(
+        comment.author,
+        fields=('first_name', 'last_name', 'id',))
+
+    if comment.author.profile_image:
+        comment_dict['author']['profile_image'] = comment.author.profile_image.url
+    return JsonResponse(comment_dict)
 
 
 class MeetingListView(CheckIfUserIsMentorMixin, TemplateView):

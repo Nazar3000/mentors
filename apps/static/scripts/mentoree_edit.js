@@ -93,5 +93,4 @@ $.get('/mentor/mentoree/?get_mentoree_data', function (mentoreeData) {
       }
     }
   });
-
 });

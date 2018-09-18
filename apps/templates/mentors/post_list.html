@@ -88,10 +88,18 @@
                 <div class="tape-dialog-wrapp">
                   <img src="{{ user|get_mentor_data:'profile_image' }}" alt="">
                   <div class="tape-dialog-content">
-                    <textarea name="text" :data-post-id="post.id" placeholder="Залишити коментар"></textarea>
+                    <textarea name="text"
+                              placeholder="Залишити коментар"
+                              @input="addNewComment($event.target.value, post.id)"
+                    ></textarea>
                   </div>
                 </div>
-                <button type="button" class="tape-dialog-btn">Надіслати</button>
+                <button type="button"
+                        class="tape-dialog-btn"
+                        @click="sendNewComment(post.id)"
+                >
+                  Надіслати
+                </button>
                 <div class="tape-line"></div>
               </div>
             </div>
