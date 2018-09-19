@@ -227,11 +227,13 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
                 model_dict.update(model_to_dict(
                     mentoree,
                     exclude=('profile_image', 'organization', 'date_of_birth',)))
-                model_dict['profile_image'] = mentoree.profile_image.url
+                if mentoree.profile_image:
+                    model_dict['profile_image'] = mentoree.profile_image.url
                 if mentoree.organization:
                     model_dict['organization'] = mentoree.organization.id
 
-                model_dict['date_of_birth'] = mentoree.date_of_birth.strftime('%d.%m.%Y')
+                if mentoree.date_of_birth:
+                    model_dict['date_of_birth'] = mentoree.date_of_birth.strftime('%d.%m.%Y')
                 model_dict['age'] = get_age(mentoree.date_of_birth)
                 model_dict['story_images'] = list(
                     map(lambda img: img.image.url, (mentoree.story_images.all())))
@@ -294,7 +296,7 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
             post_dict = model_to_dict(post, fields=('id', 'content',))
             post_dict['author'] = model_to_dict(
                 post.author,
-                fields=('id', 'first_name', 'last_name',))
+                fields=('user', 'first_name', 'last_name',))
             if post.author.profile_image:
                 post_dict['author']['profile_image'] = post.author.profile_image.url
             post_dict['likes'] = post.likes.count()
@@ -340,6 +342,8 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
             post_list = self.get_queryset_dict_list(
                 Post.objects.filter(id=post.id))
             return JsonResponse(post_list, safe=False)
+        elif 'delete' in request.POST.keys():
+            Post.objects.get(id=request.POST['post_id']).delete()
 
         return JsonResponse({'status': 'success'})
 

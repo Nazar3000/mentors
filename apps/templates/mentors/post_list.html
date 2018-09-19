@@ -51,13 +51,27 @@
             </div>
 
             <div class="tape-content" v-for="post in posts">
-              <div class="tape-author"><img :src="post.author.profile_image" alt="">
-                <div>
-                  <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
+              <div class="tape-author">
+                <div class="tape-author">
+                  <div class="tape-author-left"><img :src="post.author.profile_image" alt="">
+                    <div>
+                      <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
+                    </div>
+                  </div>
+                  <div class="tape-author-right" v-if="post.author.user === '{{ user.id }}'">
+                    <div class="tape-author-right-wrapp">
+                      <a class="tape-bage-edit" href="javascript: void(0)" title="Edit">
+                        <i class="fas fa-pencil-alt"></i>
+                      </a>
+                      <a class="tape-bage-trash" href="javascript: void(0)" title="Delete" @click="deletePost(post.id)">
+                        <i class="fas fa-trash"></i>
+                      </a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="tape-description">
-                <p>[[ post.content ]]</p>
+                <div class="tape-description">
+                  <p>[[ post.content ]]</p>
+                </div>
               </div>
               <div class="tape-image">
                 <img :src="post.image" v-if="post.image" alt="">

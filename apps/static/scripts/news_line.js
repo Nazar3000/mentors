@@ -69,6 +69,13 @@ const meetingList = new Vue({
 
         posts.find(p => p.id === postId).comments.push(data);
       });
+    },
+    deletePost(postId) {
+      const posts = this.posts;
+      $.post('', {'delete': true, 'post_id': postId}, function () {
+        const index = posts.indexOf(posts.find(p => p.id === postId));
+        posts.splice(index, 1);
+      });
     }
   }
 });

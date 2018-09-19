@@ -367,18 +367,32 @@ class Mentoree(models.Model):
     first_name = models.CharField(
         max_length=32)
     last_name = models.CharField(
-        max_length=32)
-    date_of_birth = models.DateField()
+        max_length=32,
+        null=True,
+        blank=True)
+    date_of_birth = models.DateField(
+        null=True,
+        blank=True)
     dream = models.CharField(
-        max_length=128)
+        max_length=128,
+        null=True,
+        blank=True)
     want_to_become = models.CharField(
-        max_length=32)
+        max_length=32,
+        null=True,
+        blank=True)
     fears = models.CharField(
-        max_length=128)
+        max_length=128,
+        null=True,
+        blank=True)
     loves = models.CharField(
-        max_length=64)
+        max_length=64,
+        null=True,
+        blank=True)
     hates = models.CharField(
-        max_length=64)
+        max_length=64,
+        null=True,
+        blank=True)
     strengths = models.CharField(
         max_length=64,
         null=True,
@@ -392,14 +406,18 @@ class Mentoree(models.Model):
         on_delete=models.SET_NULL,
         null=True)
     profile_image = models.ImageField(
-        upload_to='mentorees/profile')
+        upload_to='mentorees/profile',
+        null=True,
+        blank=True)
     extra_data_fields = ArrayField(
         HStoreField(
             default=dict),
         null=True,
         blank=True)
 
-    story = models.TextField()
+    story = models.TextField(
+        null=True,
+        blank=True)
 
 
 class StoryImage(models.Model):

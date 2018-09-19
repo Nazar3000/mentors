@@ -120,7 +120,7 @@ class MeetingImageForm(forms.ModelForm):
 
 
 class MentoreeEditForm(forms.ModelForm):
-    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
+    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'], required=False)
 
     class Meta:
         model = Mentoree
