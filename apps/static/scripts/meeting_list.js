@@ -3,7 +3,7 @@ const meetingList = new Vue({
   delimiters: ['[[', ']]'],
   data: {
     meetings: [],
-    errors: null,
+    errors: {},
     modes: {
       collapsed: 0,
       expanded: 1,
@@ -63,7 +63,6 @@ const meetingList = new Vue({
       }
     },
     changeMeeting(meeting) {
-      console.log(meeting);
       const formData = new FormData();
       formData.append('new_meeting', '');
       meeting.images.map((img, index) => {
@@ -92,6 +91,7 @@ const meetingList = new Vue({
             delete res.errors;
             this.errors = res;
           } else {
+            this.errors = {};
             meeting = this.meetings.find(m => m.id === meeting.id);
             if (meeting) {
               meeting.mode = this.modes.collapsed;
