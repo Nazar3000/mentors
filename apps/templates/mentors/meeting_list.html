@@ -12,52 +12,55 @@
     <section class="diary">
       <div class="container" id="meeting-list">
         <div class="diary-header">
-          <div class="diary-header-link">
-            <a href=""><i class="fas fa-plus"></i></a><span>Додати зустріч</span>
+          <div class="diary-header-link" v-if="!itemAdding">
+            <a href="javascript: void(0)" @click="insertNewMeeting">
+              <i class="fas fa-plus"></i>
+            </a>
+            <span>Додати зустріч</span>
           </div>
         </div>
+
         <template v-for="meeting in meetings">
-          <div class="diary-block"
-               data-id="1"
-               :style="{'display': !collapsedView ? 'none' : ''}"
-          >
-            <div class="diary-card">
-              <h2>[[ meeting.title ]]</h2>
-              <div class="diary-line"></div><span>[[ meeting.date ]]</span>
-              <p>[[ meeting.description ]]</p>
-              <a class="block-open-more"
-                 href="javascript: void(0)"
-                 @click="collapsedView=false"
-              >
-                Читати далі
-              </a>
-            </div>
-            <div class="diary-slider" v-if="meeting.images.length">
-              <div class="slider-wrap">
-                <ul id="vertical">
-                  <template v-for="img in meeting.images">
-                    <li :data-thumb="getImageUrl(img)"><img class="w-100" :src="getImageUrl(img)"></li>
-                  </template>
-                </ul>
+          <template v-if="meeting.mode === modes.collapsed || meeting.mode === modes.expanded">
+            <div class="diary-block"
+                 :data-id="meeting.id"
+                 :style="{'display': meeting.mode === modes.expanded ? 'none' : ''}"
+            >
+              <div class="diary-card">
+                <h2>[[ meeting.title ]]</h2>
+                <div class="diary-line"></div><span>[[ meeting.date ]]</span>
+                <p>[[ meeting.description ]]</p>
+                <a class="block-open-more"
+                   href="javascript: void(0)"
+                   @click="meeting.mode = modes.expanded"
+                >
+                  Читати далі
+                </a>
+              </div>
+              <div class="diary-slider" v-if="meeting.images.length">
+                <div class="slider-wrap">
+                  <ul class="vertical">
+                    <template v-for="img in meeting.images">
+                      <li :data-thumb="getImageUrl(img)"><img class="w-100" :src="getImageUrl(img)"></li>
+                    </template>
+                  </ul>
+                </div>
+              </div>
+              <div class="diary-slider-empty" v-else>
+                <a class="diary-slider-frown" href="">
+                  <i class="far fa-frown"></i><span>Фото дня не завантажені</span>
+                </a>
+                <div class="diary-slider-img">
+                  <label :for="`closed-${meeting.id}`"><i class="fas fa-plus"></i></label><span>Додати фото</span>
+                  <input :id="`closed-${meeting.id}`" style="display:none;" type="file" @change="addImage($event, meeting.id)">
+                </div>
               </div>
             </div>
-            <div class="diary-slider-empty" v-else>
-              <a class="diary-slider-frown" href="">
-                <i class="far fa-frown"></i><span>Фото дня не завантажені</span>
-              </a>
-              <a class="diary-slider-img"
-                 href="javascript: void(0)"
-                 @change="addImage($event, meeting.id)"
-              >
-                <i class="fas fa-plus"></i><span>Додати фото</span>
-              </a>
-              <input type="file" @change="addImage($event, meeting.id)">
-            </div>
-          </div>
-          <div class="diary-block-open"
-               data-id="1"
-               :style="{'display': collapsedView ? 'none' : 'block'}"
-          >
+
+            <div class="diary-block-open"
+               :data-id="meeting.id"
+               :style="{'display': meeting.mode === modes.collapsed ? 'none' : 'block'}"
+            >
             <div class="diary-block-wrapp">
               <div class="diary-block-left">
                 <h2>[[ meeting.title ]]</h2>
@@ -72,11 +75,14 @@
                     <span>Фото дня не завантажені</span>
                   </div>
                   <div class="diary-block-link-item">
-                    <a class="diary-block-img" href=""><i class="fas fa-plus"></i></a>
-                    <span>Додати фото</span>
+                    <label :for="`opened-${meeting.id}`"><i class="fas fa-plus"></i><span>Додати фото</span></label>
+                    <input :id="`opened-${meeting.id}`" style="display:none;" type="file" @change="addImage($event, meeting.id)">
                   </div>
-                  <input type="file" @change="addImage($event, meeting.id)">
-                  <div class="diary-block-link-item"><a class="diary-block-edit" href=""><i class="fas fa-pencil-alt"></i></a></div>
+                  <div class="diary-block-link-item">
+                    <a class="diary-block-edit" href="javascript: void(0)" @click="editMeeting(meeting.id)">
+                      <i class="fas fa-pencil-alt"></i>
+                    </a>
+                  </div>
                 </div>
                 <div class="diary-block-trash">
                   <a href="javascript: void(0)" @click="deleteMeeting(meeting.id)">
@@ -94,10 +100,67 @@
               <p>[[ meeting.note_for_next_meeting ]]</p>
               <a class="diary-block-close"
                  href="javascript: void(0)"
-                 @click="collapsedView=true"
+                 @click="meeting.mode = modes.collapsed"
               >
                 Згорнути
               </a>
+            </div>
+          </div>
+          </template>
+
+          <div class="diary-block-open-edit" v-else>
+            <div class="diary-block-wrapp">
+              <div class="diary-block-left">
+                <input class="diary-block-input-name"
+                       type="text"
+                       placeholder="Де ви побували?"
+                       v-model="meeting.title"
+                >
+                <div class="diary-block-line"></div>
+                <input class="diary-block-input-date"
+                       type="text"
+                       placeholder="дд.мм.рр"
+                       v-model="meeting.date"
+                >
+              </div>
+              <div class="diary-block-right">
+                <div class="diary-block-link">
+                  <div class="diary-block-link-item" v-if="!meeting.images.length">
+                    <a class="diary-block-frown" href="javascript: void(0)">
+                      <i class="far fa-frown"></i>
+                    </a>
+                    <span>Фото дня не завантажені</span>
+                  </div>
+                  <div class="diary-block-link-item">
+                    <label for="new-meeting">
+                      <i class="fas fa-plus"></i><span>Додати фото</span>
+                    </label>
+                    <input id="new-meeting"
+                           style="display:none;"
+                           type="file"
+                           @change="addNewMeetingImage($event, meeting)"
+                    >
+                  </div>
+                  <div class="diary-block-link-item">
+                    <a class="diary-block-edit" href="javascript: void(0)" @click="changeMeeting(meeting)">
+                      <i class="fas fa-check"></i>
+                    </a>
+                  </div>
+                </div>
+                <div class="diary-block-trash">
+                  <a href="javascript: void(0)" @click="deleteMeeting(meeting.id)">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="diary-block-content">
+              <h4>Опис:</h4>
+              <textarea rows="4" placeholder="Опис:" v-model="meeting.description"></textarea>
+              <h4>Спостереження за вихованцем:</h4>
+              <textarea rows="4" placeholder="Спостереження за вихованцем:" v-model="meeting.observation"></textarea>
+              <h4>Замітка для наступної зустрічі:</h4>
+              <textarea rows="4" placeholder="Замітка для наступної зустрічі:" v-model="meeting.note_for_next_meeting"></textarea>
             </div>
           </div>
         </template>

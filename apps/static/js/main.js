@@ -89,7 +89,7 @@ $(document).ready(function() {
 
     // slider diary
 
-    $('#vertical').lightSlider({
+    $('.vertical').lightSlider({
         gallery:true,
         item:1,
         vertical:true,

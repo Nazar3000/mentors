@@ -366,22 +366,27 @@ class MeetingListView(CheckIfUserIsMentorMixin, TemplateView):
     def get_queryset(self):
         return Meeting.objects.filter(performer__pk=self.request.user.pk)
 
+    @staticmethod
+    def get_meeting_list(queryset):
+        meeting_query_list = queryset.values(
+            'id',
+            'title',
+            'date',
+            'description',
+            'observation',
+            'note_for_next_meeting', )
+        meeting_list = []
+        for meeting in meeting_query_list.iterator():
+            meeting['date'] = datetime.strftime(meeting['date'], '%d.%m.%Y')
+            meeting['images'] = []
+            for image in MeetingImage.objects.filter(meeting_id=meeting['id']).iterator():
+                meeting['images'].append(image.image.url)
+            meeting_list.append(meeting)
+        return meeting_list
+
     def get(self, request, *args, **kwargs):
         if 'get_meetings_data' in self.request.GET.keys():
-            meeting_query_list = self.get_queryset().values(
-                'id',
-                'title',
-                'date',
-                'description',
-                'observation',
-                'note_for_next_meeting',)
-            meeting_list = []
-            for meeting in meeting_query_list.iterator():
-                meeting['date'] = datetime.strftime(meeting['date'], '%d. %m. %Y')
-                meeting['images'] = []
-                for image in MeetingImage.objects.filter(meeting_id=meeting['id']).iterator():
-                    meeting['images'].append(image.image.url)
-                meeting_list.append(meeting)
+            meeting_list = self.get_meeting_list(self.get_queryset())
             return JsonResponse(meeting_list, safe=False)
         return super().get(request, *args, **kwargs)
 
@@ -393,6 +398,25 @@ class MeetingListView(CheckIfUserIsMentorMixin, TemplateView):
             image.image.save(
                 self.request.FILES['image'].name,
                 self.request.FILES['image'])
+        elif 'new_meeting' in self.request.POST.keys():
+            instance = None
+            if 'id' in self.request.POST.keys():
+                instance = Meeting.objects.get(id=self.request.POST['id'])
+            form = self.form_class(self.request.POST, instance=instance)
+            if form.is_valid():
+                meeting = form.save(commit=False)
+                meeting.performer = Mentor.objects.get(pk=self.request.user.pk)
+                meeting.save()
+                for i in range(len(self.request.FILES)):
+                    meeting_image = MeetingImage(meeting=meeting)
+                    meeting_image.image.save(
+                        self.request.FILES['new_image_{}'.format(i)].name,
+                        self.request.FILES['new_image_{}'.format(i)])
+                return JsonResponse(self.get_meeting_list(Meeting.objects.filter(id=meeting.id))[0])
+            else:
+                errors = dict(form.errors.items())
+                errors['errors'] = True
+                return JsonResponse(errors)
 
         return JsonResponse({'status': 'success'})
 
