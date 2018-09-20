@@ -33,30 +33,6 @@ const meetingList = new Vue({
     getPostImageUrl(image) {
       return URL.createObjectURL(this.newPostData.image);
     },
-    sendNewPost() {
-      const formData = new FormData();
-      formData.append('text', this.newPostData.text);
-      formData.append('image', this.newPostData.image);
-      formData.append('new_post', '');
-
-      $.ajax({
-        url: '',
-        data: formData,
-        processData: false,
-        contentType: false,
-        cache: false,
-        enctype: 'multipart/form-data',
-        type: 'POST',
-        success: (data) => {
-          this.posts = [...data, ...this.posts];
-          this.addNews = false;
-          this.newPostData = {
-            text: '',
-            image: '',
-          }
-        }
-      });
-    },
     likePost(postId) {
       $.post('/mentor/posts/like-post/', {'post_id': postId}, (data) => {
         this.posts.find(p => p.id === postId).likes = data.likes;
@@ -83,6 +59,44 @@ const meetingList = new Vue({
       $.post('', {'delete': true, 'post_id': postId}, function () {
         const index = posts.indexOf(posts.find(p => p.id === postId));
         posts.splice(index, 1);
+      });
+    },
+    changePostMode(postId, mode) {
+      const post = this.posts.find(p => p.id === postId);
+      post.mode = mode;
+      const index = this.posts.indexOf(post);
+      this.posts.splice(index, 1);
+      this.posts.splice(index, 0, post)
+    },
+    changePost(post) {
+      const formData = new FormData();
+      const currPost = post ? post : this.newPostData;
+      formData.append('content', currPost.text);
+      formData.append('image', currPost.image);
+      formData.append('new_post', '');
+
+      $.ajax({
+        url: '',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+        success: (data) => {
+          console.log(data);
+          if (post && post.hasOwnProperty('id')) {
+            this.posts.splice(this.posts.indexOf(post), 0, data);
+            this.changePostMode(data.id, this.modes.view);
+          } else {
+            this.posts.unshift(data);
+            this.newPostData = {
+              text: '',
+              image: '',
+            };
+            this.addNews = false;
+          }
+        }
       });
     }
   }

@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 
 from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
-    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree
+    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post
 from users.constants import UserTypes
 from users.models import Mentor
 
@@ -136,4 +136,13 @@ class MentoreeEditForm(forms.ModelForm):
             'strengths',
             'extra_data',
             'profile_image',
+        )
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = (
+            'content',
+            'image'
         )

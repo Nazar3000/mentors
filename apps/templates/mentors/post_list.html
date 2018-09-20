@@ -48,7 +48,7 @@
                 <div class="tape-image">
                   <img :src="getPostImageUrl(newPostData.image)" v-if="newPostData.image" alt="">
                 </div>
-                <button class="tape-add-btn" @click="sendNewPost()">Поділитися</button>
+                <button class="tape-add-btn" @click="changePost()">Поділитися</button>
               </div>
             </div>
 
@@ -63,7 +63,7 @@
                     </div>
                     <div class="tape-author-right" v-if="post.author.user === '{{ user.id }}'">
                       <div class="tape-author-right-wrapp">
-                        <a class="tape-bage-edit" href="javascript: void(0)" title="Edit" @click="editPost(post.id)">
+                        <a class="tape-bage-edit" href="javascript: void(0)" title="Edit" @click="changePostMode(post.id, modes.edit)">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
                         <a class="tape-bage-trash" href="javascript: void(0)" title="Delete" @click="deletePost(post.id)">
@@ -79,7 +79,10 @@
                 <div class="tape-image">
                   <img :src="post.image" v-if="post.image" alt="">
                   <div class="tape-wrapp-icon">
-                    <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ([[ post.comments.length ]])</a></div>
+                    <div class="tape-social-icon">
+                      <span><i class="far fa-comment"></i></span>
+                      <a href="">Коментарi ([[ post.comments.length ]])</a>
+                    </div>
                     <div class="tape-social-icon" @click="likePost(post.id)">
                       <span><i class="far fa-thumbs-up"></i></span>
                       <a href="javascript: void(0)">([[ post.likes ]])</a>
@@ -131,23 +134,34 @@
                       </div>
                       <div class="tape-author-right">
                         <div class="tape-author-right-wrapp">
-                          <a class="tape-bage-ok" href="" title="Submit"><i class="fas fa-check"></i></a>
+                          <a class="tape-bage-ok"
+                             href="javascript: void(0)"
+                             title="Submit"
+                             @click="changePost(post)"
+                          >
+                            <i class="fas fa-check"></i>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="tape-description">
-                    <textarea name="" rows="5" placeholder="Напишіть Вашу новину тут"></textarea>
+                    <textarea rows="5" placeholder="Напишіть Вашу новину тут">[[ post.content ]]</textarea>
                   </div>
-                  <div class="tape-image"><img src="img/post2.jpg" alt="">
+                  <div class="tape-image">
+                    <img :src="post.image" alt="" v-if="post.image">
                     <div class="tape-wrapp-icon-edit">
                       <div class="tape-wrapp-icon-img">
-                        <label class="tape-bage-img" for="files"><i class="fas fa-camera"></i><span>Змінити фото</span></label>
-                        <input id="files" style="display:none;" type="file">
+                        <label class="tape-bage-img" for="`file-${post.id}`">
+                          <i class="fas fa-camera"></i>
+                          <span v-if="post.image">Змінити фото</span>
+                          <span>Додати фото</span>
+                        </label>
+                        <input id="`file-${post.id}`" style="display:none;" type="file">
                       </div>
                       <div class="tape-wrapp-icon-right">
-                        <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарii (3)</a></div>
-                        <div class="tape-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">(18)</a></div>
+                        <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ([[ post.comments.length ]])</a></div>
+                        <div class="tape-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">([[ post.likes ]])</a></div>
                       </div>
                     </div>
                   </div>

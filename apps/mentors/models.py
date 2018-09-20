@@ -459,7 +459,9 @@ class Post(models.Model):
         related_name='posts')
     content = models.TextField()
     image = models.ImageField(
-        upload_to='mentorees/post')
+        upload_to='mentorees/post',
+        null=True,
+        blank=True)
     likes = models.ManyToManyField(
         to='users.Mentor')
     datetime = models.DateTimeField(

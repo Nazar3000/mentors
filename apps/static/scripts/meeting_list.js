@@ -13,11 +13,16 @@ const meetingList = new Vue({
   },
   created() {
     $.get('?get_meetings_data', (data) => {
-      this.meetings = data.map(m => {
-        m.mode = this.modes.collapsed;
-        return m;
-      });
+      if (data.length) {
+        this.meetings = data.map(m => {
+          m.mode = this.modes.collapsed;
+          return m;
+        });
+      }
     });
+    if (window.location.search.substring(1).includes('newMeeting')) {
+      this.insertNewMeeting();
+    }
   },
   methods: {
     deleteMeeting(meetingId) {

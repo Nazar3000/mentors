@@ -171,26 +171,47 @@
                 <a class="admin-social-btn" href="{% url 'mentors:posts' %}">Відкрити всю ленту</a>
               {% endif %}
             </div>
-            <div class="admin-diary">
-              <h2 class="admin-diary-title">Щоденник зустрічей</h2>
-              <div class="admin-diary-line"></div>
-              <div class="admin-diary-wrapp">
-                {% for meeting in mentor.meetings.all|dictsortreversed:'date'|slice:'3' %}
-                  <div class="admin-diary-item">
-                    <div>
-                      <span>{{ meeting.date|date:'d.m.Y' }}</span>
-                      <span>{{ meeting.title }}</span>
+            {% if mentor.meetings.exists %}
+              <div class="admin-diary">
+                <h2 class="admin-diary-title">Щоденник зустрічей</h2>
+                <div class="admin-diary-line"></div>
+                <div class="admin-diary-wrapp">
+                  {% for meeting in mentor.meetings.all|dictsortreversed:'date'|slice:'3' %}
+                    <div class="admin-diary-item">
+                      <div>
+                        <span>{{ meeting.date|date:'d.m.Y' }}</span>
+                        <span>{{ meeting.title }}</span>
+                      </div>
+                      <a href="{% url 'mentors:meetings_list' %}?meeting_id={{ meeting.id }}">Детальніше ></a>
                     </div>
-                    <a href="{% url 'mentors:meetings_list' %}?meeting_id={{ meeting.id }}">Детальніше ></a>
-                  </div>
-                {% endfor %}
+                  {% endfor %}
+                </div>
+                <a class="admin-diary-btn"
+                   href="{% url 'mentors:meetings_list' %}"
+                >
+                  Усі зустрічі
+                </a>
               </div>
-              <a class="admin-diary-btn"
-                 href="{% url 'mentors:meetings_list' %}"
-              >
-                Усі зустрічі
-              </a>
-            </div>
+            {% else %}
+                <div class="admin-diary-empty">
+                  <div class="w-100">
+                    <h2 class="admin-diary-title">Щоденник зустрічей</h2>
+                    <div class="admin-diary-line"></div>
+                  </div>
+                  <div>
+                    <a class="diary-slider-frown">
+                      <i class="far fa-frown"></i><span>Фото дня не завантажені</span>
+                    </a>
+                  </div>
+                  <div>
+                    <a class="admin-diary-btn"
+                       href="{% url 'mentors:meetings_list' %}?newMeeting=true"
+                    >
+                      Додати зустріч
+                    </a>
+                  </div>
+                </div>
+            {% endif %}
           </div>
         </div>
       </div>

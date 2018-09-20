@@ -17,7 +17,7 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
@@ -286,6 +286,7 @@ class MentoreeDetailView(CheckIfUserIsMentorMixin, TemplateView):
 
 class PostListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/post_list.html'
+    form_class = PostForm
 
     def get_queryset(self):
         return Post.objects.all().order_by('-datetime')
@@ -329,19 +330,22 @@ class PostListView(CheckIfUserIsMentorMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         if 'new_post' in request.POST.keys():
-            post = Post(
-                author_id=request.user.pk,
-                content=request.POST['text']
-            )
-            if 'image' in self.request.FILES:
-                post.image.save(
-                    self.request.FILES['image'].name,
-                    self.request.FILES['image'],
-                    save=False)
-            post.save()
-            post_list = self.get_queryset_dict_list(
-                Post.objects.filter(id=post.id))
-            return JsonResponse(post_list, safe=False)
+            if 'id' in request.POST.keys():
+                instance = Post.objects.get(id=request.POST['id'])
+            else:
+                instance = None
+            form = self.form_class(request.POST, self.request.FILES, instance=instance)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author_id = self.request.user.pk
+                post.save()
+
+                post_list = self.get_queryset_dict_list(
+                    Post.objects.filter(id=post.id))
+                return JsonResponse(post_list[0], safe=False)
+
+            else:
+                return JsonResponse(dict(form.errors.items()))
         elif 'delete' in request.POST.keys():
             Post.objects.get(id=request.POST['post_id']).delete()
 

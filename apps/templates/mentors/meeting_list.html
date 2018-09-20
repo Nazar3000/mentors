@@ -13,18 +13,12 @@
       <div class="container" id="meeting-list">
         <div class="diary-header">
           <div class="diary-header-link" v-if="!itemAdding">
-            <a href="javascript: void(0)" @click="insertNewMeeting">
+            <a href="javascript: void(0)" @click="insertNewMeeting" ref="addNewBtn">
               <i class="fas fa-plus"></i>
             </a>
             <span>Додати зустріч</span>
           </div>
         </div>
-        <button type="button"
-                @click="insertNewMeeting"
-                v-if="meetings.length === 0"
-        >
-          Додати першу зустріч
-        </button>
         <template v-for="meeting in meetings">
           <template v-if="meeting.mode === modes.collapsed || meeting.mode === modes.expanded">
             <div class="diary-block"
