@@ -8,11 +8,19 @@ const meetingList = new Vue({
       image: '',
     },
     posts: [],
-    newComments: []
+    newComments: [],
+    modes: {
+      view: 0,
+      edit: 1
+    }
   },
   created() {
     $.get('?get_posts', (data) => {
       this.posts = data;
+      this.posts.map(p => {
+        p.mode = this.modes.view;
+        return p;
+      });
     });
     if (window.location.search.substring(1).includes('addPost')) {
       this.addNews = true;

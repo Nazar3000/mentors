@@ -29,13 +29,15 @@
             </video>
           {% endif %}
         </div>
-        <div class="video-see-download">
-          <p>Матеріали для скачування:</p>
-          {% for material in object.extra_materials.all %}
-            <a href="{{ material.file.url }}" target="_blank">
-              <span><i class="fas fa-paperclip"></i></span>{{ material.file.name }}</a>
-          {% endfor %}
-        </div>
+        {% if object.extra_materials.exists %}
+          <div class="video-see-download">
+            <p>Матеріали для скачування:</p>
+            {% for material in object.extra_materials.all %}
+              <a href="{{ material.file.url }}" target="_blank">
+                <span><i class="fas fa-paperclip"></i></span>{{ material.file.name }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
       </div>
     </section>
   </div>

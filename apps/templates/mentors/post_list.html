@@ -25,16 +25,15 @@
                 <div class="tape-add-wrapp">
                   <div class="tape-author"><img src="{{ user|get_mentor_data:'profile_image' }}" alt=""></div>
                   <div class="tape-add-content">
-                    <textarea name=""
-                              id=""
-                              rows="5"
+                    <textarea rows="5"
                               placeholder="Напишіть Вашу новину тут"
                               v-model="newPostData.text"
                     ></textarea>
                     <div class="tape-add-img">
                       <label tabindex="0" for="file">
                         <i class="fas fa-camera"></i>
-                        <span>Додати фото</span>
+                        <span v-if="!newPostData.image">Додати фото</span>
+                        <span v-else>Змінити фото</span>
                       </label>
                       <p class="tape-add-img-name"></p>
                       <input id="file"
@@ -46,77 +45,115 @@
                     </div>
                   </div>
                 </div>
+                <div class="tape-image">
+                  <img :src="getPostImageUrl(newPostData.image)" v-if="newPostData.image" alt="">
+                </div>
                 <button class="tape-add-btn" @click="sendNewPost()">Поділитися</button>
               </div>
             </div>
 
-            <div class="tape-content" v-for="post in posts">
-              <div class="tape-author">
+            <template v-for="post in posts">
+              <div class="tape-content" v-if="post.mode === modes.view">
                 <div class="tape-author">
-                  <div class="tape-author-left"><img :src="post.author.profile_image" alt="">
-                    <div>
-                      <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
+                  <div class="tape-author">
+                    <div class="tape-author-left"><img :src="post.author.profile_image" alt="">
+                      <div>
+                        <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
+                      </div>
+                    </div>
+                    <div class="tape-author-right" v-if="post.author.user === '{{ user.id }}'">
+                      <div class="tape-author-right-wrapp">
+                        <a class="tape-bage-edit" href="javascript: void(0)" title="Edit" @click="editPost(post.id)">
+                          <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <a class="tape-bage-trash" href="javascript: void(0)" title="Delete" @click="deletePost(post.id)">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      </div>
                     </div>
                   </div>
-                  <div class="tape-author-right" v-if="post.author.user === '{{ user.id }}'">
-                    <div class="tape-author-right-wrapp">
-                      <a class="tape-bage-edit" href="javascript: void(0)" title="Edit">
-                        <i class="fas fa-pencil-alt"></i>
-                      </a>
-                      <a class="tape-bage-trash" href="javascript: void(0)" title="Delete" @click="deletePost(post.id)">
-                        <i class="fas fa-trash"></i>
-                      </a>
+                  <div class="tape-description">
+                    <p>[[ post.content ]]</p>
+                  </div>
+                </div>
+                <div class="tape-image">
+                  <img :src="post.image" v-if="post.image" alt="">
+                  <div class="tape-wrapp-icon">
+                    <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ([[ post.comments.length ]])</a></div>
+                    <div class="tape-social-icon" @click="likePost(post.id)">
+                      <span><i class="far fa-thumbs-up"></i></span>
+                      <a href="javascript: void(0)">([[ post.likes ]])</a>
                     </div>
                   </div>
                 </div>
-                <div class="tape-description">
-                  <p>[[ post.content ]]</p>
-                </div>
-              </div>
-              <div class="tape-image">
-                <img :src="post.image" v-if="post.image" alt="">
-                <div class="tape-wrapp-icon">
-                  <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ([[ post.comments.length ]])</a></div>
-                  <div class="tape-social-icon" @click="likePost(post.id)">
-                    <span><i class="far fa-thumbs-up"></i></span>
-                    <a href="javascript: void(0)">([[ post.likes ]])</a>
-                  </div>
-                </div>
-              </div>
-              <div class="tape-line"></div>
-              <div class="tape-dialog">
-                <div class="tape-dialog-wrapp" v-for="comment in post.comments">
-                  <img :src="comment.author.profile_image" alt="">
-                  <div class="tape-dialog-content">
-                    <div class="tape-dialog-header">
-                      <p>[[ comment.author.first_name ]] [[ comment.author.last_name ]]</p>
-                      <span>[[ comment.datetime ]]</span>
-                    </div><span>[[ comment.content ]]</span>
-                  </div>
-                </div>
-                <div class="tape-dialog-all"
-                     v-if="post.comments.length"
-                >
-                  <a href="javascript: void(0)">Читати всі коментарі</a>
-                </div>
-                <div class="tape-dialog-wrapp">
-                  <img src="{{ user|get_mentor_data:'profile_image' }}" alt="">
-                  <div class="tape-dialog-content">
-                    <textarea name="text"
-                              placeholder="Залишити коментар"
-                              @input="addNewComment($event.target.value, post.id)"
-                    ></textarea>
-                  </div>
-                </div>
-                <button type="button"
-                        class="tape-dialog-btn"
-                        @click="sendNewComment(post.id)"
-                >
-                  Надіслати
-                </button>
                 <div class="tape-line"></div>
+                <div class="tape-dialog">
+                  <div class="tape-dialog-wrapp" v-for="comment in post.comments">
+                    <img :src="comment.author.profile_image" alt="">
+                    <div class="tape-dialog-content">
+                      <div class="tape-dialog-header">
+                        <p>[[ comment.author.first_name ]] [[ comment.author.last_name ]]</p>
+                        <span>[[ comment.datetime ]]</span>
+                      </div><span>[[ comment.content ]]</span>
+                    </div>
+                  </div>
+                  <div class="tape-dialog-all"
+                       v-if="post.comments.length"
+                  >
+                    <a href="javascript: void(0)">Читати всі коментарі</a>
+                  </div>
+                  <div class="tape-dialog-wrapp">
+                    <img src="{{ user|get_mentor_data:'profile_image' }}" alt="">
+                    <div class="tape-dialog-content">
+                      <textarea name="text"
+                                placeholder="Залишити коментар"
+                                @input="addNewComment($event.target.value, post.id)"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <button type="button"
+                          class="tape-dialog-btn"
+                          @click="sendNewComment(post.id)"
+                  >
+                    Надіслати
+                  </button>
+                  <div class="tape-line"></div>
+                </div>
               </div>
-            </div>
+              <div class="tape-content" v-else-if="post.mode === modes.edit">
+                <div class="tape-edit">
+                  <div class="tape-author">
+                    <div class="tape-author-head">
+                      <div class="tape-author-left"><img :src="post.author.profile_image" alt="">
+                        <div>
+                          <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
+                        </div>
+                      </div>
+                      <div class="tape-author-right">
+                        <div class="tape-author-right-wrapp">
+                          <a class="tape-bage-ok" href="" title="Submit"><i class="fas fa-check"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tape-description">
+                    <textarea name="" rows="5" placeholder="Напишіть Вашу новину тут"></textarea>
+                  </div>
+                  <div class="tape-image"><img src="img/post2.jpg" alt="">
+                    <div class="tape-wrapp-icon-edit">
+                      <div class="tape-wrapp-icon-img">
+                        <label class="tape-bage-img" for="files"><i class="fas fa-camera"></i><span>Змінити фото</span></label>
+                        <input id="files" style="display:none;" type="file">
+                      </div>
+                      <div class="tape-wrapp-icon-right">
+                        <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарii (3)</a></div>
+                        <div class="tape-social-icon"><span><i class="far fa-thumbs-up"></i></span><a href="">(18)</a></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
         </div>
       </div>
     </section>

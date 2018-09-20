@@ -19,7 +19,12 @@
             <span>Додати зустріч</span>
           </div>
         </div>
-
+        <button type="button"
+                @click="insertNewMeeting"
+                v-if="meetings.length === 0"
+        >
+          Додати першу зустріч
+        </button>
         <template v-for="meeting in meetings">
           <template v-if="meeting.mode === modes.collapsed || meeting.mode === modes.expanded">
             <div class="diary-block"
@@ -161,21 +166,18 @@
             <div class="diary-block-content">
               <h4>Опис:</h4>
               <textarea rows="4"
-                        placeholder="Опис:"
                         v-model="meeting.description"
                         :class="{'alert-border': errors.description}"
               ></textarea>
               <span class="error-form" v-for="err in errors.description">[[ err ]]</span>
               <h4>Спостереження за вихованцем:</h4>
               <textarea rows="4"
-                        placeholder="Спостереження за вихованцем:"
                         v-model="meeting.observation"
                         :class="{'alert-border': errors.observation}"
               ></textarea>
               <span class="error-form" v-for="err in errors.observation">[[ err ]]</span>
               <h4>Замітка для наступної зустрічі:</h4>
               <textarea rows="4"
-                        placeholder="Замітка для наступної зустрічі:"
                         v-model="meeting.note_for_next_meeting"
                         :class="{'alert-border': errors.note_for_next_meeting}"
               ></textarea>

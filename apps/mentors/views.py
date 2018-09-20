@@ -166,7 +166,7 @@ class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
         context['mentor_school_videos'] = \
             MentorSchoolVideo.objects.order_by('?')[:2]
         context['mentor_tip'] = MentorTip.objects.order_by('?').first()
-        context['last_post'] = self.object.posts.last()
+        context['last_post'] = Post.objects.last()
         return context
 
 
