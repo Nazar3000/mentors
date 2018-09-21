@@ -27,7 +27,7 @@
                   <div class="tape-add-content">
                     <textarea rows="5"
                               placeholder="Напишіть Вашу новину тут"
-                              v-model="newPostData.text"
+                              v-model="newPostData.content"
                     ></textarea>
                     <div class="tape-add-img">
                       <label tabindex="0" for="file">
@@ -127,7 +127,8 @@
                 <div class="tape-edit">
                   <div class="tape-author">
                     <div class="tape-author-head">
-                      <div class="tape-author-left"><img :src="post.author.profile_image" alt="">
+                      <div class="tape-author-left">
+                        <img :src="post.author.profile_image" alt="">
                         <div>
                           <h4>[[ post.author.first_name ]] [[ post.author.last_name ]]</h4><span>[[ post.datetime ]]</span>
                         </div>
@@ -146,18 +147,22 @@
                     </div>
                   </div>
                   <div class="tape-description">
-                    <textarea rows="5" placeholder="Напишіть Вашу новину тут">[[ post.content ]]</textarea>
+                    <textarea rows="5" placeholder="Напишіть Вашу новину тут" v-model="post.content"></textarea>
                   </div>
                   <div class="tape-image">
-                    <img :src="post.image" alt="" v-if="post.image">
+                    <img :src="getImageUrl(post.image)" alt="" v-if="post.image">
                     <div class="tape-wrapp-icon-edit">
                       <div class="tape-wrapp-icon-img">
                         <label class="tape-bage-img" for="`file-${post.id}`">
                           <i class="fas fa-camera"></i>
                           <span v-if="post.image">Змінити фото</span>
-                          <span>Додати фото</span>
+                          <span v-else>Додати фото</span>
                         </label>
-                        <input id="`file-${post.id}`" style="display:none;" type="file">
+                        <input id="`file-${post.id}`"
+                               style="display:none;"
+                               type="file"
+                               @change="addPostImage($event, post.id)"
+                        >
                       </div>
                       <div class="tape-wrapp-icon-right">
                         <div class="tape-social-icon"><span><i class="far fa-comment"></i></span><a href="">Коментарi ([[ post.comments.length ]])</a></div>

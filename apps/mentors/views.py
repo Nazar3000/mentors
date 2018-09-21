@@ -170,6 +170,17 @@ class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):
         return context
 
 
+def get_next_tip(request):
+    next_tip = MentorTip.objects.exclude(id=request.GET['id']).order_by('?').first()
+    next_tip_dict = {
+        'id': next_tip.id,
+        'title': next_tip.title,
+        'content': next_tip.content,
+        'image': next_tip.image.url
+    }
+    return JsonResponse(next_tip_dict)
+
+
 class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/mentor_school_video_list.html'
     queryset = MentorSchoolVideo.objects.all()

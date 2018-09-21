@@ -16,8 +16,10 @@
                 <img src="{% static 'img/user.svg' %}" alt="" v-else>
                 <div>
                   <h2 class="admin-card-name">[[ mentoreeData.first_name ]]<br>[[ mentoreeData.last_name ]]</h2>
-                  <p class="admin-card-birth">Дата народження</p>
-                  <p class="admin-card-data">[[ mentoreeData.date_of_birth ]] <span class="admin-card-age">([[ mentoreeData.age ]]  років)</span></p>
+                  <template v-if="mentoreeData.date_of_birth">
+                    <p class="admin-card-birth">Дата народження</p>
+                    <p class="admin-card-data">[[ mentoreeData.date_of_birth ]] <span class="admin-card-age">([[ mentoreeData.age ]]  років)</span></p>
+                  </template>
                 </div>
                 <a class="admin-card-bage" href="javascript: void(0)" @click="viewMode=false">
                   <i class="fas fa-pencil-alt"></i>
@@ -25,9 +27,12 @@
               </div>
               <div class="admin-card-line"></div>
               <div class="admin-card-dream">
-                <div><span class="admin-card-dream-name">Мрія</span>
-                  <p class="admin-card-dream-item">[[ mentoreeData.dream ]]</p><span class="admin-card-dream-name">Боїться</span>
-                  <p class="admin-card-dream-item">[[ mentoreeData.fears ]]</p><span class="admin-card-dream-name">Ненавидить</span>
+                <div>
+                  <span class="admin-card-dream-name">Мрія</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.dream ]]</p>
+                  <span class="admin-card-dream-name">Боїться</span>
+                  <p class="admin-card-dream-item">[[ mentoreeData.fears ]]</p>
+                  <span class="admin-card-dream-name">Ненавидить</span>
                   <p class="admin-card-dream-item">[[ mentoreeData.hates ]]</p>
                 </div>
                 <div><span class="admin-card-dream-name">Хочу стати</span>
@@ -107,16 +112,19 @@
               </div><a href="{% url 'mentors:school_videos' %}">Всі відео</a>
             </div>
             <div class="admin-walk">
-              <h2 class="admin-walk-title">Що робити з вихованцем</h2>
-              <div class="admin-walk-line"></div>
-              <div class="admin-walk-wrapp">
-                <div class="admin-walk-place"><img src="{{ mentor_tip.image.url }}" alt="">
-                  <div class="admin-walk-desc">
-                    <h4>{{ mentor_tip.title }}</h4>
-                    <p>{{ mentor_tip.content }}</p>
+              <div id="tip-content">
+                <h2 class="admin-walk-title">Що робити з вихованцем</h2>
+                <div class="admin-walk-line"></div>
+                <div class="admin-walk-wrapp">
+                  <div class="admin-walk-place"><img src="{{ mentor_tip.image.url }}" alt="">
+                    <div class="admin-walk-desc">
+                      <h4>{{ mentor_tip.title }}</h4>
+                      <p>{{ mentor_tip.content }}</p>
+                    </div>
                   </div>
                 </div>
-              </div><a href="#">Ще поради</a>
+              </div>
+              <a href="" id="next-tip" data-id="{{ mentor_tip.id }}">Ще поради</a>
             </div>
           </div>
           <div class="admin-right">
@@ -225,4 +233,5 @@
   </script>
   <script src="{% static 'scripts/news_item_like.js' %}"></script>
   <script src="{% static 'scripts/mentoree_edit.js' %}"></script>
+  <script src="{% static 'scripts/new_tip.js' %}"></script>
 {% endblock %}

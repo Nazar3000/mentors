@@ -4,7 +4,7 @@ const meetingList = new Vue({
   data: {
     addNews: false,
     newPostData: {
-      text: '',
+      content: '',
       image: '',
     },
     posts: [],
@@ -27,8 +27,13 @@ const meetingList = new Vue({
     }
   },
   methods: {
-    addPostImage(event) {
-      this.newPostData.image = event.target.files[0];
+    addPostImage(event, postId) {
+      const file = event.target.files[0];
+      if (postId) {
+        this.posts.find(p => p.id === postId).image = file;
+      } else {
+        this.newPostData.image = file;
+      }
     },
     getPostImageUrl(image) {
       return URL.createObjectURL(this.newPostData.image);
@@ -71,7 +76,10 @@ const meetingList = new Vue({
     changePost(post) {
       const formData = new FormData();
       const currPost = post ? post : this.newPostData;
-      formData.append('content', currPost.text);
+      if (currPost.hasOwnProperty('id')) {
+        formData.append('id', currPost.id);
+      }
+      formData.append('content', currPost.content);
       formData.append('image', currPost.image);
       formData.append('new_post', '');
 
@@ -84,20 +92,26 @@ const meetingList = new Vue({
         enctype: 'multipart/form-data',
         type: 'POST',
         success: (data) => {
-          console.log(data);
           if (post && post.hasOwnProperty('id')) {
-            this.posts.splice(this.posts.indexOf(post), 0, data);
+            this.posts.splice(this.posts.indexOf(post), 1, data);
             this.changePostMode(data.id, this.modes.view);
           } else {
+            data.mode = this.modes.view;
             this.posts.unshift(data);
             this.newPostData = {
               text: '',
               image: '',
             };
+            console.log(this.posts);
             this.addNews = false;
           }
         }
       });
+    },
+    getImageUrl(img) {
+      if (img) {
+        return typeof img === 'string' ? img : URL.createObjectURL(img);
+      }
     }
   }
 });
