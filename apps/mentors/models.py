@@ -419,6 +419,18 @@ class Mentoree(models.Model):
         null=True,
         blank=True)
 
+    def save(self, *args, **kwargs):
+        if not self.extra_data_fields:
+            self.extra_data_fields = [
+                {_('Гігієна'): ''},
+                {_('Що цій дитині допоможе бути самостійним'): ''},
+                {_('Емоціанальний стан дитини'): ''},
+                {_('Навички спілкування'): ''},
+                {_('Як орієнтується в просторі (чи є проблеми)'): ''}
+            ]
+
+        super().save(*args, **kwargs)
+
 
 class StoryImage(models.Model):
     # TODO: find out how many images should be available to upload
