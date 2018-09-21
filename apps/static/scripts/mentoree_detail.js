@@ -148,11 +148,18 @@ const mentoreeDetailEdit = new Vue({
     },
     submitMentoreeData() {
       let formData = new FormData();
+      for (let key in this.mentoreeData) {
+          if (this.mentoreeData.hasOwnProperty(key)) {
+              if (!this.mentoreeData[key]) {
+                this.mentoreeData[key] = '';
+              }
+          }
+      }
       formData.append('mentoree_data', '');
       formData.append('user_id', userId);
       formData.append('first_name', this.mentoreeData['first_name']);
       formData.append('last_name', this.mentoreeData['last_name']);
-      formData.append('date_of_birth', this.mentoreeData['date_of_birth']);
+      formData.append('date_of_birth', this.mentoreeData['date_of_birth'] ? this.mentoreeData['date_of_birth'] : '');
       formData.append('dream', this.mentoreeData['dream']);
       formData.append('want_to_become', this.mentoreeData['want_to_become']);
       formData.append('fears', this.mentoreeData['fears']);
@@ -164,18 +171,23 @@ const mentoreeDetailEdit = new Vue({
       formData.append('organization_id', this.mentoreeData['organization']);
 
       $.ajax({
-        url: '',
+        url: '/mentor/mentoree/',
         data: formData,
         processData: false,
         contentType: false,
         cache: false,
         enctype: 'multipart/form-data',
         type: 'POST',
-        success: () => {
-          this.organizationObject = this.mentoreeData.all_organizations.find(o => {
-            return o.id === this.mentoreeData.organization;
-          });
-          this.viewMode = true;
+        success: (res) => {
+          if (res.status === 'success') {
+            this.organizationObject = this.mentoreeData.all_organizations.find(o => {
+              return o.id === this.mentoreeData.organization;
+            });
+            this.viewMode = true;
+          } else {
+            // TODO: display errors
+            console.log(res);
+          }
         }
       });
     }
