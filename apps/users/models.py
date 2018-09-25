@@ -99,16 +99,35 @@ class Mentor(models.Model):
     profile_image = models.ImageField(
         upload_to='mentors/profile_images')
 
+    social_service_center = models.ManyToManyField(
+        to='users.SocialServiceCenter',
+        through='users.Coordinator'
+    )
+
 
 class SocialServiceCenter(models.Model):
     user = models.OneToOneField(
         to=User,
         on_delete=models.CASCADE,
         primary_key=True)
-    mentor_license_key = models.ForeignKey(
-        to='mentors.MentorLicenceKey',
-        on_delete=models.SET_NULL,
-        null=True)
+
+    name = models.CharField(
+        max_length=256
+    )
+    city = models.CharField(
+        max_length=256
+    )
+    address = models.CharField(
+        max_length=512
+    )
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_numbers = ArrayField(
+        models.CharField(
+            max_length=17,
+            validators=[phone_regex]
+        )
+    )
 
 
 class PublicService(models.Model):
@@ -128,7 +147,9 @@ class Organization(models.Model):
     phone_numbers = ArrayField(
         models.CharField(
             max_length=17,
-            validators=[phone_regex]))
+            validators=[phone_regex]
+        )
+    )
 
 
 class ChildService(models.Model):
@@ -169,3 +190,31 @@ class Volunteer(models.Model):
 
     another_assistance_ways_names = models.CharField(
         max_length=512)
+
+
+class Coordinator(models.Model):
+    mentor = models.OneToOneField(
+        to='users.Mentor',
+        on_delete=models.CASCADE
+    )
+    social_service_center = models.ForeignKey(
+        to='users.SocialServiceCenter',
+        on_delete=models.CASCADE
+    )
+
+    image = models.ImageField(
+        upload_to='mentorees/coordinator_images'
+    )
+    full_name = models.CharField(
+        max_length=256,
+
+    )
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_numbers = ArrayField(
+        models.CharField(
+            max_length=17,
+            validators=[phone_regex]
+        )
+    )
+    email = models.EmailField()

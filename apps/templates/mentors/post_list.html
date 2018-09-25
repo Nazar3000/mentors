@@ -48,7 +48,12 @@
                 <div class="tape-image">
                   <img :src="getPostImageUrl(newPostData.image)" v-if="newPostData.image" alt="">
                 </div>
-                <button class="tape-add-btn" @click="changePost()">Поділитися</button>
+                <button class="tape-add-btn"
+                        @click="changePost()"
+                        :disabled="!newPostData.content"
+                >
+                  Поділитися
+                </button>
               </div>
             </div>
 
@@ -117,6 +122,7 @@
                   <button type="button"
                           class="tape-dialog-btn"
                           @click="sendNewComment(post.id)"
+                          :disabled="!post.content"
                   >
                     Надіслати
                   </button>

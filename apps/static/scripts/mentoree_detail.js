@@ -200,7 +200,7 @@ const mentoreeStory = new Vue({
   data: {
     story: mentoreeData.story,
     images: mentoreeData.story_images,
-    currentImage: '/static/img/user.svg',
+    currentImage: '/static/img/empty-img.png',
     viewMode: true
   },
   created() {
@@ -234,7 +234,7 @@ const mentoreeStory = new Vue({
       const currImgIndex = this.images.indexOf(this.currentImage);
       this.images.splice(currImgIndex, 1);
       if (!this.images.length) {
-        this.currentImage = '/static/img/user.svg';
+        this.currentImage = '/static/img/empty-img.png';
       }
       else {
         this.prevImage();

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
     MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post
@@ -102,6 +103,9 @@ class SignUpStep2Forms:
 
 
 class MeetingForm(forms.ModelForm):
+    date = forms.DateField(error_messages={
+        'invalid': _('Введіть дату у форматі дд.мм.рррр')})
+
     class Meta:
         model = Meeting
         fields = (

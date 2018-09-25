@@ -102,7 +102,6 @@ const meetingList = new Vue({
               text: '',
               image: '',
             };
-            console.log(this.posts);
             this.addNews = false;
           }
         }

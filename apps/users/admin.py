@@ -9,7 +9,7 @@ from .models import (
     Organization,
     ChildService,
     Volunteer,
-)
+    Coordinator)
 
 User = get_user_model()
 
@@ -27,3 +27,4 @@ admin.site.register(PublicService)
 admin.site.register(Organization)
 admin.site.register(ChildService)
 admin.site.register(Volunteer)
+admin.site.register(Coordinator)

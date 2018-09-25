@@ -1,0 +1,63 @@
+{% load static mentor_tags %}
+
+<section class="pre-footer-contact">
+  <div class="container">
+    <div class="pre-footer-wrapp">
+      <div class="pre-footer-share">
+        <h2>Поділись своєю<br>думкою</h2><span>Поскаржитись на</span>
+        <div class="pre-footer-search">
+          {% get_social_service_centers as social_service_centers %}
+          <select required="">
+            <option value="" hidden="">Центр соц служб</option>
+            {% for center in social_service_centers %}
+              <option value="{{ center.pk }}">{{ center.name }}</option>
+            {% endfor %}
+          </select>
+          <button>Надіслати</button>
+        </div>
+        <button>Оцінити заклад</button>
+      </div>
+      <div class="pre-footer-line"></div>
+      <div class="pre-footer-mentor">
+        <h2>Твій координатор</h2>
+        {% get_related_coordinator user as coordinator %}
+          <div class="pre-footer-item">
+            <div class="pre-footer-img"><img src="{{ coordinator.image.url }}"></div>
+            <div class="pre-footer-title">
+              <div class="pre-footer-title-name">
+                <p>{{ coordinator.full_name }}</p><span>Співробітник центра соц служб</span>
+              </div>
+              {% for number in coordinator.phone_numbers %}
+                <div class="pre-footer-title-info"><img src="{% static 'img/sm-phone.svg' %}">
+                  <p>{{ number }}</p>
+                </div>
+              {% endfor %}
+              <div class="pre-footer-title-info"><img src="{% static 'img/sm-mail.svg' %}">
+                <p>{{ coordinator.email }}</p>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="pre-footer-line"></div>
+      <div class="pre-footer-prof">
+        <h2>Корисні контакти</h2>
+        <div class="pre-footer-prof-wrapp">
+          <div class="pre-footer-prof-item">
+            <p>ОО “Одна надежда”</p><span>Будь-які питання по<br>наставництву</span>
+          </div>
+          <div class="pre-footer-prof-info"><img src="{% static 'img/sm-phone.svg' %}">
+            <p>0800 - 000 - 00 - 00</p>
+          </div>
+        </div>
+        <div class="pre-footer-prof-wrapp">
+          <div class="pre-footer-prof-item">
+            <p>Школа-интернат №72</p><span> Интерант в котором учится воспитанник</span>
+          </div>
+          <div class="pre-footer-prof-info"><img src="{% static 'img/sm-phone.svg' %}">
+            <p>044 - 000 - 00 - 00</p>
+          </div>
+        </div><a href="#">Дивитися всі</a>
+      </div>
+    </div>
+  </div>
+</section>
