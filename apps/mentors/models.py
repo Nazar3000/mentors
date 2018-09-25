@@ -15,7 +15,8 @@ from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVis
 class MentorQuestionnaire(models.Model):
     mentor = models.OneToOneField(
         to='users.Mentor',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='questionnaire'
     )
 
     # 1. Common data

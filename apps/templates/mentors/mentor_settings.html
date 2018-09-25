@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <div class="container">
+      <section class="admin-log" id="mentor-edit">
+        <div class="admin-log-card">
+          <div class="admin-log-head">
+            <div class="admin-log-img">
+              <img src="{% static 'img/user.svg' %}" alt="">
+              <div class="setting-card-icon">
+                <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
+                <input id="files" style="display:none;" type="file">
+                <a class="delete-img" href="" title="Delete image">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </div>
+            <div class="admin-log-title">
+              <input type="text" placeholder="Ім'я" v-model="mentor.first_name" :class="{'alert-border': errors['first_name']}">
+              <span class="error-form" v-for="err in errors.first_name">[[ err ]]</span>
+              <input type="text" placeholder="Прізвище" v-model="mentor.last_name" :class="{'alert-border': errors['last_name']}">
+              <span class="error-form" v-for="err in errors.last_name">[[ err ]]</span>
+              <span>Дата народження</span>
+              <input type="text" placeholder="дд.мм.рррр" v-model="mentor.date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
+              <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
+            </div>
+          </div>
+          <div class="admin-log-line"></div>
+          <div class="admin-log-info">
+            <div class="admin-log-description">
+              <span>Телефон:</span>
+              <input type="text" placeholder="Ваш телефон" v-model="mentor.phone_number" :class="{'alert-border': errors['phone_number']}">
+              <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+              <span>Email:</span>
+              <input type="text" placeholder="Ваш email" v-model="mentor.email" :class="{'alert-border': errors['email']}">
+              <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+              <span>Адреса:</span>
+              <input type="text" placeholder="Ваш адресс" v-model="mentor.actual_address" :class="{'alert-border': errors['actual_address']}">
+              <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
+            </div>
+            <div class="admin-log-password"><span>Змінити пароль:</span>
+              <input type="password" placeholder="Введіть старий пароль" v-model="mentor.password_old" :class="{'alert-border': errors['password_old']}">
+              <span class="error-form" v-for="err in errors.password_old">[[ err ]]</span>
+              <input type="password" placeholder="Введіть новий пароль" v-model="mentor.password_new1" :class="{'alert-border': errors['password_new1']}">
+              <span class="error-form" v-for="err in errors.password_new1">[[ err ]]</span>
+              <input type="password" placeholder="Підтвердіть новий пароль" v-model="mentor.password_new2" :class="{'alert-border': errors['password_new2']}">
+              <span class="error-form" v-for="err in errors.password_new2">[[ err ]]</span>
+            </div>
+          </div>
+          <button @click="updateMentor">Зберегти</button>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/mentor_settings.js' %}"></script>
+{% endblock %}

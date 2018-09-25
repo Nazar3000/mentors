@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, FormView, DetailView, ListView
+from django.views.generic import TemplateView, FormView, DetailView, ListView, UpdateView
 from django.conf import settings
 
 from govern_users.models import MentorSchoolVideo, MentorTip
@@ -17,7 +17,8 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
-from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm
+from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
+    MentorSettingsForm, MentorQuestionnaireSettingsForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
@@ -447,3 +448,66 @@ def like_news_item(request):
     else:
         post.likes.add(request.user.id)
     return JsonResponse({'likes': post.likes.count()})
+
+
+class MentorSettingsView(UpdateView):
+    template_name = 'mentors/mentor_settings.html'
+    form_class = MentorSettingsForm
+    questionnaire_form = MentorQuestionnaireSettingsForm
+
+    def get_object(self, queryset=None):
+        return Mentor.objects.get(pk=self.request.user.id)
+
+    def get(self, request, *args, **kwargs):
+        if 'get_mentor_data' in request.GET.keys():
+            mentor_data = model_to_dict(
+                self.get_object(),
+                fields=(
+                    'first_name',
+                    'last_name',
+                    'phone_number',
+                )
+            )
+            mentor_questionnaire_data = model_to_dict(
+                self.get_object().questionnaire,
+                fields=(
+                    'date_of_birth',
+                    'phone_number',
+                    'email',
+                    'actual_address',
+                )
+            )
+            mentor_questionnaire_data['date_of_birth'] = \
+                datetime.strftime(mentor_questionnaire_data['date_of_birth'], '%d.%m.%Y')
+            mentor_data.update(mentor_questionnaire_data)
+            return JsonResponse(mentor_data)
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        mentor = form.save(commit=False)
+        questionnaire_form = self.questionnaire_form(self.request.POST)
+        if questionnaire_form.is_valid():
+            if form.cleaned_data.get('password_new1'):
+                mentor.user.set_password(form.cleaned_data.get('password_new1'))
+            mentor.user.email = questionnaire_form.cleaned_data['email']
+            questionnaire = questionnaire_form.save(commit=False)
+            mentor_questionnaire_dict = {k: v for k, v
+                                         in questionnaire.__dict__.items()
+                                         if v is not None}
+
+            mentor.questionnaire.__dict__.update({k: v for k, v in mentor_questionnaire_dict.items() if v})
+            mentor.questionnaire.save()
+            mentor.save()
+        else:
+            return JsonResponse(dict(questionnaire_form.errors.items()))
+
+        return JsonResponse({'status': 'success'})
+
+    def form_invalid(self, form):
+        questionnaire_form = self.questionnaire_form(self.request.POST)
+        if questionnaire_form.is_valid():
+            return JsonResponse(dict(form.errors.items()))
+        else:
+            errors = dict(form.errors.items())
+            errors.update(dict(questionnaire_form.errors.items()))
+            return JsonResponse(errors)

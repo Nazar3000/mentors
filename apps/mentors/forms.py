@@ -150,3 +150,55 @@ class PostForm(forms.ModelForm):
             'content',
             'image'
         )
+
+
+class MentorQuestionnaireSettingsForm(forms.ModelForm):
+    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
+    full_name = forms.CharField(required=False)
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+
+    class Meta:
+        model = MentorQuestionnaire
+        fields = (
+            'full_name',
+            'date_of_birth',
+            'phone_number',
+            'email',
+            'actual_address',
+        )
+
+    def clean(self):
+        if {'first_name', 'last_name'}.issubset(self.cleaned_data.keys()):
+            self.cleaned_data['full_name'] = '{} {}'.format(
+                self.cleaned_data['first_name'], self.cleaned_data['last_name'])
+
+
+class MentorSettingsForm(forms.ModelForm):
+    email = forms.EmailField()
+    password_old = forms.CharField(required=False)
+    password_new1 = forms.CharField(required=False)
+    password_new2 = forms.CharField(required=False)
+
+    class Meta:
+        model = Mentor
+        fields = (
+            'first_name',
+            'last_name',
+            'phone_number',
+        )
+
+    def clean_password_old(self):
+        password_old = self.cleaned_data.get('password_old')
+        if password_old and not self.instance.user.check_password(password_old):
+            raise ValidationError(_('Неправильний пароль.'))
+
+    def clean(self):
+        password_new1 = self.cleaned_data.get('password_new1')
+        password_new2 = self.cleaned_data.get('password_new2')
+
+        if password_new1 or password_new2:
+            validate_password(password_new1)
+
+            if password_new1 != password_new2:
+                raise ValidationError({'password_new1': _('Паролі не співпадають.')})

@@ -18,6 +18,7 @@ urlpatterns = [
     path('posts/', login_required(views.PostListView.as_view()), name='posts'),
     path('posts/send-comment/', login_required(views.send_post_comment), name='send_comment'),
     path('meetings/', login_required(views.MeetingListView.as_view()), name='meetings_list'),
+    path('settings/', login_required(views.MentorSettingsView.as_view()), name='mentor_settings'),
 
     path('posts/like-post/', login_required(views.like_news_item), name='like_post'),
     path('next-tip/', login_required(views.get_next_tip), name='next_tip'),

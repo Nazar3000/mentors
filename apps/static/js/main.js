@@ -89,7 +89,7 @@ $(document).ready(function() {
 
     // slider diary
 
-    $('.vertical').lightSlider({
+    $('#vertical').lightSlider({
         gallery:true,
         item:1,
         vertical:true,
@@ -103,7 +103,7 @@ $(document).ready(function() {
 
     // add img
 
-    $("#files, #file").change(function() {
+    $("#files, #file, #filess").change(function() {
         filename = this.files[0].name;
         // console.log(filename);
     });
@@ -111,6 +111,69 @@ $(document).ready(function() {
     $('input[type=file]').change(function(){
         files = this.files;
         $('.tape-add-img-name').append(files[0].name);
+    });
+
+    // select2
+
+    $('.js-example-basic-single').select2();
+
+    // star rate script
+
+    /* 1. Visualizing things on Hover - See next part for action on click */
+    $('#stars li').on('mouseover', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+        // Now highlight all the stars that's not after the current hovered star
+        $(this).parent().children('li.star').each(function(e){
+            if (e < onStar) {
+                $(this).addClass('hover');
+            }
+            else {
+                $(this).removeClass('hover');
+            }
+        });
+
+    }).on('mouseout', function(){
+        $(this).parent().children('li.star').each(function(e){
+            $(this).removeClass('hover');
+        });
+    });
+
+    /* 2. Action to perform on click */
+    $('#stars li').on('click', function(){
+        var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+        var stars = $(this).parent().children('li.star');
+
+        for (i = 0; i < stars.length; i++) {
+            $(stars[i]).removeClass('selected');
+        }
+
+        for (i = 0; i < onStar; i++) {
+            $(stars[i]).addClass('selected');
+        }
+    });
+
+    //  admin menu
+
+    $(".admin-menu-on").hide();
+
+    $(".admin-menu-off").click(
+        function() {
+            $(".admin-menu-on").slideToggle('fast');
+        },
+        function() {
+            $(".admin-menu-on").slideToggle('fast');
+        }
+    );
+
+    // open modal card creer
+
+    $('.career-table-btn').click(function(){
+        $('.career-card').fadeIn(500);
+    });
+
+    $('.career-card-close').click(function(){
+        $('.career-card').fadeOut(400);
     });
 
 });
