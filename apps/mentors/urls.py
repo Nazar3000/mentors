@@ -20,6 +20,7 @@ urlpatterns = [
     path('meetings/', login_required(views.MeetingListView.as_view()), name='meetings_list'),
     path('settings/', login_required(views.MentorSettingsView.as_view()), name='mentor_settings'),
 
+    path('prefooter/report-ssc/', login_required(views.SscReportView.as_view()), name='ssc_report'),
     path('posts/like-post/', login_required(views.like_news_item), name='like_post'),
     path('next-tip/', login_required(views.get_next_tip), name='next_tip'),
 ]

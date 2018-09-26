@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
     MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post
 from users.constants import UserTypes
-from users.models import Mentor
+from users.models import Mentor, SocialServiceCenterReport
 
 User = get_user_model()
 
@@ -202,3 +202,11 @@ class MentorSettingsForm(forms.ModelForm):
 
             if password_new1 != password_new2:
                 raise ValidationError({'password_new1': _('Паролі не співпадають.')})
+
+
+class SscReportForm(forms.ModelForm):
+    class Meta:
+        model = SocialServiceCenterReport
+        fields = (
+            'content',
+        )

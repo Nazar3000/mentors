@@ -30,5 +30,8 @@
   <script src="{% static 'js/ajax_setup.js' %}"></script>
   <script src="{% static 'js/vue.js' %}"></script>
   {% block extra_js %}{% endblock %}
+  {% if user.is_authenticated and user.user_type == 1 %}
+    <script src="{% static 'scripts/prefooter_forms.js' %}"></script>
+  {% endif %}
 </body>
 </html>

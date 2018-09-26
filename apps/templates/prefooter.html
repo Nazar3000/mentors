@@ -5,17 +5,51 @@
     <div class="pre-footer-wrapp">
       <div class="pre-footer-share">
         <h2>Поділись своєю<br>думкою</h2><span>Поскаржитись на</span>
-        <div class="pre-footer-search">
+        <div class="pre-footer-search" id="prefooter-report">
           {% get_social_service_centers as social_service_centers %}
-          <select required="">
+          <select @change="selectSsc($event.target.value)">
             <option value="" hidden="">Центр соц служб</option>
             {% for center in social_service_centers %}
-              <option value="{{ center.pk }}">{{ center.name }}</option>
+              <option value="{{ center.pk }}"
+              >
+                {{ center.name }}
+              </option>
             {% endfor %}
           </select>
-          <button>Надіслати</button>
+          <button class="complaint" :disabled="!selected_ssc">Надіслати</button>
+          <div class="complaint-modal">
+            <div class="complaint-card">
+              <div class="complaint-close">×</div>
+              <p>Поскаржитися</p>
+              <div class="complaint-line"></div>
+              <textarea rows="6"
+                        placeholder="Опишіть суть проблеми"
+                        v-model="content"
+              ></textarea>
+              <button @click="submitReport">Надіслати</button>
+            </div>
+          </div>
         </div>
-        <button>Оцінити заклад</button>
+        <button class="rate-place">Оцінити заклад</button>
+        <div class="rate-place-modal">
+          <div class="rate-place-card">
+            <div class="rate-place-close">×</div>
+            <p>Оцініть роботу закладу</p>
+            <div class="rate-place-line"></div>
+            <div class="rating-stars">
+              <ul class="mb-0" id="stars">
+                <li class="star" data-value="1"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" data-value="2"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" data-value="3"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" data-value="4"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" data-value="5"><i class="fa fa-star fa-fw"></i></li>
+              </ul>
+            </div>
+            <textarea rows="4" placeholder="Чим заклад допомогає тобі?"></textarea>
+            <textarea rows="4" placeholder="Як саме заклад може допомогти вашій парі?"></textarea>
+            <button>Надіслати</button>
+          </div>
+        </div>
       </div>
       <div class="pre-footer-line"></div>
       <div class="pre-footer-mentor">

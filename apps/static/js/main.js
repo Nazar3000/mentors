@@ -166,15 +166,75 @@ $(document).ready(function() {
         }
     );
 
+
+    // relativeanchor
+
+    $('a[rel="relativeanchor"]').click(function() {
+        $('html, body').animate({
+            scrollTop: $($.attr(this, 'href')).offset().top - 20
+        }, 1000);
+        return false;
+    });
+
+
+
     // open modal card creer
 
     $('.career-table-btn').click(function(){
-        $('.career-card').fadeIn(500);
+        $('.career-modal').fadeIn(500);
     });
 
     $('.career-card-close').click(function(){
-        $('.career-card').fadeOut(400);
+        $('.career-modal').fadeOut(400);
     });
+
+
+    $('.career-add').click(function(){
+        $('.career-modal-reg').fadeIn(500);
+    });
+
+    $('.career-card-close').click(function(){
+        $('.career-modal-reg').fadeOut(400);
+    });
+
+    $('.complaint').click(function(){
+        $('.complaint-modal').fadeIn(500);
+    });
+
+    $('.complaint-close').click(function(){
+        $('.complaint-modal').fadeOut(400);
+    });
+
+    $('.rate-place').click(function(){
+        $('.rate-place-modal').fadeIn(500);
+    });
+
+    $('.rate-place-close').click(function(){
+        $('.rate-place-modal').fadeOut(400);
+    });
+
+
+
+    // go top auto
+
+    $(function() {
+        $.fn.scrollToTop = function() {
+            $(this).hide().removeAttr("href");
+            if ($(window).scrollTop() >= "250") $(this).fadeIn("slow")
+            var scrollDiv = $(this);
+            $(window).scroll(function() {
+                if ($(window).scrollTop() <= "250") $(scrollDiv).fadeOut("slow")
+                else $(scrollDiv).fadeIn("slow")
+            });
+            $(this).click(function() {
+                $("html, body").animate({scrollTop: 0}, "slow")
+            })
+        }
+    });
+    $(function() {
+        $("#go-top").scrollToTop();
+    });
+
 
 });
 

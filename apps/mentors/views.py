@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, FormView, DetailView, ListView, UpdateView
+from django.views.generic import TemplateView, FormView, DetailView, ListView, UpdateView, CreateView
 from django.conf import settings
 
 from govern_users.models import MentorSchoolVideo, MentorTip
@@ -18,7 +18,7 @@ from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
 from users.models import Mentor, Organization
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
-    MentorSettingsForm, MentorQuestionnaireSettingsForm
+    MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
@@ -511,3 +511,17 @@ class MentorSettingsView(UpdateView):
             errors = dict(form.errors.items())
             errors.update(dict(questionnaire_form.errors.items()))
             return JsonResponse(errors)
+
+
+class SscReportView(CreateView):
+    form_class = SscReportForm
+
+    def form_valid(self, form):
+        ssc_report = form.save(commit=False)
+        ssc_report.ssc_id = self.request.POST['selected_ssc']
+        ssc_report.save()
+
+        return JsonResponse({'status': 'success'})
+
+    def form_invalid(self, form):
+        return JsonResponse(dict(form.errors.items()))
