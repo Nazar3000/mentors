@@ -31,23 +31,27 @@
           </div>
         </div>
         <button class="rate-place">Оцінити заклад</button>
-        <div class="rate-place-modal">
+        <div class="rate-place-modal" id="prefooter-assess">
           <div class="rate-place-card">
             <div class="rate-place-close">×</div>
             <p>Оцініть роботу закладу</p>
             <div class="rate-place-line"></div>
             <div class="rating-stars">
               <ul class="mb-0" id="stars">
-                <li class="star" data-value="1"><i class="fa fa-star fa-fw"></i></li>
-                <li class="star" data-value="2"><i class="fa fa-star fa-fw"></i></li>
-                <li class="star" data-value="3"><i class="fa fa-star fa-fw"></i></li>
-                <li class="star" data-value="4"><i class="fa fa-star fa-fw"></i></li>
-                <li class="star" data-value="5"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" v-for="i in 5" :data-value="i" @click="setGrade(i)">
+                  <i class="fa fa-star fa-fw"></i>
+                </li>
               </ul>
             </div>
-            <textarea rows="4" placeholder="Чим заклад допомогає тобі?"></textarea>
-            <textarea rows="4" placeholder="Як саме заклад може допомогти вашій парі?"></textarea>
-            <button>Надіслати</button>
+            <textarea rows="4"
+                      placeholder="Чим заклад допомогає тобі?"
+                      v-model="mentor_help_description"
+            ></textarea>
+            <textarea rows="4"
+                      placeholder="Як саме заклад може допомогти вашій парі?"
+                      v-model="mentor_pair_help_description"
+            ></textarea>
+            <button @click="submitAssessment">Надіслати</button>
           </div>
         </div>
       </div>

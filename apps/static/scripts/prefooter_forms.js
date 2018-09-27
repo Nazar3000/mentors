@@ -16,3 +16,23 @@ const reportSsc = new Vue({
     }
   }
 });
+
+const sscAssessment = new Vue({
+  el: '#prefooter-assess',
+  delimiters: ['[[', ']]'],
+  data: {
+    grade: null,
+    mentor_help_description: '',
+    mentor_pair_help_description: '',
+  },
+  methods: {
+    setGrade(grade) {
+      this.grade = grade;
+    },
+    submitAssessment() {
+      $.post('/mentor/prefooter/assess-ssc/', this.$data, () => {
+        $('.rate-place-modal').fadeOut(400);
+      })
+    }
+  }
+});

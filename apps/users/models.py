@@ -143,12 +143,22 @@ class SocialServiceCenterAssessment(models.Model):
         to=SocialServiceCenter,
         on_delete=models.CASCADE
     )
+    mentor = models.OneToOneField(
+        to=Mentor,
+        on_delete=models.CASCADE
+    )
     grade = models.PositiveSmallIntegerField(
         default=0,
         validators=[MaxValueValidator(5)]
     )
-    mentor_help_description = models.TextField()
-    mentor_pair_help_description = models.TextField()
+    mentor_help_description = models.TextField(
+        null=True,
+        blank=True
+    )
+    mentor_pair_help_description = models.TextField(
+        null=True,
+        blank=True
+    )
 
 
 class PublicService(models.Model):

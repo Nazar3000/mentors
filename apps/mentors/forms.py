@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
     MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post
 from users.constants import UserTypes
-from users.models import Mentor, SocialServiceCenterReport
+from users.models import Mentor, SocialServiceCenterReport, SocialServiceCenterAssessment
 
 User = get_user_model()
 
@@ -209,4 +209,14 @@ class SscReportForm(forms.ModelForm):
         model = SocialServiceCenterReport
         fields = (
             'content',
+        )
+
+
+class SscAssessForm(forms.ModelForm):
+    class Meta:
+        model = SocialServiceCenterAssessment
+        fields = (
+            'grade',
+            'mentor_help_description',
+            'mentor_pair_help_description',
         )
