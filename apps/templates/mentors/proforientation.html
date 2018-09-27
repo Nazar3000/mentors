@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container"><a class="admin-link" href="">Особистий кабінет наставника ></a>
+        <p class="admin-link-title">Профорієнтація</p>
+      </div>
+    </section>
+    <div class="container">
+      <section class="career">
+        <h2> Профорієнтація</h2><span>Тут ти можеш знайти місце де вихованець може познайомитися з професією</span>
+        <div class="career-search"><i class="fas fa-search"></i>
+          <input type="text" placeholder="Почніть вводити запитання або ключові слова">
+        </div>
+        <div class="career-add"><i class="fas fa-plus"></i><span>Створити компанію</span></div>
+        <div class="career-modal-reg">
+          <div class="career-card-reg">
+            <div class="career-card-close">×</div>
+            <p>Заповніть анкету! Станьте одним із нас!</p>
+            <div class="career-card-line"></div>
+            <input type="text" placeholder="Введіть назву компанії">
+            <input type="text" placeholder="Введіть назву професії">
+            <input type="text" placeholder="Введіть адресу">
+            <input type="text" placeholder="Вкажіть зручні дни для зустрічей">
+            <textarea rows="6" placeholder="Опишіть вашу діяльність"></textarea>
+            <input type="text" placeholder="Контактний телефон ">
+            <button>Зберегти</button>
+          </div>
+        </div>
+        <div class="career-slider">
+          <div class="owl-carousel">
+            {% for chunk in object_list %}
+            <div class="career-table">
+              <div class="career-table-header">
+                <div class="career-table-title">Професія</div>
+                <div class="career-line"></div>
+                <div class="career-table-title">Компанія</div>
+                <div class="career-line"></div>
+                <div class="career-table-title">Де?</div>
+                <div class="career-line"></div>
+                <div class="career-table-title">Статус</div>
+              </div>
+              {% for item in chunk %}
+                <div class="career-table-line">
+                <div class="career-table-item">
+                  <p>{{ item.company_name }}</p>
+                </div>
+                <div class="career-table-item">
+                  <p>{{ item.profession_name }}</p>
+                </div><a class="career-table-item" href="">
+                  <p>{{ item.address }}</p><i class="fas fa-map-marker-alt"></i></a>
+                <div class="career-table-success">
+                  <p>Ви з вихованцем записані</p>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+          </div>
+          <div class="career-modal">
+            <div class="career-card">
+              <div class="career-card-close">×</div>
+              <h4>Зв’яжися з компанією та домовся про зустріч!</h4>
+              <div class="career-card-line"></div>
+              <div class="career-card-wrapp"><img src="img/old-phone.svg">
+                <div class="career-card-info">
+                  <h5>Контакти</h5>
+                  <p>+38 (063) 222 12 12</p>
+                  <p>+38 (063) 222 22 12</p><span>nastavniki@gmail.com</span>
+                  <p>м.Київ, вул. М.Лисенка 23</p>
+                  <div class="career-card-check">
+                    <label class="form-check">
+                      <input type="radio" name="1" value="" checked="checked"><span class="form-check-label-md">Домовився</span>
+                    </label>
+                    <label class="form-check">
+                      <input type="radio" name="1" value="" checked=""><span class="form-check-label-md">Не домовився</span>
+                    </label>
+                  </div>
+                  <button>Зберегти</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="career-map">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d81323.1837745071!2d30.476906381392816!3d50.434590515786375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgoogle!5e0!3m2!1sru!2sua!4v1537353884035" width="1110" height="500" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  
+{% endblock %}

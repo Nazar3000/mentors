@@ -15,18 +15,35 @@ from django.conf import settings
 from govern_users.models import MentorSchoolVideo, MentorTip
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree
-from users.models import Mentor, Organization, SocialServiceCenterAssessment, Coordinator
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree, Proforientation
+from users.models import Mentor, Organization, SocialServiceCenterAssessment, Coordinator, SocialServiceCenter
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
-    MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm, SscAssessForm
+    MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
+
+
+def nest_queryset(nest_size, queryset):
+    """
+    Return list of list with same length
+    """
+    nested_items = []
+    for index, vid in enumerate(queryset, 1):
+        if (index + nest_size) % nest_size == 1:
+            nested_items.append([])
+            nested_items[index // nest_size].append(vid)
+        else:
+            nested_index = index // nest_size - 1 \
+                if index // nest_size == 1 else index // nest_size
+            nested_items[nested_index].append(vid)
+    return nested_items
 
 
 class SignUpStepsAccessMixin(AccessMixin):
     """
     Mixin to forbid users to skip registration steps.
     """
+
     def test_session_mentor_data(self):
         return ('mentor_data' in self.request.session.keys()) or self.request.user.is_authenticated
 
@@ -64,7 +81,7 @@ class SignUpStep1View(SignUpStepsAccessMixin, FormView):
         if 'mentor_data' in self.request.session.keys():
             mentor = Mentor(**self.request.session['mentor_data'])
             mentor.user = user
-            mentor.licence_key = MentorLicenceKey.objects\
+            mentor.licence_key = MentorLicenceKey.objects \
                 .create(mentor=mentor, key=rstr.xeger(MentorLicenceKey.key_validator.regex))
             mentor.save()
 
@@ -109,10 +126,10 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
             errors.update(dict(main_form.errors.items()))
 
         for form_name in [
-                'education',
-                'job',
-                'family_member',
-                'children_work_experience']:
+            'education',
+            'job',
+            'family_member',
+            'children_work_experience']:
             error_list = []
             for i in range(len(request_body[form_name + 's'])):
                 form = self.forms_class.forms[form_name](request_body[form_name + 's'][i])
@@ -186,24 +203,8 @@ class MentorSchoolVideoListView(CheckIfUserIsMentorMixin, ListView):
     template_name = 'mentors/mentor_school_video_list.html'
     queryset = MentorSchoolVideo.objects.all()
 
-    @staticmethod
-    def nest_queryset(nest_size):
-        """
-        Return list of list with same length
-        """
-        nested_videos = []
-        for index, vid in enumerate(MentorSchoolVideo.objects.all(), 1):
-            if (index + nest_size) % nest_size == 1:
-                nested_videos.append([])
-                nested_videos[index // nest_size].append(vid)
-            else:
-                nested_index = index // nest_size - 1 \
-                    if index // nest_size == 1 else index // nest_size
-                nested_videos[nested_index].append(vid)
-        return nested_videos
-
     def get_queryset(self):
-        return self.nest_queryset(nest_size=4)
+        return nest_queryset(4, MentorSchoolVideo.objects.all())
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
@@ -549,3 +550,16 @@ class SscAssessView(UpdateView):
 
     def form_invalid(self, form):
         return JsonResponse(dict(form.errors.items()))
+
+
+class UsefulContactsView(ListView):
+    template_name = 'mentors/contacts.html'
+    queryset = SocialServiceCenter.objects.all()
+
+
+class ProforientationView(FormView, ListView):
+    template_name = 'mentors/proforientation.html'
+    form_class = ProforientationForm
+
+    def get_queryset(self):
+        return nest_queryset(8, Proforientation.objects.all())

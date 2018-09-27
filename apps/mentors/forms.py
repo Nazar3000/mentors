@@ -5,7 +5,8 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
-    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post
+    MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post, \
+    Proforientation
 from users.constants import UserTypes
 from users.models import Mentor, SocialServiceCenterReport, SocialServiceCenterAssessment
 
@@ -219,4 +220,17 @@ class SscAssessForm(forms.ModelForm):
             'grade',
             'mentor_help_description',
             'mentor_pair_help_description',
+        )
+
+
+class ProforientationForm(forms.ModelForm):
+    class Meta:
+        model = Proforientation
+        fields = (
+            'company_name',
+            'profession_name',
+            'address',
+            'meeting_days',
+            'business_description',
+            'phone_number',
         )

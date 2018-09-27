@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <section class="admin-link-nav">
+      <div class="container">
+        <a class="admin-link" href="{% url 'mentors:mentor_office' %}">Особистий кабінет наставника ></a>
+        <p class="admin-link-title">Корисні контакти</p>
+      </div>
+    </section>
+    <section class="contacts">
+      <div class="contacts-container">
+        <h2>Корисні контакти</h2>
+        <div class="contacts-search"><i class="fas fa-search"></i>
+          <input type="text" placeholder="Почніть вводити назву організації або ключові слова">
+        </div>
+        <a class="contacts-prof" href="{% url 'mentors:proforientation' %}">Перейти в розділ “Профорієнтація”</a>
+        <div class="contacts-slide">
+          <div class="owl-carousel">
+            <div class="contacts-all">
+              <div class="contacts-all-item">
+                <p>ОО “Одна Надія”</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.jpg' %}" alt=""></div>
+              </div>
+              <div class="contacts-all-item">
+                <p>Альянс “Україна без сиріт”</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.png' %}" alt=""></div>
+              </div>
+              <div class="contacts-all-item">
+                <p>Приймальня Уповноваженого Президента з прав дитини</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.svg' %}" alt=""></div>
+              </div>
+            </div>
+            <div class="contacts-all">
+              <div class="contacts-all-item">
+                <p>ОО “Одна Надія”</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.jpg' %}" alt=""></div>
+              </div>
+              <div class="contacts-all-item">
+                <p>Альянс “Україна без сиріт”</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.png' %}" alt=""></div>
+              </div>
+              <div class="contacts-all-item">
+                <p>Приймальня Уповноваженого Президента з прав дитини</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.svg' %}" alt=""></div>
+              </div>
+            </div>
+            <div class="contacts-all">
+              <div class="contacts-all-item">
+                <p>ОО “Одна Надія”</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.jpg' %}" alt=""></div>
+              </div>
+              <div class="contacts-all-item">
+                <p>Альянс “Україна без сиріт”</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.png' %}" alt=""></div>
+              </div>
+              <div class="contacts-all-item">
+                <p>Приймальня Уповноваженого Президента з прав дитини</p>
+                <div class="contacts-all-img"><img src="{% static 'img/cont-3.svg' %}" alt=""></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

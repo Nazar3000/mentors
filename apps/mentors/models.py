@@ -492,3 +492,28 @@ class PostComment(models.Model):
         to='users.Mentor',
         on_delete=models.CASCADE)
     content = models.TextField()
+
+
+class Proforientation(models.Model):
+    related_mentor = models.ManyToManyField(
+        to='users.Mentor'
+    )
+
+    company_name = models.CharField(
+        max_length=256
+    )
+    profession_name = models.CharField(
+        max_length=256
+    )
+    address = models.CharField(
+        max_length=512
+    )
+    meeting_days = models.CharField(
+        max_length=128
+    )
+    business_description = models.TextField()
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[phone_regex])
