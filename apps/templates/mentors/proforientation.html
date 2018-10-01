@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
   <div class="content">
     <section class="admin-link-nav">
@@ -7,7 +9,7 @@
         <p class="admin-link-title">Профорієнтація</p>
       </div>
     </section>
-    <div class="container">
+    <div class="container" id="career-list">
       <section class="career">
         <h2> Профорієнтація</h2><span>Тут ти можеш знайти місце де вихованець може познайомитися з професією</span>
         <div class="career-search"><i class="fas fa-search"></i>
@@ -30,8 +32,7 @@
         </div>
         <div class="career-slider">
           <div class="owl-carousel">
-            {% for chunk in object_list %}
-            <div class="career-table">
+            <div class="career-table" v-for="chunk in proforientations">
               <div class="career-table-header">
                 <div class="career-table-title">Професія</div>
                 <div class="career-line"></div>
@@ -41,43 +42,45 @@
                 <div class="career-line"></div>
                 <div class="career-table-title">Статус</div>
               </div>
-              {% for item in chunk %}
-                <div class="career-table-line">
+                <div class="career-table-line" v-for="item in chunk">
                 <div class="career-table-item">
-                  <p>{{ item.company_name }}</p>
+                  <p>[[ item.company_name ]]</p>
                 </div>
                 <div class="career-table-item">
-                  <p>{{ item.profession_name }}</p>
+                  <p>[[ item.profession_name ]]</p>
                 </div><a class="career-table-item" href="">
-                  <p>{{ item.address }}</p><i class="fas fa-map-marker-alt"></i></a>
-                <div class="career-table-success">
-                  <p>Ви з вихованцем записані</p>
-                </div>
+                  <p>[[ item.address ]]</p><i class="fas fa-map-marker-alt"></i></a>
+                  <div class="career-table-btn"
+                       v-if="item.related_mentors.includes(userId)"
+                  >
+                    <p>Ви з вихованцем записані</p>
+                  </div>
+                  <div class="career-table-btn" @click="selectProforientation(item)">
+                    <p>Домовитися</p>
+                  </div>
               </div>
-              {% endfor %}
             </div>
-            {% endfor %}
           </div>
           <div class="career-modal">
             <div class="career-card">
-              <div class="career-card-close">×</div>
+              <div class="career-card-close" @click="unselectProforientation">×</div>
               <h4>Зв’яжися з компанією та домовся про зустріч!</h4>
               <div class="career-card-line"></div>
-              <div class="career-card-wrapp"><img src="img/old-phone.svg">
+              <div class="career-card-wrapp">
+                <img src="{% static 'img/old-phone.svg' %}">
                 <div class="career-card-info">
                   <h5>Контакти</h5>
-                  <p>+38 (063) 222 12 12</p>
-                  <p>+38 (063) 222 22 12</p><span>nastavniki@gmail.com</span>
-                  <p>м.Київ, вул. М.Лисенка 23</p>
+                  <p>[[ selected_proforientation.phone_number ]]</p>
+                  <span>nastavniki@gmail.com</span>
+                  <p>[[ selected_proforientation.address ]]</p>
                   <div class="career-card-check">
-                    <label class="form-check">
-                      <input type="radio" name="1" value="" checked="checked"><span class="form-check-label-md">Домовився</span>
-                    </label>
-                    <label class="form-check">
-                      <input type="radio" name="1" value="" checked=""><span class="form-check-label-md">Не домовився</span>
-                    </label>
+                    <input type="checkbox" v-model="agreed">
+                    <span class="form-check-label-md">Домовився</span>
                   </div>
-                  <button>Зберегти</button>
+                  <button @click="submitRelation"
+                  >
+                    Зберегти
+                  </button>
                 </div>
               </div>
             </div>
@@ -92,5 +95,8 @@
 {% endblock %}
 
 {% block extra_js %}
-  
+  <script>
+    const userId = '{{ user.id }}';
+  </script>
+  <script src="{% static 'scripts/career_list.js' %}"></script>
 {% endblock %}

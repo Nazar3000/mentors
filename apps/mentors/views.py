@@ -28,14 +28,14 @@ def nest_queryset(nest_size, queryset):
     Return list of list with same length
     """
     nested_items = []
-    for index, vid in enumerate(queryset, 1):
+    for index, item in enumerate(queryset, 1):
         if (index + nest_size) % nest_size == 1:
             nested_items.append([])
-            nested_items[index // nest_size].append(vid)
+            nested_items[index // nest_size].append(item)
         else:
             nested_index = index // nest_size - 1 \
                 if index // nest_size == 1 else index // nest_size
-            nested_items[nested_index].append(vid)
+            nested_items[nested_index].append(item)
     return nested_items
 
 
@@ -557,9 +557,30 @@ class UsefulContactsView(ListView):
     queryset = SocialServiceCenter.objects.all()
 
 
-class ProforientationView(FormView, ListView):
+class ProforientationView(FormView):
     template_name = 'mentors/proforientation.html'
     form_class = ProforientationForm
 
     def get_queryset(self):
-        return nest_queryset(8, Proforientation.objects.all())
+        proforientations = Proforientation.objects.all().values(
+            'id',
+            'company_name',
+            'profession_name',
+            'address',
+            'meeting_days',
+            'business_description',
+            'phone_number',
+        )
+
+        for p in proforientations:
+            p['related_mentors'] = \
+                list(Proforientation
+                     .objects.get(id=p['id'])
+                     .related_mentor.all()
+                     .values_list('user_id', flat=True))
+        return nest_queryset(8, list(proforientations))
+
+    def get(self, request, *args, **kwargs):
+        if 'get_careers' in request.GET.keys():
+            return JsonResponse(self.get_queryset(), safe=False)
+        return super().get(request, *args, **kwargs)

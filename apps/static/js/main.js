@@ -176,19 +176,6 @@ $(document).ready(function() {
         return false;
     });
 
-
-
-    // open modal card creer
-
-    $('.career-table-btn').click(function(){
-        $('.career-modal').fadeIn(500);
-    });
-
-    $('.career-card-close').click(function(){
-        $('.career-modal').fadeOut(400);
-    });
-
-
     $('.career-add').click(function(){
         $('.career-modal-reg').fadeIn(500);
     });
