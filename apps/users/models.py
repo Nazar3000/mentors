@@ -103,6 +103,9 @@ class Mentor(models.Model):
         to='users.SocialServiceCenter',
         through='users.Coordinator'
     )
+    licenced = models.BooleanField(
+        default=False
+    )
 
 
 class SocialServiceCenter(models.Model):

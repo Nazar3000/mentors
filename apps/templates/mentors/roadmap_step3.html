@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <section class="third-stage">
+      <div class="container">
+        <h2> Дякую за бажання стати Наставником для дитини</h2>
+        <div class="first-stage-wrapp">
+          <div class="stage-panel-two"><img src="{% static 'img/family.svg' %}" alt=""><span class="stage-panel-start">Зареєструватися<br> в ЦССССДМ</span><span class="stage-panel-next">Зібрати пакет<br>документів</span><span class="stage-panel-last">Пройти навчання</span>
+            <div class="stage-panel-active">До наступного кроку</div><span class="stage-panel-finish">Знайомство з дитиною,<br> підписання договору</span>
+          </div>
+          <div class="first-stage-info">
+            <div class="first-stage-license">
+              <p>Підтвердіть що ви пройшли тренінг</p>
+              <div class="first-stage-line-license"></div><span>Для цього введить свій ліцензійний номер<br> виданий Центром соціальних Служб:</span>
+              <input type="text">
+              <button>Підтвердити</button>
+            </div>
+            <div class="first-stage-star"><span>Оціни роботу центру соціальних служб:</span></div>
+            <div class="rating-widget">
+              <div class="rating-stars">
+                <ul class="mb-0" id="stars">
+                  <li class="star" data-value="1"><i class="fa fa-star fa-fw"></i></li>
+                  <li class="star" data-value="2"><i class="fa fa-star fa-fw"></i></li>
+                  <li class="star" data-value="3"><i class="fa fa-star fa-fw"></i></li>
+                  <li class="star" data-value="4"><i class="fa fa-star fa-fw"></i></li>
+                  <li class="star" data-value="5"><i class="fa fa-star fa-fw"></i></li>
+                </ul>
+              </div>
+            </div>
+            <p class="mb-3">1. Знайомство з дитиною
+              <p>2. Підписання договору.<br>Ознайомся попередньо з договором</p>
+              <div class="first-stage-doc"><a href="" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a></div>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

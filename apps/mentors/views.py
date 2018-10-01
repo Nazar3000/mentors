@@ -129,7 +129,8 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
             'education',
             'job',
             'family_member',
-            'children_work_experience']:
+            'children_work_experience'
+        ]:
             error_list = []
             for i in range(len(request_body[form_name + 's'])):
                 form = self.forms_class.forms[form_name](request_body[form_name + 's'][i])
@@ -162,13 +163,42 @@ class SignUpStep3View(SignUpStepsAccessMixin, TemplateView):
     template_name = 'mentors/signup_step3.html'
 
 
-class MentorRoadmap(TemplateView):
-    template_name = 'mentors/mentor_roadmap.html'
+class Roadmap(TemplateView):
+    # TODO: complete all roadmap steps
+    template_name = 'mentors/roadmap.html'
+
+
+class RoadmapStepMixin(TemplateView):
+    def post(self, request, *args, **kwargs):
+        licence_key = request.POST['licence_key']
+        mentor = Mentor.objects.get(pk=self.request.user.pk)
+        if Mentor.objects.get(pk=self.request.user.pk).licence_key.key == licence_key:
+            mentor.licenced = True
+            mentor.save()
+            return redirect('mentors:mentor_office')
+        else:
+            return self.get(request, *args, **kwargs)
+
+
+class RoadmapStep1(RoadmapStepMixin):
+    template_name = 'mentors/roadmap_step1.html'
+
+
+class RoadmapStep2(RoadmapStepMixin):
+    template_name = 'mentors/roadmap_step2.html'
+
+
+class RoadmapStep3(RoadmapStepMixin):
+    template_name = 'mentors/roadmap_step3.html'
 
 
 class CheckIfUserIsMentorMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.user_type == UserTypes.MENTOR
+        try:
+            mentor = Mentor.objects.get(user=self.request.user)
+            return self.request.user.user_type == UserTypes.MENTOR and mentor.licenced
+        except Mentor.DoesNotExist:
+            return False
 
 
 class MentorOfficeView(CheckIfUserIsMentorMixin, DetailView):

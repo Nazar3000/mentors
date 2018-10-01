@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <section class="stage">
+      <div class="container">
+        <h2> Обери етап, на якому ти зараз знаходишся:</h2>
+        <div class="stage-wrapp">
+          <div class="stage-wrapp-item">
+            <p class="stage-wrapp-one">Це мій перший крок,<br>я ще нічого не<br>робив</p>
+            <a href="{% url 'mentors:mentor_roadmap_step1' %}">
+              <div class="stage-wrapp-icon">
+                <div class="stage-wrapp-img"><img src="{% static 'img/nipple.png'  %}" alt=""></div>
+              </div>
+            </a>
+          </div>
+          <div class="stage-wrapp-item">
+            <p class="stage-wrapp-two">Я вже був в Центрі<br>соціальних служб,<br>тренінг ще не проходив</p>
+            <a href="{% url 'mentors:mentor_roadmap_step2' %}" target="_blank">
+              <div class="stage-wrapp-icon">
+                <div class="stage-wrapp-img"><img src="{% static 'img/bottle.png' %}" alt=""></div>
+              </div>
+            </a>
+          </div>
+          <div class="stage-wrapp-item">
+            <p class="stage-wrapp-free">Я вже пройшов<br>тренінг для<br>наставників</p>
+            <a href="{% url 'mentors:mentor_roadmap_step3' %}" target="_blank">
+              <div class="stage-wrapp-icon">
+                <div class="stage-wrapp-img"><img src="{% static 'img/bottle-full.png' %}" alt=""></div>
+              </div>
+            </a>
+          </div>
+          <div class="stage-wrapp-item">
+            <p class="stage-wrapp-four">Я вже взаємодію<br>з дитиною<br>(є підписаний договір)</p>
+            <a href="javascript: void(0)" target="_blank">
+              <div class="stage-wrapp-icon-end"><img src="{% static 'img/baby.png' %}" alt=""></div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <section class="first-stage">
+      <div class="container">
+        <h2> Дякую за бажання стати Наставником для дитини</h2>
+        <div class="first-stage-wrapp">
+          <div class="stage-panel"><img src="{% static 'img/family.svg' %}" alt=""><span class="stage-panel-start">Зареєструватися<br> в ЦССССДМ</span>
+            <div class="stage-panel-active">До наступного кроку</div><span class="stage-panel-next">Зібрати пакет<br>документів</span><span class="stage-panel-last">Пройти навчання</span><span class="stage-panel-finish">Знайомство з дитиною,<br> підписання договору</span>
+          </div>
+          <div class="first-stage-info">
+            <div class="first-stage-btn">Крок 1. Реєстрація</div>
+            <p>1. Звернися в Центр соціальних служб в твоєму районі:</p>
+            <div class="first-stage-place">
+              <input type="text" placeholder="Львів">
+              <select>
+                <option>Центр социальних служб №1</option>
+                <option>Центр социальних служб №2</option>
+                <option>Центр социальних служб №3</option>
+              </select>
+              <div class="first-stage-place-wrapp">
+                <div>
+                  <p>Телефон</p><span>+38 (063) 222 12 12</span><span>+38 (063) 222 22 12</span>
+                </div>
+                <div>
+                  <p>Адреса</p><span>м. Львів,<br>вул. Богдана Божка 12</span>
+                </div>
+              </div>
+            </div>
+            <p>2. Роздрукуй свою анкету кандидата в наставники і<br>візьми її з собою в Центр соц. служб, щоб заощадити<br>свій час:</p>
+            <div class="first-stage-doc"><a href="" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a><a href="" target="_blank"><img src="img/print.svg" alt=""><span>Друкувати</span></a></div>
+            <div class="first-stage-btn">Крок 2. Підготовка документів</div>
+            <p>1. Звернися в твоє регіональне відділення Міністерства<br> внутрішніх справ для отримання довідки про несудимість<br> або<a href=""> замов її Online.</a>  Знайди контактні дані на карті:</p>
+            <input type="text" placeholder="Введіть вашу адресу, щоб знайти відділення поблизу">
+            <div class="first-stage-map">
+              <iframe src="https://www.google.com/maps/embed?pb" width="100%" height="100%" frameborder="8px" style="border:0" allowfullscreen=""></iframe>
+            </div>
+            <p>2. Пройди медогляд. Якщо тобі не дали форму для<br>огляду, то ти можеш її завантажити тут:</p>
+            <div class="first-stage-doc"><a href="" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a></div>
+            <p>3. Віднеси зібрані документи в Центр соціальних служб:</p>
+            <div class="first-stage-subt"><span>1. Довідка про несудимість</span><span>2. Висновок про стан здоров'я</span></div>
+            <div class="first-stage-btn">Крок 3. Підготовка до зустрічі</div>
+            <p>1. Пройди співбесіду з психологом Центру<br>соціальних служб</p>
+            <div class="first-stage-social">
+              <p>Запишися на співбесіду з психологом, а також, дізнайся<br> коли ти зможеш пройти тренінг для наставників</p>
+              <div class="first-stage-line"></div>
+              <div class="first-stage-social-wrapp"><img src="{% static 'img/old-phone.svg' %}" alt="">
+                <div class="first-stage-social-info">
+                  <p>Контакти</p>
+                  <p>+38 (063) 222 12 12</p>
+                  <p>+38 (063) 222 12 12</p>
+                  <div class="first-stage-social-mail"><span>nastavniki@gmail.com</span><span>info_nasta@gmail.com</span></div>
+                </div>
+              </div>
+            </div>
+            <p>2. Пройди тренінг для наставників.<br>Його тривалість 4 дня</p>
+            <form method="post">
+              {% csrf_token %}
+              <div class="first-stage-license">
+              <p>Підтвердіть що ви пройшли тренінг</p>
+              <div class="first-stage-line-license"></div>
+              <span>Для цього введить свій ліцензійний номер<br> виданий Центром соціальних Служб:</span>
+                <input type="text" name="licence_key">
+                <button>Підтвердити</button>
+            </div>
+            </form>
+            <div class="first-stage-success">
+              <p>Вітаємо!</p>
+              <div class="first-stage-success-line"></div><span>Ви успішно пройшли тренінг<br> для наставників!</span><i class="far fa-heart"></i>
+            </div>
+            <div class="first-stage-btn">Крок 4. Зустріч</div>
+            <p class="mb-3">1. Знайомство з дитиною</p>
+            <p>2. Підписання договору.<br>Ознайомся попередньо з договором</p>
+            <div class="first-stage-doc"><a href="" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}
