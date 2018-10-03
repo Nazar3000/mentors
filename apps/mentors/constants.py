@@ -1,12 +1,6 @@
-from enum import Enum
-
 from django.utils.translation import gettext_lazy as _
 
-
-class ChoicesEnum(Enum):
-    @classmethod
-    def choices(cls):
-        return tuple((x.name, x.value) for x in cls)
+from users.constants import ChoicesEnum
 
 
 class Religions(ChoicesEnum):

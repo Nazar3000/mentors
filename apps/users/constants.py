@@ -1,3 +1,12 @@
+from enum import Enum
+
+
+class ChoicesEnum(Enum):
+    @classmethod
+    def choices(cls):
+        return tuple((x.name, x.value) for x in cls)
+
+
 class UserTypes:
     GOVERN_USER = 0
     MENTOR = 1

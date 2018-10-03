@@ -1,3 +1,6 @@
+import datetime
+
+from dateutil.tz import tzlocal
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -43,3 +46,27 @@ class MentorTip(models.Model):
     content = models.TextField()
     image = models.ImageField(
         upload_to='govern_users/mentor_tips')
+
+
+class TipOfTheDay(models.Model):
+    content = models.CharField(
+        max_length=256
+    )
+    last_swap_date = models.DateTimeField(
+        auto_now=True
+    )
+    watched_by = models.ManyToManyField(
+        to='users.Mentor'
+    )
+
+    @staticmethod
+    def get_current_tip():
+        if TipOfTheDay.objects.count():
+            current_tip = TipOfTheDay.objects.latest('last_swap_date')
+            if (datetime.datetime.utcnow() - current_tip.last_swap_date.replace(tzinfo=None)).days >= 1:
+                for tip in TipOfTheDay.objects.iterator():
+                    if tip == current_tip:
+                        current_tip = next(TipOfTheDay.objects.iterator())
+                        break
+            return current_tip
+        return None
