@@ -13,6 +13,10 @@
     {% block extra_css %}{% endblock %}
   </head>
 <body>
+  <script src="{% static 'js/libs.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/ajax_setup.js' %}"></script>
+  <script src="{% static 'js/vue.js' %}"></script>
   <div class="wrapper">
     {% if user.is_authenticated and user.user_type == 1 %}
       {% include 'mentor_header.html' %}
@@ -25,10 +29,6 @@
     {% endif %}
     {% include 'footer.html' %}
   </div>
-  <script src="{% static 'js/libs.min.js' %}"></script>
-  <script src="{% static 'js/main.js' %}"></script>
-  <script src="{% static 'js/ajax_setup.js' %}"></script>
-  <script src="{% static 'js/vue.js' %}"></script>
   {% block extra_js %}{% endblock %}
   {% if user.is_authenticated and user.user_type == 1 %}
     <script src="{% static 'scripts/prefooter_forms.js' %}"></script>

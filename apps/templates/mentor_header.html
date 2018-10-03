@@ -6,10 +6,39 @@
     <nav class="header-log-wrapp">
       <div class="header-logo">
         <a href="{% url 'mentors:mentor_office' %}">
-          <img src="{% static 'img/header-logo.png' %}" alt="">
+          <img src="{% static 'img/header-logo.svg' %}" alt="">
         </a>
       </div>
-      <div class="header-notification"><a class="header-notification-title" href="">Питання?</a><a class="header-notification-icon" href=""><i class="fas fa-bell"></i></a>
+      <div class="header-notification" id="notifications">
+        <a class="header-notification-title" href="">Питання?</a>
+        <div class="message"
+             v-if="currentMode === modes.nonEmptySwallowed || currentMode === modes.nonEmptyExpanded"
+        >
+          <a class="message-link" href="javascript: void(0)" @click="changeMode">
+            <i class="fas fa-bell"></i>
+            <div class="message-new"><span>[[ notifications.length ]]</span></div>
+          </a>
+          <div class="message-item" v-if="currentMode === modes.nonEmptyExpanded"
+               v-for="item in notifications"
+          >
+            <template v-if="item.tip_of_the_day">
+              <span>Порада дня</span>
+              [[ item.tip_of_the_day.content ]]
+              <div class="message-wrapp">
+                <div class="message-check" @click="markAsRead(item.tip_of_the_day.id)">
+                  <input class="css-font" :id="item.tip_of_the_day.id" type="checkbox">
+                  <label :for="item.tip_of_the_day.id">Відмітити<br>прочитаним</label>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+        <a class="header-notification-icon"
+           href="javascript: void(0)"
+           v-else-if="currentMode === modes.empty"
+        >
+          <i class="fas fa-bell"></i>
+        </a>
         <div class="admin">
           <img src="{{ user|get_mentor_data:'profile_image' }}" alt="">
           <div class="admin-title"><span>Особистий кабінет наставника</span>
@@ -20,8 +49,12 @@
               </div>
             </div>
           </div>
-    </div>
+      </div>
       </div>
     </nav>
   </div>
 </header>
+
+{% block extra_js %}
+  <script src="{% static 'scripts/notifications.js' %}"></script>
+{% endblock %}

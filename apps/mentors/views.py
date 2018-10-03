@@ -12,10 +12,10 @@ from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView, UpdateView, CreateView
 from django.conf import settings
 
-from govern_users.models import MentorSchoolVideo, MentorTip
+from govern_users.models import MentorSchoolVideo, MentorTip, TipOfTheDay
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Mentoree, Proforientation
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation
 from users.models import Mentor, Organization, SocialServiceCenterAssessment, Coordinator, SocialServiceCenter
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
     MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
@@ -614,3 +614,17 @@ class ProforientationView(FormView):
         if 'get_careers' in request.GET.keys():
             return JsonResponse(self.get_queryset(), safe=False)
         return super().get(request, *args, **kwargs)
+
+
+def get_notifications(request):
+    if request.method == 'GET':
+        notifications = []
+
+        tip_of_the_day = model_to_dict(TipOfTheDay.get_current_tip(), fields=('content', 'id'))
+        if tip_of_the_day:
+            notifications.append({'tip_of_the_day': tip_of_the_day})
+        return JsonResponse(notifications, safe=False)
+    elif request.method == 'POST':
+        tip_of_the_day = TipOfTheDay.objects.get(id=request.POST['notification_id'])
+        tip_of_the_day.watched_by.add(request.user.id)
+        return JsonResponse({'status': 'success'})
