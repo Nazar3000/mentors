@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% if user.is_authenticated and user.user_type == 2 %}
+  {% block wrapper_content %}
+    {% include 'social_services/social_service_header.html' %}
+    {% block content %}{% endblock %}
+    {% include 'prefooter.html' %}
+  {% endblock %}
+{% endif %}

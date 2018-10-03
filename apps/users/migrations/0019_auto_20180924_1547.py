@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RemoveField(
             model_name='mentor',
-            name='social_service',
+            name='social_services',
         ),
         migrations.AddField(
             model_name='coordinator',
