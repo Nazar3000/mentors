@@ -1,0 +1,62 @@
+{% extends 'social_service/ssc_base.html' %}
+{% load static %}
+
+      {% block content %}
+      <header class="css-header-log">
+        <div class="container">
+          <nav class="css-header-wrapp">
+            <div class="css-header-logo"><a href="/"><img src="{% static 'img/main-logo.svg' %}" alt=""></a></div>
+            <div class="css-header-notification"><a class="header-notification-title" href="question.html">Питання?</a><a href=""><i class="fas fa-bell"></i></a>
+              <div class="message"><a class="message-link" href=""><i class="fas fa-bell"></i>
+                  <div class="message-new"><span>25</span></div></a>
+                <div class="message-item"><span>У тебе 1 нове повідомлення</span>
+                  <div class="message-wrapp"><a href="">Читати</a>
+                    <div class="message-check">
+                      <input class="css-font" id="box3" type="checkbox" checked="checked">
+                      <label for="box3">Відмітити<br>прочитаним</label>
+                    </div>
+                  </div>
+                </div>
+              </div><a class="css-header-company" href=""><img src="{% static 'img/css-logo.svg' %}"><span>Особистий кабінет<br>Пирятинського ЦСССДМ</span></a>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <div class="content">
+        <section class="css-main">
+          <div class="container">
+            <div class="css-main-page">
+              <div class="css-main-link"><a href="">Головна</a><a href="">Наставники</a><a href="">Громадські організації</a><a href="">Матеріали</a></div>
+              <div class="css-main-video">
+                <iframe width="720" height="453" src="{{ main_video.video_link }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+                <p>Звернення Міністра</p>
+              </div>
+            </div>
+          </div>
+          <div class="css-main-stat">
+            <div class="container">
+              <div class="css-main-wrapp">
+                <h2>Статистика вашого ЦСССДМ</h2>
+                <div>
+                  <div class="css-main-item">
+                    <p>37</p><span>Сертифікованих<br>Наставників</span>
+                    <div class="css-main-circle"><span>24%</span></div>
+                  </div>
+                  <div class="css-main-item">
+                    <p>59</p><span>Сертифікованих<br>Наставників</span>
+                    <div class="css-main-circle"><span>39%</span></div>
+                  </div>
+                  <div class="css-main-item">
+                    <p>87</p><span>Сертифікованих<br>Наставників</span>
+                    <div class="css-main-circle"><span>57%</span></div>
+                  </div>
+                  <div class="css-main-item">
+                    <p>153</p><span>Подали заяву</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      {% endblock %}

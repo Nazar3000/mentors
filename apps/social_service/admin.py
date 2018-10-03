@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import SocialServiceMasterKey, SocialServiceVideo
 
-# Register your models here.
+admin.site.register(SocialServiceMasterKey)
+admin.site.register(SocialServiceVideo)
