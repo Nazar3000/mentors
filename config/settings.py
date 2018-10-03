@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'users',
     'mentors',
     'volunteers',
-    'govern_users'
+    'govern_users',
+    'social_service',
 ]
 
 MIDDLEWARE = [
