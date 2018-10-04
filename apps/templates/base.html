@@ -18,16 +18,20 @@
   <script src="{% static 'js/ajax_setup.js' %}"></script>
   <script src="{% static 'js/vue.js' %}"></script>
   <div class="wrapper">
-    {% block wrapper_content %}
-      {% if user.is_anonymous %}
-        {% include 'header.html' %}
-      {% endif %}
-      {% block content %}{% endblock %}
-      {% if user.is_anonymous %}
-        {% include 'footer.html' %}
-      {% endif %}
-    {% endblock %}
+    {% if user.is_authenticated and user.user_type == 1 %}
+      {% include 'mentor_header.html' %}
+    {% else %}
+      {% include 'header.html' %}
+    {% endif %}
+    {% block content %}{% endblock %}
+    {% if user.is_authenticated and user.user_type == 1 %}
+      {% include 'prefooter.html' %}
+    {% endif %}
+    {% include 'footer.html' %}
   </div>
   {% block extra_js %}{% endblock %}
+  {% if user.is_authenticated and user.user_type == 1 %}
+    <script src="{% static 'scripts/prefooter_forms.js' %}"></script>
+  {% endif %}
 </body>
 </html>
