@@ -7,7 +7,7 @@ from django.core.validators import RegexValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .constants import UserTypes
+from .constants import UserTypes, MentorStatuses
 
 
 class UserManager(BaseUserManager):
@@ -78,6 +78,10 @@ class Mentor(models.Model):
         to=User,
         on_delete=models.CASCADE,
         primary_key=True)
+    status = models.CharField(
+        max_length=32,
+        choices=MentorStatuses.choices()
+    )
     first_name = models.CharField(
         max_length=32)
     last_name = models.CharField(
@@ -106,6 +110,34 @@ class Mentor(models.Model):
     licenced = models.BooleanField(
         default=False
     )
+
+    passport_copy = models.BooleanField(
+        default=False
+    )
+    application = models.BooleanField(
+        default=False
+    )
+    certificate_of_good_conduct = models.BooleanField(
+        default=False
+    )
+    medical_certificate = models.BooleanField(
+        default=False
+    )
+
+    @property
+    def docs_status(self):
+        docs_fields_values = [
+            self.passport_copy,
+            self.application,
+            self.certificate_of_good_conduct,
+            self.medical_certificate
+        ]
+        if all(value for value in docs_fields_values):
+            return _('Є всі')
+        elif any(value for value in docs_fields_values):
+            return _('Не всі')
+        else:
+            return _('Немає жодного')
 
 
 class SocialServiceCenter(models.Model):

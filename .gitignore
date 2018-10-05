@@ -73,3 +73,5 @@ node_modules
 
 apps/staticfiles
 apps/media
+
+.DS_Store

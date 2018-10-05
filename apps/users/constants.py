@@ -1,5 +1,7 @@
 from enum import Enum
 
+from django.utils.translation import gettext_lazy as _
+
 
 class ChoicesEnum(Enum):
     @classmethod
@@ -25,3 +27,13 @@ class UserTypes:
         (CHILD_SERVICE, 'child_service'),
         (VOLUNTEER, 'volunteer'),
     )
+
+
+class MentorStatuses(ChoicesEnum):
+    PASSED_INFO_MEETING = _('Пройшов інфо-зустріч')
+    PASSED_TRAINING = _('Пройшов тренінг')
+    REJECTED_TO_BE_MENTOR = _('Відмовився бути наставником')
+    PASSED_INTERVIEW_WITH_PSYCHOLOGIST = _('Пройшов співбесіду з психологом')
+    SELECTED_FOR_MENTOREE = _('Підібраний для вихованця')
+    ACTIVE_INTERACTION = _('Активна взаємодія')
+    PAIR_DISBANDED = _('Пара розформована')
