@@ -57,10 +57,10 @@
             <div class="css-table-block-doc"><span>[[ lightMentor.docs_status ]]</span></div>
             <div class="css-table-block-respon">
               <select class="triangle-green">
-                <option v-for="value, key in mentorStatuses"
-                        :value="value"
+                <option v-for="service in publicServices"
+                        :value="service.pk"
                 >
-                  key
+                  [[ service.name ]]
                 </option>
               </select>
             </div>

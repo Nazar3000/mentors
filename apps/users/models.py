@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -103,9 +104,9 @@ class Mentor(models.Model):
     profile_image = models.ImageField(
         upload_to='mentors/profile_images')
 
-    social_service_center = models.ManyToManyField(
-        to='users.SocialServiceCenter',
-        through='users.Coordinator'
+    coordinator = models.ForeignKey(
+        to='users.Coordinator',
+        on_delete=models.SET_NULL
     )
     licenced = models.BooleanField(
         default=False
@@ -201,6 +202,26 @@ class PublicService(models.Model):
         to=User,
         on_delete=models.CASCADE,
         primary_key=True)
+    social_service_center = models.ForeignKey(
+        to=SocialServiceCenter,
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        max_length=128
+    )
+    max_pair_count = models.PositiveSmallIntegerField(
+        default=1
+    )
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[phone_regex])
+    email = models.EmailField()
+    address = models.CharField(
+        max_length=512
+    )
+    website = models.URLField()
 
 
 class Organization(models.Model):
@@ -263,9 +284,20 @@ class Coordinator(models.Model):
         to='users.Mentor',
         on_delete=models.CASCADE
     )
+
+    # One of social_service_center or public_service need to be filled
+    # but one of them should be null
     social_service_center = models.ForeignKey(
         to='users.SocialServiceCenter',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
+    public_service = models.ForeignKey(
+        to='users.PublicService',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
     )
 
     image = models.ImageField(
@@ -284,3 +316,11 @@ class Coordinator(models.Model):
         )
     )
     email = models.EmailField()
+
+    def clean(self):
+        super().clean()
+        if not (self.social_service_center or self.public_service):
+            raise ValidationError(_('Оберіть ЦССДМ або громадську огранізацію для даного координатора.'))
+        elif self.social_service_center and self.public_service:
+            raise ValidationError(_('Оберіть тільки ЦССДМ або громадську огранізацію для даного координатора. '
+                                    'Не можна заповнювати обидва значення'))

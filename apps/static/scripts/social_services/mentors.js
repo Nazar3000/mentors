@@ -3,7 +3,8 @@ const mentors = new Vue({
   delimiters: ['[[', ']]'],
   data: {
     lightMentors: [],
-    mentorStatuses: {}
+    mentorStatuses: {},
+    publicServices: []
   },
   created() {
     this.getLightData();
@@ -13,6 +14,7 @@ const mentors = new Vue({
       $.get('?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
         this.mentorStatuses = res.mentor_statuses;
+        this.publicServices = res.public_services;
       })
     }
   }
