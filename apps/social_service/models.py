@@ -20,5 +20,23 @@ class SocialServiceVideo(models.Model):
     page = models.IntegerField(choices=PAGE_CHOICES)
 
 
+class MaterialCategory(models.Model):
+    title = models.CharField(max_length=256)
+    icon = models.ImageField(upload_to='icons', blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Material category"
+        verbose_name_plural = "Material categories"
+
+    def __str__(self):
+        return "{}".format(self.title)
+
+
+class Material(models.Model):
+    title = models.CharField(max_length=256)
+    file = models.FileField(blank=True, null=True)
+    video_link = models.URLField(blank=True, null=True)
+    category = models.ForeignKey(MaterialCategory, blank=True, null=True, on_delete=models.SET_NULL)
+
 
 

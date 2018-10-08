@@ -2,28 +2,9 @@
 {% load static %}
 
       {% block content %}
+      {% include 'social_service/scc_logged_header.html' %}
 
 
-      <header class="css-header-log">
-        <div class="container">
-          <nav class="css-header-wrapp">
-            <div class="css-header-logo"><a href="/"><img src="{% static 'img/main-logo.svg' %}" alt=""></a></div>
-            <div class="css-header-notification"><a class="header-notification-title" href="question.html">Питання?</a><a href=""><i class="fas fa-bell"></i></a>
-              <div class="message"><a class="message-link" href=""><i class="fas fa-bell"></i>
-                  <div class="message-new"><span>25</span></div></a>
-                <div class="message-item"><span>У тебе 1 нове повідомлення</span>
-                  <div class="message-wrapp"><a href="">Читати</a>
-                    <div class="message-check">
-                      <input class="css-font" id="box3" type="checkbox" checked="checked">
-                      <label for="box3">Відмітити<br>прочитаним</label>
-                    </div>
-                  </div>
-                </div>
-              </div><a class="css-header-company" href=""><img src="{% static 'img/css-logo.svg' %}"><span>Особистий кабінет<br>Пирятинського ЦСССДМ</span></a>
-            </div>
-          </nav>
-        </div>
-      </header>
       <div class="content">
         <div class="container">
           <section class="css-material">
@@ -42,12 +23,12 @@
                   </div>
                 </div>
               </div>
-              <div class="css-material-img"><img src="img/happy-child.png"></div>
+              <div class="css-material-img"><img src="{% static 'img/happy-child.png' %}"></div>
             </div>
             <h2>Матеріали для закладів</h2>
             <div class="css-material-wrapp">
               <div class="css-material-left">
-                <div class="css-block-one"><img src="img/book.svg">
+                <div class="css-block-one"><img src="{% static 'img/book.svg' %}">
                   <p>Законодавча база</p>
                   <p>Методологія</p>
                   <p>Договори</p>
@@ -56,120 +37,47 @@
               </div>
               <div class="css-material-right">
                 <div class="css-material-page">
+                  {% for material in object_list %}
+                      {% if not material.category %}
                   <div class="css-material-item">
-                    <p>Закон України стосовно соціального захисту дітей-сиріт та дітей, позбавлених батьківського піклування<br>(про Наставництво)</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
+                    <p>{{ material.title }}</p>
+                      <a href="{% url 'social_service:download_file' material.pk %}" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
                   </div>
-                  <div class="css-material-item">
-                    <p>Положення про Наставництво</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Методичні рекомендації з реалізації програми наставництва над дітьми</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Алгоритрм впровадження програми в області</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Договір про співробітництво між ОЦСССДМ та громадською організацією</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Договір про співробітництво між МЦСССДМ/РЦСССДМ та громадською організацією</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Крок за кроком 2 видання</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
+                      {% endif %}
+                  {% endfor %}
                 </div>
               </div>
             </div>
+
+            {% for category in categories %}
             <div class="css-material-wrapp">
               <div class="css-material-left">
-                <div class="css-block-two"><img src="img/video.svg">
-                  <p>Як прийняти та<br>обробити звернення<br>від кандидата у<br>наставники</p>
+                <div class="css-block-two">
+                    {% if category.icon %}
+                    <img src="{{ category.icon.url }}">
+                    {% endif %}
+                  <p>{{ category.title }}</p>
                 </div>
               </div>
               <div class="css-material-right">
+                  {% for material in object_list %}
+                      {% if material.category == category %}
                 <div class="css-material-video">
+                      {% if material.video_link %}
                   <iframe width="640" height="420" src="https://www.youtube.com/embed/rReXd742OUE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
-                  <p>Журнал обліку кандидатів у наставники</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
+                      {% endif %}
+                  <p>{{ material.title }}</p>
+                    {% if material.file %}
+                    <a href="{% url 'social_service:download_file' material.pk %}" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                    {% endif %}
                 </div>
+                      {% endif %}
+                 {% endfor %}
               </div>
             </div>
-            <div class="css-material-wrapp">
-              <div class="css-material-left">
-                <div class="css-block-three"><img src="img/license.svg">
-                  <p>Проведення<br>інформаційної<br>зустрічі</p>
-                </div>
-              </div>
-              <div class="css-material-right">
-                <div class="css-material-license">
-                  <iframe width="640" height="420" src="https://www.youtube.com/embed/rReXd742OUE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
-                  <p>Вихованець: Кураченко Дмитро</p>
-                </div>
-              </div>
-            </div>
-            <div class="css-material-wrapp">
-              <div class="css-material-left">
-                <div class="css-block-four"><img src="img/search-big.svg">
-                  <p>Консультація з<br>психологом</p>
-                </div>
-              </div>
-              <div class="css-material-right">
-                <div class="css-material-consult">
-                  <iframe width="640" height="420" src="https://www.youtube.com/embed/rReXd742OUE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
-                  <p>Як отримати довідку про несудимість через Інтернет<br>(дякуємо Смілянському ЦСССДМ за запис!)</p>
-                </div>
-              </div>
-            </div>
-            <div class="css-material-wrapp">
-              <div class="css-material-left">
-                <div class="css-block-five"><img src="img/pen.svg">
-                  <p>Проведення<br>тренінгу</p>
-                </div>
-              </div>
-              <div class="css-material-right">
-                <div class="css-material-page">
-                  <div class="css-material-item">
-                    <p>Загальний план роботи наставника з дитиною</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Анкета зворотного зв’язку наставника</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="css-material-wrapp">
-              <div class="css-material-left">
-                <div class="css-block-six"><img src="img/wiping.svg">
-                  <p>Взаємопідбір та<br>ведення пари</p>
-                </div>
-              </div>
-              <div class="css-material-right">
-                <div class="css-material-page">
-                  <div class="css-material-item">
-                    <p>Загальний план роботи наставника з дитиною</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Анкета зворотного зв’язку наставника</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                  <div class="css-material-item">
-                    <p>Анкета зворотного зв’язку дитини</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="css-material-wrapp">
-              <div class="css-material-left">
-                <div class="css-block-seven"><img src="img/wiping.svg">
-                  <p>Підписання<br>Договору</p>
-                </div>
-              </div>
-              <div class="css-material-right">
-                <div class="css-material-page">
-                  <div class="css-material-item">
-                    <p>Типовий договір про наставництво<br>(між Наставником, Закладом та ЦСССДМ)</p><a href="" target="_blank"><img src="img/download.svg" alt=""><span>Завантажити</span></a>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {% endfor %}
+
+
           </section>
         </div>
       </div>

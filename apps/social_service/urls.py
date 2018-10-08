@@ -11,4 +11,5 @@ urlpatterns = [
     path('video/', views.VideoMentorView.as_view(), name='video'),
     re_path(r'^mentor_card/(?P<pk>[\w-]+)/$', views.MentorCardView.as_view(), name='mentor_card'),
     path('material/', views.MaterialView.as_view(), name='material'),
+    path('download_file/<int:material_id>/', views.download_file, name='download_file'),
 ]

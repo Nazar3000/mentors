@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect, reverse, HttpResponseRedirect
-from django.views.generic import TemplateView, FormView, DetailView
+from django.shortcuts import render, redirect, reverse, HttpResponseRedirect, HttpResponse
+from django.views.generic import TemplateView, FormView, DetailView, ListView
 from .forms import SignUpStep0Form, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from .models import SocialServiceVideo
+from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
-
+from django.core.files import File
 
 class SignUpFormView(FormView):
     template_name = 'social_service/ssc_register.html'
@@ -56,5 +56,19 @@ class MentorCardView(DetailView):
     template_name = 'social_service/ssc_mentor_card.html'
 
 
-class MaterialView(TemplateView):
+class MaterialView(ListView):
+    model = Material
     template_name = 'social_service/ssc_material.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MaterialView, self).get_context_data(**kwargs)
+        context['categories'] = MaterialCategory.objects.all()
+        return context
+
+
+def download_file(request, material_id):
+    material = Material.objects.get(id=material_id)
+    filename = material.file.name.split('/')[-1]
+    response = HttpResponse(material.file, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return response
