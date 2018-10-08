@@ -15,7 +15,7 @@ def get_age(date_of_birth):
     try:
         return (datetime.now().date() - relativedelta(years=date_of_birth.year)).year
     except (TypeError, AttributeError, ValueError):
-        return ''
+        return 0
 
 
 @register.filter

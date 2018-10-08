@@ -296,9 +296,9 @@ $(document).ready(function () {
     });
 
 
-    $('.mentor-title').click(function(){
-        $('.css-card').slideToggle(500);
-    });
+    // $('.mentor-title').click(function(){
+    //     $('.css-card').slideToggle(500);
+    // });
 
 });
 

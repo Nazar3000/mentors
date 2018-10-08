@@ -18,6 +18,9 @@ class MentorQuestionnaire(models.Model):
         on_delete=models.CASCADE,
         related_name='questionnaire'
     )
+    creation_date = models.DateTimeField(
+        auto_now=True
+    )
 
     # 1. Common data
     full_name = models.CharField(

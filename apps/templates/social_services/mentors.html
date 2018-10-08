@@ -40,7 +40,7 @@
           </div>
           <div class="css-table-mentor-line" v-for="lightMentor in lightMentors">
             <div class="css-table-block-mentor">
-                <span class="mentor-title">[[ lightMentor.questionnaire__full_name ]]</span>
+                <span class="mentor-title" @click="getExtendedMentorData(lightMentor.id)">[[ lightMentor.questionnaire__full_name ]]</span>
                 <span class="mentor-phone">[[ lightMentor.phone_number ]]</span>
                 <span class="mentor-phone-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
             </div>
@@ -57,6 +57,7 @@
             <div class="css-table-block-doc"><span>[[ lightMentor.docs_status ]]</span></div>
             <div class="css-table-block-respon">
               <select class="triangle-green">
+                <option>ЦССДМ</option>
                 <option v-for="service in publicServices"
                         :value="service.pk"
                 >
@@ -65,7 +66,7 @@
               </select>
             </div>
           </div>
-          <div class="css-card">
+          <div class="css-card" v-if="expanded">
             <div class="css-card-wrapp">
               <!-- start card mentor-->
               <div class="css-card-left">
@@ -73,8 +74,8 @@
                   <div class="css-card-img"><img src="{% static 'img/mentor.jpg' %}" alt=""></div>
                   <div class="css-card-title">
                     <h2>Наставник</h2>
-                    <p>Максим<br>Пеcтров</p><span>Дата народження</span>
-                    <p>25.03.1993 (25  років)</p>
+                    <p>[[ extendedMentor.first_name ]]<br>[[ extendedMentor.last_name ]]</p><span>Дата народження</span>
+                    <p>[[ extendedMentor.date_of_birth ]] ([[ extendedMentor.age ]]  років)</p>
                   </div>
                   <div class="css-card-edit"><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a></div>
                 </div>
@@ -82,19 +83,31 @@
                 <div class="css-card-stat">
                   <div class="css-card-stat-wrapp">
                     <div><span>Статус:</span>
-                      <select class="triangle-green">
-                        <option>Кандидат в наставники</option>
-                        <option>Кандидат в наставники</option>
-                        <option>Кандидат в наставники</option>
-                      </select><span>Телефон:</span>
-                      <p>+38 (063) 234 12 11</p><span>Email:</span>
-                      <p>Maks12_1@gmail.com</p><span>Адреса:</span>
-                      <p>пр. Перемоги, 113 г. Киев</p>
+                      <select class="triangle-green" v-model="extendedMentor.status">
+                        <option v-for="key, value in mentorStatuses"
+                                :value="value"
+                        >
+                          [[ key ]]
+                        </option>
+                      </select>
+                      <span>Телефон:</span>
+                      <p>[[ extendedMentor.phone_number ]]</p><span>Email:</span>
+                      <p>[[ extendedMentor.email ]]</p><span>Адреса:</span>
+                      <p>[[ extendedMentor.address ]]</p>
                     </div>
-                    <div><span>Відповідальний:</span>
-                      <p>РЦСССДМ</p><span>Ліцензія:</span>
+                    <div>
+                      <span>Відповідальний:</span>
+                      <select class="triangle-green">
+                        <option>ЦССДМ</option>
+                        <option v-for="service in publicServices"
+                                :value="service.pk"
+                        >
+                          [[ service.name ]]
+                        </option>
+                      </select>
+                      <span>Ліцензія:</span>
                       <p>LOTR 89<a href=""><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a></p><span>Дата подачі анкети:</span>
-                      <p>11 січня 2017 року</p><a href="css-admin.html">Переглянути анкету</a>
+                      <p>[[ extendedMentor.questionnaire_creation_date ]]</p><a href="css-admin.html">Переглянути анкету</a>
                     </div>
                   </div>
                 </div>
@@ -288,130 +301,6 @@
               <!-- end edit card info-->
             </div>
           </div>
-          <div class="css-card-content">
-            <div class="css-table-mentor-line">
-              <div class="css-table-block-mentor"><span class="mentor-title">Наставниченко<br>Максим Петрович</span><span class="mentor-phone">(063) 324 43 43</span><span class="mentor-phone-img"><img src="img/blue-tel.svg"></span></div>
-              <div class="css-table-block-stat">
-                <select class="triangle-green" required="">
-                  <option value="">Кандидат в наст…</option>
-                  <option>Дыня</option>
-                  <option>Тыква</option>
-                  <option>Кабачок</option>
-                  <option>Баклажан</option>
-                  <option>Патиссон</option>
-                  <option>Огурец</option>
-                </select>
-              </div>
-              <div class="css-table-block-license"><span>LOTR 89</span></div>
-              <div class="css-table-block-doc"><span>Є всі</span></div>
-              <div class="css-table-block-respon">
-                <select class="triangle-green" required="">
-                  <option value="">Выбрать</option>
-                  <option>Дыня</option>
-                  <option>Тыква</option>
-                  <option>Кабачок</option>
-                  <option>Баклажан</option>
-                  <option>Патиссон</option>
-                  <option>Огурец</option>
-                </select>
-              </div>
-            </div>
-            <div class="css-card">
-              <div class="css-card-wrapp">
-                <div class="css-card-left">
-                  <div class="css-card-info">
-                    <div class="css-card-img"><img src="{% static 'img/mentor.jpg' %}" alt=""></div>
-                    <div class="css-card-title">
-                      <h2>Наставник</h2>
-                      <p>Максим<br>Пеcтров</p><span>Дата народження</span>
-                      <p>25.03.1993 (25  років)</p>
-                    </div>
-                    <div class="css-card-edit"><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a></div>
-                  </div>
-                  <div class="css-card-line"></div>
-                  <div class="css-card-stat">
-                    <div class="css-card-stat-wrapp">
-                      <div><span>Статус:</span>
-                        <select class="triangle-green">
-                          <option>Кандидат в наставники</option>
-                          <option>Кандидат в наставники</option>
-                          <option>Кандидат в наставники</option>
-                        </select><span>Телефон:</span>
-                        <p>+38 (063) 234 12 11</p><span>Email:</span>
-                        <p>Maks12_1@gmail.com</p><span>Адреса:</span>
-                        <p>пр. Перемоги, 113 г. Киев</p>
-                      </div>
-                      <div><span>Відповідальний:</span>
-                        <p>РЦСССДМ</p><span>Ліцензія:</span>
-                        <p>LOTR 89<a href=""><i class="fas fa-envelope"></i></a></p><span>Дата подачі анкети:</span>
-                        <p>11 січня 2017 року</p><a href="">Переглянути анкету</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="css-card-right">
-                  <div class="css-card-edit"><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a></div><span>Дата проходження інфо-зустрічі:</span>
-                  <p>11 лютого 2017</p><span>Наявність документів:</span>
-                  <div class="css-card-check-wrapp">
-                    <div class="css-card-check">
-                      <input class="css-font" id="box1" type="checkbox" checked="checked">
-                      <label for="box1">Довідка про несудимість</label>
-                    </div>
-                    <div class="css-card-check">
-                      <input class="css-font" id="box2" type="checkbox" checked="checked">
-                      <label for="box2">Мед. довідка</label>
-                    </div>
-                  </div><span>Дата проходження консультації з психологом:</span>
-                  <p>21 лютого 2017</p>
-                  <div class="css-card-subtitle"><span>Висновок психолога:</span>
-                    <div>
-                      <h5>поведінка:</h5>
-                      <p>адекватна ситуації; психомоторна розгальмованість;<br>особливості поведінки: пожвавлення, розкутість, дисциплінованість...</p>
-                      <div class="css-card-subtitle-content">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ad animi, at corporis cum ea exercitationem expedita laboriosam maiores non nostrum quam, quasi sunt tempore ullam vero voluptatem! Ad, est.</p>
-                      </div>
-                      <div class="css-card-subtitle-all">Читати більше…</div>
-                    </div>
-                  </div>
-                  <label class="form-check">
-                    <input type="radio" name="1" value="" checked="checked"><span>Рекомендований для участі в тренінгу</span>
-                  </label><span>Дата тренінга:</span>
-                  <p>16 березня 2017</p>
-                  <div class="css-card-subtitle"><span>Висновок тренера:</span>
-                    <div>
-                      <h5>поведінка:</h5>
-                      <p>адекватна ситуації; психомоторна розгальмованість;<br>особливості поведінки: пожвавлення, розкутість, дисциплінованість...</p><a href="">Читати більше…</a>
-                    </div>
-                  </div>
-                  <label class="form-check">
-                    <input type="radio" name="1" value="" checked="checked"><span>Допущений до дитини</span>
-                  </label>
-                  <div class="access-no">
-                    <p>Вихованець:<span>Миронець Ігор</span></p>
-                  </div>
-                  <div class="access-yes">
-                    <input type="text" placeholder="Впиши ПІБ вихованця">
-                    <button>Зберегти</button>
-                  </div>
-                  <div class="contract-wrapp">
-                    <div class="contract-num"><span>Номер договору:</span>
-                      <p>Р012-1</p>
-                    </div>
-                    <div class="contract-date"><span>Дата договору:</span>
-                      <p>01 травня 2017</p>
-                    </div>
-                  </div>
-                  <div class="css-card-subtitle"><span>Коментар:</span>
-                    <div>
-                      <h5>поведінка:</h5>
-                      <p>адекватна ситуації; психомоторна розгальмованість;<br>особливості поведінки: пожвавлення, розкутість, дисциплінованість...</p><a href="">Читати більше…</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="css-card-all">Дивитися всі</div>
         </div>
       </section>
     </div>
@@ -419,5 +308,8 @@
 {% endblock %}
 
 {% block extra_js %}
+    <script>
+        const soc_service_id = '{{ user.id }}';
+    </script>
     <script src="{% static 'scripts/social_services/mentors.js' %}"></script>
 {% endblock %}
