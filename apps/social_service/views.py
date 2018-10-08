@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, reverse, HttpResponseRedirect
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, DetailView
 from .forms import SignUpStep0Form, AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from .models import SocialServiceVideo
+from users.models import Mentor
 
 
 class SignUpFormView(FormView):
@@ -12,7 +13,7 @@ class SignUpFormView(FormView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('/')
+        return redirect('social_service:video')
 
 
 class LoginView(FormView):
@@ -48,3 +49,12 @@ class VideoMentorView(TemplateView):
         context = super(VideoMentorView, self).get_context_data(**kwargs)
         context['mentor_video'] = SocialServiceVideo.objects.filter(page=2).first()
         return context
+
+
+class MentorCardView(DetailView):
+    model = Mentor
+    template_name = 'social_service/ssc_mentor_card.html'
+
+
+class MaterialView(TemplateView):
+    template_name = 'social_service/ssc_material.html'

@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import path
-
+from django.urls import path, re_path
 from . import views
 
 app_name = 'social_service'
@@ -10,4 +9,6 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='ssc_login'),
     path('main/', views.MainPageView.as_view(), name='main'),
     path('video/', views.VideoMentorView.as_view(), name='video'),
+    re_path(r'^mentor_card/(?P<pk>[\w-]+)/$', views.MentorCardView.as_view(), name='mentor_card'),
+    path('material/', views.MaterialView.as_view(), name='material'),
 ]
