@@ -239,6 +239,81 @@ class MentorQuestionnaire(models.Model):
     )
 
 
+class MentorSocialServiceCenterData(models.Model):
+    mentor = models.OneToOneField(
+        to='users.Mentor',
+        on_delete=models.CASCADE,
+        related_name='social_service_center_data'
+    )
+
+    infomeeting_date = models.DateField(
+        null=True,
+        blank=True
+    )
+    passport_copy = models.BooleanField(
+        default=False
+    )
+    application = models.BooleanField(
+        default=False
+    )
+    certificate_of_good_conduct = models.BooleanField(
+        default=False
+    )
+    medical_certificate = models.BooleanField(
+        default=False
+    )
+    psychologist_meeting_date = models.DateField(
+        null=True,
+        blank=True
+    )
+    psychologist_summary = models.TextField(
+        null=True,
+        blank=True
+    )
+    recommended_to_training = models.BooleanField(
+        default=False
+    )
+    training_date = models.DateField(
+        null=True,
+        blank=True
+    )
+    trainer_summary = models.TextField(
+        null=True,
+        blank=True
+    )
+    admitted_to_child = models.BooleanField(
+        default=False
+    )
+    contract_number = models.CharField(
+        max_length=32,
+        null=True,
+        blank=True
+    )
+    contract_date = models.DateField(
+        null=True,
+        blank=True
+    )
+    comment = models.TextField(
+        null=True,
+        blank=True
+    )
+
+    @property
+    def docs_status(self):
+        docs_fields_values = [
+            self.passport_copy,
+            self.application,
+            self.certificate_of_good_conduct,
+            self.medical_certificate
+        ]
+        if all(value for value in docs_fields_values):
+            return _('Є всі')
+        elif any(value for value in docs_fields_values):
+            return _('Не всі')
+        else:
+            return _('Немає жодного')
+
+
 class MentorQuestionnaireEducation(models.Model):
     questionnaire = models.ForeignKey(
         to=MentorQuestionnaire,

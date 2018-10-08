@@ -6,7 +6,8 @@ const mentors = new Vue({
     mentorStatuses: {},
     publicServices: [],
     expanded: false,
-    extendedMentor: {}
+    extendedMentor: {},
+    mentorSocServiceData: {}
   },
   created() {
     this.getLightData();
@@ -24,7 +25,8 @@ const mentors = new Vue({
 
       if (this.expanded) {
         $.get(`?get_extended_data&soc_service_id=${soc_service_id}`, (res) => {
-          this.extendedMentor = res;
+          this.extendedMentor = res.mentor_data;
+          this.mentorSocServiceData = res.mentor_social_service_center_data;
         });
       }
     }

@@ -13,7 +13,8 @@ from .models import (
     MentorQuestionnaireJob,
     MentorQuestionnaireFamilyMember,
     MentorQuestionnaireChildrenWorkExperience,
-    Proforientation)
+    Proforientation,
+    MentorSocialServiceCenterData)
 
 
 @admin.register(MentorLicenceKey)
@@ -78,4 +79,9 @@ class MentorQuestionnaireChildrenWorkExperienceAdmin(admin.ModelAdmin):
 
 @admin.register(Proforientation)
 class ProforientationAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MentorSocialServiceCenterData)
+class MentorSocialServiceCenterDataAdmin(admin.ModelAdmin):
     pass

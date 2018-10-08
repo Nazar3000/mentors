@@ -168,67 +168,72 @@
               <!-- start card info-->
               <div class="css-card-right">
                 <div class="css-card-edit"><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a></div><span>Дата проходження інфо-зустрічі:</span>
-                <p>11 лютого 2017</p><span>Наявність документів:</span>
+                <p>[[ mentorSocServiceData.infomeeting_date ]]</p><span>Наявність документів:</span>
                 <div class="css-card-check-wrapp">
                   <div class="css-card-check">
-                    <input class="css-font" id="box3" type="checkbox" checked="checked">
-                    <label for="box3">Довідка про несудимість</label>
+                    <input class="css-font" id="good-conduct" type="checkbox" v-model="mentorSocServiceData.certificate_of_good_conduct">
+                    <label for="good-conduct">Довідка про несудимість</label>
                   </div>
                   <div class="css-card-check">
-                    <input class="css-font" id="box4" type="checkbox" checked="checked">
-                    <label for="box4">Мед. довідка</label>
+                    <input class="css-font" id="med-cert" type="checkbox" v-model="mentorSocServiceData.medical_certificate">
+                    <label for="med-cert">Мед. довідка</label>
                   </div>
-                </div><span>Дата проходження консультації з психологом:</span>
-                <p>21 лютого 2017</p>
+                </div>
+                <div class="css-card-check-wrapp">
+                  <div class="css-card-check">
+                    <input class="css-font" id="passport-copy" type="checkbox" v-model="mentorSocServiceData.passport_copy">
+                    <label for="passport-copy">Копія паспорта</label>
+                  </div>
+                  <div class="css-card-check">
+                    <input class="css-font" id="application" type="checkbox" v-model="mentorSocServiceData.application">
+                    <label for="application">Заява</label>
+                  </div>
+                </div>
+                <span>Дата проходження консультації з психологом:</span>
+                <p>[[ mentorSocServiceData.psychologist_meeting_date ]]</p>
                 <div class="css-card-subtitle"><span>Висновок психолога:</span>
                   <div>
                     <h5>поведінка:</h5>
-                    <p>адекватна ситуації; психомоторна розгальмованість;<br>особливості поведінки: пожвавлення, розкутість, дисциплінованість...</p>
-                    <div class="css-card-subtitle-content">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ad animi, at corporis cum ea exercitationem expedita laboriosam maiores non nostrum quam, quasi sunt tempore ullam vero voluptatem! Ad, est.</p>
-                    </div>
+                    <p>[[ mentorSocServiceData.psychologist_summary ]]</p>
                     <div class="css-card-subtitle-all">Читати більше…</div>
                   </div>
                 </div>
-                <label class="form-check">
-                  <input type="radio" name="1" value="" checked="checked"><span>Рекомендований для участі в тренінгу</span>
-                </label><span>Дата тренінга:</span>
-                <p>16 березня 2017</p>
+                <div class="css-card-check">
+                  <input class="css-font" id="training-recommended" type="checkbox" v-model="mentorSocServiceData.recommended_to_training">
+                  <label for="training-recommended">Рекомендований для участі в тренінгу</label>
+                </div>
+                <span>Дата тренінга:</span>
+                <p>[[ mentorSocServiceData.training_date ]]</p>
                 <div class="css-card-subtitle"><span>Висновок тренера:</span>
                   <div>
                     <h5>поведінка:</h5>
-                    <p>адекватна ситуації; психомоторна розгальмованість;<br>особливості поведінки: пожвавлення, розкутість, дисциплінованість...</p>
-                    <div class="css-card-subtitle-content">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ad animi, at corporis cum ea exercitationem expedita laboriosam maiores non nostrum quam, quasi sunt tempore ullam vero voluptatem! Ad, est.</p>
-                    </div>
+                    <p>[[ mentorSocServiceData.trainer_summary ]]</p>
                     <div class="css-card-subtitle-all">Читати більше…</div>
                   </div>
                 </div>
-                <label class="form-check">
-                  <input type="radio" name="1" value="" checked="checked"><span>Допущений до дитини</span>
-                </label>
-                <div class="access-no">
-                  <p>Вихованець:<span>Миронець Ігор</span></p>
+                <div class="css-card-check">
+                  <input class="css-font" id="child-admitted" type="checkbox" v-model="mentorSocServiceData.admitted_to_child">
+                  <label for="child-admitted">Допущений до дитини</label>
                 </div>
-                <div class="access-yes">
+                <div class="access-no" v-if="mentorSocServiceData.mentoree_name">
+                  <p>Вихованець:<span>[[ mentorSocServiceData.mentoree_name ]]</span></p>
+                </div>
+                <div class="access-yes" v-else>
                   <input type="text" placeholder="Впиши ПІБ вихованця">
                   <button>Зберегти</button>
                 </div>
                 <div class="contract-wrapp">
                   <div class="contract-num"><span>Номер договору:</span>
-                    <p>Р012-1</p>
+                    <p>[[ mentorSocServiceData.contract_number ]]</p>
                   </div>
                   <div class="contract-date"><span>Дата договору:</span>
-                    <p>01 травня 2017</p>
+                    <p>[[ mentorSocServiceData.contract_date ]]</p>
                   </div>
                 </div>
                 <div class="css-card-subtitle"><span>Коментар:</span>
                   <div>
                     <h5>поведінка:</h5>
-                    <p>адекватна ситуації; психомоторна розгальмованість;<br>особливості поведінки: пожвавлення, розкутість, дисциплінованість...</p>
-                    <div class="css-card-subtitle-content">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A ad animi, at corporis cum ea exercitationem expedita laboriosam maiores non nostrum quam, quasi sunt tempore ullam vero voluptatem! Ad, est.</p>
-                    </div>
+                    <p>[[ mentorSocServiceData.comment ]]</p>
                     <div class="css-card-subtitle-all">Читати більше…</div>
                   </div>
                 </div>

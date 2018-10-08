@@ -26,7 +26,7 @@ class MentorsView(TemplateView):
                 'status',
             )
             for data in mentors_data:
-                data['docs_status'] = Mentor.objects.get(pk=data['pk']).docs_status
+                data['docs_status'] = Mentor.objects.get(pk=data['pk']).social_service_center_data.docs_status
             return JsonResponse({
                 'mentors_data': list(mentors_data),
                 'mentor_statuses': mentor_statuses,
@@ -46,6 +46,27 @@ class MentorsView(TemplateView):
             mentor_data['age'] = get_age(mentor.questionnaire.date_of_birth)
             mentor_data['address'] = mentor.questionnaire.actual_address
             mentor_data['questionnaire_creation_date'] = formats.date_format(mentor.questionnaire.creation_date)
-            return JsonResponse(mentor_data)
+
+            mentor_social_service_center_data = model_to_dict(mentor.social_service_center_data)
+            if mentor.social_service_center_data.infomeeting_date:
+                mentor_social_service_center_data['infomeeting_date'] = formats.date_format(
+                    mentor.social_service_center_data.infomeeting_date)
+            if mentor.social_service_center_data.psychologist_meeting_date:
+                mentor_social_service_center_data['psychologist_meeting_date'] = formats.date_format(
+                    mentor.social_service_center_data.psychologist_meeting_date)
+            if mentor.social_service_center_data.training_date:
+                mentor_social_service_center_data['training_date'] = formats.date_format(
+                    mentor.social_service_center_data.training_date)
+            if mentor.social_service_center_data.contract_date:
+                mentor_social_service_center_data['contract_date'] = formats.date_format(
+                    mentor.social_service_center_data.contract_date)
+
+            if mentor.mentoree:
+                mentor_social_service_center_data['mentoree_name'] = '{} {}'.format(
+                    mentor.mentoree.first_name, mentor.mentoree.last_name)
+            else:
+                mentor_social_service_center_data['mentoree_name'] = ''
+            return JsonResponse({'mentor_data': mentor_data,
+                                 'mentor_social_service_center_data': mentor_social_service_center_data})
 
         return super().get(request, *args, **kwargs)
