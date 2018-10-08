@@ -103,15 +103,9 @@ class Mentor(models.Model):
         null=True)
     profile_image = models.ImageField(
         upload_to='mentors/profile_images')
-
-    coordinator = models.ForeignKey(
-        to='users.Coordinator',
-        on_delete=models.SET_NULL
-    )
     licenced = models.BooleanField(
         default=False
     )
-
     passport_copy = models.BooleanField(
         default=False
     )
@@ -282,7 +276,8 @@ class Volunteer(models.Model):
 class Coordinator(models.Model):
     mentor = models.OneToOneField(
         to='users.Mentor',
-        on_delete=models.CASCADE
+        on_delete=models.SET_NULL,
+        null=True
     )
 
     # One of social_service_center or public_service need to be filled
