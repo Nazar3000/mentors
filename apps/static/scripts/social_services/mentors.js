@@ -7,7 +7,8 @@ const mentors = new Vue({
     publicServices: [],
     expanded: false,
     extendedMentor: {},
-    mentorSocServiceData: {}
+    mentorSocServiceData: {},
+    socServiceId: soc_service_id
   },
   created() {
     this.getLightData();
@@ -29,6 +30,25 @@ const mentors = new Vue({
           this.mentorSocServiceData = res.mentor_social_service_center_data;
         });
       }
+    }
+  },
+  watch: {
+    lightMentors: {
+      handler: function (oldVal, newVal) {
+        if (newVal.length) {
+          $.ajax({
+            url: '',
+            dataType: 'json',
+            data: JSON.stringify({change_light_data: newVal}),
+            contentType: 'application/json',
+            type: 'POST',
+            success: (res) => {
+              console.log(res);
+            }
+          });
+        }
+      },
+      deep: true
     }
   }
 });

@@ -1,4 +1,5 @@
 import uuid
+from contextlib import suppress
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
@@ -6,6 +7,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from .constants import UserTypes, MentorStatuses
@@ -107,6 +109,11 @@ class Mentor(models.Model):
         default=False
     )
 
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.user.user_type != UserTypes.MENTOR:
+            raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
+
 
 class SocialServiceCenter(models.Model):
     user = models.OneToOneField(
@@ -131,6 +138,15 @@ class SocialServiceCenter(models.Model):
             validators=[phone_regex]
         )
     )
+    coordinator = models.OneToOneField(
+        to='users.Coordinator',
+        on_delete=models.CASCADE
+    )
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.user.user_type != UserTypes.SOCIAL_SERVICE_CENTER:
+            raise ValidationError({'user': _('Користувач має бути типу "ЦССДМ".')})
 
 
 class SocialServiceCenterReport(models.Model):
@@ -189,6 +205,15 @@ class PublicService(models.Model):
         max_length=512
     )
     website = models.URLField()
+    coordinator = models.OneToOneField(
+        to='users.Coordinator',
+        on_delete=models.CASCADE
+    )
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude=exclude)
+        if self.user.user_type != UserTypes.PUBLIC_SERVICE:
+            raise ValidationError({'user': _('Користувач має бути типу "громадська організація".')})
 
 
 class Organization(models.Model):
@@ -250,20 +275,6 @@ class Coordinator(models.Model):
     mentor = models.OneToOneField(
         to='users.Mentor',
         on_delete=models.SET_NULL,
-        null=True
-    )
-
-    # One of social_service_center or public_service need to be filled
-    # but one of them should be null
-    social_service_center = models.ForeignKey(
-        to='users.SocialServiceCenter',
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
-    public_service = models.ForeignKey(
-        to='users.PublicService',
-        on_delete=models.CASCADE,
         null=True,
         blank=True
     )
@@ -284,11 +295,3 @@ class Coordinator(models.Model):
         )
     )
     email = models.EmailField()
-
-    def clean(self):
-        super().clean()
-        if not (self.social_service_center or self.public_service):
-            raise ValidationError(_('Оберіть ЦССДМ або громадську огранізацію для даного координатора.'))
-        elif self.social_service_center and self.public_service:
-            raise ValidationError(_('Оберіть тільки ЦССДМ або громадську огранізацію для даного координатора. '
-                                    'Не можна заповнювати обидва значення'))

@@ -56,8 +56,8 @@
             <div class="css-table-block-license"><span>[[ lightMentor.licence_key__key ]]</span></div>
             <div class="css-table-block-doc"><span>[[ lightMentor.docs_status ]]</span></div>
             <div class="css-table-block-respon">
-              <select class="triangle-green">
-                <option>ЦССДМ</option>
+              <select class="triangle-green" v-model="lightMentor.responsible">
+                <option :value="socServiceId">ЦССДМ</option>
                 <option v-for="service in publicServices"
                         :value="service.pk"
                 >
