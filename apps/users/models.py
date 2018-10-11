@@ -82,7 +82,7 @@ class Mentor(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
     status = models.CharField(
-        max_length=32,
+        max_length=64,
         choices=MentorStatuses.choices()
     )
     first_name = models.CharField(
@@ -140,7 +140,8 @@ class SocialServiceCenter(models.Model):
     )
     coordinator = models.OneToOneField(
         to='users.Coordinator',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='social_service_center'
     )
 
     def clean_fields(self, exclude=None):
@@ -207,7 +208,8 @@ class PublicService(models.Model):
     website = models.URLField()
     coordinator = models.OneToOneField(
         to='users.Coordinator',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='public_service'
     )
 
     def clean_fields(self, exclude=None):
@@ -295,3 +297,14 @@ class Coordinator(models.Model):
         )
     )
     email = models.EmailField()
+
+    @classmethod
+    def get_coordinator_by_related_service_pk(cls, service_pk):
+        try:
+            coordinator = SocialServiceCenter.objects.get(pk=service_pk).coordinator
+        except SocialServiceCenter.DoesNotExist:
+            coordinator = PublicService.objects.get(pk=service_pk).coordinator
+        except PublicService.DoesNotExist:
+            raise Coordinator.DoesNotExist
+
+        return coordinator

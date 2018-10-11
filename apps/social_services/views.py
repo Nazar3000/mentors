@@ -7,8 +7,9 @@ from django.http import JsonResponse
 from django.utils import formats
 from django.views.generic import TemplateView
 
+from mentors.models import MentorSocialServiceCenterData
 from users.constants import MentorStatuses
-from users.models import Mentor, PublicService, Coordinator
+from users.models import Mentor, PublicService, Coordinator, SocialServiceCenter
 from users.templatetags.date_tags import get_age
 
 
@@ -28,9 +29,15 @@ class MentorsView(TemplateView):
         )
         for data in mentors_data:
             mentor = Mentor.objects.get(pk=data['pk'])
-            data['docs_status'] = mentor.social_service_center_data.docs_status
-            responsible = mentor.coordinator.social_service_center or mentor.coordinator.public_service
-            data['responsible'] = responsible.pk
+            soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
+            data['docs_status'] = soc_service_data.docs_status
+            try:
+                responsible = mentor.coordinator.social_service_center.pk
+            except SocialServiceCenter.DoesNotExist:
+                responsible = mentor.coordinator.public_service.pk
+            except (Coordinator.DoesNotExist, PublicService.DoesNotExist):
+                responsible = None
+            data['responsible'] = responsible
 
         return JsonResponse({
             'mentors_data': list(mentors_data),
@@ -39,7 +46,7 @@ class MentorsView(TemplateView):
         })
 
     def get_extended_data(self):
-        mentor = Coordinator.objects.get(social_service_center__pk=request.GET['soc_service_id']).mentor
+        mentor = Coordinator.objects.get(social_service_center__pk=self.request.GET['soc_service_id']).mentor
         mentor_data = model_to_dict(mentor, fields=(
             'first_name',
             'last_name',
@@ -92,9 +99,9 @@ class MentorsView(TemplateView):
             for d in light_data:
                 mentor = Mentor.objects.get(pk=d['pk'])
                 mentor.status = d['status']
-                coordinator = Coordinator.get_by_owner_pk(d['responsible'])
+                coordinator = Coordinator.get_coordinator_by_related_service_pk(d['responsible'])
                 coordinator.mentor = mentor
                 coordinator.save()
                 mentor.save()
 
-        return JsonResponse({})
+        return JsonResponse({'status': 'success'})
