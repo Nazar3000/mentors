@@ -6,6 +6,8 @@ const mentors = new Vue({
     mentorStatuses: {},
     publicServices: [],
     expanded: false,
+    mentorCardView: true,
+    mentorSocServeDataView: true,
     extendedMentor: {},
     mentorSocServiceData: {},
     socServiceId: soc_service_id
@@ -30,6 +32,22 @@ const mentors = new Vue({
           this.mentorSocServiceData = res.mentor_social_service_center_data;
         });
       }
+    },
+    submitMentorCard() {
+      $.ajax({
+        url: '',
+        dataType: 'json',
+        data: JSON.stringify({change_extended_data: this.extendedMentor}),
+        contentType: 'application/json',
+        type: 'POST',
+        success: (res) => {
+          if (res.status === 'success') {
+            this.mentorCardView = true;
+          } else {
+            console.log(res);
+          }
+        }
+      });
     }
   },
   watch: {
@@ -41,10 +59,7 @@ const mentors = new Vue({
             dataType: 'json',
             data: JSON.stringify({change_light_data: newVal}),
             contentType: 'application/json',
-            type: 'POST',
-            success: (res) => {
-              console.log(res);
-            }
+            type: 'POST'
           });
         }
       },

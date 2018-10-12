@@ -30,6 +30,7 @@ class UserTypes:
 
 
 class MentorStatuses(ChoicesEnum):
+    NOT_SPECIFIED = _('Не визначений')
     PASSED_INFO_MEETING = _('Пройшов інфо-зустріч')
     PASSED_TRAINING = _('Пройшов тренінг')
     REJECTED_TO_BE_MENTOR = _('Відмовився бути наставником')

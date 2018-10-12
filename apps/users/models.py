@@ -83,7 +83,8 @@ class Mentor(models.Model):
         primary_key=True)
     status = models.CharField(
         max_length=64,
-        choices=MentorStatuses.choices()
+        choices=MentorStatuses.choices(),
+        default=MentorStatuses.NOT_SPECIFIED
     )
     first_name = models.CharField(
         max_length=32)

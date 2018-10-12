@@ -8,6 +8,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from users.constants import MentorStatuses
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
 
@@ -312,6 +313,37 @@ class MentorSocialServiceCenterData(models.Model):
             return _('Не всі')
         else:
             return _('Немає жодного')
+
+    def save(self, *args, **kwargs):
+        # set mentor status
+        if self.infomeeting_date and self.mentor.status == MentorStatuses.NOT_SPECIFIED:
+            self.mentor.status = MentorStatuses.PASSED_INFO_MEETING
+        if self.training_date \
+                and self.mentor.status in (MentorStatuses.NOT_SPECIFIED, MentorStatuses.PASSED_INFO_MEETING):
+            self.mentor.status = MentorStatuses.PASSED_TRAINING
+        if self.psychologist_meeting_date \
+                and self.mentor.status in (
+                    MentorStatuses.NOT_SPECIFIED,
+                    MentorStatuses.PASSED_INFO_MEETING,
+                    MentorStatuses.PASSED_TRAINING):
+            self.mentor.status = MentorStatuses.PASSED_INTERVIEW_WITH_PSYCHOLOGIST
+        if self.mentor.mentoree \
+            and self.mentor.status in (
+                MentorStatuses.NOT_SPECIFIED,
+                MentorStatuses.PASSED_INFO_MEETING,
+                MentorStatuses.PASSED_TRAINING,
+                MentorStatuses.PASSED_INTERVIEW_WITH_PSYCHOLOGIST):
+            self.mentor.status = MentorStatuses.SELECTED_FOR_MENTOREE
+        if self.mentor.meetings.count() \
+            and self.mentor.status in (
+                MentorStatuses.NOT_SPECIFIED,
+                MentorStatuses.PASSED_INFO_MEETING,
+                MentorStatuses.PASSED_TRAINING,
+                MentorStatuses.PASSED_INTERVIEW_WITH_PSYCHOLOGIST,
+                MentorStatuses.SELECTED_FOR_MENTOREE):
+            self.mentor.status = MentorStatuses.ACTIVE_INTERACTION
+
+        super().save(*args, **kwargs)
 
 
 class MentorQuestionnaireEducation(models.Model):
