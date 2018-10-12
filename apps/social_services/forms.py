@@ -1,5 +1,5 @@
 from django import forms
-from users.models import SocialServiceCenter
+from users.models import SocialServiceCenter, Mentor
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -50,3 +50,15 @@ class AuthenticationForm(forms.Form):
         if not User.objects.filter(email=email).exists():
             raise ValidationError('Користувач з цією електронною адресою не зареєстрований.')
         return email
+
+
+class MentorEditForm(forms.ModelForm):
+    class Meta:
+        model = Mentor
+        fields = (
+            'status',
+            'first_name',
+            'last_name',
+            'phone_number',
+            'profile_image',
+        )
