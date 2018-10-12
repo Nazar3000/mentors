@@ -1,0 +1,45 @@
+{% extends 'social_service/ssc_base.html' %}
+{% load static %}
+
+      {% block content %}
+      {% include 'social_service/scc_logged_header.html' %}
+
+
+      <div class="content">
+        <section class="css-main">
+          <div class="container">
+            <div class="css-main-page">
+              <div class="css-main-link"><a href="">Головна</a><a href="">Наставники</a><a href="">Громадські організації</a><a href="">Матеріали</a></div>
+              <div class="css-main-video">
+                <iframe width="720" height="453" src="{{ main_video.video_link }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+                <p>Звернення Міністра</p>
+              </div>
+            </div>
+          </div>
+          <div class="css-main-stat">
+            <div class="container">
+              <div class="css-main-wrapp">
+                <h2>Статистика вашого ЦСССДМ</h2>
+                <div>
+                  <div class="css-main-item">
+                    <p>37</p><span>Сертифікованих<br>Наставників</span>
+                    <div class="css-main-circle"><span>24%</span></div>
+                  </div>
+                  <div class="css-main-item">
+                    <p>59</p><span>Сертифікованих<br>Наставників</span>
+                    <div class="css-main-circle"><span>39%</span></div>
+                  </div>
+                  <div class="css-main-item">
+                    <p>87</p><span>Сертифікованих<br>Наставників</span>
+                    <div class="css-main-circle"><span>57%</span></div>
+                  </div>
+                  <div class="css-main-item">
+                    <p>153</p><span>Подали заяву</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      {% endblock %}

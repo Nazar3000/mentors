@@ -128,7 +128,7 @@ class MentorQuestionnaire(models.Model):
     # 8. Work with children experience
     # See MentorQuestionnaireChildrenWorkExperience model
 
-    # 9. Want to became a mentor reason
+    # 9. Want to become a mentor reason
     join_reason = models.TextField()
 
     # 10. Helpful specifics
@@ -354,6 +354,11 @@ class MentorQuestionnaireEducation(models.Model):
     education_type = models.CharField(
         max_length=20,
         choices=EducationTypes.choices()
+    )
+    institution = models.CharField(
+        max_length=256,
+        blank=True,
+        default=''
     )
     year_of_admission = models.PositiveIntegerField()
     year_of_graduation = models.PositiveIntegerField()

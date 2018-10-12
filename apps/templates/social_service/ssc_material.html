@@ -1,0 +1,84 @@
+{% extends 'social_service/ssc_base.html' %}
+{% load static %}
+
+      {% block content %}
+      {% include 'social_service/scc_logged_header.html' %}
+
+
+      <div class="content">
+        <div class="container">
+          <section class="css-material">
+            <div class="css-material-main">
+              <div class="css-material-info">
+                <div class="css-material-info-wrapp">
+                  <div class="css-material-link"><a href="css-main.html">Головна</a><a href="css-mentor.html">Наставники</a><a href="">Громадські організації</a><a href="/">Матеріали</a></div>
+                  <div class="css-material-title">
+                    <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
+                    <div class="css counter">
+                      <div class="counter-numb">0</div>
+                      <div class="counter-numb">2</div>
+                      <div class="counter-numb">9</div>
+                      <div class="counter-numb">0</div>
+                    </div><span>Дітей мають наставників<br>(активно взаємодіють)</span>
+                  </div>
+                </div>
+              </div>
+              <div class="css-material-img"><img src="{% static 'img/happy-child.png' %}"></div>
+            </div>
+            <h2>Матеріали для закладів</h2>
+            <div class="css-material-wrapp">
+              <div class="css-material-left">
+                <div class="css-block-one"><img src="{% static 'img/book.svg' %}">
+                  <p>Законодавча база</p>
+                  <p>Методологія</p>
+                  <p>Договори</p>
+                  <p>Література</p>
+                </div>
+              </div>
+              <div class="css-material-right">
+                <div class="css-material-page">
+                  {% for material in object_list %}
+                      {% if not material.category %}
+                  <div class="css-material-item">
+                    <p>{{ material.title }}</p>
+                      <a href="{% url 'social_service:download_file' material.pk %}" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                  </div>
+                      {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+            {% for category in categories %}
+            <div class="css-material-wrapp">
+              <div class="css-material-left">
+                <div class="css-block-two">
+                    {% if category.icon %}
+                    <img src="{{ category.icon.url }}">
+                    {% endif %}
+                  <p>{{ category.title }}</p>
+                </div>
+              </div>
+              <div class="css-material-right">
+                  {% for material in object_list %}
+                      {% if material.category == category %}
+                <div class="css-material-video">
+                      {% if material.video_link %}
+                  <iframe width="640" height="420" src="https://www.youtube.com/embed/rReXd742OUE" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+                      {% endif %}
+                  <p>{{ material.title }}</p>
+                    {% if material.file %}
+                    <a href="{% url 'social_service:download_file' material.pk %}" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                    {% endif %}
+                </div>
+                      {% endif %}
+                 {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+
+
+          </section>
+        </div>
+      </div>
+     {% endblock %}

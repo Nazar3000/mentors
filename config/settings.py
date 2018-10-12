@@ -46,6 +46,7 @@ INSTALLED_APPS = [
 
     'jsonify',
     'debug_toolbar',
+    'widget_tweaks',
 
     'users',
     'mentors',
