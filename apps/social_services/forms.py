@@ -1,4 +1,6 @@
 from django import forms
+
+from mentors.models import MentorSocialServiceCenterData
 from users.models import SocialServiceCenter, Mentor
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -64,3 +66,9 @@ class MentorEditForm(forms.ModelForm):
         )
 
 
+class MentorSocialServiceCenterDataEditForm(forms.ModelForm):
+    class Meta:
+        model = MentorSocialServiceCenterData
+        exclude = (
+            'mentor',
+        )

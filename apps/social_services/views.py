@@ -8,7 +8,8 @@ from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
-from .forms import SignUpStep0Form, AuthenticationForm
+from social_services.utils import get_date_str_formatted
+from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm
 from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey
@@ -132,26 +133,25 @@ class MentorsView(TemplateView):
         mentor_data['pk'] = mentor.pk
         mentor_data['email'] = mentor.user.email
         mentor_data['licence_key'] = mentor.licence_key.key
-        mentor_data['date_of_birth'] = mentor.questionnaire.date_of_birth.strftime('%d.%m.%Y')
-        mentor_data['age'] = get_age(mentor.questionnaire.date_of_birth)
+        mentor_data['date_of_birth'] = get_date_str_formatted(mentor.questionnaire.date_of_birth)
         mentor_data['address'] = mentor.questionnaire.actual_address
-        mentor_data['questionnaire_creation_date'] = formats.date_format(mentor.questionnaire.creation_date)
+        mentor_data['questionnaire_creation_date'] = get_date_str_formatted(mentor.questionnaire.creation_date)
         mentor_data['responsible'] = self.get_responsible_pk(mentor)
         mentor_data['profile_image'] = mentor.profile_image.url if mentor.profile_image else ''
 
         mentor_social_service_center_data = model_to_dict(mentor.social_service_center_data)
         if mentor.social_service_center_data.infomeeting_date:
-            mentor_social_service_center_data['infomeeting_date'] = formats.date_format(
-                mentor.social_service_center_data.infomeeting_date)
+            mentor_social_service_center_data['infomeeting_date'] = \
+                get_date_str_formatted(mentor.social_service_center_data.infomeeting_date)
         if mentor.social_service_center_data.psychologist_meeting_date:
-            mentor_social_service_center_data['psychologist_meeting_date'] = formats.date_format(
-                mentor.social_service_center_data.psychologist_meeting_date)
+            mentor_social_service_center_data['psychologist_meeting_date'] = \
+                get_date_str_formatted(mentor.social_service_center_data.psychologist_meeting_date)
         if mentor.social_service_center_data.training_date:
-            mentor_social_service_center_data['training_date'] = formats.date_format(
-                mentor.social_service_center_data.training_date)
+            mentor_social_service_center_data['training_date'] = \
+                get_date_str_formatted(mentor.social_service_center_data.training_date)
         if mentor.social_service_center_data.contract_date:
-            mentor_social_service_center_data['contract_date'] = formats.date_format(
-                mentor.social_service_center_data.contract_date)
+            mentor_social_service_center_data['contract_date'] = \
+                get_date_str_formatted(mentor.social_service_center_data.contract_date)
 
         if mentor.mentoree:
             mentor_social_service_center_data['mentoree_name'] = '{} {}'.format(
@@ -197,6 +197,16 @@ class MentorsView(TemplateView):
             else:
                 return JsonResponse(dict(form.errors.items()))
         elif 'change_social_service_center_data' in data.keys():
-            print('change_social_service_center_data')
+            social_service_center_data = data['change_social_service_center_data']
+            social_service_center_data_inst = MentorSocialServiceCenterData.objects.get(
+                id=social_service_center_data['id'])
+            form = MentorSocialServiceCenterDataEditForm(social_service_center_data,
+                                                         instance=social_service_center_data_inst)
+            if form.is_valid():
+                social_service_center_data_obj = form.save(commit=False)
+                social_service_center_data_obj.mentor = Mentor.objects.get(pk=social_service_center_data['mentor'])
+                social_service_center_data_obj.save()
+            else:
+                return JsonResponse(dict(form.errors.items()))
 
         return JsonResponse({'status': 'success'})

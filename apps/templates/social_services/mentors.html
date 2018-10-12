@@ -75,7 +75,7 @@
                   <div class="css-card-title">
                     <h2>Наставник</h2>
                     <p>[[ extendedMentor.first_name ]]<br>[[ extendedMentor.last_name ]]</p><span>Дата народження</span>
-                    <p>[[ extendedMentor.date_of_birth ]] ([[ extendedMentor.age ]]  років)</p>
+                    <p>[[ extendedMentor.date_of_birth ]] ([[ getAge(extendedMentor.date_of_birth) ]]  років)</p>
                   </div>
                   <div class="css-card-edit">
                     <a href="javascript: void(0)" title="Edit" @click="mentorCardView = false"><i class="fas fa-pencil-alt"></i></a>
@@ -97,7 +97,7 @@
                       <p>[[ publicServices[extendedMentor.responsible] ? publicServices[extendedMentor.responsible] : 'ЦССДМ'  ]]</p>
                       <span>Ліцензія:</span>
                       <p>[[ extendedMentor.licence_key ]]<a href=""><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a></p><span>Дата подачі анкети:</span>
-                      <p>[[ extendedMentor.questionnaire_creation_date ]]</p><a href="css-admin.html">Переглянути анкету</a>
+                      <p>[[ getDateFormatted(extendedMentor.questionnaire_creation_date) ]]</p><a href="css-admin.html">Переглянути анкету</a>
                     </div>
                   </div>
                 </div>
@@ -161,7 +161,7 @@
                   <a href="javascript: void(0)" title="Edit" @click="mentorSocServeDataView = false"><i class="fas fa-pencil-alt"></i></a>
                 </div>
                 <span>Дата проходження інфо-зустрічі:</span>
-                <p>[[ mentorSocServiceData.infomeeting_date ]]</p><span>Наявність документів:</span>
+                <p>[[ getDateFormatted(mentorSocServiceData.infomeeting_date) ]]</p><span>Наявність документів:</span>
                 <div class="css-card-check-wrapp">
                   <div class="css-card-check">
                     <input class="css-font" id="good-conduct" type="checkbox" v-model="mentorSocServiceData.certificate_of_good_conduct" disabled>
@@ -183,7 +183,7 @@
                   </div>
                 </div>
                 <span>Дата проходження консультації з психологом:</span>
-                <p>[[ mentorSocServiceData.psychologist_meeting_date ]]</p>
+                <p>[[ getDateFormatted(mentorSocServiceData.psychologist_meeting_date) ]]</p>
                 <div class="css-card-subtitle"><span>Висновок психолога:</span>
                   <div>
                     <h5>поведінка:</h5>
