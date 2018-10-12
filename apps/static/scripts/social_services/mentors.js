@@ -48,6 +48,22 @@ const mentors = new Vue({
           }
         }
       });
+    },
+    submitMentorSocServeData() {
+      $.ajax({
+        url: '',
+        dataType: 'json',
+        data: JSON.stringify({change_extended_data: this.extendedMentor}),
+        contentType: 'application/json',
+        type: 'POST',
+        success: (res) => {
+          if (res.status === 'success') {
+            this.mentorCardView = true;
+          } else {
+            console.log(res);
+          }
+        }
+      });
     }
   },
   watch: {

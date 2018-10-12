@@ -19,7 +19,7 @@ from users.templatetags.date_tags import get_age
 
 
 class SignUpFormView(FormView):
-    template_name = 'social_service/ssc_register.html'
+    template_name = 'social_services/ssc_register.html'
     form_class = SignUpStep0Form
 
     def form_valid(self, form):
@@ -28,7 +28,7 @@ class SignUpFormView(FormView):
 
 
 class LoginView(FormView):
-    template_name = 'social_service/ssc_login.html'
+    template_name = 'social_services/ssc_login.html'
     form_class = AuthenticationForm
 
     def form_valid(self, form):
@@ -45,7 +45,7 @@ class LoginView(FormView):
 
 
 class MainPageView(TemplateView):
-    template_name = 'social_service/ssc_main.html'
+    template_name = 'social_services/ssc_main.html'
 
     def get_context_data(self, **kwargs):
         context = super(MainPageView, self).get_context_data(**kwargs)
@@ -54,7 +54,7 @@ class MainPageView(TemplateView):
 
 
 class VideoMentorView(TemplateView):
-    template_name = 'social_service/ssc_video_mentor.html'
+    template_name = 'social_services/ssc_video_mentor.html'
 
     def get_context_data(self, **kwargs):
         context = super(VideoMentorView, self).get_context_data(**kwargs)
@@ -64,12 +64,12 @@ class VideoMentorView(TemplateView):
 
 class MentorCardView(DetailView):
     model = Mentor
-    template_name = 'social_service/ssc_mentor_card.html'
+    template_name = 'social_services/ssc_mentor_card.html'
 
 
 class MaterialView(ListView):
     model = Material
-    template_name = 'social_service/ssc_material.html'
+    template_name = 'social_services/ssc_material.html'
 
     def get_context_data(self, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
@@ -152,7 +152,6 @@ class MentorsView(TemplateView):
         if mentor.social_service_center_data.contract_date:
             mentor_social_service_center_data['contract_date'] = formats.date_format(
                 mentor.social_service_center_data.contract_date)
-        print(mentor_social_service_center_data)
 
         if mentor.mentoree:
             mentor_social_service_center_data['mentoree_name'] = '{} {}'.format(
@@ -197,5 +196,7 @@ class MentorsView(TemplateView):
                 mentor.save()
             else:
                 return JsonResponse(dict(form.errors.items()))
+        elif 'change_social_service_center_data' in data.keys():
+            print('change_social_service_center_data')
 
         return JsonResponse({'status': 'success'})
