@@ -25,6 +25,7 @@ urlpatterns = [
     path('mentor/', include('mentors.urls')),
     path('volunteer/', include('volunteers.urls')),
     path('social-service/', include('social_services.urls')),
+    path('public-organizations/', include('public_organizations.urls')),
 ] \
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

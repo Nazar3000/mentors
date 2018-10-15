@@ -24,7 +24,7 @@ class SignUpFormView(FormView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('social_service:video')
+        return redirect('social_services:video')
 
 
 class LoginView(FormView):
@@ -40,7 +40,7 @@ class LoginView(FormView):
                 login(self.request, user)
         else:
             messages.error(self.request, 'Невірний пароль.')
-            return redirect('social_service:ssc_login')
+            return redirect('social_services:ssc_login')
         return redirect('/')
 
 
