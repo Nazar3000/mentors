@@ -3,6 +3,7 @@ const mentors = new Vue({
   delimiters: ['[[', ']]'],
   data: {
     lightMentors: [],
+    searchedMentors: [],
     mentorStatuses: {},
     publicServices: [],
     expanded: false,
@@ -24,7 +25,8 @@ const mentors = new Vue({
       status: "NOT_SPECIFIED"
     },
     mentorSocServiceData: {},
-    socServiceId: soc_service_id
+    socServiceId: soc_service_id,
+    searchString: ''
   },
   created() {
     this.extendedMentor = Object.assign({}, this.defaultExtendedMentor);
@@ -34,6 +36,7 @@ const mentors = new Vue({
     getLightData() {
       $.get('?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
+        this.searchedMentors = this.lightMentors;
         this.mentorStatuses = res.mentor_statuses;
         this.publicServices = res.public_services;
       })
@@ -173,6 +176,36 @@ const mentors = new Vue({
         }
       },
       deep: true
+    },
+    searchString: function (newSearchString) {
+      const searchableFields = ['questionnaire__full_name', 'licence_key__key', 'docs_status'];
+      this.searchedMentors = this.lightMentors.filter(m => {
+        let searched = false;
+
+        for (let field of searchableFields) {
+          if (m[field] && !searched) {
+            console.log(m[field], newSearchString, m[field].toLowerCase().includes(newSearchString.toLowerCase()));
+            searched = m[field].toLowerCase().includes(newSearchString.toLowerCase());
+          }
+        }
+
+        if (!searched) {
+          searched = this.mentorStatuses[m['status']].toLowerCase().includes(newSearchString.toLowerCase());
+        }
+
+        for (let service of this.publicServices) {
+          if (service.pk === m['responsible']) {
+            if (!searched) {
+              searched = service.name.toLowerCase().includes(newSearchString.toLowerCase())
+            }
+          }
+        }
+
+        if (!searched) {
+          searched = 'ЦССДМ'.toLowerCase().includes(newSearchString.toLowerCase());
+        }
+        return searched;
+      });
     }
   }
 });

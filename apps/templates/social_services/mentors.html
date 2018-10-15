@@ -21,7 +21,7 @@
               </div>
             </div>
             <div class="css-mentor-search"><img src="{% static 'img/search.svg' %}">
-              <input type="text" placeholder="Почніть вводити дані тут">
+              <input type="text" placeholder="Почніть вводити дані тут" v-model="searchString">
             </div>
             <div class="css-mentor-add" @click="addMentorModal"><i class="fas fa-plus"></i><span>Додати Наставника</span></div>
           </div>
@@ -106,7 +106,7 @@
             <div class="css-table-line"></div>
             <div class="css-table-title-respon">Відповідальний</div>
           </div>
-          <div class="css-table-mentor-line" v-for="lightMentor in lightMentors" @click="activeLightMentorPk = lightMentor.pk">
+          <div class="css-table-mentor-line" v-for="lightMentor in searchedMentors" @click="activeLightMentorPk = lightMentor.pk">
             <div class="css-table-block-mentor">
                 <span class="mentor-title" @click="getExtendedMentorData(lightMentor.pk)">[[ lightMentor.questionnaire__full_name ]]</span>
                 <span class="mentor-phone">[[ lightMentor.phone_number ]]</span>
