@@ -109,11 +109,19 @@ class Mentor(models.Model):
     licenced = models.BooleanField(
         default=False
     )
+    coordinator = models.ForeignKey(
+        to='users.Coordinator',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='mentor'
+    )
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
-        if self.user.user_type != UserTypes.MENTOR:
-            raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
+        with suppress(User.DoesNotExist):
+            if self.user.user_type != UserTypes.MENTOR:
+                raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
 
 
 class SocialServiceCenter(models.Model):
@@ -275,13 +283,6 @@ class Volunteer(models.Model):
 
 
 class Coordinator(models.Model):
-    mentor = models.OneToOneField(
-        to='users.Mentor',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-    )
-
     image = models.ImageField(
         upload_to='mentorees/coordinator_images'
     )

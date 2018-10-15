@@ -9,10 +9,25 @@ const mentors = new Vue({
     mentorCardView: true,
     mentorSocServeDataView: true,
     extendedMentor: {},
+    activeLightMentorPk: '',
+    defaultExtendedMentor: {
+      address: "",
+      date_of_birth: "",
+      email: "",
+      first_name: "",
+      last_name: "",
+      licence_key: "",
+      phone_number: "",
+      profile_image: "/static/img/empty-img.png",
+      questionnaire_creation_date: "",
+      responsible: soc_service_id,
+      status: "NOT_SPECIFIED"
+    },
     mentorSocServiceData: {},
     socServiceId: soc_service_id
   },
   created() {
+    this.extendedMentor = Object.assign({}, this.defaultExtendedMentor);
     this.getLightData();
   },
   methods: {
@@ -23,22 +38,31 @@ const mentors = new Vue({
         this.publicServices = res.public_services;
       })
     },
-    getExtendedMentorData() {
+    getExtendedMentorData(mentorId) {
       this.expanded = !this.expanded;
 
       if (this.expanded) {
-        $.get(`?get_extended_data&soc_service_id=${soc_service_id}`, (res) => {
+        $.get(`?get_extended_data&mentor_id=${mentorId}`, (res) => {
           this.extendedMentor = res.mentor_data;
           this.mentorSocServiceData = res.mentor_social_service_center_data;
         });
       }
     },
     submitMentorCard() {
+      const formData = new FormData();
+      for (let key in this.extendedMentor) {
+          if (this.extendedMentor.hasOwnProperty(key)) {
+              formData.append(key, this.extendedMentor[key]);
+          }
+      }
+
       $.ajax({
-        url: '',
-        dataType: 'json',
-        data: JSON.stringify({change_extended_data: this.extendedMentor}),
-        contentType: 'application/json',
+        url: 'change_extended_data/',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
         type: 'POST',
         success: (res) => {
           if (res.status === 'success') {
@@ -50,11 +74,20 @@ const mentors = new Vue({
       });
     },
     submitMentorSocServeData() {
+      const formData = new FormData();
+      for (let key in this.mentorSocServiceData) {
+          if (this.mentorSocServiceData.hasOwnProperty(key)) {
+              formData.append(key, this.mentorSocServiceData[key]);
+          }
+      }
+
       $.ajax({
-        url: '',
-        dataType: 'json',
-        data: JSON.stringify({change_social_service_center_data: this.mentorSocServiceData}),
-        contentType: 'application/json',
+        url: 'change_social_service_center_data/',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
         type: 'POST',
         success: (res) => {
           if (res.status === 'success') {
@@ -99,18 +132,43 @@ const mentors = new Vue({
       } else {
         return 0;
       }
+    },
+    addMentorModal() {
+      this.expanded = false;
+      this.extendedMentor = Object.assign({}, this.defaultExtendedMentor);
+      this.extendedMentor.password1 = '';
+      this.extendedMentor.password2 = '';
+    },
+    changeProfileImage(event) {
+      this.extendedMentor.profile_image = event.target.files[0];
+    },
+    deleteProfileImage() {
+      this.extendedMentor.profile_image = this.defaultExtendedMentor.profile_image;
+    },
+    getImageUrl(img) {
+      return typeof img === 'string' ? img : URL.createObjectURL(img);
     }
   },
   watch: {
     lightMentors: {
       handler: function (oldVal, newVal) {
         if (newVal.length) {
+          const val = newVal.find(v => v.pk === this.activeLightMentorPk);
+          const formData = new FormData();
+          for (let key in val) {
+              if (val.hasOwnProperty(key)) {
+                  formData.append(key, val[key]);
+              }
+          }
+
           $.ajax({
-            url: '',
-            dataType: 'json',
-            data: JSON.stringify({change_light_data: newVal}),
-            contentType: 'application/json',
-            type: 'POST'
+            url: 'change_light_data/',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            type: 'POST',
           });
         }
       },

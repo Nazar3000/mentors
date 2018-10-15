@@ -107,7 +107,7 @@ $(document).ready(function () {
 
     // add img
 
-    $("#files, #file, #filess").change(function () {
+    $("#files, #file, #filess, #css-add-img").change(function () {
         filename = this.files[0].name;
         // console.log(filename);
     });
@@ -180,6 +180,20 @@ $(document).ready(function () {
         return false;
     });
 
+
+    // career modal
+    $('.career-table-btn').click(function () {
+        $('.career-modal').fadeIn(500);
+    });
+
+    $('.career-card-close').click(function () {
+        $('.career-modal').fadeOut(400);
+    });
+
+
+
+
+
     $('.career-add').click(function () {
         $('.career-modal-reg').fadeIn(500);
     });
@@ -210,10 +224,10 @@ $(document).ready(function () {
     $(function () {
         $.fn.scrollToTop = function () {
             $(this).hide().removeAttr("href");
-            if ($(window).scrollTop() >= "250") $(this).fadeIn("slow")
+            if ($(window).scrollTop() >= "250") $(this).fadeIn("slow");
             var scrollDiv = $(this);
             $(window).scroll(function () {
-                if ($(window).scrollTop() <= "250") $(scrollDiv).fadeOut("slow")
+                if ($(window).scrollTop() <= "250") $(scrollDiv).fadeOut("slow");
                 else $(scrollDiv).fadeIn("slow")
             });
             $(this).click(function () {
@@ -274,9 +288,9 @@ $(document).ready(function () {
     // sort mentor click
 
     $('.sort-mentor').click(function () { // при клике на рисунок
-        if($(this).find('img').attr('src') == 'img/a-b.svg'){ // если в этом элименте мы находим картику с путем катороый равняется аб
+        if ($(this).find('img').attr('src') == 'img/a-b.svg') { // если в этом элименте мы находим картику с путем катороый равняется аб
             $(this).find('img').attr('src', 'img/b-a.svg'); // то это меняем картинку на ба
-        }else {
+        } else {
             $(this).find('img').attr('src', 'img/a-b.svg'); // иначе возвращяем обратно
         }
     });
@@ -284,11 +298,11 @@ $(document).ready(function () {
     // sort mentor click phone and change
 
     $('.mentor-phone-img').click(function () {
-        if($(this).find('img').attr('src') == 'img/blue-tel.svg'){
+        if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
             $(this).find('img').attr('src', 'img/green-tel.svg');
             $(this).siblings('.mentor-title').toggle();
             $(this).siblings('.mentor-phone').toggle();
-        }else {
+        } else {
             $(this).find('img').attr('src', 'img/blue-tel.svg');
             $(this).siblings('.mentor-title').toggle();
             $(this).siblings('.mentor-phone').toggle();
@@ -296,9 +310,128 @@ $(document).ready(function () {
     });
 
 
-    // $('.mentor-title').click(function(){
+    // $('.mentor-title').click(function () {
     //     $('.css-card').slideToggle(500);
     // });
+
+
+    // sort css-social click
+
+    $('.css-sort-mentor').click(function () { // при клике на рисунок
+        if ($(this).find('img').attr('src') == 'img/a-b.svg') { // если в этом элименте мы находим картику с путем катороый равняется аб
+            $(this).find('img').attr('src', 'img/b-a.svg'); // то это меняем картинку на ба
+        } else {
+            $(this).find('img').attr('src', 'img/a-b.svg'); // иначе возвращяем обратно
+        }
+    });
+
+
+    // sort css-social click phone and change
+
+    $('.css-block-img').click(function () {
+        if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
+            $(this).find('img').attr('src', 'img/green-tel.svg');
+            $(this).siblings('.css-block-title').toggle();
+            $(this).siblings('.css-block-phone').toggle();
+        } else {
+            $(this).find('img').attr('src', 'img/blue-tel.svg');
+            $(this).siblings('.css-block-title').toggle();
+            $(this).siblings('.css-block-phone').toggle();
+        }
+    });
+
+
+    //  add social card org
+
+
+    $('.css-social-add').click(function () {
+        $('.css-slip').fadeIn(500);
+    });
+
+    $('.css-slip-close').click(function () {
+        $('.css-slip').fadeOut(400);
+    });
+
+
+    // sort css-org click
+
+    $('.css-org-sort-mentor').click(function () { // при клике на рисунок
+        if ($(this).find('img').attr('src') == 'img/a-b.svg') { // если в этом элименте мы находим картику с путем катороый равняется аб
+            $(this).find('img').attr('src', 'img/b-a.svg'); // то это меняем картинку на ба
+        } else {
+            $(this).find('img').attr('src', 'img/a-b.svg'); // иначе возвращяем обратно
+        }
+    });
+
+    $('.css-org-sort-child').click(function () { // при клике на рисунок
+        if ($(this).find('img').attr('src') == 'img/a-b.svg') { // если в этом элименте мы находим картику с путем катороый равняется аб
+            $(this).find('img').attr('src', 'img/b-a.svg'); // то это меняем картинку на ба
+        } else {
+            $(this).find('img').attr('src', 'img/a-b.svg'); // иначе возвращяем обратно
+        }
+    });
+
+
+    // sort css-org click phone and change
+
+    $('.css-block-sort-img').click(function () {
+        if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
+            $(this).find('img').attr('src', 'img/green-tel.svg');
+            $(this).siblings('.css-block-mentor-link').toggle();
+            $(this).siblings('.css-block-mentors-phone').toggle();
+        } else {
+            $(this).find('img').attr('src', 'img/blue-tel.svg');
+            $(this).siblings('.css-block-mentor-link').toggle();
+            $(this).siblings('.css-block-mentors-phone').toggle();
+        }
+    });
+
+
+    $('.css-block-title').click(function () {
+        $('.css-big-card').slideToggle(500);
+    });
+
+    // open diary block team
+
+    $('.team-diary-more').click(function (event) {
+        event.preventDefault();
+
+        var parent = $(this).parents('.team-diary');
+        var parent_id = parent.data('id');
+
+        parent.slideToggle(400);
+        $('.team-diary-content[data-id=' + parent_id + ']').slideToggle(400);
+
+    });
+
+    $('.team-diary-close').click(function (event) {
+        event.preventDefault();
+        var parent = $(this).parents('.team-diary-content');
+        var parent_id = parent.data('id');
+
+        $(this).parents('.team-diary-content').slideToggle(400);
+        $('.team-diary[data-id=' + parent_id + ']').slideToggle(400);
+    });
+
+
+    // open modal mentor social
+
+    $('.css-block-mentor-link').click(function () {
+        $('.social-modal').fadeIn(500);
+    });
+
+    $('.social-card-close').click(function () {
+        $('.social-modal').fadeOut(400);
+    });
+
+    // open modal mentor
+    $('.css-mentor-add').click(function () {
+        $('.social-modal').fadeIn(500);
+    });
+
+    $('.social-card-close').click(function () {
+        $('.social-modal').fadeOut(400);
+    });
 
 });
 

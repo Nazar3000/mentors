@@ -5,18 +5,20 @@ from django.http import JsonResponse
 from django.utils import formats
 from django.shortcuts import redirect, HttpResponse
 from django.views.generic import TemplateView, FormView, DetailView, ListView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 
 from social_services.utils import get_date_str_formatted
-from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm
+from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, MentorUserForm
 from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey
 from social_services.forms import MentorEditForm
-from users.constants import MentorStatuses
+from users.constants import MentorStatuses, UserTypes
 from users.models import PublicService, Coordinator, SocialServiceCenter
 from users.templatetags.date_tags import get_age
+
+User = get_user_model()
 
 
 class SignUpFormView(FormView):
@@ -90,11 +92,12 @@ class MentorsView(TemplateView):
     template_name = 'social_services/mentors.html'
 
     @staticmethod
-    def get_responsible_pk(mentor):
+    def get_responsible_pk(coordinator_pk):
+        coordinator = Coordinator.objects.get(pk=coordinator_pk)
         try:
-            responsible = mentor.coordinator.social_service_center.pk
+            responsible = coordinator.social_service_center.pk
         except SocialServiceCenter.DoesNotExist:
-            responsible = mentor.coordinator.public_service.pk
+            responsible = coordinator.public_service.pk
         except (Coordinator.DoesNotExist, PublicService.DoesNotExist):
             responsible = None
         return responsible
@@ -109,12 +112,13 @@ class MentorsView(TemplateView):
             'phone_number',
             'licence_key__key',
             'status',
+            'coordinator'
         )
         for data in mentors_data:
             mentor = Mentor.objects.get(pk=data['pk'])
             soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
             data['docs_status'] = soc_service_data.docs_status
-            data['responsible'] = self.get_responsible_pk(mentor)
+            data['responsible'] = self.get_responsible_pk(data['coordinator'])
 
         return JsonResponse({
             'mentors_data': list(mentors_data),
@@ -123,7 +127,7 @@ class MentorsView(TemplateView):
         })
 
     def get_extended_data(self):
-        mentor = Coordinator.objects.get(social_service_center__pk=self.request.GET['soc_service_id']).mentor
+        mentor = Mentor.objects.get(pk=self.request.GET['mentor_id'])
         mentor_data = model_to_dict(mentor, fields=(
             'first_name',
             'last_name',
@@ -136,7 +140,7 @@ class MentorsView(TemplateView):
         mentor_data['date_of_birth'] = get_date_str_formatted(mentor.questionnaire.date_of_birth)
         mentor_data['address'] = mentor.questionnaire.actual_address
         mentor_data['questionnaire_creation_date'] = get_date_str_formatted(mentor.questionnaire.creation_date)
-        mentor_data['responsible'] = self.get_responsible_pk(mentor)
+        mentor_data['responsible'] = self.get_responsible_pk(mentor.coordinator.pk)
         mentor_data['profile_image'] = mentor.profile_image.url if mentor.profile_image else ''
 
         mentor_social_service_center_data = model_to_dict(mentor.social_service_center_data)
@@ -171,20 +175,18 @@ class MentorsView(TemplateView):
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        data = json.loads(request.body)
-        if 'change_light_data' in data.keys():
-            light_data = data['change_light_data']
-            for d in light_data:
-                mentor = Mentor.objects.get(pk=d['pk'])
-                mentor.status = d['status']
-                coordinator = Coordinator.get_coordinator_by_related_service_pk(d['responsible'])
-                coordinator.mentor = mentor
-                coordinator.save()
-                mentor.save()
-        elif 'change_extended_data' in data.keys():
-            extended_data = data['change_extended_data']
-            licence_key = extended_data.pop('licence_key')
-            form = MentorEditForm(extended_data, instance=Mentor.objects.get(pk=extended_data['pk']))
+        action = kwargs['action']
+        if action == 'change_light_data':
+            mentor = Mentor.objects.get(pk=request.POST['pk'])
+            mentor.status = request.POST['status']
+            coordinator = Coordinator.get_coordinator_by_related_service_pk(request.POST['responsible'])
+            mentor.coordinator = coordinator
+            mentor.save()
+        elif action == 'change_extended_data':
+            # edit/create mentor
+            licence_key = request.POST['licence_key']
+            instance = Mentor.objects.get(pk=request.POST['pk']) if request.POST.get('pk') else None
+            form = MentorEditForm(request.POST, request.FILES, instance=instance)
             if form.is_valid():
                 mentor = form.save(commit=False)
                 if mentor.licence_key:
@@ -193,18 +195,25 @@ class MentorsView(TemplateView):
                 else:
                     key = MentorLicenceKey.objects.create(key=licence_key)
                     mentor.licence_key = key
+                if not request.POST.get('pk'):
+                    user_form = MentorUserForm(request.POST)
+                    if user_form.is_valid():
+                        user = user_form.save()
+                        mentor.user = user
+                        user.save()
+                    else:
+                        return JsonResponse(dict(user_form.errors.items()))
                 mentor.save()
             else:
                 return JsonResponse(dict(form.errors.items()))
-        elif 'change_social_service_center_data' in data.keys():
-            social_service_center_data = data['change_social_service_center_data']
+        elif action == 'change_social_service_center_data':
             social_service_center_data_inst = MentorSocialServiceCenterData.objects.get(
-                id=social_service_center_data['id'])
-            form = MentorSocialServiceCenterDataEditForm(social_service_center_data,
+                id=request.POST['id'])
+            form = MentorSocialServiceCenterDataEditForm(request.POST,
                                                          instance=social_service_center_data_inst)
             if form.is_valid():
                 social_service_center_data_obj = form.save(commit=False)
-                social_service_center_data_obj.mentor = Mentor.objects.get(pk=social_service_center_data['mentor'])
+                social_service_center_data_obj.mentor = Mentor.objects.get(pk=request.POST['mentor'])
                 social_service_center_data_obj.save()
             else:
                 return JsonResponse(dict(form.errors.items()))
