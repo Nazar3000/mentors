@@ -69,8 +69,8 @@ class MentorEditForm(forms.ModelForm):
         )
 
 
-class MentorUserForm(SignUpStep1Form):
-    pass
+# class MentorUserForm(SignUpStep1Form):
+#     pass
 
 
 class MentorSocialServiceCenterDataEditForm(forms.ModelForm):

@@ -184,7 +184,6 @@ const mentors = new Vue({
 
         for (let field of searchableFields) {
           if (m[field] && !searched) {
-            console.log(m[field], newSearchString, m[field].toLowerCase().includes(newSearchString.toLowerCase()));
             searched = m[field].toLowerCase().includes(newSearchString.toLowerCase());
           }
         }

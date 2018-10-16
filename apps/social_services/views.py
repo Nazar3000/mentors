@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 
 from social_services.utils import get_date_str_formatted
-from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, MentorUserForm
+from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm
 from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey
@@ -27,7 +27,7 @@ class SignUpFormView(FormView):
 
     def form_valid(self, form):
         form.save()
-        return redirect('social_service:video')
+        return redirect('social_services:video')
 
 
 class LoginView(FormView):
@@ -43,7 +43,7 @@ class LoginView(FormView):
                 login(self.request, user)
         else:
             messages.error(self.request, 'Невірний пароль.')
-            return redirect('social_service:ssc_login')
+            return redirect('social_services:ssc_login')
         return redirect('/')
 
 
@@ -195,14 +195,14 @@ class MentorsView(TemplateView):
                 else:
                     key = MentorLicenceKey.objects.create(key=licence_key)
                     mentor.licence_key = key
-                if not request.POST.get('pk'):
-                    user_form = MentorUserForm(request.POST)
-                    if user_form.is_valid():
-                        user = user_form.save()
-                        mentor.user = user
-                        user.save()
-                    else:
-                        return JsonResponse(dict(user_form.errors.items()))
+                # if not request.POST.get('pk'):
+                #     user_form = MentorUserForm(request.POST)
+                #     if user_form.is_valid():
+                #         user = user_form.save()
+                #         mentor.user = user
+                #         user.save()
+                #     else:
+                #         return JsonResponse(dict(user_form.errors.items()))
                 mentor.save()
             else:
                 return JsonResponse(dict(form.errors.items()))
