@@ -90,6 +90,11 @@ class Mentor(models.Model):
         max_length=32)
     last_name = models.CharField(
         max_length=32)
+    date_of_birth = models.DateField()
+    actual_address = models.CharField(
+        max_length=521
+    )
+    questionnaire_creation_date = models.DateField()
 
     phone_regex = RegexValidator(
         regex=r'\+?1?\d$')

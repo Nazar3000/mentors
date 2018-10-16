@@ -24,24 +24,24 @@ class MentorQuestionnaire(models.Model):
     )
 
     # 1. Common data
-    full_name = models.CharField(
-        max_length=512
+    middle_name = models.CharField(
+        max_length=32
     )
-    date_of_birth = models.DateField()
-    phone_regex = RegexValidator(
-        regex=r'\+?1?\d$'
-    )
-    phone_number = models.CharField(
-        max_length=17,
-        validators=[phone_regex]
-    )
-    email = models.EmailField()
+    # date_of_birth = models.DateField()
+    # phone_regex = RegexValidator(
+    #     regex=r'\+?1?\d$'
+    # )
+    # phone_number = models.CharField(
+    #     max_length=17,
+    #     validators=[phone_regex]
+    # )
+    # email = models.EmailField()
     nationality = models.CharField(
         max_length=265
     )
-    actual_address = models.CharField(
-        max_length=521
-    )
+    # actual_address = models.CharField(
+    #     max_length=521
+    # )
     registration_address = models.CharField(
         max_length=521
     )
@@ -238,6 +238,10 @@ class MentorQuestionnaire(models.Model):
     convenient_meeting_conditions = models.CharField(
         max_length=128
     )
+
+    def save(self, *args, **kwargs):
+        self.mentor.questionnaire_creation_date = self.creation_date
+        super().save(*args, **kwargs)
 
 
 class MentorSocialServiceCenterData(models.Model):

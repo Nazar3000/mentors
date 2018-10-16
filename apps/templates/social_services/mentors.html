@@ -68,7 +68,7 @@
                   <span>Email:</span>
                   <input type="text" v-model="extendedMentor.email">
                   <span>Адреса:</span>
-                  <input type="text" v-model="extendedMentor.address">
+                  <input type="text" v-model="extendedMentor.actual_address">
                 </div>
                 <div>
                   <span>Відповідальний:</span>
@@ -102,35 +102,40 @@
             <div class="css-table-line"></div>
             <div class="css-table-title-respon">Відповідальний</div>
           </div>
-          <div class="css-table-mentor-line" v-for="lightMentor in searchedMentors" @click="activeLightMentorPk = lightMentor.pk">
-            <div class="css-table-block-mentor">
-                <span class="mentor-title" @click="getExtendedMentorData(lightMentor.pk)">[[ lightMentor.questionnaire__full_name ]]</span>
-                <span class="mentor-phone">[[ lightMentor.phone_number ]]</span>
-                <span class="mentor-phone-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
+          <template v-for="lightMentor in searchedMentors">
+            <div class="css-table-mentor-line" @click="activeLightMentorPk = lightMentor.pk">
+              <div class="css-table-block-mentor">
+                  <span class="mentor-title" @click="getExtendedMentorData(lightMentor.pk)">[[ lightMentor.full_name ]]</span>
+                  <span class="mentor-phone">[[ lightMentor.phone_number ]]</span>
+                  <span class="mentor-phone-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
+              </div>
+              <div class="css-table-block-stat">
+                <select class="triangle-green" v-model="lightMentor.status">
+                  <option v-for="key, value in mentorStatuses"
+                          :value="value"
+                  >
+                    [[ key ]]
+                  </option>
+                </select>
+              </div>
+              <div class="css-table-block-license"><span>[[ lightMentor.licence_key__key ]]</span></div>
+              <div class="css-table-block-doc"><span>[[ lightMentor.docs_status ]]</span></div>
+              <div class="css-table-block-respon">
+                <select class="triangle-green" v-model="lightMentor.responsible">
+                  <option :value="socServiceId">ЦССДМ</option>
+                  <option v-for="service in publicServices"
+                          :value="service.pk"
+                  >
+                    [[ service.name ]]
+                  </option>
+                </select>
+              </div>
             </div>
-            <div class="css-table-block-stat">
-              <select class="triangle-green" v-model="lightMentor.status">
-                <option v-for="key, value in mentorStatuses"
-                        :value="value"
-                >
-                  [[ key ]]
-                </option>
-              </select>
-            </div>
-            <div class="css-table-block-license"><span>[[ lightMentor.licence_key__key ]]</span></div>
-            <div class="css-table-block-doc"><span>[[ lightMentor.docs_status ]]</span></div>
-            <div class="css-table-block-respon">
-              <select class="triangle-green" v-model="lightMentor.responsible">
-                <option :value="socServiceId">ЦССДМ</option>
-                <option v-for="service in publicServices"
-                        :value="service.pk"
-                >
-                  [[ service.name ]]
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="css-card" v-if="expanded">
+            <div class="css-card"
+                 v-if="extendedMentor.pk === activeLightMentorPk
+                      && lightMentor.pk === activeLightMentorPk
+                      && expanded"
+            >
             <div class="css-card-wrapp">
               <!-- start card mentor-->
               <div class="css-card-left" v-if="mentorCardView">
@@ -154,14 +159,15 @@
                       <span>Телефон:</span>
                       <p>[[ extendedMentor.phone_number ]]</p><span>Email:</span>
                       <p>[[ extendedMentor.email ]]</p><span>Адреса:</span>
-                      <p>[[ extendedMentor.address ]]</p>
+                      <p>[[ extendedMentor.actual_address ]]</p>
                     </div>
                     <div>
                       <span>Відповідальний:</span>
                       <p>[[ publicServices[extendedMentor.responsible] ? publicServices[extendedMentor.responsible] : 'ЦССДМ'  ]]</p>
                       <span>Ліцензія:</span>
                       <p>[[ extendedMentor.licence_key ]]<a href=""><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a></p><span>Дата подачі анкети:</span>
-                      <p>[[ getDateFormatted(extendedMentor.questionnaire_creation_date) ]]</p><a href="css-admin.html">Переглянути анкету</a>
+                      <p>[[ getDateFormatted(extendedMentor.questionnaire_creation_date) ]]</p>
+                      <a :href="`/social-service/mentor-card/${extendedMentor.pk}/`">Переглянути анкету</a>
                     </div>
                   </div>
                 </div>
@@ -199,7 +205,7 @@
                       <span>Email:</span>
                       <input class="css-input-card" type="text" placeholder="Ваш Email" v-model="extendedMentor.email">
                       <span>Адреса:</span>
-                      <input class="css-input-card" type="text" placeholder="Ваша адреса" v-model="extendedMentor.address">
+                      <input class="css-input-card" type="text" placeholder="Ваша адреса" v-model="extendedMentor.actual_address">
                     </div>
                     <div>
                       <span>Відповідальний:</span>
@@ -372,6 +378,7 @@
               <!-- end edit card info-->
             </div>
           </div>
+          </template>
         </div>
       </section>
     </div>

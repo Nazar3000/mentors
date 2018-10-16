@@ -14,9 +14,8 @@ from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey
 from social_services.forms import MentorEditForm
-from users.constants import MentorStatuses, UserTypes
+from users.constants import MentorStatuses
 from users.models import PublicService, Coordinator, SocialServiceCenter
-from users.templatetags.date_tags import get_age
 
 User = get_user_model()
 
@@ -108,7 +107,6 @@ class MentorsView(TemplateView):
             social_service_center__pk=self.request.user.pk).values('pk', 'name')
         mentors_data = Mentor.objects.all().values(
             'pk',
-            'questionnaire__full_name',
             'phone_number',
             'licence_key__key',
             'status',
@@ -119,6 +117,7 @@ class MentorsView(TemplateView):
             soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
             data['docs_status'] = soc_service_data.docs_status
             data['responsible'] = self.get_responsible_pk(data['coordinator'])
+            data['full_name'] = '{} {}'.format(mentor.first_name, mentor.last_name)
 
         return JsonResponse({
             'mentors_data': list(mentors_data),
@@ -133,15 +132,15 @@ class MentorsView(TemplateView):
             'last_name',
             'status',
             'phone_number',
+            'actual_address',
         ))
         mentor_data['pk'] = mentor.pk
         mentor_data['email'] = mentor.user.email
         mentor_data['licence_key'] = mentor.licence_key.key
-        mentor_data['date_of_birth'] = get_date_str_formatted(mentor.questionnaire.date_of_birth)
-        mentor_data['address'] = mentor.questionnaire.actual_address
-        mentor_data['questionnaire_creation_date'] = get_date_str_formatted(mentor.questionnaire.creation_date)
         mentor_data['responsible'] = self.get_responsible_pk(mentor.coordinator.pk)
+        mentor_data['date_of_birth'] = get_date_str_formatted(mentor.date_of_birth)
         mentor_data['profile_image'] = mentor.profile_image.url if mentor.profile_image else ''
+        mentor_data['questionnaire_creation_date'] = get_date_str_formatted(mentor.questionnaire_creation_date)
 
         mentor_social_service_center_data = model_to_dict(mentor.social_service_center_data)
         if mentor.social_service_center_data.infomeeting_date:
@@ -195,14 +194,6 @@ class MentorsView(TemplateView):
                 else:
                     key = MentorLicenceKey.objects.create(key=licence_key)
                     mentor.licence_key = key
-                # if not request.POST.get('pk'):
-                #     user_form = MentorUserForm(request.POST)
-                #     if user_form.is_valid():
-                #         user = user_form.save()
-                #         mentor.user = user
-                #         user.save()
-                #     else:
-                #         return JsonResponse(dict(user_form.errors.items()))
                 mentor.save()
             else:
                 return JsonResponse(dict(form.errors.items()))

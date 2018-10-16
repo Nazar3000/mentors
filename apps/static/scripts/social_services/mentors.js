@@ -12,7 +12,7 @@ const mentors = new Vue({
     extendedMentor: {},
     activeLightMentorPk: '',
     defaultExtendedMentor: {
-      address: "",
+      actual_address: "",
       date_of_birth: "",
       email: "",
       first_name: "",
@@ -178,7 +178,7 @@ const mentors = new Vue({
       deep: true
     },
     searchString: function (newSearchString) {
-      const searchableFields = ['questionnaire__full_name', 'licence_key__key', 'docs_status'];
+      const searchableFields = ['full_name', 'licence_key__key', 'docs_status'];
       this.searchedMentors = this.lightMentors.filter(m => {
         let searched = false;
 

@@ -159,21 +159,6 @@ class MentorQuestionnaireSettingsForm(forms.ModelForm):
     first_name = forms.CharField()
     last_name = forms.CharField()
 
-    class Meta:
-        model = MentorQuestionnaire
-        fields = (
-            'full_name',
-            'date_of_birth',
-            'phone_number',
-            'email',
-            'actual_address',
-        )
-
-    def clean(self):
-        if {'first_name', 'last_name'}.issubset(self.cleaned_data.keys()):
-            self.cleaned_data['full_name'] = '{} {}'.format(
-                self.cleaned_data['first_name'], self.cleaned_data['last_name'])
-
 
 class MentorSettingsForm(forms.ModelForm):
     email = forms.EmailField()
