@@ -14,4 +14,5 @@ urlpatterns = [
     path('download_file/<int:material_id>/', views.download_file, name='download_file'),
     path('mentors/', views.MentorsView.as_view(), name='mentors'),
     path('mentors/<str:action>/', views.MentorsView.as_view(), name='mentors_post'),
+    path('public-services/', views.PublicServicesView.as_view(), name='public_services'),
 ]

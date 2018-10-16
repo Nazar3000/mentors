@@ -210,3 +210,7 @@ class MentorsView(TemplateView):
                 return JsonResponse(dict(form.errors.items()))
 
         return JsonResponse({'status': 'success'})
+
+
+class PublicServicesView(TemplateView):
+    template_name = 'social_services/public_services.html'
