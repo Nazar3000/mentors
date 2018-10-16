@@ -61,6 +61,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text=_('Designates whether the user can log into this admin site.'),
     )
+    is_active = models.BooleanField(
+        'active',
+        default=True,
+        help_text='Is the user account currently active',
+    )
     user_type = models.PositiveSmallIntegerField(
         choices=UserTypes.USER_TYPE_CHOICES)
 
