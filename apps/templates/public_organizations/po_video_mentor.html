@@ -1,0 +1,20 @@
+{% extends 'public_organizations/po_base.html' %}
+{% load static %}
+
+      {% block content %}
+      {% include 'public_organizations/po_header.html' %}
+
+      <div class="content">
+        <section class="css-video-mentor">
+          <div class="container">
+            <div class="css-video-mentor-wrapp">
+              <h3>Дізнайся як користуватися цією платформою</h3>
+              <div class="css-video-mentor-video">
+                <iframe width="720" height="453" src="{{ mentor_video.video_link }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+              </div><a href="page-form.html">Ок, я зрозумів. Ідемо далі</a>
+            </div>
+          </div>
+        </section>
+      </div>
+      {% endblock %}
+

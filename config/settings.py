@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'volunteers',
     'govern_users',
     'social_services',
+    'public_organizations',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,11 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = 'users:signin'
 LOGOUT_REDIRECT_URL = 'users:signin'
+
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = 'Ch2mEc_l'
+EMAIL_HOST_USER = 'nastavniki.service@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
