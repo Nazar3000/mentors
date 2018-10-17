@@ -10,7 +10,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from .constants import UserTypes, MentorStatuses
+from .constants import UserTypes, MentorStatuses, PublicServiceStatuses
 
 
 class UserManager(BaseUserManager):
@@ -124,7 +124,7 @@ class Mentor(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='mentor'
+        related_name='mentors'
     )
 
     def clean_fields(self, exclude=None):
@@ -156,11 +156,6 @@ class SocialServiceCenter(models.Model):
             max_length=17,
             validators=[phone_regex]
         )
-    )
-    coordinator = models.OneToOneField(
-        to='users.Coordinator',
-        on_delete=models.CASCADE,
-        related_name='social_service_center'
     )
 
     def clean_fields(self, exclude=None):
@@ -225,11 +220,23 @@ class PublicService(models.Model):
         max_length=512
     )
     website = models.URLField()
-    coordinator = models.OneToOneField(
-        to='users.Coordinator',
-        on_delete=models.CASCADE,
-        related_name='public_service'
+    status = models.CharField(
+        max_length=64,
+        choices=PublicServiceStatuses.choices(),
+        default=PublicServiceStatuses.NOT_SPECIFIED
     )
+    contract_number = models.CharField(
+        max_length=32,
+        null=True,
+        blank=True
+    )
+
+    @property
+    def pair_count(self):
+        pair_count = 0
+        for c in self.coordinators.all().iterator():
+            pair_count += c.mentors.count()
+        return pair_count
 
     def clean_fields(self, exclude=None):
         super().clean_fields(exclude=exclude)
@@ -309,6 +316,23 @@ class Coordinator(models.Model):
         )
     )
     email = models.EmailField()
+
+    # One of social_service_center or public_service need to be filled
+    # but one of them should be null
+    social_service_center = models.ForeignKey(
+        to='users.SocialServiceCenter',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='coordinators'
+    )
+    public_service = models.ForeignKey(
+        to='users.PublicService',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='coordinators'
+    )
 
     @classmethod
     def get_coordinator_by_related_service_pk(cls, service_pk):

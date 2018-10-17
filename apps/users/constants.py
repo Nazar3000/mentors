@@ -38,3 +38,10 @@ class MentorStatuses(ChoicesEnum):
     SELECTED_FOR_MENTOREE = _('Підібраний для вихованця')
     ACTIVE_INTERACTION = _('Активна взаємодія')
     PAIR_DISBANDED = _('Пара розформована')
+
+
+class PublicServiceStatuses(ChoicesEnum):
+    NOT_SPECIFIED = _('Не визначений')
+    KNOW_ABOUT_EXISTING = _('Знаємо про її існування')
+    COOPERATION_AGREEMENT = _('Домовленість про співпрацю')
+    CONTRACT_SIGNED = _('Підписаний договір')

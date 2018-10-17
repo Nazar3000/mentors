@@ -95,10 +95,11 @@ class MentorsView(TemplateView):
         coordinator = Coordinator.objects.get(pk=coordinator_pk)
         try:
             responsible = coordinator.social_service_center.pk
-        except SocialServiceCenter.DoesNotExist:
-            responsible = coordinator.public_service.pk
-        except (Coordinator.DoesNotExist, PublicService.DoesNotExist):
-            responsible = None
+        except AttributeError:
+            try:
+                responsible = coordinator.public_service.pk
+            except AttributeError:
+                responsible = None
         return responsible
 
     def get_light_data(self):
@@ -214,3 +215,24 @@ class MentorsView(TemplateView):
 
 class PublicServicesView(TemplateView):
     template_name = 'social_services/public_services.html'
+
+    def get(self, request, *args, **kwargs):
+        # TODO: finish
+        if 'get_light_public_service_data' in request.GET.keys():
+            service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id)\
+                .values('pk', 'name')
+
+            for data in service_data:
+                service = PublicService.objects.get(pk=data['pk'])
+                data['pair_count'] = service.pair_count
+        elif 'get_extended_public_service_data' in request.GET.keys():
+            public_service = PublicService.objects.get(pk='public_service_pk')
+            public_service_data = model_to_dict(public_service, fields=(
+                'name',
+                'max_pair_count',
+                'phone_number',
+                'email',
+                'address',
+                'website',
+                'contract_number'
+            ))
