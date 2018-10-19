@@ -207,6 +207,8 @@ class PublicService(models.Model):
     name = models.CharField(
         max_length=128
     )
+    profile_image = models.ImageField(
+        upload_to='public_services/profile_images')
     max_pair_count = models.PositiveSmallIntegerField(
         default=1
     )

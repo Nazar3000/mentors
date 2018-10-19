@@ -14,7 +14,7 @@ from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey
 from social_services.forms import MentorEditForm
-from users.constants import MentorStatuses
+from users.constants import MentorStatuses, PublicServiceStatuses
 from users.models import PublicService, Coordinator, SocialServiceCenter
 
 User = get_user_model()
@@ -217,16 +217,21 @@ class PublicServicesView(TemplateView):
     template_name = 'social_services/public_services.html'
 
     def get(self, request, *args, **kwargs):
-        # TODO: finish
+        print(request.GET.keys())
         if 'get_light_public_service_data' in request.GET.keys():
             service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id)\
-                .values('pk', 'name')
-
+                .values('pk', 'name', 'status')
             for data in service_data:
                 service = PublicService.objects.get(pk=data['pk'])
                 data['pair_count'] = service.pair_count
+
+            return JsonResponse({
+                'service_data': list(service_data),
+                'public_service_statuses': dict(PublicServiceStatuses.choices())
+            })
+
         elif 'get_extended_public_service_data' in request.GET.keys():
-            public_service = PublicService.objects.get(pk='public_service_pk')
+            public_service = PublicService.objects.get(pk=request.GET['public_service_pk'])
             public_service_data = model_to_dict(public_service, fields=(
                 'name',
                 'max_pair_count',
@@ -234,5 +239,12 @@ class PublicServicesView(TemplateView):
                 'email',
                 'address',
                 'website',
-                'contract_number'
+                'contract_number',
             ))
+            public_service_data['profile_image'] = public_service.profile_image.url
+            public_service_data['pair_count'] = public_service.pair_count
+            return JsonResponse({
+                'public_service_data': public_service_data
+            })
+
+        return super().get(request, *args, **kwargs)
