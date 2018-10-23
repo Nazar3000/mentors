@@ -34,7 +34,7 @@ const mentors = new Vue({
   },
   methods: {
     getLightData() {
-      $.get('?get_light_data', (res) => {
+      $.get('/social-service/mentors/?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
         this.searchedMentors = this.lightMentors;
         this.mentorStatuses = res.mentor_statuses;
@@ -45,7 +45,7 @@ const mentors = new Vue({
       this.expanded = !this.expanded;
 
       if (this.expanded) {
-        $.get(`?get_extended_data&mentor_id=${mentorId}`, (res) => {
+        $.get(`/social-service/mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
           this.extendedMentor = res.mentor_data;
           this.mentorSocServiceData = res.mentor_social_service_center_data;
         });
@@ -60,7 +60,7 @@ const mentors = new Vue({
       }
 
       $.ajax({
-        url: 'change_extended_data/',
+        url: '/social-service/mentors/change_extended_data/',
         data: formData,
         processData: false,
         contentType: false,
@@ -85,7 +85,7 @@ const mentors = new Vue({
       }
 
       $.ajax({
-        url: 'change_social_service_center_data/',
+        url: '/social-service/mentors/change_social_service_center_data/',
         data: formData,
         processData: false,
         contentType: false,
@@ -165,7 +165,7 @@ const mentors = new Vue({
           }
 
           $.ajax({
-            url: 'change_light_data/',
+            url: '/social-service/mentors/change_light_data/',
             data: formData,
             processData: false,
             contentType: false,

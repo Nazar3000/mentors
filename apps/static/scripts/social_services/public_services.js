@@ -20,7 +20,8 @@ const publicServices = new Vue({
       $.get(`?get_extended_public_service_data&public_service_pk=${publicServicePk}`, (res) => {
         this.extendedPublicService = res.public_service_data;
       })
-    }
+    },
+
   },
   watch: {
 

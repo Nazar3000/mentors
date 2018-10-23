@@ -217,7 +217,6 @@ class PublicServicesView(TemplateView):
     template_name = 'social_services/public_services.html'
 
     def get(self, request, *args, **kwargs):
-        print(request.GET.keys())
         if 'get_light_public_service_data' in request.GET.keys():
             service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id)\
                 .values('pk', 'name', 'status')
