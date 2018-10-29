@@ -9,7 +9,6 @@ from django.core.validators import RegexValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-
 from .constants import UserTypes, MentorStatuses
 
 
@@ -68,6 +67,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     user_type = models.PositiveSmallIntegerField(
         choices=UserTypes.USER_TYPE_CHOICES)
+    user_master_key = models.CharField(
+        max_length=12,
+        blank=True,
+        default=''
+    )
 
     USERNAME_FIELD = 'email'
 
