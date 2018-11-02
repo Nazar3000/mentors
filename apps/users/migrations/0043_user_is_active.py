@@ -10,9 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='user',
-            name='is_active',
-            field=models.BooleanField(default=True, help_text='Is the user account currently active', verbose_name='active'),
-        ),
     ]

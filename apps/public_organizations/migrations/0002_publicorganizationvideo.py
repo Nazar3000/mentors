@@ -10,12 +10,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='PublicOrganizationVideo',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('video_link', models.URLField()),
-                ('page', models.IntegerField(choices=[(1, 'Main'), (2, 'Video Mentor')])),
-            ],
-        ),
     ]

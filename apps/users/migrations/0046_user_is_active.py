@@ -15,4 +15,13 @@ class Migration(migrations.Migration):
             name='is_active',
             field=models.BooleanField(default=True, help_text='Is the user account currently active', verbose_name='active'),
         ),
+        migrations.RemoveField(
+            model_name='user',
+            name='master_key',
+        ),
+        migrations.AddField(
+            model_name='user',
+            name='user_master_key',
+            field=models.CharField(blank=True, default='', max_length=12),
+        ),
     ]
