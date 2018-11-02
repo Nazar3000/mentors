@@ -68,6 +68,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     user_type = models.PositiveSmallIntegerField(
         choices=UserTypes.USER_TYPE_CHOICES)
+    user_master_key = models.CharField(
+        max_length=12,
+        blank=True,
+        default=''
+    )
 
     USERNAME_FIELD = 'email'
 
@@ -127,11 +132,10 @@ class Mentor(models.Model):
         related_name='mentors'
     )
 
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude=exclude)
-        with suppress(User.DoesNotExist):
-            if self.user.user_type != UserTypes.MENTOR:
-                raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
+    # def clean_fields(self, exclude=None):
+    #     super().clean_fields(exclude=exclude)
+    #     if self.user.user_type != UserTypes.MENTOR:
+    #         raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
 
 
 class SocialServiceCenter(models.Model):

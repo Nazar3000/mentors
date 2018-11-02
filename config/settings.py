@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'govern_users',
     'social_services',
     'public_organizations',
+    'social_policy',
 ]
 
 MIDDLEWARE = [

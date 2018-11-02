@@ -20,13 +20,14 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('django.contrib.auth.urls')),
 
     path('', include('users.urls')),
     path('mentor/', include('mentors.urls')),
     path('volunteer/', include('volunteers.urls')),
     path('social-service/', include('social_services.urls')),
     path('public-organizations/', include('public_organizations.urls')),
+    path('social-policy/', include('social_policy.urls')),
+    path('', include('django.contrib.auth.urls')),
 ] \
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
