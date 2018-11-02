@@ -17,6 +17,7 @@ class UserTypes:
     ORGANIZATION = 4
     CHILD_SERVICE = 5
     VOLUNTEER = 6
+    SOCIAL_POLICY_MINISTRY = 7
 
     USER_TYPE_CHOICES = (
         (GOVERN_USER, 'govern_user'),
@@ -26,6 +27,7 @@ class UserTypes:
         (ORGANIZATION, 'organization'),
         (CHILD_SERVICE, 'child_service'),
         (VOLUNTEER, 'volunteer'),
+        (SOCIAL_POLICY_MINISTRY, 'social_policy_ministry'),
     )
 
 

@@ -119,10 +119,10 @@ class Mentor(models.Model):
         default=False
     )
 
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude=exclude)
-        if self.user.user_type != UserTypes.MENTOR:
-            raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
+    # def clean_fields(self, exclude=None):
+    #     super().clean_fields(exclude=exclude)
+    #     if self.user.user_type != UserTypes.MENTOR:
+    #         raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
 
 
 class SocialServiceCenter(models.Model):

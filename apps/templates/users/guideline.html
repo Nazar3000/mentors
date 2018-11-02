@@ -24,7 +24,14 @@
               <div class="numb">7</div>
             </div><span>Дітей мають наставників</span>
           </div>
-          <div class="main-mentor-interactiv-item"><a href="{% url 'mentors:signup_step0' %}">Стати наставником</a></div>
+          <div class="main-mentor-interactiv-item">
+              {% if user.is_authenticated %}
+              <a href="{% url 'mentors:mentor_office' %}">
+                  {% else %}
+              <a href="{% url 'mentors:signup_step0' %}">
+                  {% endif %}
+                  Стати наставником</a>
+          </div>
         </div>
       </div>
     </section>

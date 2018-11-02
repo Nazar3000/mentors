@@ -14,32 +14,44 @@
           <h3>1. Загальні відомості:</h3>
           <div class="page-form-register">
             <div class="page-form-register-left">
+              <p>
               <span>ПІБ</span>
               <input type="text" v-model="full_name" :class="{'alert-border': errors['full_name']}">
               <span class="error-form" v-for="err in errors.full_name">[[ err ]]</span>
+              </p>
+              <p>
               <span>Дата народження</span>
-              <input type="text" v-model="date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
+              <input type="text" placeholder="dd.mm.yyyy" v-model="date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
               <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
+              </p>
+              <p>
               <span>Контактний телефон</span>
               <input type="text" v-model="phone_number" :class="{'alert-border': errors['phone_number']}">
               <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+              </p>
+              <p>
               <span>Електронна адреса</span>
               <input type="email" v-model="email" :class="{'alert-border': errors['email']}">
               <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+              </p>
             </div>
             <div class="page-form-register-right">
+              <p>
               <span>Національність/Громадянство</span>
               <input type="text" v-model="nationality" :class="{'alert-border': errors['nationality']}">
               <span class="error-form" v-for="err in errors.nationality">[[ err ]]</span>
-
+              </p>
+              <p>
               <span>Адреса фактичного місця проживання</span>
               <input type="text" v-model="actual_address" :class="{'alert-border': errors['actual_address']}">
               <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
-
+              </p>
+              <p>
               <span>Адреса реєстрації</span>
               <input type="text" v-model="registration_address" :class="{'alert-border': errors['registration_address']}">
               <span class="error-form" v-for="err in errors.registration_address">[[ err ]]</span>
-
+              </p>
+              <p>
               <span>Віросповідання</span>
               <select v-model="religion" :class="{'alert-border': errors['religion']}">
                 <option v-for="key, value in choices.religions" :value="value">
@@ -47,7 +59,7 @@
                 </option>
               </select>
               <span class="error-form" v-for="err in errors.religion">[[ err ]]</span>
-
+              </p>
               <div class="page-form-register-religion">
                 <span>Яку міську церкву ви відвідуєте?</span>
                 <input type="text" v-model="local_church_visiting" :class="{'alert-border': errors['local_church_visiting']}">

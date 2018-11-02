@@ -40,7 +40,9 @@
           <i class="fas fa-bell"></i>
         </a>
         <div class="admin">
+
           <img src="{{ user|get_mentor_data:'profile_image' }}" alt="">
+
           <div class="admin-title"><span>Особистий кабінет наставника</span>
             <div class="admin-menu-off">{{ user|get_mentor_data:'first_name' }} {{ user|get_mentor_data:'last_name' }}<i class="fas fa-caret-down"></i>
               <div class="admin-menu-on" style="display: none;">
