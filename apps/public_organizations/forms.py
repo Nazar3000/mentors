@@ -19,7 +19,6 @@ class PublicOrganizationSignUpStep0Form(SignUpStep0Form):
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
         master_key = self.cleaned_data['master_key']
-        PublicOrganizationMasterKey.objects.filter(master_key=master_key).first().delete()
         if commit:
             user.set_password(self.cleaned_data['password1'])
             user.user_type = UserTypes.PUBLIC_SERVICE

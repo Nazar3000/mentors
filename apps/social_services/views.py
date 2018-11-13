@@ -247,3 +247,7 @@ class PublicServicesView(TemplateView):
             })
 
         return super().get(request, *args, **kwargs)
+
+
+class DatingView(TemplateView):
+    template_name = 'social_services/ssc_dating.html'

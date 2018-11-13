@@ -36,7 +36,6 @@ class SignUpStep0Form(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         master_key = self.cleaned_data['master_key']
-        SocialServiceMasterKey.objects.filter(master_key=master_key).first().delete()
         if commit:
             user.set_password(self.cleaned_data['password1'])
             user.user_type = UserTypes.SOCIAL_SERVICE_CENTER
