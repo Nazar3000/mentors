@@ -106,19 +106,31 @@ class MentorsView(TemplateView):
         mentor_statuses = dict(MentorStatuses.choices())
         related_public_services = PublicService.objects.filter(
             social_service_center__pk=self.request.user.pk).values('pk', 'name')
-        mentors_data = Mentor.objects.all().values(
-            'pk',
-            'phone_number',
-            'licence_key__key',
-            'status',
-            'coordinator'
-        )
-        for data in mentors_data:
-            mentor = Mentor.objects.get(pk=data['pk'])
+        mentors_query_data = Mentor.objects.raw("""
+            SELECT
+                users_mentor.user_id,
+                users_mentor.first_name || ' ' || users_mentor.last_name as full_name,
+                users_mentor.phone_number,
+                mentors_mentorlicencekey.key as licence_key__key,
+                users_mentor.status,
+                users_mentor.coordinator_id,
+                (CASE WHEN (users_coordinator.social_service_center_id IS NOT NULL )
+                THEN users_coordinator.social_service_center_id
+                ELSE users_coordinator.public_service_id END) as responsible
+            FROM users_mentor
+                JOIN users_coordinator ON users_mentor.coordinator_id = users_coordinator.id
+                JOIN mentors_mentorlicencekey ON users_mentor.licence_key_id = mentors_mentorlicencekey.id
+            WHERE users_coordinator.social_service_center_id = '{current_soc_service_id}'
+        """.format(current_soc_service_id=self.request.user.id))
+
+        mentors_data = []
+        for mentor in mentors_query_data.iterator():
+            mentor_dict = mentor.__dict__
+            del mentor_dict['_state']
             soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
-            data['docs_status'] = soc_service_data.docs_status
-            data['responsible'] = self.get_responsible_pk(data['coordinator'])
-            data['full_name'] = '{} {}'.format(mentor.first_name, mentor.last_name)
+            mentor_dict['docs_status'] = soc_service_data.docs_status
+            mentor_dict['pk'] = mentor.pk
+            mentors_data.append(mentor_dict)
 
         return JsonResponse({
             'mentors_data': list(mentors_data),

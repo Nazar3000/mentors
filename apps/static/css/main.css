@@ -13404,7 +13404,7 @@ select.table-education-name {
 }
 
 .css-card {
-  display: none;
+  display: block;
   margin-bottom: 20px;
 }
 
