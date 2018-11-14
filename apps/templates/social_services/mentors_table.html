@@ -86,7 +86,14 @@
       <!-- start edit card mentor-->
       <div class="css-card-left" v-else>
         <div class="css-card-info">
-          <div class="css-card-img"><img :src="extendedMentor.profile_image" alt=""></div>
+          <div class="css-card-img"><img :src="getImageUrl(extendedMentor.profile_image)" alt=""></div>
+          <div class="social-card-icon">
+            <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
+            <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
+            <a class="delete-img" href="javascript: void(0)" title="Delete image" @click="deleteProfileImage()">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
           <div class="css-card-title">
             <h2>Наставник</h2>
             <input class="css-input-name" type="text" placeholder="Ім’я" v-model="extendedMentor.first_name">

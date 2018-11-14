@@ -199,6 +199,7 @@ class MentorsView(TemplateView):
             licence_key = request.POST['licence_key']
             instance = Mentor.objects.get(pk=request.POST['pk']) if request.POST.get('pk') else None
             form = MentorEditForm(request.POST, request.FILES, instance=instance)
+            print(request.FILES)
             if form.is_valid():
                 mentor = form.save(commit=False)
                 if mentor.licence_key:
