@@ -64,3 +64,9 @@ class EducationTypes(ChoicesEnum):
     SCHOOL = _('Загальноосвітня школа')
     UNIVERSITY = _('Університет, інститут, технікум')
     EXTRA_EDUCATION = _('Додаткові курси, тренінги, семінари')
+
+
+class DocsStatuses(ChoicesEnum):
+    ALL = _('Є всі')
+    NOT_ALL = _('Не всі')
+    NOTHING = _('Немає жодного')

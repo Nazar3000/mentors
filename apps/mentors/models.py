@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 from users.constants import MentorStatuses
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
-    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
+    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency, DocsStatuses
 
 
 class MentorQuestionnaire(models.Model):
@@ -256,16 +256,24 @@ class MentorSocialServiceCenterData(models.Model):
         blank=True
     )
     passport_copy = models.BooleanField(
-        default=False
+        default=False,
+        null=True,
+        blank=True
     )
     application = models.BooleanField(
-        default=False
+        default=False,
+        null=True,
+        blank=True
     )
     certificate_of_good_conduct = models.BooleanField(
-        default=False
+        default=False,
+        null=True,
+        blank=True
     )
     medical_certificate = models.BooleanField(
-        default=False
+        default=False,
+        null=True,
+        blank=True
     )
     psychologist_meeting_date = models.DateField(
         null=True,
@@ -276,7 +284,9 @@ class MentorSocialServiceCenterData(models.Model):
         blank=True
     )
     recommended_to_training = models.BooleanField(
-        default=False
+        default=False,
+        null=True,
+        blank=True
     )
     training_date = models.DateField(
         null=True,
@@ -287,7 +297,9 @@ class MentorSocialServiceCenterData(models.Model):
         blank=True
     )
     admitted_to_child = models.BooleanField(
-        default=False
+        default=False,
+        null=True,
+        blank=True
     )
     contract_number = models.CharField(
         max_length=32,
@@ -312,11 +324,11 @@ class MentorSocialServiceCenterData(models.Model):
             self.medical_certificate
         ]
         if all(value for value in docs_fields_values):
-            return _('Є всі')
+            return DocsStatuses.ALL.name
         elif any(value for value in docs_fields_values):
-            return _('Не всі')
+            return DocsStatuses.NOT_ALL.name
         else:
-            return _('Немає жодного')
+            return DocsStatuses.NOTHING.name
 
     def save(self, *args, **kwargs):
         # set mentor status

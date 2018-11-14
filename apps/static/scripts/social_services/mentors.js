@@ -26,7 +26,8 @@ const mentors = new Vue({
     },
     mentorSocServiceData: {},
     socServiceId: soc_service_id,
-    searchString: ''
+    searchString: '',
+    docsStatuses: []
   },
   created() {
     this.extendedMentor = Object.assign({}, this.defaultExtendedMentor);
@@ -37,6 +38,7 @@ const mentors = new Vue({
       $.get('/social-service/mentors/?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
         this.searchedMentors = this.lightMentors;
+        this.docsStatuses = res.docs_statuses;
         this.mentorStatuses = res.mentor_statuses;
         this.publicServices = res.public_services;
       })
@@ -80,7 +82,9 @@ const mentors = new Vue({
       const formData = new FormData();
       for (let key in this.mentorSocServiceData) {
           if (this.mentorSocServiceData.hasOwnProperty(key)) {
-              formData.append(key, this.mentorSocServiceData[key]);
+              if (this.mentorSocServiceData[key]) {
+                formData.append(key, this.mentorSocServiceData[key]);
+              }
           }
       }
 
@@ -205,6 +209,45 @@ const mentors = new Vue({
         }
         return searched;
       });
+    },
+    extendedMentor: {
+      handler: function (newObj) {
+        const lightObj = this.lightMentors.find(m => m.pk === newObj.pk);
+
+        if (lightObj) {
+          const index = this.lightMentors.indexOf(lightObj);
+
+          const newLightMentor = {
+            'pk': newObj.pk,
+            'full_name': `${newObj.first_name} ${newObj.last_name}`,
+            'status': newObj.status,
+            'licence_key__key': newObj.licence_key,
+            'responsible': newObj.responsible,
+            'docs_status': lightObj.docs_status,
+          }
+          this.lightMentors.splice(index, 1);
+          this.lightMentors.splice(index, 0, newLightMentor);
+        }
+      },
+      deep: true
+    },
+    mentorSocServiceData: {
+      handler: function (newObj) {
+        const activeLightMentor = this.lightMentors.find(m => m.pk === this.activeLightMentorPk);
+
+        if (newObj.certificate_of_good_conduct
+          && newObj.medical_certificate && newObj.passport_copy && newObj.application) {
+          activeLightMentor.docs_status = 'ALL';
+        } else if (newObj.certificate_of_good_conduct
+          || newObj.medical_certificate || newObj.passport_copy || newObj.application) {
+          activeLightMentor.docs_status = 'NOT_ALL';
+        } else {
+          activeLightMentor.docs_status = 'NOTHING';
+        }
+
+        this.submitMentorSocServeData();
+      },
+      deep: true
     }
   }
 });

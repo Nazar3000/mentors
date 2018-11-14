@@ -8,6 +8,7 @@ from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 
+from mentors.constants import DocsStatuses
 from social_services.utils import get_date_str_formatted
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm
 from .models import SocialServiceVideo, Material, MaterialCategory
@@ -133,8 +134,9 @@ class MentorsView(TemplateView):
             mentors_data.append(mentor_dict)
 
         return JsonResponse({
-            'mentors_data': list(mentors_data),
+            'mentors_data': mentors_data,
             'mentor_statuses': mentor_statuses,
+            'docs_statuses': dict(DocsStatuses.choices()),
             'public_services': list(related_public_services)
         })
 
@@ -156,18 +158,6 @@ class MentorsView(TemplateView):
         mentor_data['questionnaire_creation_date'] = get_date_str_formatted(mentor.questionnaire_creation_date)
 
         mentor_social_service_center_data = model_to_dict(mentor.social_service_center_data)
-        if mentor.social_service_center_data.infomeeting_date:
-            mentor_social_service_center_data['infomeeting_date'] = \
-                get_date_str_formatted(mentor.social_service_center_data.infomeeting_date)
-        if mentor.social_service_center_data.psychologist_meeting_date:
-            mentor_social_service_center_data['psychologist_meeting_date'] = \
-                get_date_str_formatted(mentor.social_service_center_data.psychologist_meeting_date)
-        if mentor.social_service_center_data.training_date:
-            mentor_social_service_center_data['training_date'] = \
-                get_date_str_formatted(mentor.social_service_center_data.training_date)
-        if mentor.social_service_center_data.contract_date:
-            mentor_social_service_center_data['contract_date'] = \
-                get_date_str_formatted(mentor.social_service_center_data.contract_date)
 
         if mentor.mentoree:
             mentor_social_service_center_data['mentoree_name'] = '{} {}'.format(
@@ -199,7 +189,6 @@ class MentorsView(TemplateView):
             licence_key = request.POST['licence_key']
             instance = Mentor.objects.get(pk=request.POST['pk']) if request.POST.get('pk') else None
             form = MentorEditForm(request.POST, request.FILES, instance=instance)
-            print(request.FILES)
             if form.is_valid():
                 mentor = form.save(commit=False)
                 if mentor.licence_key:

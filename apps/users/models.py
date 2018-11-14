@@ -343,11 +343,10 @@ class Coordinator(models.Model):
     @classmethod
     def get_coordinator_by_related_service_pk(cls, service_pk):
         try:
-            coordinator = SocialServiceCenter.objects.get(pk=service_pk).coordinator
+            coordinator = SocialServiceCenter.objects.get(pk=service_pk).coordinators.first()
         except SocialServiceCenter.DoesNotExist:
-            coordinator = PublicService.objects.get(pk=service_pk).coordinator
+            coordinator = PublicService.objects.get(pk=service_pk).coordinators.first()
         except PublicService.DoesNotExist:
             raise Coordinator.DoesNotExist
 
         return coordinator
-
