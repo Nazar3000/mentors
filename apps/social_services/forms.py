@@ -59,6 +59,8 @@ class AuthenticationForm(forms.Form):
 
 
 class MentorEditForm(forms.ModelForm):
+    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
+
     class Meta:
         model = Mentor
         fields = (
@@ -67,11 +69,9 @@ class MentorEditForm(forms.ModelForm):
             'last_name',
             'phone_number',
             'profile_image',
+            'date_of_birth',
+            'actual_address',
         )
-
-
-# class MentorUserForm(SignUpStep1Form):
-#     pass
 
 
 class MentorSocialServiceCenterDataEditForm(forms.ModelForm):

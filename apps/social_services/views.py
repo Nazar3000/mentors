@@ -148,6 +148,7 @@ class MentorsView(TemplateView):
             'status',
             'phone_number',
             'actual_address',
+            'date_of_birth',
         ))
         mentor_data['pk'] = mentor.pk
         mentor_data['email'] = mentor.user.email

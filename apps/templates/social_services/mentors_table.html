@@ -96,10 +96,26 @@
           </div>
           <div class="css-card-title">
             <h2>Наставник</h2>
-            <input class="css-input-name" type="text" placeholder="Ім’я" v-model="extendedMentor.first_name">
-            <input class="css-input-prename" type="text" placeholder="Прізвище" v-model="extendedMentor.last_name">
+            <input class="css-input-name"
+                   type="text" placeholder="Ім’я"
+                   v-model="extendedMentor.first_name"
+                   :class="{'alert-border': errors['first_name']}"
+              >
+              <span class="error-form" v-for="err in errors.first_name">[[ err ]]</span>
+            <input class="css-input-prename"
+                   type="text"
+                   placeholder="Прізвище"
+                   v-model="extendedMentor.last_name"
+                   :class="{'alert-border': errors['last_name']}"
+              >
+              <span class="error-form" v-for="err in errors.last_name">[[ err ]]</span>
             <span>Дата народження</span>
-            <input class="css-input-birth" type="text" placeholder="дд.мм.рррр" v-model="extendedMentor.date_of_birth">
+            <input class="css-input-birth"
+                   type="text"
+                   v-model="extendedMentor.date_of_birth"
+                   :class="{'alert-border': errors['date_of_birth']}"
+              >
+              <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
           </div>
           <div class="css-card-edit">
             <a href="javascript: void(0)" title="Edit" @click="submitMentorCard"><i class="fas fa-check"></i></a>
@@ -118,11 +134,29 @@
                 </option>
               </select>
               <span>Телефон:</span>
-              <input class="css-input-card" type="text" placeholder="Ваш телефон" v-model="extendedMentor.phone_number">
+              <input class="css-input-card"
+                     type="text"
+                     placeholder="Ваш телефон"
+                     v-model="extendedMentor.phone_number"
+                     :class="{'alert-border': errors['phone_number']}"
+              >
+              <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
               <span>Email:</span>
-              <input class="css-input-card" type="text" placeholder="Ваш Email" v-model="extendedMentor.email">
+              <input class="css-input-card"
+                     type="text"
+                     placeholder="Ваш Email"
+                     v-model="extendedMentor.email"
+                     :class="{'alert-border': errors['email']}"
+              >
+              <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
               <span>Адреса:</span>
-              <input class="css-input-card" type="text" placeholder="Ваша адреса" v-model="extendedMentor.actual_address">
+              <input class="css-input-card"
+                     type="text"
+                     placeholder="Ваша адреса"
+                     v-model="extendedMentor.actual_address"
+                     :class="{'alert-border': errors['actual_address']}"
+              >
+              <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
             </div>
             <div>
               <span>Відповідальний:</span>
@@ -144,88 +178,8 @@
         </div>
       </div>
       <!-- end edit card mentor-->
-      <!-- start card info-->
-{#      <div class="css-card-right" v-if="mentorSocServeDataView">#}
-{#        <div class="css-card-edit">#}
-{#          <a href="javascript: void(0)" title="Edit" @click="mentorSocServeDataView = false"><i class="fas fa-pencil-alt"></i></a>#}
-{#        </div>#}
-{#        <span>Дата проходження інфо-зустрічі:</span>#}
-{#        <p>[[ getDateFormatted(mentorSocServiceData.infomeeting_date) ]]</p><span>Наявність документів:</span>#}
-{#        <div class="css-card-check-wrapp">#}
-{#          <div class="css-card-check">#}
-{#            <input class="css-font" id="good-conduct" type="checkbox" v-model="mentorSocServiceData.certificate_of_good_conduct" disabled>#}
-{#            <label for="good-conduct">Довідка про несудимість</label>#}
-{#          </div>#}
-{#          <div class="css-card-check">#}
-{#            <input class="css-font" id="med-cert" type="checkbox" v-model="mentorSocServiceData.medical_certificate" disabled>#}
-{#            <label for="med-cert">Мед. довідка</label>#}
-{#          </div>#}
-{#        </div>#}
-{#        <div class="css-card-check-wrapp">#}
-{#          <div class="css-card-check">#}
-{#            <input class="css-font" id="passport-copy" type="checkbox" v-model="mentorSocServiceData.passport_copy" disabled>#}
-{#            <label for="passport-copy">Копія паспорта</label>#}
-{#          </div>#}
-{#          <div class="css-card-check">#}
-{#            <input class="css-font" id="application" type="checkbox" v-model="mentorSocServiceData.application" disabled>#}
-{#            <label for="application">Заява</label>#}
-{#          </div>#}
-{#        </div>#}
-{#        <span>Дата проходження консультації з психологом:</span>#}
-{#        <p>[[ getDateFormatted(mentorSocServiceData.psychologist_meeting_date) ]]</p>#}
-{#        <div class="css-card-subtitle"><span>Висновок психолога:</span>#}
-{#          <div>#}
-{#            <h5>поведінка:</h5>#}
-{#            <p>[[ mentorSocServiceData.psychologist_summary ]]</p>#}
-{#            <div class="css-card-subtitle-all">Читати більше…</div>#}
-{#          </div>#}
-{#        </div>#}
-{#        <div class="css-card-check">#}
-{#          <input class="css-font" id="training-recommended" type="checkbox" v-model="mentorSocServiceData.recommended_to_training" disabled>#}
-{#          <label for="training-recommended">Рекомендований для участі в тренінгу</label>#}
-{#        </div>#}
-{#        <span>Дата тренінга:</span>#}
-{#        <p>[[ mentorSocServiceData.training_date ]]</p>#}
-{#        <div class="css-card-subtitle"><span>Висновок тренера:</span>#}
-{#          <div>#}
-{#            <h5>поведінка:</h5>#}
-{#            <p>[[ mentorSocServiceData.trainer_summary ]]</p>#}
-{#            <div class="css-card-subtitle-all">Читати більше…</div>#}
-{#          </div>#}
-{#        </div>#}
-{#        <div class="css-card-check">#}
-{#          <input class="css-font" id="child-admitted" type="checkbox" v-model="mentorSocServiceData.admitted_to_child" disabled>#}
-{#          <label for="child-admitted">Допущений до дитини</label>#}
-{#        </div>#}
-{#        <div class="access-no" v-if="mentorSocServiceData.mentoree_name">#}
-{#          <p>Вихованець:<span>[[ mentorSocServiceData.mentoree_name ]]</span></p>#}
-{#        </div>#}
-{#        <div class="access-yes" v-else>#}
-{#          <input type="text" placeholder="Впиши ПІБ вихованця">#}
-{#          <button>Зберегти</button>#}
-{#        </div>#}
-{#        <div class="contract-wrapp">#}
-{#          <div class="contract-num"><span>Номер договору:</span>#}
-{#            <p>[[ mentorSocServiceData.contract_number ]]</p>#}
-{#          </div>#}
-{#          <div class="contract-date"><span>Дата договору:</span>#}
-{#            <p>[[ mentorSocServiceData.contract_date ]]</p>#}
-{#          </div>#}
-{#        </div>#}
-{#        <div class="css-card-subtitle"><span>Коментар:</span>#}
-{#          <div>#}
-{#            <h5>поведінка:</h5>#}
-{#            <p>[[ mentorSocServiceData.comment ]]</p>#}
-{#            <div class="css-card-subtitle-all">Читати більше…</div>#}
-{#          </div>#}
-{#        </div>#}
-{#      </div>#}
-      <!-- end card info-->
       <!-- start edit card info-->
       <div class="css-card-right">
-{#        <div class="css-card-edit">#}
-{#          <a href="javascript: void(0)" @click="submitMentorSocServeData" title="Edit"><i class="fas fa-check"></i></a>#}
-{#        </div>#}
         <span>Дата проходження інфо-зустрічі:</span>
         <input class="css-input-card" type="date" v-model="mentorSocServiceData.infomeeting_date"/>
         <span>Наявність документів:</span>

@@ -27,7 +27,8 @@ const mentors = new Vue({
     mentorSocServiceData: {},
     socServiceId: soc_service_id,
     searchString: '',
-    docsStatuses: []
+    docsStatuses: [],
+    errors: {}
   },
   created() {
     this.extendedMentor = Object.assign({}, this.defaultExtendedMentor);
@@ -73,7 +74,7 @@ const mentors = new Vue({
           if (res.status === 'success') {
             this.mentorCardView = true;
           } else {
-            console.log(res);
+            this.errors = res;
           }
         }
       });
