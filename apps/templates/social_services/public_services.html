@@ -33,7 +33,7 @@
               <div class="css-slip-modal">
                 <div class="css-slip-close">×</div>
                 <div class="css-slip-main">
-                  <div class="css-slip-image"><img src="img/empty-img.png" alt=""></div>
+                  <div class="css-slip-image"><img src="{% static 'img/empty-img.png' %}" alt=""></div>
                   <div class="css-slip-icon">
                     <label class="add-img" for="files" title="Add image"><i class="fas fa-plus"></i></label>
                     <input id="files" style="display:none;" type="file">
@@ -109,7 +109,7 @@
             <div class="css-block-val"><span>[[ lightPublicService.pair_count ]]</span></div>
           </div>
 
-          <div class="css-big-card">
+          <div class="css-big-card" v-if="publicServiceDetail">
             <div class="css-org">
               <div class="css-org-img"><img :src="extendedPublicService.profile_image" alt=""></div>
               <div class="css-org-title">
@@ -135,16 +135,23 @@
                 <span>Сайт:</span>
                 <a :href="extendedPublicService.website">[[ extendedPublicService.website ]]</a>
               </div>
-              <div class="css-org-mentor"><span>Передати пару:</span>
+              <div class="css-org-mentor">
+                <span>Передати пару:</span>
                 <select class="triangle-green">
-                  <option>Марченко Марія</option>
-                  <option>Марченко Марія</option>
-                  <option>Марченко Марія</option>
-                </select><span>Передати всі пари інтерната:</span>
+                  <option v-for="option in mentorList"
+                          :value="option.pk"
+                  >
+                    [[ option.full_name ]]
+                  </option>
+                </select>
+
+                <span>Передати всі пари інтерната:</span>
                 <select class="triangle-green">
-                  <option>№32</option>
-                  <option>№32</option>
-                  <option>№32</option>
+                  <option v-for="option in organizationList"
+                          :value="option.organization__pk"
+                  >
+                    [[ option.organization__name ]]
+                  </option>
                 </select>
                 <div class="css-org-doc">
                   <div><span>Номер договору:</span>
@@ -157,19 +164,12 @@
               </div>
               <div class="css-org-edit"><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a></div>
             </div>
-            <div id="mentors">
-              <div class="css-org-search">
-                <img src="{% static 'img/search.svg' %}">
-                <input type="text" placeholder="Почніть вводити дані тут" v-model="searchString">
-              </div>
-              {% include 'social_services/mentors_table.html' %}
-            </div>
-            <Mentors></Mentors>
+            {% include 'social_services/public_service_mentors_table.html' %}
             <a class="css-org-all" href=""><span>Дивитися всі</span></a>
             <div class="css-info">* Щоб переглянути історію взаємодії наставника та вихованця натисніть на ім’я вихованця в таблиці.</div>
           </div>
         </div>
-      </section><a class="css-social-all" href=""><span>Дивитися всі</span></a>
+      </section>
     </div>
   </div>
 {% endblock %}
@@ -178,6 +178,5 @@
   <script>
       const soc_service_id = '{{ user.id }}';
   </script>
-  <script src="{% static 'scripts/social_services/mentors.js' %}"></script>
   <script src="{% static 'scripts/social_services/public_services.js' %}"></script>
 {% endblock %}

@@ -14376,7 +14376,7 @@ select.table-education-name {
 }
 
 .triangle-green {
-  background-image: url(/img/triangle-green.svg);
+  background-image: url(/static/img/triangle-green.svg);
   background-repeat: no-repeat;
   background-position: right 14px center;
   background-size: 13px 8px;
@@ -15670,7 +15670,6 @@ select.table-education-name {
 }
 
 .css-big-card {
-  display: none;
   padding: 5px;
 }
 

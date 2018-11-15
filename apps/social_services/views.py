@@ -13,7 +13,7 @@ from social_services.utils import get_date_str_formatted
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm
 from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
-from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey
+from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
 from users.constants import MentorStatuses, PublicServiceStatuses
 from users.models import PublicService, Coordinator, SocialServiceCenter
@@ -88,7 +88,29 @@ def download_file(request, material_id):
     return response
 
 
-class MentorsView(TemplateView):
+class GetSocialServiceRelatedMentors:
+    """
+    Get specified fields from Mentor related to current SocialServiceCenter user
+    """
+
+    def get_mentors_query_data(self, fields_select_query):
+        mentors_query_data = Mentor.objects.raw("""
+            SELECT
+                users_mentor.user_id,
+                {fields_select_query}
+            FROM users_mentor
+                JOIN users_coordinator ON users_mentor.coordinator_id = users_coordinator.id
+                JOIN mentors_mentorlicencekey ON users_mentor.licence_key_id = mentors_mentorlicencekey.id
+            WHERE users_coordinator.social_service_center_id = '{current_soc_service_id}'
+                OR users_coordinator.public_service_id 
+                IN (SELECT user_id 
+                    FROM users_publicservice 
+                    WHERE users_publicservice.social_service_center_id = '{current_soc_service_id}')
+        """.format(current_soc_service_id=self.request.user.id, fields_select_query=fields_select_query))
+        return mentors_query_data
+
+
+class MentorsView(GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/mentors.html'
 
     @staticmethod
@@ -107,22 +129,19 @@ class MentorsView(TemplateView):
         mentor_statuses = dict(MentorStatuses.choices())
         related_public_services = PublicService.objects.filter(
             social_service_center__pk=self.request.user.pk).values('pk', 'name')
-        mentors_query_data = Mentor.objects.raw("""
-            SELECT
-                users_mentor.user_id,
+        mentors_query_data = self.get_mentors_query_data(
+            """
                 users_mentor.first_name || ' ' || users_mentor.last_name as full_name,
                 users_mentor.phone_number,
                 mentors_mentorlicencekey.key as licence_key__key,
                 users_mentor.status,
                 users_mentor.coordinator_id,
                 (CASE WHEN (users_coordinator.social_service_center_id IS NOT NULL )
-                THEN users_coordinator.social_service_center_id
-                ELSE users_coordinator.public_service_id END) as responsible
-            FROM users_mentor
-                JOIN users_coordinator ON users_mentor.coordinator_id = users_coordinator.id
-                JOIN mentors_mentorlicencekey ON users_mentor.licence_key_id = mentors_mentorlicencekey.id
-            WHERE users_coordinator.social_service_center_id = '{current_soc_service_id}'
-        """.format(current_soc_service_id=self.request.user.id))
+                 THEN users_coordinator.social_service_center_id
+                 ELSE users_coordinator.public_service_id END
+                 ) as responsible
+            """
+        )
 
         mentors_data = []
         for mentor in mentors_query_data.iterator():
@@ -216,38 +235,77 @@ class MentorsView(TemplateView):
         return JsonResponse({'status': 'success'})
 
 
-class PublicServicesView(TemplateView):
+class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/public_services.html'
+
+    def get_light_public_service_data(self):
+        mentors_query_data = self.get_mentors_query_data(
+            """
+                users_mentor.first_name || ' ' || users_mentor.last_name as full_name,
+                mentoree_id
+            """
+        )
+        mentor_list = list(map(lambda m: {'pk': m.pk, 'full_name': m.full_name}, mentors_query_data.iterator()))
+        mentoree_ids = []
+        for mentor in mentors_query_data:
+            mentoree_ids.append(mentor.mentoree_id)
+        organization_list = Mentoree.objects.filter(pk__in=mentoree_ids)\
+            .values('organization__pk', 'organization__name')
+
+        service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id) \
+            .values('pk', 'name', 'status')
+        for data in service_data:
+            service = PublicService.objects.get(pk=data['pk'])
+            data['pair_count'] = service.pair_count
+
+        return JsonResponse({
+            'mentor_list': mentor_list,
+            'organization_list': list(organization_list),
+            'service_data': list(service_data),
+            'public_service_statuses': dict(PublicServiceStatuses.choices())
+        })
+
+    def get_extended_public_service_data(self):
+        public_service = PublicService.objects.get(pk=self.request.GET['public_service_pk'])
+        public_service_data = model_to_dict(public_service, fields=(
+            'name',
+            'max_pair_count',
+            'phone_number',
+            'email',
+            'address',
+            'website',
+            'contract_number',
+        ))
+        public_service_data['profile_image'] = public_service.profile_image.url
+        public_service_data['pair_count'] = public_service.pair_count
+
+        coordinator_ids = PublicService.objects.filter(social_service_center__pk=self.request.user.pk)\
+            .values_list('coordinators', flat=True)
+        mentor_pks = Coordinator.objects.filter(id__in=coordinator_ids).values_list('mentors__pk', flat=True)
+        mentors_data = []
+        mentors = Mentor.objects.filter(pk__in=mentor_pks).iterator()
+        for mentor in mentors:
+            mentors_data.append({
+                'pk': mentor.pk,
+                'full_name': mentor.first_name + ' ' + mentor.last_name,
+                'mentoree_full_name': mentor.mentoree.first_name + ' ' + mentor.mentoree.last_name,
+                'organization_name': mentor.mentoree.organization.name,
+                'contract_number': mentor.social_service_center_data.contract_number,
+                'mentoring_start_date':
+                    get_date_str_formatted(mentor.meetings.first().date()) if mentor.meetings.first() else None
+            })
+
+        return JsonResponse({
+            'public_service_data': public_service_data,
+            'mentors_data': mentors_data
+        })
 
     def get(self, request, *args, **kwargs):
         if 'get_light_public_service_data' in request.GET.keys():
-            service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id)\
-                .values('pk', 'name', 'status')
-            for data in service_data:
-                service = PublicService.objects.get(pk=data['pk'])
-                data['pair_count'] = service.pair_count
-
-            return JsonResponse({
-                'service_data': list(service_data),
-                'public_service_statuses': dict(PublicServiceStatuses.choices())
-            })
+            return self.get_light_public_service_data()
 
         elif 'get_extended_public_service_data' in request.GET.keys():
-            public_service = PublicService.objects.get(pk=request.GET['public_service_pk'])
-            public_service_data = model_to_dict(public_service, fields=(
-                'name',
-                'max_pair_count',
-                'phone_number',
-                'email',
-                'address',
-                'website',
-                'contract_number',
-            ))
-            public_service_data['profile_image'] = public_service.profile_image.url
-            public_service_data['pair_count'] = public_service.pair_count
-            return JsonResponse({
-                'public_service_data': public_service_data
-            })
+            return self.get_extended_public_service_data()
 
         return super().get(request, *args, **kwargs)
 

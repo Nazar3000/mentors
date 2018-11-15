@@ -1,0 +1,70 @@
+{% load static %}
+
+<div class="css-org-search"><img src="{% static 'img/search.svg' %}">
+  <input type="text" placeholder="Почніть вводити дані тут">
+</div>
+<div class="css-org-table">
+  <div class="css-org-header">
+    <div class="css-org-mentors">Наставник<span class="css-org-sort-mentor"><img src="{% static 'img/a-b.svg' %}"></span></div>
+    <div class="css-line"></div>
+    <div class="css-org-child">Вихованець<span class="css-org-sort-child"><img src="{% static 'img/a-b.svg' %}"></span></div>
+    <div class="css-line"></div>
+    <div class="css-org-place">Заклад</div>
+    <div class="css-line"></div>
+    <div class="css-org-contract">Номер<br>договору</div>
+    <div class="css-line"></div>
+    <div class="css-org-data">Дата початку<br>наставництва</div>
+  </div>
+  <div class="css-org-block" v-for="mentor in mentorsData">
+    <div class="css-block-mentors">
+      <div class="css-block-mentor-link" @click="mentorModalDisplay=true">[[ mentor.full_name ]]
+        <div class="help-info-org"><span>Переглянути інформацію<br>про наставника</span></div>
+      </div><span class="css-block-mentors-phone">(063) 324 43 43</span><span class="css-block-sort-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
+    </div>
+    <div class="css-block-child"><a href="css-team.html">[[ mentor.mentoree_full_name ]]
+        <div class="help-info-org"><span>Переглянути інформацію<br> про вихованеця</span></div></a></div>
+    <div class="css-block-place"><span>[[ mentor.organization_name ]]</span></div>
+    <div class="css-block-contract"><span>[[ mentor.contract_number ]]</span></div>
+    <div class="css-block-data"><span>[[ mentor.mentoring_start_date ]]</span></div>
+  </div>
+
+  <!-- start  modal mentor-->
+  <div class="social-modal" :style="{'display': mentorModalDisplay ? 'block' : 'none'}">
+    <div class="social-modal-card">
+      <div class="social-info">
+        <div class="social-card-img"><img src="{% static 'img/mentor.jpg' %}" alt=""></div>
+        <div class="social-card-title">
+          <h2>Наставник</h2>
+          <p>Максим<br>Пеcтров</p><span>Дата народження</span>
+          <p>25.03.1993 (25  років)</p>
+        </div>
+        <div class="social-card-edit"><i class="fas fa-pencil-alt"></i></div>
+        <div class="social-card-close"><i class="fas fa-times"></i></div>
+      </div>
+      <div class="social-card-line"></div>
+      <div class="social-card-stat">
+        <div class="social-card-wrapp">
+          <div><span>Статус:</span>
+            <select class="triangle-green">
+              <option>Кандидат в наставники</option>
+              <option>Кандидат в наставники</option>
+              <option>Кандидат в наставники</option>
+            </select><span>Телефон:</span>
+            <p>+38 (063) 234 12 11</p><span>Email:</span>
+            <p>Maks12_1@gmail.com</p><span>Адреса:</span>
+            <p>пр. Перемоги, 113 г. Киев</p>
+          </div>
+          <div><span>Відповідальний:</span>
+            <p>РЦСССДМ</p><span>Ліцензія:</span>
+            <p>LOTR 89<a href=""><i class="fas fa-envelope"></i><span class="social-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a></p><span>Дата подачі анкети:</span>
+            <p>11 січня 2017 року</p><a href="css-admin.html">Переглянути анкету</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal mentor-->
+  <!-- start edit modal mentor-->
+  {# TODO: search for the layout #}
+  <!-- end edit modal mentor-->
+</div>

@@ -328,17 +328,17 @@ $(document).ready(function () {
 
     // sort css-social click phone and change
 
-    $('.css-block-img').click(function () {
-        if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
-            $(this).find('img').attr('src', 'img/green-tel.svg');
-            $(this).siblings('.css-block-title').toggle();
-            $(this).siblings('.css-block-phone').toggle();
-        } else {
-            $(this).find('img').attr('src', 'img/blue-tel.svg');
-            $(this).siblings('.css-block-title').toggle();
-            $(this).siblings('.css-block-phone').toggle();
-        }
-    });
+    // $('.css-block-img').click(function () {
+    //     if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
+    //         $(this).find('img').attr('src', 'img/green-tel.svg');
+    //         $(this).siblings('.css-block-title').toggle();
+    //         $(this).siblings('.css-block-phone').toggle();
+    //     } else {
+    //         $(this).find('img').attr('src', 'img/blue-tel.svg');
+    //         $(this).siblings('.css-block-title').toggle();
+    //         $(this).siblings('.css-block-phone').toggle();
+    //     }
+    // });
 
 
     //  add social card org
@@ -387,9 +387,9 @@ $(document).ready(function () {
     });
 
 
-    $('.css-block-title').click(function () {
-        $('.css-big-card').slideToggle(500);
-    });
+    // $('.css-block-title').click(function () {
+    //     $('.css-big-card').slideToggle(500);
+    // });
 
     // open diary block team
 
