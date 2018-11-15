@@ -297,17 +297,17 @@ $(document).ready(function () {
 
     // sort mentor click phone and change
 
-    $('.mentor-phone-img').click(function () {
-        if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
-            $(this).find('img').attr('src', 'img/green-tel.svg');
-            $(this).siblings('.mentor-title').toggle();
-            $(this).siblings('.mentor-phone').toggle();
-        } else {
-            $(this).find('img').attr('src', 'img/blue-tel.svg');
-            $(this).siblings('.mentor-title').toggle();
-            $(this).siblings('.mentor-phone').toggle();
-        }
-    });
+    // $('.mentor-phone-img').click(function () {
+    //     if ($(this).find('img').attr('src') == 'img/blue-tel.svg') {
+    //         $(this).find('img').attr('src', 'img/green-tel.svg');
+    //         $(this).siblings('.mentor-title').toggle();
+    //         $(this).siblings('.mentor-phone').toggle();
+    //     } else {
+    //         $(this).find('img').attr('src', 'img/blue-tel.svg');
+    //         $(this).siblings('.mentor-title').toggle();
+    //         $(this).siblings('.mentor-phone').toggle();
+    //     }
+    // });
 
 
     // $('.mentor-title').click(function () {

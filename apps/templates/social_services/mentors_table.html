@@ -15,9 +15,12 @@
   <template v-for="lightMentor in searchedMentors">
     <div class="css-table-mentor-line" @click="activeLightMentorPk = lightMentor.pk">
       <div class="css-table-block-mentor">
-          <span class="mentor-title" @click="getExtendedMentorData(lightMentor.pk)">[[ lightMentor.full_name ]]</span>
-          <span class="mentor-phone">[[ lightMentor.phone_number ]]</span>
-          <span class="mentor-phone-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
+          <span class="mentor-phone" @click="getExtendedMentorData(lightMentor.pk)" v-if="phoneView">[[ lightMentor.phone_number ]]</span>
+          <span class="mentor-title" @click="getExtendedMentorData(lightMentor.pk)" v-else>[[ lightMentor.full_name ]]</span>
+          <span class="mentor-phone-img" @click="phoneView=!phoneView">
+            <img src="{% static 'img/green-tel.svg' %}" v-if="phoneView">
+            <img src="{% static 'img/blue-tel.svg' %}" v-else>
+          </span>
       </div>
       <div class="css-table-block-stat">
         <select class="triangle-green" v-model="lightMentor.status">

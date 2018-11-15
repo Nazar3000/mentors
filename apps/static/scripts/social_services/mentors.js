@@ -9,6 +9,7 @@ const mentors = new Vue({
     expanded: false,
     mentorCardView: true,
     mentorSocServeDataView: true,
+    phoneView: false,
     extendedMentor: {},
     activeLightMentorPk: '',
     defaultExtendedMentor: {
@@ -225,6 +226,7 @@ const mentors = new Vue({
             'licence_key__key': newObj.licence_key,
             'responsible': newObj.responsible,
             'docs_status': lightObj.docs_status,
+            'phone_number': newObj.phone_number,
           }
           this.lightMentors.splice(index, 1);
           this.lightMentors.splice(index, 0, newLightMentor);
