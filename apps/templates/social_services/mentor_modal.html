@@ -1,0 +1,61 @@
+<div class="social-modal" v-if="mentorModalDisplay">
+  <div class="social-modal-card">
+    <div class="social-info-edit">
+      <div class="social-card-img-edit">
+        <img :src="getImageUrl(extendedMentor.profile_image)" alt="">
+      </div>
+      <div class="social-card-icon">
+        <label class="add-img" for="files">
+          <i class="fas fa-plus"></i>
+        </label>
+        <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
+        <a class="delete-img" href="javascript: void(0)" title="Delete image" @click="deleteProfileImage"><i class="fas fa-trash"></i></a>
+      </div>
+      <div class="social-card-title">
+        <h2>Наставник</h2>
+        <input class="social-input-name" type="text" placeholder="Ім’я" v-model="extendedMentor.first_name">
+        <input class="social-input-surname" type="text" placeholder="Прізвище" v-model="extendedMentor.last_name">
+        <span>Дата народження</span>
+        <input class="social-input-birth" type="text" placeholder="" v-model="extendedMentor.date_of_birth">
+      </div>
+      <div class="social-card-edit" @click="submitMentorCard"><i class="fas fa-check"></i></div>
+      <div class="social-card-close" ref="closeAddMentorModal" @click="closeMentorCard"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="social-card-line"></div>
+    <div class="social-card-stat">
+      <div class="social-card-wrapp">
+        <div>
+          <span>Статус:</span>
+          <select class="triangle-green" v-model="extendedMentor.status">
+            <option v-for="key, value in mentorStatuses"
+                    :value="value"
+            >
+              [[ key ]]
+            </option>
+          </select>
+          <span>Телефон:</span>
+          <input type="text" v-model="extendedMentor.phone_number">
+          <span>Email:</span>
+          <input type="text" v-model="extendedMentor.email">
+          <span>Адреса:</span>
+          <input type="text" v-model="extendedMentor.actual_address">
+        </div>
+        <div>
+          <span>Відповідальний:</span>
+          <select class="triangle-green" v-model="extendedMentor.responsible">
+            <option>ЦССДМ</option>
+            <option v-for="service in publicServices"
+                    :value="service.pk"
+            >
+              [[ service.name ]]
+            </option>
+          </select>
+          <span>Ліцензія:</span>
+          <input type="text" v-model="extendedMentor.licence_key">
+          <span>Дата подачі анкети:</span>
+          <input type="text" placeholder="дд.мм.рррр" v-model="extendedMentor.questionnaire_creation_date">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

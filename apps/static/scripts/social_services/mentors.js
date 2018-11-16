@@ -10,6 +10,7 @@ const mentors = new Vue({
     mentorCardView: true,
     mentorSocServeDataView: true,
     phoneView: false,
+    mentorModalDisplay: false,
     extendedMentor: {},
     activeLightMentorPk: '',
     defaultExtendedMentor: {
@@ -144,9 +145,13 @@ const mentors = new Vue({
     },
     addMentorModal() {
       this.expanded = false;
+      this.mentorModalDisplay = true;
       this.extendedMentor = Object.assign({}, this.defaultExtendedMentor);
       this.extendedMentor.password1 = '';
       this.extendedMentor.password2 = '';
+    },
+    closeMentorCard() {
+      this.mentorModalDisplay = false;
     },
     changeProfileImage(event) {
       this.extendedMentor.profile_image = event.target.files[0];

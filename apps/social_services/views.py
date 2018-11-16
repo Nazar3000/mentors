@@ -262,7 +262,7 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
             'mentor_list': mentor_list,
             'organization_list': list(organization_list),
             'service_data': list(service_data),
-            'public_service_statuses': dict(PublicServiceStatuses.choices())
+            'public_service_statuses': dict(PublicServiceStatuses.choices()),
         })
 
     def get_extended_public_service_data(self):
@@ -284,6 +284,9 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
         mentor_pks = Coordinator.objects.filter(id__in=coordinator_ids).values_list('mentors__pk', flat=True)
         mentors_data = []
         mentors = Mentor.objects.filter(pk__in=mentor_pks).iterator()
+
+        related_public_services = PublicService.objects.filter(
+            social_service_center__pk=self.request.user.pk).values('pk', 'name')
         for mentor in mentors:
             mentors_data.append({
                 'pk': mentor.pk,
@@ -292,11 +295,13 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
                 'organization_name': mentor.mentoree.organization.name,
                 'contract_number': mentor.social_service_center_data.contract_number,
                 'mentoring_start_date':
-                    get_date_str_formatted(mentor.meetings.first().date()) if mentor.meetings.first() else None
+                    get_date_str_formatted(mentor.meetings.first().date()) if mentor.meetings.first() else None,
             })
 
         return JsonResponse({
             'public_service_data': public_service_data,
+            'mentor_statuses': dict(MentorStatuses.choices()),
+            'public_services': list(related_public_services),
             'mentors_data': mentors_data
         })
 
