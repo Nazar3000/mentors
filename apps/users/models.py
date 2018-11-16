@@ -1,6 +1,7 @@
 import uuid
 from contextlib import suppress
 
+import rstr
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.postgres.fields import ArrayField
@@ -236,6 +237,12 @@ class PublicService(models.Model):
         null=True,
         blank=True
     )
+    licence_validator = RegexValidator(
+        regex=r'[A-Z]{4}\s{1}\d{2}')
+    licence = models.CharField(
+        max_length=7,
+        validators=[licence_validator],
+        default=rstr.xeger(licence_validator.regex))
 
     @property
     def pair_count(self):

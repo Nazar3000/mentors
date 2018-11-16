@@ -98,9 +98,63 @@ const publicServices = new Vue({
     },
     getImageUrl(img) {
       return typeof img === 'string' ? img : URL.createObjectURL(img);
+    },
+
+    changeLightPublicServiceData() {
+
+    },
+    postPublicService() {
+      const formData = new FormData();
+      for (let key in this.mentorSocServiceData) {
+          if (this.mentorSocServiceData.hasOwnProperty(key)) {
+              if (this.mentorSocServiceData[key]) {
+                formData.append(key, this.mentorSocServiceData[key]);
+              }
+          }
+      }
+
+      $.ajax({
+        url: '/social-service/mentors/change_extended_data/',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+        success: (res) => {
+          if (res.status === 'success') {
+            this.mentorCardView = true;
+          } else {
+            this.errors = res;
+          }
+        }
+      });
     }
   },
   watch: {
+    lightPublicServices: {
+      handler: function (oldVal, newVal) {
+        console.log(oldVal, newVal);
+        if (oldVal.status && (oldVal.status !== newVal.status)) {
+          const formData = new FormData();
+          for (let key in newVal) {
+              if (newVal.hasOwnProperty(key)) {
+                  formData.append(key, newVal[key]);
+              }
+          }
 
+          $.ajax({
+            url: '/social-service/public-services/change_light_data/',
+            data: formData,
+            processData: false,
+            contentType: false,
+            cache: false,
+            enctype: 'multipart/form-data',
+            type: 'POST',
+          });
+        }
+      },
+      deep: true
+    }
   }
 });

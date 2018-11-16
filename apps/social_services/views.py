@@ -257,6 +257,7 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
         for data in service_data:
             service = PublicService.objects.get(pk=data['pk'])
             data['pair_count'] = service.pair_count
+            data['licence'] = service.licence
 
         return JsonResponse({
             'mentor_list': mentor_list,
@@ -275,6 +276,7 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
             'address',
             'website',
             'contract_number',
+            'licence',
         ))
         public_service_data['pk'] = public_service.pk
         public_service_data['profile_image'] = public_service.profile_image.url
@@ -314,6 +316,14 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
             return self.get_extended_public_service_data()
 
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        action = kwargs['action']
+        if action == 'change_light_data':
+            pass
+        elif action == 'change_extended_data':
+            pass
+        return JsonResponse({'status': 'success'})
 
 
 class DatingView(TemplateView):
