@@ -28,47 +28,64 @@
             <div class="css-social-search"><img src="{% static 'img/search.svg' %}">
               <input type="text" placeholder="Почніть вводити дані тут">
             </div>
-            <div class="css-social-add"><i class="fas fa-plus"></i><span>Додати організацію</span></div>
+            <div class="css-social-add" @click="addPublicService">
+              <i class="fas fa-plus"></i><span>Додати організацію</span>
+            </div>
             <div class="css-slip">
               <div class="css-slip-modal">
                 <div class="css-slip-close">×</div>
                 <div class="css-slip-main">
-                  <div class="css-slip-image"><img src="{% static 'img/empty-img.png' %}" alt=""></div>
+                  <div class="css-slip-image">
+                    <img :src="extendedPublicService.profile_image ? getImageUrl(extendedPublicService.profile_image) : defaultExtendedMentor.profile_image" alt=""></div>
                   <div class="css-slip-icon">
-                    <label class="add-img" for="files" title="Add image"><i class="fas fa-plus"></i></label>
-                    <input id="files" style="display:none;" type="file">
-                    <div class="css-del" title="Delete image"><i class="fas fa-trash"></i></div>
+                    <label class="add-img" for="new-public-service" title="Add image"><i class="fas fa-plus"></i></label>
+                    <input id="new-public-service" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
+                    <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage">
+                      <i class="fas fa-trash"></i>
+                    </div>
                   </div>
                   <div>
                     <p>Органзація</p>
-                    <textarea class="css-slip-input-name" rows="3" placeholder="Назва організації"></textarea><span>Максимальна кількість пар:</span>
+                    <textarea class="css-slip-input-name" rows="3" placeholder="Назва організації"></textarea>
+                    <span>Максимальна кількість пар:</span>
                     <input class="css-slip-input-value" type="text">
                   </div>
                 </div>
                 <div class="css-line-modal"></div>
                 <div class="css-slip-choice">
-                  <div><span>Статус:</span>
+                  <div>
+                    <span>Статус:</span>
                     <select class="triangle-green">
-                      <option>Знаємо про її існування</option>
-                      <option>Знаємо про її існування</option>
-                      <option>Знаємо про її існування</option>
-                    </select><span>Телефон:</span>
+                      <option v-for="key, value in publicServiceStatuses"
+                              :value="value"
+                      >
+                        [[ key ]]
+                      </option>
+                    </select>
+                    <span>Телефон:</span>
                     <input type="text"><span>Email:</span>
                     <input type="text"><span>Адреса:</span>
                     <input type="text"><span>Сайт:</span>
                     <input type="text">
                   </div>
-                  <div><span>Передати пару:</span>
+                  <div>
+                    <span>Передати пару:</span>
                     <select class="triangle-green">
-                      <option>Покищо нікого не передавати</option>
-                      <option>Покищо нікого не передавати</option>
-                      <option>Покищо нікого не передавати</option>
-                    </select><span>Передати пару:</span>
+                      <option v-for="option in mentorList"
+                              :value="option.pk"
+                      >
+                        [[ option.full_name ]]
+                      </option>
+                    </select>
+                    <span>Передати всі пари інтерната:</span>
                     <select class="triangle-green">
-                      <option>Покищо нікого не передавати</option>
-                      <option>Покищо нікого не передавати</option>
-                      <option>Покищо нікого не передавати</option>
-                    </select><span>№ Договору:</span>
+                      <option v-for="option in organizationList"
+                              :value="option.organization__pk"
+                      >
+                        [[ option.organization__name ]]
+                      </option>
+                    </select>
+                    <span>№ Договору:</span>
                     <input type="text">
                     <button>Зберегти</button>
                   </div>
@@ -110,8 +127,8 @@
           </div>
 
           <div class="css-big-card" v-if="publicServiceDetail">
-            <div class="css-org">
-              <div class="css-org-img"><img :src="extendedPublicService.profile_image" alt=""></div>
+            <div class="css-org" v-if="publicServiceView">
+              <div class="css-org-img"><img :src="getImageUrl(extendedPublicService.profile_image)" alt=""></div>
               <div class="css-org-title">
                 <h3>го</h3>
                 <p>[[ extendedPublicService.name ]]</p>
@@ -162,8 +179,71 @@
                   </div>
                 </div>
               </div>
-              <div class="css-org-edit"><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a></div>
+              <div class="css-org-edit">
+                <a href="javascript: void(0)" title="Edit" @click="publicServiceView=false"><i class="fas fa-pencil-alt"></i></a>
+              </div>
             </div>
+            <!-- start  edit card-->
+            <div class="css-org" v-else>
+              <div class="css-org-img-edit"><img :src="getImageUrl(extendedPublicService.profile_image)" alt=""></div>
+              <div class="css-org-icon">
+                <label class="add-img" :for="extendedPublicService.pk" title="Add image"><i class="fas fa-plus"></i></label>
+                <input :id="extendedPublicService.pk" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
+                <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage"><i class="fas fa-trash"></i></div>
+              </div>
+              <div class="css-org-title">
+                <h3>го</h3>
+                <textarea rows="3" placeholder="Назва організації" v-model="extendedPublicService.name"></textarea>
+                <div class="css-org-title-wrapp">
+                  <div>
+                    <input type="text" placeholder="00" v-model="extendedPublicService.max_pair_count"><span>пар<br>максимально</span>
+                  </div>
+                  <div>
+                    <p>[[ extendedPublicService.pair_count ]]</p><span>пар<br>всього</span>
+                  </div>
+                </div>
+              </div>
+              <div class="css-org-line"></div>
+              <div class="css-org-info">
+                <span>Телефон:</span>
+                <input type="text" v-model="extendedPublicService.phone_number">
+                <span>Email:</span>
+                <input type="text" v-model="extendedPublicService.email">
+                <span>Адреса:</span>
+                <input type="text" v-model="extendedPublicService.address">
+                <span>Сайт:</span>
+                <input type="text" v-model="extendedPublicService.website">
+              </div>
+              <div class="css-org-mentor">
+                <span>Передати пару:</span>
+                <select class="triangle-green">
+                  <option v-for="option in mentorList"
+                          :value="option.pk"
+                  >
+                    [[ option.full_name ]]
+                  </option>
+                </select>
+
+                <span>Передати всі пари інтерната:</span>
+                <select class="triangle-green">
+                  <option v-for="option in organizationList"
+                          :value="option.organization__pk"
+                  >
+                    [[ option.organization__name ]]
+                  </option>
+                </select>
+                <div class="css-org-doc">
+                  <div><span>Номер договору:</span>
+                    <input type="text" v-model="extendedPublicService.contract_number">
+                  </div>
+                  <div><span>Ліцензія:</span>
+                    <input type="text">
+                  </div>
+                </div>
+              </div>
+              <div class="css-org-edit"><a href="" title="Submit"><i class="fas fa-check"></i></a></div>
+            </div>
+            <!-- end edit card-->
             {% include 'social_services/public_service_mentors_table.html' %}
             <a class="css-org-all" href=""><span>Дивитися всі</span></a>
             <div class="css-info">* Щоб переглянути історію взаємодії наставника та вихованця натисніть на ім’я вихованця в таблиці.</div>

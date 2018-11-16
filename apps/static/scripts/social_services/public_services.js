@@ -4,6 +4,17 @@ const publicServices = new Vue({
   data: {
     lightPublicServices: [],
     publicServiceStatuses: {},
+    defaultExtendedPublicService: {
+      "name": "",
+      "max_pair_count": 0,
+      "phone_number": "",
+      "email": "",
+      "address": "",
+      "website": "",
+      "contract_number": "",
+      "profile_image": "/static/img/empty-img.png",
+      "pair_count": 0
+    },
     extendedPublicService: {},
     mentorList: [],
     organizationList: [],
@@ -31,8 +42,8 @@ const publicServices = new Vue({
     publicServiceView: true
   },
   created() {
-    this.getPublicServiceLightData();
     this.extendedMentor = this.defaultExtendedMentor;
+    this.getPublicServiceLightData();
   },
   methods: {
     getPublicServiceLightData() {
@@ -45,32 +56,45 @@ const publicServices = new Vue({
     },
     getExtendedMentorData(mentorId) {
       $.get(`/social-service/mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
-        console.log(res.mentor_data);
         this.extendedMentor = res.mentor_data;
 
         this.mentorModalDisplay = true;
       });
     },
     getExtendedPublicServiceData(publicServicePk) {
-      $.get(`/social-service/public-services/?get_extended_public_service_data&public_service_pk=${publicServicePk}`, (res) => {
-        this.extendedPublicService = res.public_service_data;
-        this.mentorsData = res.mentors_data;
-        this.publicServices = res.public_services;
-        this.mentorStatuses = res.mentor_statuses;
+      if (!this.publicServiceDetail) {
+        $.get(`/social-service/public-services/?get_extended_public_service_data&public_service_pk=${publicServicePk}`, (res) => {
+          this.extendedPublicService = res.public_service_data;
+          this.mentorsData = res.mentors_data;
+          this.publicServices = res.public_services;
+          this.mentorStatuses = res.mentor_statuses;
 
-        this.publicServiceDetail = true;
-      })
+          this.publicServiceDetail = true;
+        })
+      } else {
+        this.publicServiceDetail = false;
+      }
     },
     submitMentorCard() {},
     closeMentorCard() {
       this.mentorModalDisplay = false;
       this.extendedMentor = this.defaultExtendedMentor;
     },
+    addPublicService() {
+      this.extendedPublicService = this.defaultExtendedMentor;
+      this.publicServiceDetail = false;
+    },
     changeProfileImage(event) {
       this.extendedMentor.profile_image = event.target.files[0];
     },
     deleteProfileImage() {
       this.extendedMentor.profile_image = this.defaultExtendedMentor.profile_image;
+    },
+    changePublicServiceProfileImage(event) {
+      this.extendedPublicService.profile_image = event.target.files[0];
+    },
+    deletePublicServiceProfileImage() {
+      this.extendedPublicService.profile_image = this.defaultExtendedPublicService.profile_image;
     },
     getImageUrl(img) {
       return typeof img === 'string' ? img : URL.createObjectURL(img);

@@ -276,6 +276,7 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
             'website',
             'contract_number',
         ))
+        public_service_data['pk'] = public_service.pk
         public_service_data['profile_image'] = public_service.profile_image.url
         public_service_data['pair_count'] = public_service.pair_count
 
