@@ -242,7 +242,7 @@ class PublicService(models.Model):
     licence = models.CharField(
         max_length=7,
         validators=[licence_validator],
-        default=rstr.xeger(licence_validator.regex))
+        blank=True)
 
     @property
     def pair_count(self):
@@ -251,10 +251,15 @@ class PublicService(models.Model):
             pair_count += c.mentors.count()
         return pair_count
 
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude=exclude)
-        if self.user.user_type != UserTypes.PUBLIC_SERVICE:
-            raise ValidationError({'user': _('Користувач має бути типу "громадська організація".')})
+    # def clean_fields(self, exclude=None):
+    #     super().clean_fields(exclude=exclude)
+    #     if self.user.user_type != UserTypes.PUBLIC_SERVICE:
+    #         raise ValidationError({'user': _('Користувач має бути типу "громадська організація".')})
+
+    def save(self, *args, **kwargs):
+        if not self.licence:
+            self.licence = rstr.xeger(self.licence_validator.regex)
+        super().save(*args, **kwargs)
 
 
 class Organization(models.Model):

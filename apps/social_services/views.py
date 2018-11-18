@@ -1,21 +1,19 @@
-import json
-
 from django.forms import model_to_dict
 from django.http import JsonResponse
-from django.utils import formats
 from django.shortcuts import redirect, HttpResponse
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
+from django.utils.translation import gettext_lazy as _
 
 from mentors.constants import DocsStatuses
 from social_services.utils import get_date_str_formatted
-from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm
+from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm
 from .models import SocialServiceVideo, Material, MaterialCategory
 from users.models import Mentor
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
-from users.constants import MentorStatuses, PublicServiceStatuses
+from users.constants import MentorStatuses, PublicServiceStatuses, UserTypes
 from users.models import PublicService, Coordinator, SocialServiceCenter
 
 User = get_user_model()
@@ -146,10 +144,10 @@ class MentorsView(GetSocialServiceRelatedMentors, TemplateView):
         mentors_data = []
         for mentor in mentors_query_data.iterator():
             mentor_dict = mentor.__dict__
-            del mentor_dict['_state']
             soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
             mentor_dict['docs_status'] = soc_service_data.docs_status
             mentor_dict['pk'] = mentor.pk
+            del mentor_dict['_state']
             mentors_data.append(mentor_dict)
 
         return JsonResponse({
@@ -249,8 +247,8 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
         mentoree_ids = []
         for mentor in mentors_query_data:
             mentoree_ids.append(mentor.mentoree_id)
-        organization_list = Mentoree.objects.filter(pk__in=mentoree_ids)\
-            .values('organization__pk', 'organization__name')
+        organization_list = Mentoree.objects.filter(pk__in=mentoree_ids) \
+            .distinct().values('organization__pk', 'organization__name')
 
         service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id) \
             .values('pk', 'name', 'status')
@@ -294,7 +292,7 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
             mentors_data.append({
                 'pk': mentor.pk,
                 'full_name': mentor.first_name + ' ' + mentor.last_name,
-                'mentoree_full_name': mentor.mentoree.first_name + ' ' + mentor.mentoree.last_name,
+                'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name),
                 'organization_name': mentor.mentoree.organization.name,
                 'contract_number': mentor.social_service_center_data.contract_number,
                 'mentoring_start_date':
@@ -320,9 +318,28 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
     def post(self, request, *args, **kwargs):
         action = kwargs['action']
         if action == 'change_light_data':
-            pass
+            public_service = PublicService.objects.get(pk=request.POST['pk'])
+            public_service.status = request.POST['status']
+            public_service.save()
         elif action == 'change_extended_data':
-            pass
+            # edit/create public service
+            instance = PublicService.objects.get(pk=request.POST['pk']) if request.POST.get('pk') else None
+            form = PublicServiceEditForm(request.POST, request.FILES, instance=instance)
+            if form.is_valid():
+                public_service = form.save(commit=False)
+                if not instance:
+                    public_service.social_service_center_id = request.user.pk
+                    public_service.status = request.POST['status']
+                    if not User.objects.filter(email=form.cleaned_data['email']).exists():
+                        user = User.objects.create_user(email=form.cleaned_data['email'])
+                        user.user_type = UserTypes.PUBLIC_SERVICE
+                        public_service.user = user
+                    else:
+                        return JsonResponse(
+                            {'non_field_errors': [_('Користувач з таким email же існує.')]})
+                public_service.save()
+            else:
+                return JsonResponse(dict(form.errors.items()))
         return JsonResponse({'status': 'success'})
 
 

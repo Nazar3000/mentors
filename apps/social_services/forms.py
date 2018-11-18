@@ -9,7 +9,7 @@ from mentors.forms import SignUpStep1Form
 from users.constants import UserTypes
 from .models import SocialServiceMasterKey
 from mentors.models import MentorSocialServiceCenterData, MentorQuestionnaire
-from users.models import Mentor
+from users.models import Mentor, PublicService
 
 User = get_user_model()
 
@@ -79,4 +79,19 @@ class MentorSocialServiceCenterDataEditForm(forms.ModelForm):
         model = MentorSocialServiceCenterData
         exclude = (
             'mentor',
+        )
+
+
+class PublicServiceEditForm(forms.ModelForm):
+    class Meta:
+        model = PublicService
+        fields = (
+            'name',
+            'max_pair_count',
+            'phone_number',
+            'email',
+            'address',
+            'website',
+            'contract_number',
+            'profile_image',
         )

@@ -13,7 +13,8 @@ const publicServices = new Vue({
       "website": "",
       "contract_number": "",
       "profile_image": "/static/img/empty-img.png",
-      "pair_count": 0
+      "pair_count": 0,
+      "status": "NOT_SPECIFIED"
     },
     extendedPublicService: {},
     mentorList: [],
@@ -35,6 +36,9 @@ const publicServices = new Vue({
       status: "NOT_SPECIFIED"
     },
     extendedMentor: {},
+    errors: {},
+
+    activeLightPublicServicePk: '',
 
     publicServiceDetail: false,
     mentorModalDisplay: false,
@@ -100,21 +104,18 @@ const publicServices = new Vue({
       return typeof img === 'string' ? img : URL.createObjectURL(img);
     },
 
-    changeLightPublicServiceData() {
-
-    },
-    postPublicService() {
+    submitPublicService() {
       const formData = new FormData();
-      for (let key in this.mentorSocServiceData) {
-          if (this.mentorSocServiceData.hasOwnProperty(key)) {
-              if (this.mentorSocServiceData[key]) {
-                formData.append(key, this.mentorSocServiceData[key]);
+      for (let key in this.extendedPublicService) {
+          if (this.extendedPublicService.hasOwnProperty(key)) {
+              if (this.extendedPublicService[key]) {
+                formData.append(key, this.extendedPublicService[key]);
               }
           }
       }
 
       $.ajax({
-        url: '/social-service/mentors/change_extended_data/',
+        url: '/social-service/public-services/change_extended_data/',
         data: formData,
         processData: false,
         contentType: false,
@@ -123,7 +124,8 @@ const publicServices = new Vue({
         type: 'POST',
         success: (res) => {
           if (res.status === 'success') {
-            this.mentorCardView = true;
+            this.publicServiceView = true;
+            this.mentorModalDisplay = false;
           } else {
             this.errors = res;
           }
@@ -134,12 +136,13 @@ const publicServices = new Vue({
   watch: {
     lightPublicServices: {
       handler: function (oldVal, newVal) {
-        console.log(oldVal, newVal);
-        if (oldVal.status && (oldVal.status !== newVal.status)) {
+        if (newVal.length) {
+          const val = newVal.find(v => v.pk === this.activeLightPublicServicePk);
+
           const formData = new FormData();
-          for (let key in newVal) {
-              if (newVal.hasOwnProperty(key)) {
-                  formData.append(key, newVal[key]);
+          for (let key in val) {
+              if (val.hasOwnProperty(key)) {
+                  formData.append(key, val[key]);
               }
           }
 
