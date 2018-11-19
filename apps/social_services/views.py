@@ -10,7 +10,7 @@ from mentors.constants import DocsStatuses
 from social_services.utils import get_date_str_formatted
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm
 from .models import SocialServiceVideo, Material, MaterialCategory
-from users.models import Mentor
+from users.models import Mentor, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
 from users.constants import MentorStatuses, PublicServiceStatuses, UserTypes
@@ -291,6 +291,7 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
         for mentor in mentors:
             mentors_data.append({
                 'pk': mentor.pk,
+                'public_service_pk': mentor.coordinator.public_service.pk,
                 'full_name': mentor.first_name + ' ' + mentor.last_name,
                 'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name),
                 'organization_name': mentor.mentoree.organization.name,
@@ -338,6 +339,21 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
                         return JsonResponse(
                             {'non_field_errors': [_('Користувач з таким email же існує.')]})
                 public_service.save()
+                try:
+                    coordinator = Coordinator.objects.get(public_service__pk=request.POST['pk'])
+                    if request.POST.get('mentorPk'):
+                        mentor = Mentor.objects.get(pk=request.POST.get('mentorPk'))
+                        mentor.coordinator = coordinator
+                        mentor.save()
+                    elif request.POST.get('organizationPk'):
+                        mentor_pks = Mentoree.objects.filter(organization__id=request.POST.get('organizationPk'))\
+                            .values_list('mentor__pk', flat=True)
+                        Mentor.objects.filter(id__in=mentor_pks).update(
+                            coordinator=coordinator
+                        )
+                except Coordinator.DoesNotExist:
+                    return JsonResponse(
+                        {'non_field_errors': [_('Для даної громадської організації немає координатора.')]})
             else:
                 return JsonResponse(dict(form.errors.items()))
         return JsonResponse({'status': 'success'})

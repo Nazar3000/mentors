@@ -5,16 +5,18 @@ const publicServices = new Vue({
     lightPublicServices: [],
     publicServiceStatuses: {},
     defaultExtendedPublicService: {
-      "name": "",
-      "max_pair_count": 0,
-      "phone_number": "",
-      "email": "",
-      "address": "",
-      "website": "",
-      "contract_number": "",
-      "profile_image": "/static/img/empty-img.png",
-      "pair_count": 0,
-      "status": "NOT_SPECIFIED"
+      name: "",
+      max_pair_count: 0,
+      phone_number: "",
+      email: "",
+      address: "",
+      website: "",
+      contract_number: "",
+      profile_image: "/static/img/empty-img.png",
+      pair_count: 0,
+      status: "NOT_SPECIFIED",
+      mentorPk: "",
+      organizationPk: ""
     },
     extendedPublicService: {},
     mentorList: [],
@@ -70,6 +72,8 @@ const publicServices = new Vue({
       if (!this.publicServiceDetail) {
         $.get(`/social-service/public-services/?get_extended_public_service_data&public_service_pk=${publicServicePk}`, (res) => {
           this.extendedPublicService = res.public_service_data;
+          this.extendedPublicService.mentorPk = '';
+          this.extendedPublicService.organizationPk = '';
           this.mentorsData = res.mentors_data;
           this.publicServices = res.public_services;
           this.mentorStatuses = res.mentor_statuses;
@@ -110,7 +114,7 @@ const publicServices = new Vue({
       this.extendedMentor = this.defaultExtendedMentor;
     },
     addPublicService() {
-      this.extendedPublicService = this.defaultExtendedMentor;
+      this.extendedPublicService = this.defaultExtendedPublicService;
       this.publicServiceDetail = false;
       this.publicServiceModalDisplay = true;
     },

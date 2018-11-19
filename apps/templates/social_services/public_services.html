@@ -94,7 +94,8 @@
                   </div>
                   <div>
                     <span>Передати пару:</span>
-                    <select class="triangle-green">
+                    <select class="triangle-green" v-model="extendedPublicService.mentorPk">
+                      <option></option>
                       <option v-for="option in mentorList"
                               :value="option.pk"
                       >
@@ -102,7 +103,8 @@
                       </option>
                     </select>
                     <span>Передати всі пари інтерната:</span>
-                    <select class="triangle-green">
+                    <select class="triangle-green" v-model="extendedPublicService.organizationPk">
+                      <option></option>
                       <option v-for="option in organizationList"
                               :value="option.organization__pk"
                       >
@@ -180,6 +182,7 @@
                 <div class="css-org-mentor">
                   <span>Передати пару:</span>
                   <select class="triangle-green">
+                    <option></option>
                     <option v-for="option in mentorList"
                             :value="option.pk"
                     >
@@ -189,6 +192,7 @@
 
                   <span>Передати всі пари інтерната:</span>
                   <select class="triangle-green">
+                    <option></option>
                     <option v-for="option in organizationList"
                             :value="option.organization__pk"
                     >
@@ -250,8 +254,10 @@
                   <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
                 </div>
                 <div class="css-org-mentor">
+                  <span class="error-form" v-for="err in errors.non_field_errors">[[ err ]]</span>
                   <span>Передати пару:</span>
-                  <select class="triangle-green">
+                  <select class="triangle-green" v-model="extendedPublicService.mentorPk">
+                    <option></option>
                     <option v-for="option in mentorList"
                             :value="option.pk"
                     >
@@ -260,7 +266,8 @@
                   </select>
 
                   <span>Передати всі пари інтерната:</span>
-                  <select class="triangle-green">
+                  <select class="triangle-green" v-model="extendedPublicService.organizationPk">
+                    <option></option>
                     <option v-for="option in organizationList"
                             :value="option.organization__pk"
                     >

@@ -15,7 +15,7 @@
     <div class="css-line"></div>
     <div class="css-org-data">Дата початку<br>наставництва</div>
   </div>
-  <div class="css-org-block" v-for="mentor in mentorsData">
+  <div class="css-org-block" v-for="mentor in mentorsData.filter(m => m.public_service_pk === activeLightPublicServicePk)">
     <div class="css-block-mentors">
       <div class="css-block-mentor-link" @click="getExtendedMentorData(mentor.pk)">[[ mentor.full_name ]]
         <div class="help-info-org"><span>Переглянути інформацію<br>про наставника</span></div>
