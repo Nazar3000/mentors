@@ -344,13 +344,13 @@ $(document).ready(function () {
     //  add social card org
 
 
-    $('.css-social-add').click(function () {
-        $('.css-slip').fadeIn(500);
-    });
-
-    $('.css-slip-close').click(function () {
-        $('.css-slip').fadeOut(400);
-    });
+    // $('.css-social-add').click(function () {
+    //     $('.css-slip').fadeIn(500);
+    // });
+    //
+    // $('.css-slip-close').click(function () {
+    //     $('.css-slip').fadeOut(400);
+    // });
 
 
     // sort css-org click

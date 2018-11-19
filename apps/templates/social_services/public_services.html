@@ -31,12 +31,17 @@
             <div class="css-social-add" @click="addPublicService">
               <i class="fas fa-plus"></i><span>Додати організацію</span>
             </div>
-            <div class="css-slip">
+            <div class="css-slip" v-if="publicServiceModalDisplay">
               <div class="css-slip-modal">
-                <div class="css-slip-close">×</div>
+                <div class="css-slip-close" @click="publicServiceModalDisplay=false">×</div>
                 <div class="css-slip-main">
                   <div class="css-slip-image">
-                    <img :src="extendedPublicService.profile_image ? getImageUrl(extendedPublicService.profile_image) : defaultExtendedMentor.profile_image" alt=""></div>
+                    <img :src="extendedPublicService.profile_image ? getImageUrl(extendedPublicService.profile_image) : defaultExtendedMentor.profile_image"
+                         alt=""
+                         :class="{'alert-border': errors['profile_image']}"
+                    >
+                    <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
+                  </div>
                   <div class="css-slip-icon">
                     <label class="add-img" for="new-public-service" title="Add image"><i class="fas fa-plus"></i></label>
                     <input id="new-public-service" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
@@ -50,12 +55,20 @@
                               rows="3"
                               placeholder="Назва організації"
                               v-model="extendedPublicService.name"
+                              :class="{'alert-border': errors['name']}"
                     ></textarea>
+                    <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
                     <span>Максимальна кількість пар:</span>
-                    <input class="css-slip-input-value" type="text" v-model="extendedPublicService.max_pair_count">
+                    <input class="css-slip-input-value"
+                           type="text"
+                           v-model="extendedPublicService.max_pair_count"
+                           :class="{'alert-border': errors['max_pair_count']}"
+                    >
+                    <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
                   </div>
                 </div>
                 <div class="css-line-modal"></div>
+                <span class="error-form" v-for="err in errors.non_field_errors">[[ err ]]</span>
                 <div class="css-slip-choice">
                   <div>
                     <span>Статус:</span>
@@ -67,13 +80,17 @@
                       </option>
                     </select>
                     <span>Телефон:</span>
-                    <input type="text" v-model="extendedPublicService.phone_number">
+                    <input type="text" v-model="extendedPublicService.phone_number" :class="{'alert-border': errors['phone_number']}">
+                    <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
                     <span>Email:</span>
-                    <input type="text" v-model="extendedPublicService.email">
+                    <input type="text" v-model="extendedPublicService.email" :class="{'alert-border': errors['email']}">
+                    <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
                     <span>Адреса:</span>
-                    <input type="text" v-model="extendedPublicService.address">
+                    <input type="text" v-model="extendedPublicService.address" :class="{'alert-border': errors['address']}">
+                    <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
                     <span>Сайт:</span>
-                    <input type="text" v-model="extendedPublicService.website">
+                    <input type="text" v-model="extendedPublicService.website" :class="{'alert-border': errors['website']}">
+                    <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
                   </div>
                   <div>
                     <span>Передати пару:</span>
@@ -93,7 +110,8 @@
                       </option>
                     </select>
                     <span>№ Договору:</span>
-                    <input type="text" v-model="extendedPublicService.contract_number">
+                    <input type="text" v-model="extendedPublicService.contract_number" :class="{'alert-border': errors['contract_number']}">
+                    <span class="error-form" v-for="err in errors.contract_number">[[ err ]]</span>
                     <button @click="submitPublicService">Зберегти</button>
                   </div>
                 </div>
@@ -192,7 +210,10 @@
               </div>
               <!-- start  edit card-->
               <div class="css-org" v-else>
-                <div class="css-org-img-edit"><img :src="getImageUrl(extendedPublicService.profile_image)" alt=""></div>
+                <div class="css-org-img-edit">
+                  <img :src="getImageUrl(extendedPublicService.profile_image)" alt="" :class="{'alert-border': errors['profile_image']}">
+                  <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
+                </div>
                 <div class="css-org-icon">
                   <label class="add-img" :for="extendedPublicService.pk" title="Add image"><i class="fas fa-plus"></i></label>
                   <input :id="extendedPublicService.pk" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
@@ -200,10 +221,13 @@
                 </div>
                 <div class="css-org-title">
                   <h3>го</h3>
-                  <textarea rows="3" placeholder="Назва організації" v-model="extendedPublicService.name"></textarea>
+                  <textarea rows="3" placeholder="Назва організації" v-model="extendedPublicService.name" :class="{'alert-border': errors['name']}"></textarea>
+                  <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
                   <div class="css-org-title-wrapp">
                     <div>
-                      <input type="text" placeholder="00" v-model="extendedPublicService.max_pair_count"><span>пар<br>максимально</span>
+                      <input type="text" placeholder="00" v-model="extendedPublicService.max_pair_count" :class="{'alert-border': errors['max_pair_count']}">
+                      <span>пар<br>максимально</span>
+                      <span class="error-form" v-for="err in errors.max_pair_count">[[ err ]]</span>
                     </div>
                     <div>
                       <p>[[ extendedPublicService.pair_count ]]</p><span>пар<br>всього</span>
@@ -213,13 +237,17 @@
                 <div class="css-org-line"></div>
                 <div class="css-org-info">
                   <span>Телефон:</span>
-                  <input type="text" v-model="extendedPublicService.phone_number">
+                  <input type="text" v-model="extendedPublicService.phone_number" :class="{'alert-border': errors['phone_number']}">
+                  <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
                   <span>Email:</span>
-                  <input type="text" v-model="extendedPublicService.email">
+                  <input type="text" v-model="extendedPublicService.email" :class="{'alert-border': errors['email']}">
+                  <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
                   <span>Адреса:</span>
-                  <input type="text" v-model="extendedPublicService.address">
+                  <input type="text" v-model="extendedPublicService.address" :class="{'alert-border': errors['address']}">
+                  <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
                   <span>Сайт:</span>
-                  <input type="text" v-model="extendedPublicService.website">
+                  <input type="text" v-model="extendedPublicService.website" :class="{'alert-border': errors['website']}">
+                  <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
                 </div>
                 <div class="css-org-mentor">
                   <span>Передати пару:</span>
@@ -241,10 +269,12 @@
                   </select>
                   <div class="css-org-doc">
                     <div><span>Номер договору:</span>
-                      <input type="text" v-model="extendedPublicService.contract_number">
+                      <input type="text" v-model="extendedPublicService.contract_number" :class="{'alert-border': errors['contract_number']}">
+                      <span class="error-form" v-for="err in errors.contract_number">[[ err ]]</span>
                     </div>
                     <div><span>Ліцензія:</span>
-                      <input type="text" v-model="extendedPublicService.licence">
+                      <input type="text" v-model="extendedPublicService.licence" :class="{'alert-border': errors['licence']}">
+                      <span class="error-form" v-for="err in errors.licence">[[ err ]]</span>
                     </div>
                   </div>
                 </div>

@@ -43,7 +43,8 @@ const publicServices = new Vue({
     publicServiceDetail: false,
     mentorModalDisplay: false,
     mentorModalView: true,
-    publicServiceView: true
+    publicServiceView: true,
+    publicServiceModalDisplay: false
   },
   created() {
     this.extendedMentor = this.defaultExtendedMentor;
@@ -79,7 +80,31 @@ const publicServices = new Vue({
         this.publicServiceDetail = false;
       }
     },
-    submitMentorCard() {},
+    submitMentorCard() {
+      const formData = new FormData();
+      for (let key in this.extendedMentor) {
+          if (this.extendedMentor.hasOwnProperty(key)) {
+              formData.append(key, this.extendedMentor[key]);
+          }
+      }
+
+      $.ajax({
+        url: '/social-service/mentors/change_extended_data/',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+        success: (res) => {
+          if (res.status === 'success') {
+            this.mentorModalDisplay = false;
+          } else {
+            this.errors = res;
+          }
+        }
+      });
+    },
     closeMentorCard() {
       this.mentorModalDisplay = false;
       this.extendedMentor = this.defaultExtendedMentor;
@@ -87,6 +112,7 @@ const publicServices = new Vue({
     addPublicService() {
       this.extendedPublicService = this.defaultExtendedMentor;
       this.publicServiceDetail = false;
+      this.publicServiceModalDisplay = true;
     },
     changeProfileImage(event) {
       this.extendedMentor.profile_image = event.target.files[0];
@@ -124,8 +150,8 @@ const publicServices = new Vue({
         type: 'POST',
         success: (res) => {
           if (res.status === 'success') {
-            this.publicServiceView = true;
-            this.mentorModalDisplay = false;
+            this.errors = {};
+            this.publicServiceModalDisplay = false;
           } else {
             this.errors = res;
           }
