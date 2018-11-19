@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.core.validators import RegexValidator
 
@@ -39,4 +40,38 @@ class Material(models.Model):
     category = models.ForeignKey(MaterialCategory, blank=True, null=True, on_delete=models.SET_NULL)
 
 
+class BaseSocialServiceCenterManager(models.Manager):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(service__isnull=True)
 
+
+class BaseSocialServiceCenter(models.Model):
+    """
+    Non user SocialServiceCenter data. Fill it by fixtures.
+    """
+    service = models.OneToOneField(
+        'users.SocialServiceCenter',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True)
+
+    name = models.CharField(
+        max_length=256
+    )
+    region = models.CharField(
+        max_length=64
+    )
+    city = models.CharField(
+        max_length=256
+    )
+    address = models.CharField(
+        max_length=512
+    )
+    phone_numbers = ArrayField(
+        models.CharField(
+            max_length=128
+        )
+    )
+
+    objects = BaseSocialServiceCenterManager()

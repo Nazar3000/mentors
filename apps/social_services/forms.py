@@ -9,7 +9,7 @@ from mentors.forms import SignUpStep1Form
 from users.constants import UserTypes
 from .models import SocialServiceMasterKey
 from mentors.models import MentorSocialServiceCenterData, MentorQuestionnaire
-from users.models import Mentor, PublicService
+from users.models import Mentor, PublicService, SocialServiceCenter, Coordinator
 
 User = get_user_model()
 
@@ -94,4 +94,25 @@ class PublicServiceEditForm(forms.ModelForm):
             'website',
             'contract_number',
             'profile_image',
+        )
+
+
+class DatingSocialServiceCenterForm(forms.ModelForm):
+    class Meta:
+        model = SocialServiceCenter
+        fields = (
+            'name',
+            'city',
+            'address',
+            'phone_numbers',
+        )
+
+
+class DatingCoordinatorForm(forms.ModelForm):
+    class Meta:
+        model = Coordinator
+        fields = (
+            'full_name',
+            'phone_numbers',
+            'email',
         )

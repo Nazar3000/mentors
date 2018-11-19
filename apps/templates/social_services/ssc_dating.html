@@ -2,34 +2,65 @@
 {% load static %}
 {% load widget_tweaks %}
 
-      {% block content %}
-      {% include 'social_services/ssc_header.html' %}
+{% block content %}
+  {% include 'social_services/ssc_header.html' %}
 
-      <div class="container background-dating-relative">
-        <div class="background-dating"></div>
-        <div class="row">
-          <div class="col-md-2"></div>
-          <div class="col-md-8">
-            <h2 class="title-dating"> Давай знайомитися!</h2>
-            <div class="form-dating-subtitle-input">Оберіть свій Центр із списку:</div>
-            <form class="form-dating" action="POST" placeholder="s">
-              <div class="form-dating-wrapper-input">
-                <input class="form-dating-input" type="text" placeholder="Почніть вводити назву Центру починаючи з міста">
-              </div>
-              <div class="form-dating-wrapper-link"><a class="link-dating-for-input" href="#">Немає вашого Центра?</a></div>
-              <div class="form-dating-subtitle-input">Перевірте контактні данні Центра та при необхідності виправте</div>
-              <input class="form-dating-input" type="text" placeholder="Місто">
-              <input class="form-dating-input" type="text" placeholder="Адреса">
-              <input class="form-dating-input last-input" type="text" placeholder="Контактні телефони">
-              <div class="form-dating-subtitle-input">Контактні данні співробітника, що контактує з Наставниками<span>(Ви завжди можете змінити цю інформацію)</span></div>
-              <input class="form-dating-input" type="text" placeholder="ПIБ">
-              <input class="form-dating-input" type="text" placeholder="Контактні телефони">
-              <input class="form-dating-input last-input" type="text" placeholder="Email">
-              <input class="form-dating-button" type="button" value="Зберегти">
-            </form>
+  <div class="container background-dating-relative">
+    <div class="background-dating"></div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8" id="dating-form">
+        <h2 class="title-dating"> Давай знайомитися!</h2>
+        <div class="form-dating-subtitle-input">Оберіть свій Центр із списку:</div>
+        <form class="form-dating" method="post">
+          <div class="form-dating-wrapper-input">
+            <input class="form-dating-input"
+                   type="text"
+                   placeholder="Почніть вводити назву Центру починаючи з міста"
+                   v-model="searchValue">
           </div>
-          <div class="col-md-2"></div>
-        </div>
+          <div class="form-dating-wrapper-link"><a class="link-dating-for-input" href="javascript: void(0)">Немає вашого Центра?</a></div>
+          <div class="form-dating-subtitle-input">Перевірте контактні данні Центра та при необхідності виправте</div>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['city']}"
+                 type="text"
+                 placeholder="Місто"
+                 v-model="selectedSocialService.city">
+          <span class="error-form" v-for="err in errors.city">[[ err ]]</span>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['address']}"
+                 type="text"
+                 placeholder="Адреса"
+                 v-model="selectedSocialService.address">
+          <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
+          <input :class="{'form-dating-input last-input': true, 'alert-border': errors['phone_numbers']}"
+                 type="text"
+                 placeholder="Контактні телефони (розділити комами)"
+                 v-model="selectedSocialService.phone_numbers">
+          <span class="error-form" v-for="err in errors.phone_numbers">[[ err ]]</span>
+          <div class="form-dating-subtitle-input">Контактні данні співробітника, що контактує з Наставниками<span>(Ви завжди можете змінити цю інформацію)</span></div>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['full_name']}"
+                 type="text"
+                 placeholder="ПIБ"
+                 v-model="coordinator.full_name">
+          <span class="error-form" v-for="err in errors.full_name">[[ err ]]</span>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['phone_numbers']}"
+                 type="text"
+                 placeholder="Контактні телефони (розділити комами)"
+                 v-model="coordinator.phone_numbers">
+          <span class="error-form" v-for="err in errors.phone_numbers">[[ err ]]</span>
+          <input :class="{'form-dating-input last-input': true, 'alert-border': errors['email']}"
+                 type="text"
+                 placeholder="Email"
+                 v-model="coordinator.email">
+          <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+          <input class="form-dating-button" type="button" value="Зберегти" @click="submitForm">
+        </form>
       </div>
-      {% endblock %}
+      <div class="col-md-2"></div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/social_services/dating.js' %}"></script>
+{% endblock %}
 

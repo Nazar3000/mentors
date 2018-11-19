@@ -163,10 +163,10 @@ class SocialServiceCenter(models.Model):
         )
     )
 
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude=exclude)
-        if self.user.user_type != UserTypes.SOCIAL_SERVICE_CENTER:
-            raise ValidationError({'user': _('Користувач має бути типу "ЦССДМ".')})
+    # def clean_fields(self, exclude=None):
+    #     super().clean_fields(exclude=exclude)
+    #     if self.user.user_type != UserTypes.SOCIAL_SERVICE_CENTER:
+    #         raise ValidationError({'user': _('Користувач має бути типу "ЦССДМ".')})
 
 
 class SocialServiceCenterReport(models.Model):
@@ -319,7 +319,9 @@ class Volunteer(models.Model):
 
 class Coordinator(models.Model):
     image = models.ImageField(
-        upload_to='mentorees/coordinator_images'
+        upload_to='mentorees/coordinator_images',
+        null=True,
+        blank=True
     )
     full_name = models.CharField(
         max_length=256,

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import redirect, HttpResponse
@@ -8,8 +9,9 @@ from django.utils.translation import gettext_lazy as _
 
 from mentors.constants import DocsStatuses
 from social_services.utils import get_date_str_formatted
-from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm
-from .models import SocialServiceVideo, Material, MaterialCategory
+from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
+    DatingCoordinatorForm, DatingSocialServiceCenterForm
+from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
 from users.models import Mentor, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
@@ -43,6 +45,47 @@ class LoginView(FormView):
             messages.error(self.request, 'Невірний пароль.')
             return redirect('social_services:ssc_login')
         return redirect('/')
+
+
+class DatingView(FormView, TemplateView):
+    template_name = 'social_services/ssc_dating.html'
+    form_class = DatingSocialServiceCenterForm
+    coordinator_form_class = DatingCoordinatorForm
+
+    def get(self, request, *args, **kwargs):
+        if 'search_value' in request.GET.keys():
+            filtered_base_soc_centers = BaseSocialServiceCenter.objects.filter(
+                Q(city__icontains=request.GET['search_value'])
+                | Q(name__icontains=request.GET['search_value'])).values(
+                'pk',
+                'name',
+                'region',
+                'city',
+                'address',
+                'phone_numbers',
+            )
+            return JsonResponse(list(filtered_base_soc_centers), safe=False)
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        if 'pk' in self.request.POST:
+            service = form.save(commit=False)
+            service.user = self.request.user
+            service.save()
+
+            data = self.request.POST
+            data['phone_numbers'] = self.request.POST['coordinator_phone_numbers']
+            coordinator_form = self.coordinator_form_class(self.request.POST)
+            if coordinator_form.is_valid():
+                coordinator = coordinator_form.save(commit=False)
+                coordinator.social_service_center_id = self.request.user.pk
+                coordinator.save()
+        else:
+            return JsonResponse({'non_field_errors': _('Оберіть центр зі списку')})
+        return JsonResponse({'status': 'success'})
+
+    def form_invalid(self, form):
+        return JsonResponse(dict(form.errors.items()))
 
 
 class MainPageView(TemplateView):
@@ -357,7 +400,3 @@ class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
             else:
                 return JsonResponse(dict(form.errors.items()))
         return JsonResponse({'status': 'success'})
-
-
-class DatingView(TemplateView):
-    template_name = 'social_services/ssc_dating.html'
