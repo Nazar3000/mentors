@@ -1,0 +1,47 @@
+{% extends 'social_services/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <section class="css-main">
+      <div class="container">
+        <div class="css-main-page">
+          <div class="css-main-link">
+            <a href="{% url 'social_services:main' %}">Головна</a>
+            <a href="{% url 'social_services:mentors' %}">Наставники</a>
+            <a href="{% url 'social_services:public_services' %}">Громадські організації</a>
+            <a href="{% url 'social_services:material' %}">Матеріали</a>
+          </div>
+          <div class="css-main-video">
+            <iframe width="720" height="453" src="{{ main_video.video_link }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+            <p>Звернення Міністра</p>
+          </div>
+        </div>
+      </div>
+      <div class="css-main-stat">
+        <div class="container">
+          <div class="css-main-wrapp">
+            <h2>Статистика вашого ЦСССДМ</h2>
+            <div>
+              <div class="css-main-item">
+                <p>{{ licenced }}</p><span>Сертифікованих<br>Наставників</span>
+                <div class="css-main-circle"><span>{{ licenced_percentage }}%</span></div>
+              </div>
+              <div class="css-main-item">
+                <p>{{ psychologist_met }}</p><span>Співбесід з<br>психологом</span>
+                <div class="css-main-circle"><span>{{ psychologist_percentage }}%</span></div>
+              </div>
+              <div class="css-main-item">
+                <p>{{ infomeeting_made }}</p><span>Інфо-<br>зустрічей</span>
+                <div class="css-main-circle"><span>{{ infomeeting_percentage }}%</span></div>
+              </div>
+              <div class="css-main-item">
+                <p>{{ total }}</p><span>Подали заяву</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+{% endblock %}

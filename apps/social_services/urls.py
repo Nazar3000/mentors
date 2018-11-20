@@ -24,4 +24,5 @@ urlpatterns = [
     path('public-services/', views.PublicServicesView.as_view(), name='public_services'),
     path('public-services/<str:action>/', views.PublicServicesView.as_view(), name='public_services_post'),
     path('dating/', views.DatingView.as_view(), name='dating'),
+    path('pair/<uuid:pk>/', views.PairDetailView.as_view(), name='pair_detail'),
 ]

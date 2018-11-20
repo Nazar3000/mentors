@@ -1,4 +1,4 @@
-const publicServices = new Vue({
+const vm = new Vue({
   el: '#dating-form',
   delimiters: ['[[', ']]'],
   data: {

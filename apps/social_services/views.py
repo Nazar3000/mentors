@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
-from django.db.models import Q
+from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import redirect, HttpResponse
@@ -9,11 +9,13 @@ from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 
 from mentors.constants import DocsStatuses
+from mentors.views import nest_queryset
 from social_services.utils import get_date_str_formatted
+from users.templatetags.date_tags import get_age
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
     DatingCoordinatorForm, DatingSocialServiceCenterForm
 from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
-from users.models import Mentor, SocialServiceCenter
+from users.models import Mentor, SocialServiceCenter, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
 from users.constants import MentorStatuses, PublicServiceStatuses, UserTypes
@@ -114,11 +116,28 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
 
 
 class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
-    template_name = 'social_services/ssc_main.html'
+    template_name = 'social_services/main.html'
 
     def get_context_data(self, **kwargs):
         context = super(MainPageView, self).get_context_data(**kwargs)
         context['main_video'] = SocialServiceVideo.objects.filter(page=1).first()
+
+        context['licenced'] = Mentor.objects.filter(licenced=True).count()
+        context['psychologist_met'] = MentorSocialServiceCenterData.objects\
+            .filter(psychologist_meeting_date__isnull=False).count()
+        context['infomeeting_made'] = MentorSocialServiceCenterData.objects\
+            .filter(infomeeting_date__isnull=False).count()
+
+        context['total'] = MentorSocialServiceCenterData.objects.all().count()
+
+        if context['total'] > 0:
+            context['licenced_percentage'] = int(round((context['licenced'] / context['total']))) * 100
+            context['psychologist_percentage'] = int(round((context['psychologist_met'] / context['total']))) * 100
+            context['infomeeting_percentage'] = int(round((context['infomeeting_made'] / context['total']))) * 100
+        else:
+            context['licenced_percentage'] = 0
+            context['psychologist_percentage'] = 0
+            context['infomeeting_percentage'] = 0
         return context
 
 
@@ -365,7 +384,7 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
                 'organization_name': mentor.mentoree.organization.name,
                 'contract_number': mentor.social_service_center_data.contract_number,
                 'mentoring_start_date':
-                    get_date_str_formatted(mentor.meetings.first().date()) if mentor.meetings.first() else None,
+                    get_date_str_formatted(mentor.meetings.first().date) if mentor.meetings.first() else None,
             })
 
         return JsonResponse({
@@ -425,3 +444,58 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
             else:
                 return JsonResponse(dict(form.errors.items()))
         return JsonResponse({'status': 'success'})
+
+
+class PairDetailView(CheckIfUserIsSocialServiceCenterMixin, DetailView):
+    model = Mentor
+    template_name = 'social_services/pair_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['meetings'] = nest_queryset(2, self.object.meetings.all())
+
+        context['mentor_age'] = get_age(self.object.date_of_birth)
+        context['mentoree_age'] = get_age(self.object.mentoree.date_of_birth)
+        return context
+
+    @staticmethod
+    def get_responsible_pk(coordinator_pk):
+        coordinator = Coordinator.objects.get(pk=coordinator_pk)
+        try:
+            responsible = coordinator.social_service_center.pk
+        except AttributeError:
+            try:
+                responsible = coordinator.public_service.pk
+            except AttributeError:
+                responsible = None
+        return responsible
+
+    def get(self, request, *args, **kwargs):
+        if 'get_pair_data' in request.GET.keys():
+            mentor = Mentor.objects.get(pk=kwargs['pk'])
+            interaction_dates = mentor.meetings.aggregate(start_date=Min('date'), end_date=Max('date'))
+            interaction_dates['start_date'] = get_date_str_formatted(interaction_dates['start_date'])
+            interaction_dates['end_date'] = get_date_str_formatted(interaction_dates['end_date'])
+
+            related_public_services = PublicService.objects.filter(
+                social_service_center__pk=self.request.user.pk).values('pk', 'name')
+            organizations = Organization.objects.all().values('name', 'pk')
+
+            pair_data = {
+                'contract_number': mentor.social_service_center_data.contract_number,
+                'responsible': self.get_responsible_pk(mentor.coordinator.pk) if mentor.coordinator else '',
+                'organization_pk': mentor.mentoree.organization.pk,
+                'status': mentor.status
+            }
+
+            return JsonResponse({
+                'interaction_dates': interaction_dates,
+                'public_services': list(related_public_services),
+                'mentor_statuses': dict(MentorStatuses.choices()),
+                'organizations': list(organizations),
+                'statuses': dict(MentorStatuses.choices()),
+
+                'pair_data': pair_data
+            })
+
+        return super().get(request, *args, **kwargs)

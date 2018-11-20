@@ -21,8 +21,8 @@
         <div class="help-info-org"><span>Переглянути інформацію<br>про наставника</span></div>
       </div><span class="css-block-mentors-phone">(063) 324 43 43</span><span class="css-block-sort-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
     </div>
-    <div class="css-block-child"><a href="css-team.html">[[ mentor.mentoree_full_name ]]
-        <div class="help-info-org"><span>Переглянути інформацію<br> про вихованеця</span></div></a></div>
+    <div class="css-block-child"><a :href="`/social-service/pair/${mentor.pk}/`">[[ mentor.mentoree_full_name ]]
+        <div class="help-info-org"><span>Переглянути історію<br> взаємодії</span></div></a></div>
     <div class="css-block-place"><span>[[ mentor.organization_name ]]</span></div>
     <div class="css-block-contract"><span>[[ mentor.contract_number ]]</span></div>
     <div class="css-block-data"><span>[[ mentor.mentoring_start_date ]]</span></div>
