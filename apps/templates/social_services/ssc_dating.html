@@ -9,15 +9,25 @@
     <div class="background-dating"></div>
     <div class="row">
       <div class="col-md-2"></div>
-      <div class="col-md-8" id="dating-form">
+      <div class="col-md-8" id="dating-form" v-cloak>
         <h2 class="title-dating"> Давай знайомитися!</h2>
         <div class="form-dating-subtitle-input">Оберіть свій Центр із списку:</div>
         <form class="form-dating" method="post">
           <div class="form-dating-wrapper-input">
-            <input class="form-dating-input"
+            <input class="form-dating-search"
                    type="text"
                    placeholder="Почніть вводити назву Центру починаючи з міста"
                    v-model="searchValue">
+            <div class="form-dating-box-items">
+              <ul class="form-dating-items">
+                <li class="form-dating-item"
+                    v-for="socService in searchedSocialServices"
+                    @click="selectedSocialService=socService"
+                >
+                  [[ socService.name ]]
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="form-dating-wrapper-link"><a class="link-dating-for-input" href="javascript: void(0)">Немає вашого Центра?</a></div>
           <div class="form-dating-subtitle-input">Перевірте контактні данні Центра та при необхідності виправте</div>
@@ -36,6 +46,7 @@
                  placeholder="Контактні телефони (розділити комами)"
                  v-model="selectedSocialService.phone_numbers">
           <span class="error-form" v-for="err in errors.phone_numbers">[[ err ]]</span>
+
           <div class="form-dating-subtitle-input">Контактні данні співробітника, що контактує з Наставниками<span>(Ви завжди можете змінити цю інформацію)</span></div>
           <input :class="{'form-dating-input': true, 'alert-border': errors['full_name']}"
                  type="text"
@@ -45,8 +56,8 @@
           <input :class="{'form-dating-input': true, 'alert-border': errors['phone_numbers']}"
                  type="text"
                  placeholder="Контактні телефони (розділити комами)"
-                 v-model="coordinator.phone_numbers">
-          <span class="error-form" v-for="err in errors.phone_numbers">[[ err ]]</span>
+                 v-model="coordinator.coordinator_phone_numbers">
+          <span class="error-form" v-for="err in errors.coordinator_phone_numbers">[[ err ]]</span>
           <input :class="{'form-dating-input last-input': true, 'alert-border': errors['email']}"
                  type="text"
                  placeholder="Email"

@@ -11,7 +11,12 @@
             <div class="css-material-main">
               <div class="css-material-info">
                 <div class="css-material-info-wrapp">
-                  <div class="css-material-link"><a href="css-main.html">Головна</a><a href="css-mentor.html">Наставники</a><a href="">Громадські організації</a><a href="/">Матеріали</a></div>
+                  <div class="css-material-link">
+                    <a href="{% url 'social_services:main' %}">Головна</a>
+                    <a href="{% url 'social_services:mentors' %}">Наставники</a>
+                    <a href="{% url 'social_services:public_services' %}">Громадські організації</a>
+                    <a href="{% url 'social_services:material' %}">Матеріали</a>
+                  </div>
                   <div class="css-material-title">
                     <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
                     <div class="css counter">

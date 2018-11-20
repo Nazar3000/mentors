@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
 from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import JsonResponse
@@ -12,13 +13,27 @@ from social_services.utils import get_date_str_formatted
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
     DatingCoordinatorForm, DatingSocialServiceCenterForm
 from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
-from users.models import Mentor, Organization
+from users.models import Mentor, SocialServiceCenter
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
 from users.constants import MentorStatuses, PublicServiceStatuses, UserTypes
-from users.models import PublicService, Coordinator, SocialServiceCenter
+from users.models import PublicService, Coordinator
 
 User = get_user_model()
+
+
+class CheckIfUserIsPreSocialServiceCenterMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
+
+
+class CheckIfUserIsSocialServiceCenterMixin(UserPassesTestMixin):
+    def test_func(self):
+        try:
+            SocialServiceCenter.objects.get(user=self.request.user)
+            return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
+        except SocialServiceCenter.DoesNotExist:
+            return False
 
 
 class SignUpFormView(FormView):
@@ -47,7 +62,7 @@ class LoginView(FormView):
         return redirect('/')
 
 
-class DatingView(FormView, TemplateView):
+class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateView):
     template_name = 'social_services/ssc_dating.html'
     form_class = DatingSocialServiceCenterForm
     coordinator_form_class = DatingCoordinatorForm
@@ -73,13 +88,23 @@ class DatingView(FormView, TemplateView):
             service.user = self.request.user
             service.save()
 
-            data = self.request.POST
-            data['phone_numbers'] = self.request.POST['coordinator_phone_numbers']
-            coordinator_form = self.coordinator_form_class(self.request.POST)
+            data = dict(self.request.POST)
+            data['phone_numbers'] = self.request.POST.get('coordinator_phone_numbers')
+            coordinator_form = self.coordinator_form_class(data)
             if coordinator_form.is_valid():
                 coordinator = coordinator_form.save(commit=False)
                 coordinator.social_service_center_id = self.request.user.pk
                 coordinator.save()
+
+                base_soc_service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk'])
+                base_soc_service.service = service
+                base_soc_service.save()
+            else:
+                errs = dict(coordinator_form.errors.items())
+                if 'phone_numbers' in errs.keys():
+                    errs['coordinator_phone_numbers'] = errs['phone_numbers']
+                    del errs['phone_numbers']
+                return JsonResponse(errs)
         else:
             return JsonResponse({'non_field_errors': _('Оберіть центр зі списку')})
         return JsonResponse({'status': 'success'})
@@ -88,7 +113,7 @@ class DatingView(FormView, TemplateView):
         return JsonResponse(dict(form.errors.items()))
 
 
-class MainPageView(TemplateView):
+class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
     template_name = 'social_services/ssc_main.html'
 
     def get_context_data(self, **kwargs):
@@ -97,7 +122,7 @@ class MainPageView(TemplateView):
         return context
 
 
-class VideoMentorView(TemplateView):
+class VideoMentorView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
     template_name = 'social_services/ssc_video_mentor.html'
 
     def get_context_data(self, **kwargs):
@@ -106,7 +131,7 @@ class VideoMentorView(TemplateView):
         return context
 
 
-class MentorCardView(DetailView):
+class MentorCardView(CheckIfUserIsSocialServiceCenterMixin, DetailView):
     model = Mentor
     template_name = 'social_services/ssc_mentor_card.html'
 
@@ -151,7 +176,7 @@ class GetSocialServiceRelatedMentors:
         return mentors_query_data
 
 
-class MentorsView(GetSocialServiceRelatedMentors, TemplateView):
+class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/mentors.html'
 
     @staticmethod
@@ -276,7 +301,7 @@ class MentorsView(GetSocialServiceRelatedMentors, TemplateView):
         return JsonResponse({'status': 'success'})
 
 
-class PublicServicesView(GetSocialServiceRelatedMentors, TemplateView):
+class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/public_services.html'
 
     def get_light_public_service_data(self):

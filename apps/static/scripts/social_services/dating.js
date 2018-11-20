@@ -16,8 +16,10 @@ const publicServices = new Vue({
     submitForm() {
       const formData = new FormData();
       const mergedObj = {...this.selectedSocialService, ...this.coordinator};
-      if (this.selectedSocialService.phone_numbers) {
+      if (typeof this.selectedSocialService.phone_numbers === 'string') {
         mergedObj.phone_numbers = this.selectedSocialService.phone_numbers.split(',');
+      } else {
+        mergedObj.phone_numbers = this.selectedSocialService.phone_numbers;
       }
       if (this.coordinator.phone_numbers) {
         mergedObj.coordinator_phone_numbers = this.coordinator.phone_numbers.split(',');
@@ -48,9 +50,13 @@ const publicServices = new Vue({
   },
   watch: {
     searchValue: function (newVal) {
-      $.get(`/social-service/dating/?search_value=${newVal}`, (res) => {
-        this.searchedSocialServices = res;
-      });
+      if (newVal) {
+        $.get(`/social-service/dating/?search_value=${newVal}`, (res) => {
+          this.searchedSocialServices = res;
+        });
+      } else {
+        this.searchedSocialServices = [];
+      }
     }
   }
 });

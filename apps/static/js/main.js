@@ -433,6 +433,18 @@ $(document).ready(function () {
         $('.social-modal').fadeOut(400);
     });
 
+    // form-search-box
+    $('.form-dating-search').click(function(event) {
+        $('.form-dating-box-items').toggle();
+    });
+    $('.form-dating-item').click(function(event) {
+        var form_dating_info = $(this).html();
+        $('.form-dating-search').attr({
+            value: form_dating_info
+        });
+        $('.form-dating-box-items').toggle();
+    });
+
 });
 
 
