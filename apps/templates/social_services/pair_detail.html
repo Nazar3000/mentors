@@ -31,32 +31,6 @@
                 </div>
               </div>
             </div>
-            <!-- start card edit-->
-            <!--.team-card-title-->
-            <!--    div-->
-            <!--        h4 Статус пари:-->
-            <!--        .team-card-wrapp-->
-            <!--            div-->
-            <!--                select.triangle-green-->
-            <!--                    option Актив-->
-            <!--                    option Дыня-->
-            <!--                    option Тыква-->
-            <!--                span Дата початку взаємодії:-->
-            <!--                input(type='text')-->
-            <!--                span Дата відомої останньої зустрічі:-->
-            <!--                input(type='text')-->
-            <!---->
-            <!--            div-->
-            <!--                span Відповідальний:-->
-            <!--                input(type='text')-->
-            <!--                span № Договору:-->
-            <!--                input(type='text')-->
-            <!--                span Інтернат:-->
-            <!--                input(type='text')-->
-            <!--    div-->
-            <!--        a(href='', title='Submit')-->
-            <!--            i.fas.fa-check-->
-            <!-- end card edit-->
             <div class="team-card-title" id="pair-card">
               <template v-if="viewMode">
                 <div>
@@ -70,8 +44,10 @@
                       <p>[[ endDate ]]</p>
                     </div>
                     <div><span>Відповідальний:</span>
-                      <p>РЦСССДМ</p><span>№ Договору:</span>
-                      <p>[[ pairData.contract_number ]]</p><span>Інтернат:</span>
+                      <p>[[ pairData.responsible === soc_service_id ? 'ЦСССДМ' : findPublicService() ]]</p>
+                      <span>№ Договору:</span>
+                      <p>[[ pairData.contract_number ]]</p>
+                      <span>Інтернат:</span>
                       <p>[[ organizations.length ? organizations.find(o => o.pk === pairData.organization_pk).name : '' ]]</p>
                     </div>
                   </div>
@@ -83,7 +59,46 @@
                 </div>
               </template>
               <template v-else>
-
+                <div>
+                  <h4>Статус пари:</h4>
+                  <div class="team-card-wrapp">
+                    <div>
+                      <select class="triangle-green" v-model="pairData.status">
+                        <option v-for="key, value in mentorStatuses" :value="value">
+                          [[ key ]]
+                        </option>
+                      </select>
+                      <span>Дата початку взаємодії:</span>
+                      <p>[[ startDate ]]</p>
+                      <span>Дата відомої останньої зустрічі:</span>
+                      <p>[[ endDate ]]</p>
+                    </div>
+                    <div>
+                      <span>Відповідальний:</span>
+                      <select class="triangle-green" v-model="pairData.responsible">
+                        <option>ЦССДМ</option>
+                        <option v-for="service in publicServices"
+                                :value="service.pk"
+                        >
+                          [[ service.name ]]
+                        </option>
+                      </select>
+                      <span>№ Договору:</span>
+                      <input type="text" v-model="pairData.contract_number">
+                      <span>Інтернат:</span>
+                      <select v-model="pairData.organization_pk">
+                        <option v-for="org in organizations" :value="org.pk">
+                          [[ org.name ]]
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <a href="javascript: void(0)" title="Edit" @click="viewMode=false">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                </div>
               </template>
             </div>
           </div>
@@ -181,5 +196,8 @@
 {% endblock %}
 
 {% block extra_js %}
+  <script>
+    const soc_service_id = '{{ user.id }}';
+  </script>
   <script src="{% static 'scripts/social_services/pair_detail.js' %}"></script>
 {% endblock %}
