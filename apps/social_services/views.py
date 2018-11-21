@@ -90,9 +90,13 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
             service.user = self.request.user
             service.save()
 
-            data = dict(self.request.POST)
-            data['phone_numbers'] = self.request.POST.get('coordinator_phone_numbers')
+            data = {
+                'phone_numbers': self.request.POST.get('coordinator_phone_numbers'),
+                'email': self.request.POST.get('email'),
+                'full_name': self.request.POST.get('coordinator_phone_numbers')
+            }
             coordinator_form = self.coordinator_form_class(data)
+
             if coordinator_form.is_valid():
                 coordinator = coordinator_form.save(commit=False)
                 coordinator.social_service_center_id = self.request.user.pk
@@ -102,6 +106,7 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
                 base_soc_service.service = service
                 base_soc_service.save()
             else:
+                print(coordinator_form.cleaned_data)
                 errs = dict(coordinator_form.errors.items())
                 if 'phone_numbers' in errs.keys():
                     errs['coordinator_phone_numbers'] = errs['phone_numbers']
