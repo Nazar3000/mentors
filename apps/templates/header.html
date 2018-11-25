@@ -11,7 +11,17 @@
       <a class="header-trigger" href="#"><i class="fas fa-bars"></i></a>
       <ul class="header-wrapp-link">
         <li><a class="header-link" href="#">Про<br>наставництво</a></li>
-        <li><a class="header-link" href="#">Спеціалістам<br> з наставництва<span><i class="fas fa-caret-down"></i></span></a></li>
+        <li class="header-wrapp-linkdropdown">
+          <a class="header-link" href="#">Спеціалістам<br> з наставництва<span><i class="fas fa-caret-down"></i></span></a>
+          <ul class="header-dropdown">
+            <li class="header-dropdown-item">
+              <a class="header-dropdown-link" href="{% url 'social_services:main' %}">ЦСССДМ</a>
+              <a class="header-dropdown-link" href="#">Заклад</a>
+              <a class="header-dropdown-link" href="#">ССД</a>
+              <a class="header-dropdown-link" href="#">Матеріали</a>
+            </li>
+          </ul>
+        </li>
         <li class="header-dropp"><a class="header-link" href="#">Допомогти<br>наставництву</a></li>
       </ul>
       <div class="header-btn"><a class="header-link header-login" href="{% url 'users:signin' %}">Вхід<br> для наставників</a><a class="header-link header-donate" href="#">Допомогти<br> фінансово</a></div>

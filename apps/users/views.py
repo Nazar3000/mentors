@@ -18,8 +18,10 @@ class SignInView(LoginView):
         if user_type == UserTypes.MENTOR:
             return resolve_url('mentors:mentor_office')
         elif user_type == UserTypes.SOCIAL_SERVICE_CENTER:
-            pass
+            return resolve_url('social_services:main')
         elif user_type == UserTypes.PUBLIC_SERVICE:
-            pass
+            return resolve_url('public_organizations:main')
         elif user_type == UserTypes.GOVERN_USER:
             pass
+
+        return resolve_url('users:unregistered_guideline')

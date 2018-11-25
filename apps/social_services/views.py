@@ -36,7 +36,7 @@ class CheckIfUserIsSocialServiceCenterMixin(UserPassesTestMixin):
         try:
             SocialServiceCenter.objects.get(user=self.request.user)
             return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
-        except SocialServiceCenter.DoesNotExist:
+        except (SocialServiceCenter.DoesNotExist, TypeError):
             return False
 
 
