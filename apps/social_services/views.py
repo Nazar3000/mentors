@@ -63,7 +63,7 @@ class LoginView(FormView):
         else:
             messages.error(self.request, 'Невірний пароль.')
             return redirect('social_services:ssc_login')
-        return redirect('/')
+        return redirect('social_services:main')
 
 
 class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateView):
