@@ -9,7 +9,9 @@
       <div class="css-header-notification">
         <a class="header-notification-title" href="question.html">Питання?</a>
         <a href=""><i class="fas fa-bell"></i></a>
-        <a class="css-header-company" href=""><img src="{% static 'img/css-logo.svg' %}"><span>Особистий кабінет<br>Пирятинського ЦСССДМ</span></a>
+        <a class="css-header-company" href="{% url 'social_services:main' %}">
+          <img src="{% static 'img/css-logo.svg' %}"><span>Особистий кабінет<br>Пирятинського ЦСССДМ</span>
+        </a>
       </div>
     </nav>
   </div>
