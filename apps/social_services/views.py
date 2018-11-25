@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
 from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
@@ -101,12 +103,7 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
                 coordinator = coordinator_form.save(commit=False)
                 coordinator.social_service_center_id = self.request.user.pk
                 coordinator.save()
-
-                base_soc_service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk'])
-                base_soc_service.service = service
-                base_soc_service.save()
             else:
-                print(coordinator_form.cleaned_data)
                 errs = dict(coordinator_form.errors.items())
                 if 'phone_numbers' in errs.keys():
                     errs['coordinator_phone_numbers'] = errs['phone_numbers']

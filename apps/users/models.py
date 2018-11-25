@@ -154,12 +154,9 @@ class SocialServiceCenter(models.Model):
     address = models.CharField(
         max_length=512
     )
-    phone_regex = RegexValidator(
-        regex=r'\+?1?\d$')
     phone_numbers = ArrayField(
         models.CharField(
-            max_length=17,
-            validators=[phone_regex]
+            max_length=128
         )
     )
 

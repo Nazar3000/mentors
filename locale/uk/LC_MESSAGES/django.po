@@ -1,0 +1,300 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-25 23:22+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: apps/mentors/constants.py:7
+msgid "Християнство"
+msgstr ""
+
+#: apps/mentors/constants.py:8
+msgid "Католицизм"
+msgstr ""
+
+#: apps/mentors/constants.py:9
+msgid "Православ’я"
+msgstr ""
+
+#: apps/mentors/constants.py:10
+msgid "Протестантизм"
+msgstr ""
+
+#: apps/mentors/constants.py:11
+msgid "Іудаїзм"
+msgstr ""
+
+#: apps/mentors/constants.py:12
+msgid "Буддизм"
+msgstr ""
+
+#: apps/mentors/constants.py:13
+msgid "Іслам"
+msgstr ""
+
+#: apps/mentors/constants.py:14
+msgid "Інше"
+msgstr ""
+
+#: apps/mentors/constants.py:18
+msgid "раз на тиждень"
+msgstr ""
+
+#: apps/mentors/constants.py:19
+msgid "раз на місяць"
+msgstr ""
+
+#: apps/mentors/constants.py:20
+msgid "один раз на рік"
+msgstr ""
+
+#: apps/mentors/constants.py:21 apps/mentors/constants.py:47
+msgid "інше"
+msgstr ""
+
+#: apps/mentors/constants.py:25
+msgid "Одружений/одружена"
+msgstr ""
+
+#: apps/mentors/constants.py:26
+msgid "Цивільний шлюб"
+msgstr ""
+
+#: apps/mentors/constants.py:27
+msgid "Розлучений/розлучена"
+msgstr ""
+
+#: apps/mentors/constants.py:28
+msgid "Удовець/удова"
+msgstr ""
+
+#: apps/mentors/constants.py:29
+msgid "Неодружений/неодружена"
+msgstr ""
+
+#: apps/mentors/constants.py:33
+msgid "чоловіча"
+msgstr ""
+
+#: apps/mentors/constants.py:34
+msgid "жіноча"
+msgstr ""
+
+#: apps/mentors/constants.py:38
+msgid "квартира"
+msgstr ""
+
+#: apps/mentors/constants.py:39
+msgid "приватний будинок"
+msgstr ""
+
+#: apps/mentors/constants.py:40
+msgid "орендоване житло"
+msgstr ""
+
+#: apps/mentors/constants.py:44
+msgid "1 раз на тиждень"
+msgstr ""
+
+#: apps/mentors/constants.py:45
+msgid "1 раз на 2 тижні"
+msgstr ""
+
+#: apps/mentors/constants.py:46
+msgid "1 раз на місяць"
+msgstr ""
+
+#: apps/mentors/constants.py:51
+msgid "Телебачення"
+msgstr ""
+
+#: apps/mentors/constants.py:52
+msgid "Радіо"
+msgstr ""
+
+#: apps/mentors/constants.py:53
+msgid "Інші ЗМІ"
+msgstr ""
+
+#: apps/mentors/constants.py:54
+msgid "Facebook або інші соціальні мережі"
+msgstr ""
+
+#: apps/mentors/constants.py:55
+msgid "Інтернет"
+msgstr ""
+
+#: apps/mentors/constants.py:56
+msgid "Друзі, рідні, знайомі"
+msgstr ""
+
+#: apps/mentors/constants.py:57
+msgid "Друковані матеріали"
+msgstr ""
+
+#: apps/mentors/constants.py:58
+msgid "Презентація/конференція"
+msgstr ""
+
+#: apps/mentors/constants.py:59
+msgid "Центр соціальних служб для сім’ї, дітей та молоді (вкажіть район)"
+msgstr ""
+
+#: apps/mentors/constants.py:60
+msgid "Служба у справах дітей (вкажіть район)"
+msgstr ""
+
+#: apps/mentors/constants.py:64
+msgid "Загальноосвітня школа"
+msgstr ""
+
+#: apps/mentors/constants.py:65
+msgid "Університет, інститут, технікум"
+msgstr ""
+
+#: apps/mentors/constants.py:66
+msgid "Додаткові курси, тренінги, семінари"
+msgstr ""
+
+#: apps/mentors/constants.py:70
+msgid "Є всі"
+msgstr ""
+
+#: apps/mentors/constants.py:71
+msgid "Не всі"
+msgstr ""
+
+#: apps/mentors/constants.py:72
+msgid "Немає жодного"
+msgstr ""
+
+#: apps/mentors/forms.py:108
+msgid "Введіть дату у форматі дд.мм.рррр"
+msgstr ""
+
+#: apps/mentors/forms.py:180
+msgid "Неправильний пароль."
+msgstr ""
+
+#: apps/mentors/forms.py:190
+msgid "Паролі не співпадають."
+msgstr ""
+
+#: apps/mentors/models.py:393
+msgid "Введіть валідний місяць і рік."
+msgstr ""
+
+#: apps/mentors/models.py:557
+msgid "Гігієна"
+msgstr ""
+
+#: apps/mentors/models.py:558
+msgid "Що цій дитині допоможе бути самостійним"
+msgstr ""
+
+#: apps/mentors/models.py:559
+msgid "Емоціанальний стан дитини"
+msgstr ""
+
+#: apps/mentors/models.py:560
+msgid "Навички спілкування"
+msgstr ""
+
+#: apps/mentors/models.py:561
+msgid "Як орієнтується в просторі (чи є проблеми)"
+msgstr ""
+
+#: apps/social_services/forms.py:27
+msgid "Користувач з цією електронною адресою вже зареєстрований."
+msgstr ""
+
+#: apps/social_services/forms.py:57
+msgid "Користувач з цією електронною адресою не зареєстрований."
+msgstr ""
+
+#: apps/social_services/views.py:116
+msgid "Оберіть центр зі списку"
+msgstr ""
+
+#: apps/social_services/views.py:432
+msgid "Користувач з таким email же існує."
+msgstr ""
+
+#: apps/social_services/views.py:448
+msgid "Для даної громадської організації немає координатора."
+msgstr ""
+
+#: apps/templates/users/volunteer_signup.html:8
+msgid "Registration"
+msgstr ""
+
+#: apps/users/constants.py:35 apps/users/constants.py:46
+msgid "Не визначений"
+msgstr ""
+
+#: apps/users/constants.py:36
+msgid "Пройшов інфо-зустріч"
+msgstr ""
+
+#: apps/users/constants.py:37
+msgid "Пройшов тренінг"
+msgstr ""
+
+#: apps/users/constants.py:38
+msgid "Відмовився бути наставником"
+msgstr ""
+
+#: apps/users/constants.py:39
+msgid "Пройшов співбесіду з психологом"
+msgstr ""
+
+#: apps/users/constants.py:40
+msgid "Підібраний для вихованця"
+msgstr ""
+
+#: apps/users/constants.py:41
+msgid "Активна взаємодія"
+msgstr ""
+
+#: apps/users/constants.py:42
+msgid "Пара розформована"
+msgstr ""
+
+#: apps/users/constants.py:47
+msgid "Знаємо про її існування"
+msgstr ""
+
+#: apps/users/constants.py:48
+msgid "Домовленість про співпрацю"
+msgstr ""
+
+#: apps/users/constants.py:49
+msgid "Підписаний договір"
+msgstr ""
+
+#: apps/users/models.py:61
+msgid "staff status"
+msgstr "статус персоналу"
+
+#: apps/users/models.py:63
+msgid "Designates whether the user can log into this admin site."
+msgstr "Позначає, чи може користувач входити на сторінку адміністратора."
+
+#, python-format
+msgid "Item %(nth)s in the array did not validate:"
+msgstr "Елемент списку №%(nth)s не пройшов перевірку."

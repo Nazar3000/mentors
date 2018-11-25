@@ -53,7 +53,7 @@
                  placeholder="ПIБ"
                  v-model="coordinator.full_name">
           <span class="error-form" v-for="err in errors.full_name">[[ err ]]</span>
-          <input :class="{'form-dating-input': true, 'alert-border': errors['phone_numbers']}"
+          <input :class="{'form-dating-input': true, 'alert-border': errors['coordinator_phone_numbers']}"
                  type="text"
                  placeholder="Контактні телефони (розділити комами)"
                  v-model="coordinator.coordinator_phone_numbers">

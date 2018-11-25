@@ -164,3 +164,5 @@ EMAIL_HOST_USER = 'nastavniki.service@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
