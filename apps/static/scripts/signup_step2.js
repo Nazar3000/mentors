@@ -100,19 +100,7 @@ const step2Form = new Vue({
         gender: '',
         date_of_birth: '',
         relation: ''
-      },
-      {
-        name: '',
-        gender: '',
-        date_of_birth: '',
-        relation: ''
-      },
-      {
-        name: '',
-        gender: '',
-        date_of_birth: '',
-        relation: ''
-      },
+      }
     ],
     children_work_experiences: [
       {
@@ -126,7 +114,23 @@ const step2Form = new Vue({
       },
     ],
 
-    errors: {}
+    errors: {
+      educations: [
+        {},
+        {},
+        {}
+      ],
+      jobs: [
+        {},
+        {}
+      ],
+      family_members: [
+        {}
+      ],
+      children_work_experiences: [
+        {}
+      ]
+    }
   },
   created() {
     $.get('?get_selector_choices', (data) => {
@@ -154,6 +158,8 @@ const step2Form = new Vue({
         year_of_graduation: '',
         degree: ''
       })
+
+      this.errors.educations.push({});
     },
     addJobObject() {
       this.jobs.push({
@@ -166,6 +172,8 @@ const step2Form = new Vue({
         duties: '',
         reason_for_leaving: ''
       })
+
+      this.errors.jobs.push({});
     },
     addFamilyMemberObject() {
       this.family_members.push({
@@ -174,6 +182,8 @@ const step2Form = new Vue({
         date_of_birth: '',
         relation: ''
       })
+
+      this.errors.family_members.push({});
     },
     addChildrenWorkExperienceObject() {
       this.children_work_experiences.push({
@@ -185,6 +195,8 @@ const step2Form = new Vue({
         duties: '',
         children_age_group: ''
       })
+
+      this.errors.children_work_experiences.push({});
     },
     submitForm() {
       const thisData = this;

@@ -78,7 +78,8 @@
           <h3>2. Стан здоров’я:</h3>
           <div class="page-form-health">
             <span>Як Ви оцінюєте свій стан здоров’я?</span>
-            <input type="text" v-model="health_self_estimation">
+            <input type="text" v-model="health_self_estimation" :class="{'alert-border': errors['health_self_estimation']}">
+            <span class="error-form" v-for="err in errors.health_self_estimation">[[ err ]]</span>
             <span>Чи маєте Ви серйозні захворювання?</span>
             <div class="page-form-check">
               <label class="form-check">
@@ -148,7 +149,8 @@
               </div>
             </div>
             <div class="blue-title">* Якщо так, то вкажіть назву медичної установи, термін перебування</div>
-            <input class="blue-title-input" type="text" v-model="hospital_data">
+            <input class="blue-title-input" type="text" v-model="hospital_data" :class="{'alert-border': errors['hospital_data']}">
+            <span class="error-form" v-for="err in errors.hospital_data">[[ err ]]</span>
             <span>Чи є Ви ВІЛ-інфікованим?
               <div class="page-form-check">
                 <label class="form-check">
@@ -189,13 +191,16 @@
                   </select>
                 </div>
                 <div class="table-education-input">
-                  <input type="text" v-model="institution.year_of_admission">
+                  <input type="text" v-model="institution.year_of_admission" :class="{'alert-border': errors['educations'][index].year_of_admission}">
+                  <span class="error-form" v-for="err in errors.educations[index].year_of_admission">[[ err ]]</span>
                 </div>
                 <div class="table-education-input">
-                  <input type="text" v-model="institution.year_of_graduation">
+                  <input type="text" v-model="institution.year_of_graduation" :class="{'alert-border': errors['educations'][index].year_of_graduation}">
+                  <span class="error-form" v-for="err in errors.educations[index].year_of_graduation">[[ err ]]</span>
                 </div>
                 <div class="table-education-input-last">
-                  <input type="text" v-model="institution.degree">
+                  <input type="text" v-model="institution.degree" :class="{'alert-border': errors['educations'][index].degree}">
+                  <span class="error-form" v-for="err in errors.educations[index].degree">[[ err ]]</span>
                 </div>
               </div>
             </div>
@@ -204,7 +209,7 @@
             <h3>4. Працевлаштування:</h3>
             <a href="javascript: void(0)" @click="addJobObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a>
           </div>
-          <div class="table-work" v-for="job in jobs">
+          <div class="table-work" v-for="job, index in jobs">
             <div class="table-work-header">
               <div class="table-work-main" v-if="job.is_current">Місце роботи на цей момент</div>
               <div class="table-work-main" v-else>Місце попередньої роботи</div>
@@ -217,16 +222,20 @@
             </div>
             <div class="table-work-line">
               <div class="table-work-input-main">
-                <input type="text" placeholder="Введіть назву організації" v-model="job.organization_name">
+                <input type="text" placeholder="Введіть назву організації" v-model="job.organization_name" :class="{'alert-border': errors['jobs'][index].organization_name}">
+                <span class="error-form" v-for="err in errors.jobs[index].organization_name">[[ err ]]</span>
               </div>
               <div class="table-work-input-start">
-                <input type="text" v-model="job.date_since">
+                <input type="text" v-model="job.date_since" :class="{'alert-border': errors['jobs'][index].date_since}">
+                <span class="error-form" v-for="err in errors.jobs[index].date_since">[[ err ]]</span>
               </div>
               <div class="table-work-input-end">
-                <input type="text" v-model="job.date_till">
+                <input type="text" v-model="job.date_till" :class="{'alert-border': errors['jobs'][index].date_till}">
+                <span class="error-form" v-for="err in errors.jobs[index].date_till">[[ err ]]</span>
               </div>
               <div class="table-work-input-info">
-                <input type="text" v-model="job.contact_info">
+                <input type="text" v-model="job.contact_info" :class="{'alert-border': errors['jobs'][index].contact_info}">
+                <span class="error-form" v-for="err in errors.jobs[index].contact_info">[[ err ]]</span>
               </div>
             </div>
             <div class="table-work-header">
@@ -238,29 +247,34 @@
             </div>
             <div class="table-work-line">
               <div class="table-work-input-left">
-                <input type="text" v-model="job.position">
+                <input type="text" v-model="job.position" :class="{'alert-border': errors['jobs'][index].position}">
+                <span class="error-form" v-for="err in errors.jobs[index].position">[[ err ]]</span>
               </div>
               <div class="table-work-input-top">
-                <input type="text" v-model="job.duties">
+                <input type="text" v-model="job.duties" :class="{'alert-border': errors['jobs'][index].duties}">
+                <span class="error-form" v-for="err in errors.jobs[index].duties">[[ err ]]</span>
               </div>
               <div class="table-work-input-right">
-                <input type="text" v-model="job.reason_for_leaving">
+                <input type="text" v-model="job.reason_for_leaving" :class="{'alert-border': errors['jobs'][index].reason_for_leaving}">
+                <span class="error-form" v-for="err in errors.jobs[index].reason_for_leaving">[[ err ]]</span>
               </div>
             </div>
           </div>
         </form>
         <h3>5. Інтереси, хобі</h3>
         <div class="page-form-hobby">
-          <textarea rows="3" placeholder="Чим ви любите займатися на дозвіллі?" v-model="interests_and_hobbies"></textarea>
+          <textarea rows="3" placeholder="Чим ви любите займатися на дозвіллі?" v-model="interests_and_hobbies" :class="{'alert-border': errors['interests_and_hobbies']}"></textarea>
+          <span class="error-form" v-for="err in errors.interests_and_hobbies">[[ err ]]</span>
         </div>
         <h3>6. Сімейний стан:</h3>
         <div class="page-form-family"><span>Оберіть Ваш сімейний стан</span>
-          <select v-model="marital_status">
+          <select v-model="marital_status" :class="{'alert-border': errors['marital_statuses']}">
             <option></option>
             <option v-for="key, value in choices.marital_statuses" :value="value">
               [[ key ]]
             </option>
           </select>
+          <span class="error-form" v-for="err in errors.marital_status">[[ err ]]</span>
         </div>
         <div class="page-form-family-main">
           <span>* Будь ласка, вкажіть членів вашої сім’ї</span>
@@ -275,46 +289,60 @@
             <div class="table-line"></div>
             <div class="table-family-title">Характер сімейних стосунків<br>(мати, сестра, син тощо)</div>
           </div>
-          <div class="table-family-line" v-for="member in family_members">
+          <div class="table-family-line" v-for="member, index in family_members">
             <div class="table-family-input">
-              <input type="text" v-model="member.name">
+              <input type="text" v-model="member.name" :class="{'alert-border': errors['family_members'][index].name}">
+              <span class="error-form" v-for="err in errors.family_members[index].name">[[ err ]]</span>
             </div>
             <div class="table-family-input">
-              <input type="text" v-model="member.gender">
+              <select v-model="member.gender" :class="{'alert-border': errors['family_members'][index].gender}">
+                <option v-for="key, value in choices.genders" :value="value">
+                  [[ key ]]
+                </option>
+              </select>
+              <span class="error-form" v-for="err in errors.family_members[index].gender">[[ err ]]</span>
             </div>
             <div class="table-family-input">
-              <input type="text" v-model="member.date_of_birth">
+              <input type="text" v-model="member.date_of_birth" :class="{'alert-border': errors['family_members'][index].date_of_birth}">
+              <span class="error-form" v-for="err in errors.family_members[index].date_of_birth">[[ err ]]</span>
             </div>
             <div class="table-family-input">
-              <input type="text" v-model="member.relation">
+              <input type="text" v-model="member.relation" :class="{'alert-border': errors['family_members'][index].relation}">
+              <span class="error-form" v-for="err in errors.family_members[index].relation">[[ err ]]</span>
             </div>
           </div>
         </div>
         <h3>7. Житлово-побутові умови:</h3>
         <div class="page-form-home">
           <p>* Заповніть пункт 7, якщо передбачається відвідування вихованцем вашої домівки</p><span>Вкажіть, де Ви проживаєте на цей момент</span>
-          <select v-model="home_type">
+          <select v-model="home_type" :class="{'alert-border': errors['home_type']}">
             <option></option>
             <option v-for="key, value in choices.home_types" :value="value">
               [[ key ]]
             </option>
           </select>
+          <span class="error-form" v-for="err in errors.home_type">[[ err ]]</span>
           <div class="page-form-room">
             <div class="page-form-room-item"><span> Кількість кімнат</span>
-              <input type="text" v-model="room_count">
+              <input type="text" v-model="room_count" :class="{'alert-border': errors['room_count']}">
+              <span class="error-form" v-for="err in errors.room_count">[[ err ]]</span>
             </div>
             <div class="page-form-room-item"><span> Кількість осіб, які проживають в одній кімнаті</span>
-              <input type="text" v-model="people_per_room">
+              <input type="text" v-model="people_per_room" :class="{'alert-border': errors['room_count']}">
+              <span class="error-form" v-for="err in errors.people_per_room">[[ err ]]</span>
             </div>
           </div><span class="page-form-room-name">Інформація про інших членів сім’ї, які проживають разом із вами<br>(ПІБ, вік, сімейні стосунки)</span>
-          <textarea class="page-form-room-input" rows="3" v-model="home_family_members_data"></textarea><span class="page-form-room-name">Чи є у вас домашні тварини? (Якщо так, то які саме?)</span>
-          <textarea class="page-form-room-input" rows="3" v-model="pets_data"></textarea>
+          <textarea class="page-form-room-input" rows="3" v-model="home_family_members_data" :class="{'alert-border': errors['home_family_members_data']}"></textarea>
+          <span class="page-form-room-name">Чи є у вас домашні тварини? (Якщо так, то які саме?)</span>
+          <span class="error-form" v-for="err in errors.home_family_members_data">[[ err ]]</span>
+          <textarea class="page-form-room-input" rows="3" v-model="pets_data" :class="{'alert-border': errors['pets_data']}"></textarea>
+          <span class="error-form" v-for="err in errors.pets_data">[[ err ]]</span>
         </div>
         <h3>8. Досвід роботи з дітьми:</h3>
         <div class="page-form-child-main">
           <span>* Будь ласка, вкажіть ваш поточний і попередній досвід роботи з дітьми<br>(оплачувана робота, волонтерська діяльність тощо)</span>
           <a href="javascript: void(0)" @click="addChildrenWorkExperienceObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
-        <div class="table-child" v-for="exp in children_work_experiences">
+        <div class="table-child" v-for="exp, index in children_work_experiences">
           <div class="table-child-header">
             <div class="table-child-main">Назва організації</div>
             <div class="table-line"></div>
@@ -326,16 +354,20 @@
           </div>
           <div class="table-child-line">
             <div class="table-child-input-main">
-              <input type="text" v-model="exp.organization_name">
+              <input type="text" v-model="exp.organization_name" :class="{'alert-border': errors['children_work_experiences'][index].organization_name}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].organization_name">[[ err ]]</span>
             </div>
             <div class="table-child-input-start">
-              <input type="text" v-model="exp.date_since">
+              <input type="text" v-model="exp.date_since" :class="{'alert-border': errors['children_work_experiences'][index].date_since}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].date_since">[[ err ]]</span>
             </div>
             <div class="table-child-input-end">
-              <input type="text" v-model="exp.date_till">
+              <input type="text" v-model="exp.date_till" :class="{'alert-border': errors['children_work_experiences'][index].date_till}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].date_till">[[ err ]]</span>
             </div>
             <div class="table-child-input-info">
-              <input type="text" v-model="exp.contact_info">
+              <input type="text" v-model="exp.contact_info" :class="{'alert-border': errors['children_work_experiences'][index].contact_info}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].contact_info">[[ err ]]</span>
             </div>
           </div>
           <div class="table-child-header">
@@ -347,55 +379,67 @@
           </div>
           <div class="table-child-line">
             <div class="table-child-input-left">
-              <input type="text" v-model="exp.position">
+              <input type="text" v-model="exp.position" :class="{'alert-border': errors['children_work_experiences'][index].position}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].position">[[ err ]]</span>
             </div>
             <div class="table-child-input-top">
-              <input type="text" v-model="exp.duties">
+              <input type="text" v-model="exp.duties" :class="{'alert-border': errors['children_work_experiences'][index].duties}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].duties">[[ err ]]</span>
             </div>
             <div class="table-child-input-right">
-              <input type="text" v-model="exp.children_age_group">
+              <input type="text" v-model="exp.children_age_group" :class="{'alert-border': errors['children_work_experiences'][index].children_age_group}">
+              <span class="error-form" v-for="err in errors.children_work_experiences[index].children_age_group">[[ err ]]</span>
             </div>
           </div>
         </div>
         <h3>9. Чому ви хочете стати наставником?</h3>
-        <textarea class="page-form-input" rows="3" v-model="join_reason"></textarea>
+        <textarea class="page-form-input" rows="3" v-model="join_reason" :class="{'alert-border': errors['join_reason']}"></textarea>
+        <span class="error-form" v-for="err in errors.join_reason">[[ err ]]</span>
         <h3>10. Які якості вашого характеру, особливі знання, навички тощо, можуть, на вашу думку,<br>допомогти становленню та розвитку дитини із закладу?</h3>
-        <textarea class="page-form-input" rows="3" v-model="helpful_specifics"></textarea>
+        <textarea class="page-form-input" rows="3" v-model="helpful_specifics" :class="{'alert-border': errors['helpful_specifics']}"></textarea>
+        <span class="error-form" v-for="err in errors.helpful_specifics">[[ err ]]</span>
         <h3>11. Як би ви описали (охарактеризували) самі себе?</h3>
-        <textarea class="page-form-input" rows="3" v-model="self_char"></textarea>
+        <textarea class="page-form-input" rows="3" v-model="self_char" :class="{'alert-border': errors['self_char']}"></textarea>
+        <span class="error-form" v-for="err in errors.self_char">[[ err ]]</span>
         <h3>12. Чому ви хочете допомагати дитині-сироті?</h3>
-        <textarea class="page-form-input" rows="3" v-model="want_to_help_reason"></textarea>
+        <textarea class="page-form-input" rows="3" v-model="want_to_help_reason" :class="{'alert-border': errors['want_to_help_reason']}"></textarea>
+        <span class="error-form" v-for="err in errors.want_to_help_reason">[[ err ]]</span>
         <h3>13. Які ваші очікування від дитини, з якою ви хочете взаємодіяти?</h3>
         <textarea class="page-form-input"
                   rows="3"
                   placeholder="Вік, стать, наскільки важливим для вас є характер дитини (зовнішній вигляд, поведінкові особливості)?"
                   v-model="expectations_from_child"
         ></textarea>
+        <span class="error-form" v-for="err in errors.socialization">[[ err ]]</span>
         <h3>13.1. За яким напрямком наставництва ви би бажали допомагати дитині?</h3>
         <div class="page-form-wrapp">
           <div class="page-form-choice">
-            <input class="with-font" id="1" type="checkbox" v-model="socialization">
+            <input class="with-font" id="1" type="checkbox" v-model="socialization" :class="{'alert-border': errors['socialization']}">
             <label class="page-form-choice-name" for="1">Напрям «Соціалізація»</label>
           </div>
+          <span class="error-form" v-for="err in errors.socialization">[[ err ]]</span>
           <div class="page-form-choice">
-            <input class="with-font" id="2" type="checkbox" v-model="proforientation">
+            <input class="with-font" id="2" type="checkbox" v-model="proforientation" :class="{'alert-border': errors['proforientation']}">
             <label class="page-form-choice-name" for="2">Напрям «Профорієнтація»</label>
           </div>
+          <span class="error-form" v-for="err in errors.proforientation">[[ err ]]</span>
           <div class="page-form-choice">
-            <input class="with-font" id="3" type="checkbox" v-model="help_in_education">
+            <input class="with-font" id="3" type="checkbox" v-model="help_in_education" :class="{'alert-border': errors['help_in_education']}">
             <label class="page-form-choice-name" for="3">Напрям «Допомога в навчанні»</label>
           </div>
+          <span class="error-form" v-for="err in errors.help_in_education">[[ err ]]</span>
         </div>
         <h3>13.2. Як часто ви можете відвідувати дитину в закладі?</h3>
-        <div class="page-form-wrapp">
+        <div class="page-form-wrapp" :class="{'alert-border': errors['able_to_visit_child_frequency']}">
           <label class="form-check" v-for="key, value in choices.able_to_visit_child_frequency">
             <input type="radio" :value="value" v-model="able_to_visit_frequency">
             <span class="form-check-label-md">[[ key ]]</span>
           </label>
         </div>
+        <span class="error-form" v-for="err in errors.able_to_visit_child_frequency">[[ err ]]</span>
         <h3>13.3. Чи згодні ви взаємодіяти з дитиною, яка має інвалідність?</h3>
         <div class="page-form-wrapp">
-          <div class="page-form-check">
+          <div class="page-form-check" :class="{'alert-border': errors['ready_for_child_with_disabilities']}">
             <label class="form-check">
               <input type="radio" value="Yes" v-model="ready_for_child_with_disabilities"><span class="form-check-label-md">Так</span>
             </label>
@@ -403,12 +447,13 @@
               <input type="radio" value="No" v-model="ready_for_child_with_disabilities"><span class="form-check-label-md">Hi</span>
             </label>
           </div>
+          <span class="error-form" v-for="err in errors.ready_for_child_with_disabilities">[[ err ]]</span>
         </div>
         <h3>14. З метою дотримання прав та інтересів дитини (серед іншого її безпеки і здорового розвитку),<br>ми просимо вас повідомити нам таке:</h3>
         <h3>14.1. Чи вживаєте ви:</h3>
         <div class="page-form-wrapp">
           <p>- Алкоголь</p>
-          <div class="page-form-wrapp-item">
+          <div class="page-form-wrapp-item" :class="{'alert-border': errors['drink_alcohol']}">
             <label class="form-check">
               <input type="radio" value="Yes" v-model="drink_alcohol"><span class="form-check-label-md">Так</span>
             </label>
@@ -416,10 +461,12 @@
               <input type="radio" value="No" v-model="drink_alcohol"><span class="form-check-label-md">Hi</span>
             </label>
           </div>
+          <span class="error-form" v-for="err in errors.drink_alcohol">[[ err ]]</span>
           <span>Якщо так, вкажіть, як часто?</span>
-          <input type="text" v-model="drink_alcohol_frequency">
+          <input type="text" v-model="drink_alcohol_frequency" :class="{'alert-border': errors['drink_alcohol_frequency']}">
+          <span class="error-form" v-for="err in errors.drink_alcohol_frequency">[[ err ]]</span>
           <p>- Тютюнові вироби
-            <div class="page-form-wrapp-item">
+            <div class="page-form-wrapp-item" :class="{'alert-border': errors['smoke_cigarettes']}">
               <label class="form-check">
                 <input type="radio" value="Yes" v-model="smoke_cigarettes"><span class="form-check-label-md">Так</span>
               </label>
@@ -427,9 +474,10 @@
                 <input type="radio" value="No" v-model="smoke_cigarettes"><span class="form-check-label-md">Hi</span>
               </label>
             </div>
+            <span class="error-form" v-for="err in errors.smoke_cigarettes">[[ err ]]</span>
           </p>
           <p>- Психотропні речовини
-            <div class="page-form-wrapp-item">
+            <div class="page-form-wrapp-item" :class="{'alert-border': errors['psychotropic_substances']}">
               <label class="form-check">
                 <input type="radio" value="Yes" v-model="psychotropic_substances"><span class="form-check-label-md">Так</span>
               </label>
@@ -438,69 +486,79 @@
               </label>
             </div>
             <span>Якщо так, вкажіть, як часто?</span>
-            <input type="text" v-model="psychotropic_substances_names">
+            <input type="text" v-model="psychotropic_substances_names" :class="{'alert-border': errors['psychotropic_substances_names']}">
+            <span class="error-form" v-for="err in errors.psychotropic_substances_names">[[ err ]]</span>
           </p>
         </div>
         <h3>14.2. Чи вживали ви наркотики?</h3>
         <div class="page-form-wrapp">
-          <div class="page-form-wrapp-item">
+          <div class="page-form-wrapp-item" :class="{'alert-border': errors['drug_usage_info']}">
             <label class="form-check">
               <input type="radio" value="Yes" v-model="drug_usage"><span class="form-check-label-md">Так</span>
             </label>
             <label class="form-check">
               <input type="radio" value="No" v-model="drug_usage"><span class="form-check-label-md">Hi</span>
             </label>
-          </div><span>Якщо так, вкажіть, як часто?</span>
-          <input type="text" v-model="drug_usage_info">
+          </div>
+          <span>Якщо так, вкажіть, як часто?</span>
+          <input type="text" v-model="drug_usage_info" :class="{'alert-border': errors['drug_usage_info']}">
+          <span class="error-form" v-for="err in errors.drug_usage_info">[[ err ]]</span>
         </div>
         <h3>14.3. Чи були ви засуджені за злочини, пов’язані з приниженням людської гідності,<br>залученням дітей до незаконної діяльності, жорстоким поводженням з дітьми,<br>сексуальними посяганнями будь-якого роду, зневагою дитини тощо?</h3>
         <div class="page-form-wrapp">
-          <div class="page-form-wrapp-item">
+          <div class="page-form-wrapp-item" :class="{'alert-border': errors['crime_convicted']}">
             <label class="form-check">
               <input type="radio" value="Yes" v-model="crime_convicted"><span class="form-check-label-md">Так</span>
             </label>
             <label class="form-check">
               <input type="radio" value="No" v-model="crime_convicted"><span class="form-check-label-md">Hi</span>
             </label>
-          </div><span>Якщо так, будь ласка, поясніть</span>
-          <input type="text" v-model="crime_convicted_description">
+          </div>
+          <span>Якщо так, будь ласка, поясніть</span>
+          <input type="text" v-model="crime_convicted_description" :class="{'alert-border': errors['crime_convicted_description']}">
+          <span class="error-form" v-for="err in errors.crime_convicted_description">[[ err ]]</span>
         </div>
         <h3>14.4. Чи були ви раніше позбавлені батьківських або опікунських прав?</h3>
         <div class="page-form-wrapp">
-          <div class="page-form-wrapp-item">
+          <div class="page-form-wrapp-item" :class="{'alert-border': errors['parental_rights_deprived']}">
             <label class="form-check">
               <input type="radio" value="Yes" v-model="parental_rights_deprived"><span class="form-check-label-md">Так</span>
             </label>
             <label class="form-check">
               <input type="radio" value="No" v-model="parental_rights_deprived" checked="checked"><span class="form-check-label-md">Hi</span>
             </label>
+            <span class="error-form" v-for="err in errors.parental_rights_deprived">[[ err ]]</span>
           </div>
           <span>Якщо так, будь ласка, конкретизуйте</span>
-          <input type="text" v-model="parental_rights_deprived_description">
+          <input type="text" v-model="parental_rights_deprived_description" :class="{'alert-border': errors['parental_rights_deprived_description']}">
+          <span class="error-form" v-for="err in errors.parental_rights_deprived_description">[[ err ]]</span>
         </div>
         <h3>15. Чи дозволяєте ви використовувати ваші фотографії і коментарі, зроблені в процесі вашої<br>участі в програмі, на інформаційних носіях, з метою популяризації ідеї наставництва?</h3>
         <div class="page-form-wrapp">
           <div class="page-form-wrapp-item">
-            <label class="form-check">
+            <label class="form-check" :class="{'alert-border': errors['allow_to_use_personal_data']}">
               <input type="radio" value="Yes" v-model="allow_to_use_personal_data"><span class="form-check-label-md">Так</span>
             </label>
             <label class="form-check">
               <input type="radio" value="No" v-model="allow_to_use_personal_data" checked="checked"><span class="form-check-label-md">Hi</span>
             </label>
+            <span class="error-form" v-for="err in errors.allow_to_use_personal_data">[[ err ]]</span>
           </div>
         </div>
         <h3>16. Звідки ви дізналися про програму наставництва?</h3>
         <div class="page-form-select">
-          <select v-model="program_found_out_place">
+          <select v-model="program_found_out_place" :class="{'alert-border': errors['mentoring_program_find_out_places']}">
             <option></option>
             <option v-for="key, value in choices.mentoring_program_find_out_places" :value="value">
               [[ key ]]
             </option>
           </select>
+          <span class="error-form" v-for="err in errors.mentoring_program_find_out_places">[[ err ]]</span>
         </div>
         <h3>17. В який робочий день та час Вам зручніше всього прийти на консультацію з психологом<br>Центру соціальних служб або Партнерської організації?</h3>
         <div class="page-form-wrapp">
-          <input type="text" v-model="convenient_meeting_conditions">
+          <input type="text" v-model="convenient_meeting_conditions" :class="{'alert-border': errors['convenient_meeting_conditions']}">
+          <span class="error-form" v-for="err in errors.convenient_meeting_conditions">[[ err ]]</span>
         </div>
         <button type="button" @click="submitForm">Зберегти</button>
       </div>
