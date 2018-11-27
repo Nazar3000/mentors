@@ -648,3 +648,12 @@ class Proforientation(models.Model):
     phone_number = models.CharField(
         max_length=17,
         validators=[phone_regex])
+
+
+class MIA(models.Model):
+    tsc_number = models.CharField(max_length=10, null=True, blank=True)
+    address = models.CharField(max_length=2048)
+    schedule = models.CharField(max_length=2048)
+    phone_number_fax_str = models.CharField(max_length=2048)
+    email = models.EmailField()
+    region = models.CharField(max_length=2048)

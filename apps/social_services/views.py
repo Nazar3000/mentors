@@ -143,9 +143,10 @@ class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
         context['total'] = MentorSocialServiceCenterData.objects.all().count()
 
         if context['total'] > 0:
-            context['licenced_percentage'] = int(round((context['licenced'] / context['total']))) * 100
-            context['psychologist_percentage'] = int(round((context['psychologist_met'] / context['total']))) * 100
-            context['infomeeting_percentage'] = int(round((context['infomeeting_made'] / context['total']))) * 100
+
+            context['licenced_percentage'] = int(round((context['licenced'] / context['total']) * 100))
+            context['psychologist_percentage'] = int(round((context['psychologist_met'] / context['total']) * 100))
+            context['infomeeting_percentage'] = int(round((context['infomeeting_made'] / context['total']) * 100))
         else:
             context['licenced_percentage'] = 0
             context['psychologist_percentage'] = 0
