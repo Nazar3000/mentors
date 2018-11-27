@@ -25,12 +25,7 @@
             </div><span>Дітей мають наставників</span>
           </div>
           <div class="main-mentor-interactiv-item">
-              {% if user.is_authenticated %}
-              <a href="{% url 'mentors:mentor_office' %}">
-                  {% else %}
-              <a href="{% url 'mentors:signup_step0' %}">
-                  {% endif %}
-                  Стати наставником</a>
+            <a href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати наставником</a>
           </div>
         </div>
       </div>
@@ -57,7 +52,8 @@
               <li class="main-check">Дружба між одним дорослим і однією дитиною</li>
               <li class="main-check">Регулярні зустрічі як на території установи, так і поза неї</li>
               <li class="main-check">Це ефективна допомога дітям з інтернатних установ в соціалізації<br>і адаптації їх до самостійного життя</li>
-            </ul><span>Стань наставником</span><a href="{% url 'mentors:signup_step0' %}">Змінити життя дитини</a>
+            </ul><span>Стань наставником</span>
+            <a href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Змінити життя дитини</a>
           </div>
         </div>
       </div>
@@ -108,7 +104,8 @@
           </div>
         </div>
         <div class="main-history-interactiv">
-          <p>В твоїх руках створити ще<br> одну щасливу історію дитини!</p><a href="{% url 'mentors:signup_step0' %}">Ставай наставником</a>
+          <p>В твоїх руках створити ще<br> одну щасливу історію дитини!</p>
+          <a href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Ставай наставником</a>
         </div>
       </div>
     </section>
@@ -148,7 +145,10 @@
               <div class="main-new-mentor-icon-blue"><img src="{% static 'img/fami.png' %}" alt=""></div>
             </div>
           </div>
-          <div class="main-new-mentor-btn"><a href="{% url 'mentors:signup_step0' %}">Стати наставником</a><span>Після реєстрації ми будемо<br>супроводжувати тебе на<br>кожному етапі, не вагайся!</span></div>
+          <div class="main-new-mentor-btn">
+            <a href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати наставником</a>
+            <span>Після реєстрації ми будемо<br>супроводжувати тебе на<br>кожному етапі, не вагайся!</span>
+          </div>
         </div>
       </div>
     </section>
@@ -184,7 +184,8 @@
             <p class="block-right">Вітаємо! наразі<br> немає перепон для<br> того, щоб ти став<br> наставником!</p>
           </div>
           <div class="main-be-mentor-line-btn">
-            <div class="link-wrapp"><a class="link-wrapp-face" href=""><i class="fab fa-facebook-f"></i></a><a class="link-wrapp-tweet" href=""><i class="fab fa-twitter"></i></a><a class="link-wrapp-google" href=""><i class="fab fa-google-plus-g"></i></a></div><a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a><a class="link-wrapp-btn-yellow" href="{% url 'mentors:signup_step0' %}">Стати наставником</a>
+            <div class="link-wrapp"><a class="link-wrapp-face" href=""><i class="fab fa-facebook-f"></i></a><a class="link-wrapp-tweet" href=""><i class="fab fa-twitter"></i></a><a class="link-wrapp-google" href=""><i class="fab fa-google-plus-g"></i></a></div><a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a>
+            <a class="link-wrapp-btn-yellow" href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати наставником</a>
           </div>
         </div>
       </div>
@@ -215,7 +216,7 @@
           <div class="issues-content">
             <p>Действия представителей оппозиции, инициированные исключительно синтетически, разоблачены. Как уже неоднократно упомянуто, базовые сценарии поведения пользователей, инициированные исключительно синтетически, рассмотрены исключительно в разрезе маркетинговых и финансовых предпосылок. Сложно сказать, почему тщательные исследования конкурентов могут быть своевременно верифицированы. В рамках спецификации современных стандартов, предприниматели в сети интернет в равной степени предоставлены сами себе. В своем стремлении повысить качество жизни, они забывают, что разбавленное изрядной долей эмпатии, рациональное мышление, а также свежий взгляд на привычные вещи - безусловно открывает новые горизонты для существующих финансовых и административных условий.</p>
           </div>
-        </div><a href="{% url 'mentors:signup_step0' %}">Стати наставником</a>
+        </div><a href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати наставником</a>
       </div>
     </section>
   </div>
