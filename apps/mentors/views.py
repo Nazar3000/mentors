@@ -112,7 +112,7 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
         return render(request, self.template_name, {'forms': self.forms_class.forms})
 
     def post(self, request, *args, **kwargs):
-        request_body = json.loads(str(request.body))
+        request_body = json.loads(request.body.decode('utf-8'))
 
         errors = {}
 
