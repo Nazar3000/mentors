@@ -14,19 +14,26 @@
           <div class="first-stage-info">
             <div class="first-stage-btn">Крок 1. Реєстрація</div>
             <p>1. Звернися в Центр соціальних служб в твоєму районі:</p>
-            <div class="first-stage-place">
-              <input type="text" placeholder="Львів">
-              <select>
-                <option>Центр социальних служб №1</option>
-                <option>Центр социальних служб №2</option>
-                <option>Центр социальних служб №3</option>
-              </select>
+            <div class="first-stage-place" id="soc-service-block">
+              <input type="text" placeholder="Почніть вводити назву Центру починаючи з міста" v-model="searchValue">
+              <div class="form-dating-box-items" style="display: block;">
+                <ul class="form-dating-items">
+                  <li class="form-dating-item"
+                      v-for="socService in searchedSocialServices"
+                      @click="selectedSocialService=socService; searchedSocialServices=[]"
+                  >
+                    [[ socService.name ]]
+                  </li>
+                </ul>
+              </div>
               <div class="first-stage-place-wrapp">
-                <div>
-                  <p>Телефон</p><span>+38 (063) 222 12 12</span><span>+38 (063) 222 22 12</span>
+                <div v-if="selectedSocialService.phone_numbers">
+                  <p>Телефон</p>
+                  <span v-for="number in selectedSocialService.phone_numbers">[[ number ]]</span>
                 </div>
-                <div>
-                  <p>Адреса</p><span>м. Львів,<br>вул. Богдана Божка 12</span>
+                <div v-if="selectedSocialService.address">
+                  <p>Адреса</p>
+                  <span>[[ selectedSocialService.address ]]</span>
                 </div>
               </div>
             </div>
@@ -80,4 +87,8 @@
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/roadmap_soc_service.js' %}"></script>
 {% endblock %}

@@ -13,6 +13,7 @@ from django.views.generic import TemplateView, FormView, DetailView, ListView, U
 from django.conf import settings
 
 from govern_users.models import MentorSchoolVideo, MentorTip, TipOfTheDay
+from social_services.models import BaseSocialServiceCenter
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation
@@ -170,14 +171,26 @@ class Roadmap(SignUpStepsAccessMixin, TemplateView):
 
 class RoadmapStepMixin(SignUpStepsAccessMixin, TemplateView):
     def post(self, request, *args, **kwargs):
-        licence_key = request.POST['licence_key']
         mentor = Mentor.objects.get(pk=self.request.user.pk)
-        if Mentor.objects.get(pk=self.request.user.pk).licence_key.key == licence_key:
-            mentor.licenced = True
+
+        if 'base_soc_service_center_id' in request.POST.keys():
+            base_service = BaseSocialServiceCenter.objects.get(pk=request.POST['base_soc_service_center_id'])
+            if base_service.service:
+                coordinator = base_service.service.coordinators.first()
+                mentor.coordinator = coordinator
+                mentor.base_social_service_center = None
+            else:
+                mentor.base_social_service_center = base_service
             mentor.save()
-            return redirect('mentors:mentor_office')
         else:
-            return self.get(request, *args, **kwargs)
+            licence_key = request.POST['licence_key']
+            if mentor.licence_key.key == licence_key:
+                mentor.licenced = True
+                mentor.save()
+                return redirect('mentors:mentor_office')
+            else:
+                return self.get(request, *args, **kwargs)
+        return JsonResponse({'status': 'success'})
 
 
 class RoadmapStep1(RoadmapStepMixin):

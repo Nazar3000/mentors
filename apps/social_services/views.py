@@ -68,7 +68,7 @@ class LoginView(FormView):
         return redirect('social_services:main')
 
 
-class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateView):
+class DatingView(FormView, TemplateView):
     template_name = 'social_services/ssc_dating.html'
     form_class = DatingSocialServiceCenterForm
     coordinator_form_class = DatingCoordinatorForm
@@ -109,6 +109,10 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
                 base_soc_service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk'])
                 base_soc_service.service = service
                 base_soc_service.save()
+
+                for mentor in base_soc_service.mentor_set.all():
+                    mentor.coordinator = coordinator
+                    mentor.save()
             else:
                 errs = dict(coordinator_form.errors.items())
                 if 'phone_numbers' in errs.keys():
