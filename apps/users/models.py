@@ -133,10 +133,12 @@ class Mentor(models.Model):
         related_name='mentors'
     )
 
-    # def clean_fields(self, exclude=None):
-    #     super().clean_fields(exclude=exclude)
-    #     if self.user.user_type != UserTypes.MENTOR:
-    #         raise ValidationError({'user': _('Користувач має бути типу "наставник".')})
+    base_social_service_center = models.ForeignKey(
+        to='social_services.BaseSocialServiceCenter',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL
+    )
 
 
 class SocialServiceCenter(models.Model):

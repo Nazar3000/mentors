@@ -163,12 +163,12 @@ class SignUpStep3View(SignUpStepsAccessMixin, TemplateView):
     template_name = 'mentors/signup_step3.html'
 
 
-class Roadmap(TemplateView):
+class Roadmap(SignUpStepsAccessMixin, TemplateView):
     # TODO: complete all roadmap steps
     template_name = 'mentors/roadmap.html'
 
 
-class RoadmapStepMixin(TemplateView):
+class RoadmapStepMixin(SignUpStepsAccessMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         licence_key = request.POST['licence_key']
         mentor = Mentor.objects.get(pk=self.request.user.pk)

@@ -75,7 +75,7 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
 
     def get(self, request, *args, **kwargs):
         if 'search_value' in request.GET.keys():
-            filtered_base_soc_centers = BaseSocialServiceCenter.objects.filter(
+            filtered_base_soc_centers = BaseSocialServiceCenter.objects.unlinked().filter(
                 Q(city__icontains=request.GET['search_value'])
                 | Q(name__icontains=request.GET['search_value'])).values(
                 'pk',
@@ -105,6 +105,10 @@ class DatingView(CheckIfUserIsPreSocialServiceCenterMixin, FormView, TemplateVie
                 coordinator = coordinator_form.save(commit=False)
                 coordinator.social_service_center_id = self.request.user.pk
                 coordinator.save()
+
+                base_soc_service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk'])
+                base_soc_service.service = service
+                base_soc_service.save()
             else:
                 errs = dict(coordinator_form.errors.items())
                 if 'phone_numbers' in errs.keys():

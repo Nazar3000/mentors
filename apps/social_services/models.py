@@ -40,6 +40,12 @@ class Material(models.Model):
     category = models.ForeignKey(MaterialCategory, blank=True, null=True, on_delete=models.SET_NULL)
 
 
+class BaseSocialServiceCenterManager(models.Manager):
+    def unlinked(self):
+        queryset = super().get_queryset()
+        return queryset.filter(service__isnull=True)
+
+
 class BaseSocialServiceCenter(models.Model):
     """
     Non user SocialServiceCenter data. Fill it by fixtures.
@@ -61,3 +67,12 @@ class BaseSocialServiceCenter(models.Model):
             max_length=128
         )
     )
+
+    service = models.OneToOneField(
+        to='users.SocialServiceCenter',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    objects = BaseSocialServiceCenterManager()
