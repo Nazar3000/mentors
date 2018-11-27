@@ -1,6 +1,7 @@
 import re
 
 from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
+from django.core.exceptions import ValidationError
 from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
 from django.http import JsonResponse
@@ -45,7 +46,8 @@ class SignUpFormView(FormView):
     form_class = SignUpStep0Form
 
     def form_valid(self, form):
-        form.save()
+        user = form.save()
+        login(self.request, user)
         return redirect('social_services:video')
 
 
@@ -143,7 +145,7 @@ class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
         return context
 
 
-class VideoMentorView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
+class VideoMentorView(CheckIfUserIsPreSocialServiceCenterMixin, TemplateView):
     template_name = 'social_services/ssc_video_mentor.html'
 
     def get_context_data(self, **kwargs):
@@ -298,12 +300,27 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
             form = MentorEditForm(request.POST, request.FILES, instance=instance)
             if form.is_valid():
                 mentor = form.save(commit=False)
+                if not mentor.pk:
+                    mentor.user = User.objects.create(
+                        email=form.cleaned_data['email'],
+                        user_type=UserTypes.SOCIAL_SERVICE_CENTER
+                    )
+
+                    try:
+                        coordinator = Coordinator.objects.filter(public_service_id=request.POST['responsible']).first()
+                    except ValidationError:
+                        coordinator = Coordinator.objects.filter(social_service_center_id=self.request.user.pk).first()
+                    mentor.coordinator = coordinator
+                    mentor.save()
+
                 if mentor.licence_key:
                     mentor.licence_key.key = licence_key
                     mentor.licence_key.save()
                 else:
                     key = MentorLicenceKey.objects.create(key=licence_key)
                     mentor.licence_key = key
+                mentor.user.email = form.cleaned_data['email']
+                mentor.user.save()
                 mentor.save()
             else:
                 return JsonResponse(dict(form.errors.items()))

@@ -5,10 +5,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
-from mentors.forms import SignUpStep1Form
 from users.constants import UserTypes
 from .models import SocialServiceMasterKey
-from mentors.models import MentorSocialServiceCenterData, MentorQuestionnaire
+from mentors.models import MentorSocialServiceCenterData
 from users.models import Mentor, PublicService, SocialServiceCenter, Coordinator
 
 User = get_user_model()
@@ -60,6 +59,7 @@ class AuthenticationForm(forms.Form):
 
 class MentorEditForm(forms.ModelForm):
     date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
+    email = forms.EmailField()
 
     class Meta:
         model = Mentor
