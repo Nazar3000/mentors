@@ -75,7 +75,13 @@ class DatingView(FormView, TemplateView):
 
     def get(self, request, *args, **kwargs):
         if 'search_value' in request.GET.keys():
-            filtered_base_soc_centers = BaseSocialServiceCenter.objects.unlinked().filter(
+            queryset = BaseSocialServiceCenter.objects.none()
+            q_filter = request.GET.get('filter')
+            if q_filter == 'unlinked':
+                queryset = BaseSocialServiceCenter.objects.unlinked()
+            elif q_filter == 'all':
+                queryset = BaseSocialServiceCenter.objects.all()
+            filtered_base_soc_centers = queryset.filter(
                 Q(city__icontains=request.GET['search_value'])
                 | Q(name__icontains=request.GET['search_value'])).values(
                 'pk',
@@ -84,6 +90,7 @@ class DatingView(FormView, TemplateView):
                 'city',
                 'address',
                 'phone_numbers',
+                'service__user__email'
             )
             return JsonResponse(list(filtered_base_soc_centers), safe=False)
         return super().get(request, *args, **kwargs)
@@ -109,10 +116,6 @@ class DatingView(FormView, TemplateView):
                 base_soc_service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk'])
                 base_soc_service.service = service
                 base_soc_service.save()
-
-                for mentor in base_soc_service.mentor_set.all():
-                    mentor.coordinator = coordinator
-                    mentor.save()
             else:
                 errs = dict(coordinator_form.errors.items())
                 if 'phone_numbers' in errs.keys():

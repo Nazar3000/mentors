@@ -4,24 +4,25 @@ from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
-from django.forms import model_to_dict, formset_factory
+from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView, UpdateView, CreateView
 from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 from govern_users.models import MentorSchoolVideo, MentorTip, TipOfTheDay
 from social_services.models import BaseSocialServiceCenter
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation, RoadmapDoc
 from users.models import Mentor, Organization, SocialServiceCenterAssessment, Coordinator, SocialServiceCenter
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
     MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
-    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency
+    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency, RoadmapDocTypes
 
 
 def nest_queryset(nest_size, queryset):
@@ -170,6 +171,13 @@ class Roadmap(SignUpStepsAccessMixin, TemplateView):
 
 
 class RoadmapStepMixin(SignUpStepsAccessMixin, TemplateView):
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {
+            'questionnaire': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.QUESTIONNAIRE.name).first(),
+            'medical_exam': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.MEDICAL_EXAM.name).first(),
+            'contract': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.CONTRACT.name).first()
+        })
+
     def post(self, request, *args, **kwargs):
         mentor = Mentor.objects.get(pk=self.request.user.pk)
 
@@ -189,7 +197,7 @@ class RoadmapStepMixin(SignUpStepsAccessMixin, TemplateView):
                 mentor.save()
                 return redirect('mentors:mentor_office')
             else:
-                return self.get(request, *args, **kwargs)
+                return render(request, self.template_name, {'errors': {'key': _('Ліцензійний номер не є дійсним.')}})
         return JsonResponse({'status': 'success'})
 
 

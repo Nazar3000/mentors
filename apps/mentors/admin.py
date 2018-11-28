@@ -14,7 +14,8 @@ from .models import (
     MentorQuestionnaireFamilyMember,
     MentorQuestionnaireChildrenWorkExperience,
     Proforientation,
-    MentorSocialServiceCenterData)
+    MentorSocialServiceCenterData,
+    RoadmapDoc)
 
 
 @admin.register(MentorLicenceKey)
@@ -84,4 +85,9 @@ class ProforientationAdmin(admin.ModelAdmin):
 
 @admin.register(MentorSocialServiceCenterData)
 class MentorSocialServiceCenterDataAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(RoadmapDoc)
+class RoadmapDocAdmin(admin.ModelAdmin):
     pass

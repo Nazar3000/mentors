@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 
 from users.constants import MentorStatuses
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
-    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency, DocsStatuses
+    MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency, DocsStatuses, RoadmapDocTypes
 
 
 class MentorQuestionnaire(models.Model):
@@ -657,3 +657,13 @@ class MIA(models.Model):
     phone_number_fax_str = models.CharField(max_length=2048)
     email = models.EmailField()
     region = models.CharField(max_length=2048)
+
+
+class RoadmapDoc(models.Model):
+    doc_type = models.CharField(
+        max_length=15,
+        choices=RoadmapDocTypes.choices()
+    )
+    file = models.FileField(
+        upload_to='mentorees/roadmap_docs'
+    )

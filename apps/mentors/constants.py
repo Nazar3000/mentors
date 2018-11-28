@@ -70,3 +70,9 @@ class DocsStatuses(ChoicesEnum):
     ALL = _('Є всі')
     NOT_ALL = _('Не всі')
     NOTHING = _('Немає жодного')
+
+
+class RoadmapDocTypes(ChoicesEnum):
+    QUESTIONNAIRE = 'questionnaire'
+    MEDICAL_EXAM = 'medical_exam'
+    CONTRACT = 'contract'

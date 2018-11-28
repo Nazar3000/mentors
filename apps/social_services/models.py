@@ -76,3 +76,17 @@ class BaseSocialServiceCenter(models.Model):
     )
 
     objects = BaseSocialServiceCenterManager()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.__old_service = self.service
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.__old_service != self.service and self.service is not None:
+            coordinator = self.service.coordinators.first()
+            for mentor in self.mentor_set.all():
+                mentor.coordinator = coordinator
+                mentor.save()

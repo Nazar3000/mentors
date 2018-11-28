@@ -51,7 +51,7 @@ const vm = new Vue({
   watch: {
     searchValue: function (newVal) {
       if (newVal) {
-        $.get(`/social-service/dating/?search_value=${newVal}`, (res) => {
+        $.get(`/social-service/dating/?search_value=${newVal}&filter=unlinked`, (res) => {
           this.searchedSocialServices = res;
         });
       } else {
