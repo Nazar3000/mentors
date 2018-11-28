@@ -166,13 +166,16 @@ class SignUpStep3View(SignUpStepsAccessMixin, TemplateView):
 
 
 class Roadmap(SignUpStepsAccessMixin, TemplateView):
-    # TODO: complete all roadmap steps
     template_name = 'mentors/roadmap.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'mentor': Mentor.objects.get(pk=self.request.user.pk)})
 
 
 class RoadmapStepMixin(SignUpStepsAccessMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {
+            'soc_service': Mentor.objects.get(pk=self.request.user.pk).coordinator.social_service_center,
             'questionnaire': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.QUESTIONNAIRE.name).first(),
             'medical_exam': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.MEDICAL_EXAM.name).first(),
             'contract': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.CONTRACT.name).first()

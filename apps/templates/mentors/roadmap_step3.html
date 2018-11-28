@@ -12,12 +12,19 @@
             <div class="stage-panel-active">До наступного кроку</div><span class="stage-panel-finish">Знайомство з дитиною,<br> підписання договору</span>
           </div>
           <div class="first-stage-info">
-            <div class="first-stage-license">
-              <p>Підтвердіть що ви пройшли тренінг</p>
-              <div class="first-stage-line-license"></div><span>Для цього введить свій ліцензійний номер<br> виданий Центром соціальних Служб:</span>
-              <input type="text">
-              <button>Підтвердити</button>
-            </div>
+            <form method="post">
+              {% csrf_token %}
+              <div class="first-stage-license">
+                <p>Підтвердіть що ви пройшли тренінг</p>
+                <div class="first-stage-line-license"></div>
+                <span>Для цього введить свій ліцензійний номер<br> виданий Центром соціальних Служб:</span>
+                  <input type="text" name="licence_key" class="{% if errors.key %}alert-border{% endif %}">
+                  {% if errors.key %}
+                    <span class="error-form">{{ errors.key }}</span>
+                  {% endif %}
+                  <button type="submit">Підтвердити</button>
+              </div>
+            </form>
             <div class="first-stage-star"><span>Оціни роботу центру соціальних служб:</span></div>
             <div class="rating-widget">
               <div class="rating-stars">
@@ -32,7 +39,11 @@
             </div>
             <p class="mb-3">1. Знайомство з дитиною
               <p>2. Підписання договору.<br>Ознайомся попередньо з договором</p>
-              <div class="first-stage-doc"><a href="" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a></div>
+              <div class="first-stage-doc">
+                <a href="{{ contract.file.url }}" target="_blank"><img src="{% static 'img/download.svg' %}" alt="">
+                  <span>Завантажити</span>
+                </a>
+              </div>
             </p>
           </div>
         </div>

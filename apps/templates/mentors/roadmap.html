@@ -17,7 +17,7 @@
           </div>
           <div class="stage-wrapp-item">
             <p class="stage-wrapp-two">Я вже був в Центрі<br>соціальних служб,<br>тренінг ще не проходив</p>
-            <a href="{% url 'mentors:mentor_roadmap_step2' %}" target="_blank">
+            <a href="{% if mentor.coordinator %}{% url 'mentors:mentor_roadmap_step2' %}{% else %}javascript: void(0){% endif %}">
               <div class="stage-wrapp-icon">
                 <div class="stage-wrapp-img"><img src="{% static 'img/bottle.png' %}" alt=""></div>
               </div>
@@ -25,7 +25,7 @@
           </div>
           <div class="stage-wrapp-item">
             <p class="stage-wrapp-free">Я вже пройшов<br>тренінг для<br>наставників</p>
-            <a href="{% url 'mentors:mentor_roadmap_step3' %}" target="_blank">
+            <a href="{% if mentor.social_service_center_data.training_date %}{% url 'mentors:mentor_roadmap_step3' %}{% else %}javascript: void(0){% endif %}">
               <div class="stage-wrapp-icon">
                 <div class="stage-wrapp-img"><img src="{% static 'img/bottle-full.png' %}" alt=""></div>
               </div>
@@ -33,7 +33,7 @@
           </div>
           <div class="stage-wrapp-item">
             <p class="stage-wrapp-four">Я вже взаємодію<br>з дитиною<br>(є підписаний договір)</p>
-            <a href="javascript: void(0)" target="_blank">
+            <a href="{% if mentor.licenced %}{% url 'mentors:mentor_office' %}{% else %}javascript: void(0){% endif %}">
               <div class="stage-wrapp-icon-end"><img src="{% static 'img/baby.png' %}" alt=""></div>
             </a>
           </div>
