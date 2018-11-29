@@ -17,7 +17,8 @@ from govern_users.models import MentorSchoolVideo, MentorTip, TipOfTheDay
 from social_services.models import BaseSocialServiceCenter
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation, RoadmapDoc
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation, RoadmapDoc, \
+    MIA
 from users.models import Mentor, Organization, SocialServiceCenterAssessment, Coordinator, SocialServiceCenter
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
     MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
@@ -652,3 +653,17 @@ def get_notifications(request):
         tip_of_the_day = TipOfTheDay.objects.get(id=request.POST['notification_id'])
         tip_of_the_day.watched_by.add(request.user.id)
         return JsonResponse({'status': 'success'})
+
+
+def get_mia_list(request):
+    if request.method == 'GET':
+        mia_list = list(MIA.objects.all().values())
+        return JsonResponse(mia_list, safe=False)
+    elif request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+
+        mia = MIA.objects.get(id=data['id'])
+        mia.lat = data['lat']
+        mia.lng = data['lng']
+        mia.save()
+    return JsonResponse({})

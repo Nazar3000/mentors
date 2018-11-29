@@ -30,4 +30,5 @@ urlpatterns = [
     path('posts/like-post/', login_required(views.like_news_item), name='like_post'),
     path('next-tip/', login_required(views.get_next_tip), name='next_tip'),
     path('notifications/', login_required(views.get_notifications), name='notifications'),
+    path('mia_list/', login_required(views.get_mia_list), name='mia_list'),
 ]

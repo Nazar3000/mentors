@@ -657,6 +657,8 @@ class MIA(models.Model):
     phone_number_fax_str = models.CharField(max_length=2048)
     email = models.EmailField()
     region = models.CharField(max_length=2048)
+    lat = models.FloatField(default=0.0)
+    lng = models.FloatField(default=0.0)
 
 
 class RoadmapDoc(models.Model):

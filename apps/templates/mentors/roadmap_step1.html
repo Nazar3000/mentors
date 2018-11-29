@@ -50,10 +50,8 @@
             </div>
             <div class="first-stage-btn">Крок 2. Підготовка документів</div>
             <p>1. Звернися в твоє регіональне відділення Міністерства<br> внутрішніх справ для отримання довідки про несудимість<br> або<a href=""> замов її Online.</a>  Знайди контактні дані на карті:</p>
-            <input type="text" placeholder="Введіть вашу адресу, щоб знайти відділення поблизу">
-            <div class="first-stage-map">
-              <iframe src="https://www.google.com/maps/embed?pb" width="100%" height="100%" frameborder="8px" style="border:0" allowfullscreen=""></iframe>
-            </div>
+            <input type="text" placeholder="Введіть вашу адресу, щоб знайти відділення поблизу" id="map-input">
+            <div class="first-stage-map" id="map"></div>
             <p>2. Пройди медогляд. Якщо тобі не дали форму для<br>огляду, то ти можеш її завантажити тут:</p>
             <div class="first-stage-doc">
               <a href="{{ medical_exam.file.url }}" target="_blank">
@@ -106,6 +104,26 @@
   </div>
 {% endblock %}
 
+{% block extra_css %}
+  <style>
+    #map {
+      height: 300px;
+      margin-bottom: 45px;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+{% endblock %}
+
 {% block extra_js %}
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNMxEA9L4ZhEvydiG_sczKhTX68mAHOSY&callback=initMap">
+  </script>
+
   <script src="{% static 'scripts/roadmap_soc_service.js' %}"></script>
+  <script src="{% static 'scripts/google_map.js' %}"></script>
 {% endblock %}
