@@ -1,9 +1,8 @@
-{% extends 'social_services/ssc_base.html' %}
-{% load static %}
+{% extends 'base.html' %}
+{% load static common %}
 
 {% block content %}
-  {% include 'social_services/scc_logged_header.html' %}
-
+  {% get_mentors_count_str as mentors_count_str %}
 
   <div class="content">
     <div class="container">
@@ -20,10 +19,9 @@
               <div class="css-material-title">
                 <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
                 <div class="css counter">
-                  <div class="counter-numb">0</div>
-                  <div class="counter-numb">2</div>
-                  <div class="counter-numb">9</div>
-                  <div class="counter-numb">0</div>
+                  {% for digit in mentors_count_str %}
+                    <div class="counter-numb">{{ digit }}</div>
+                  {% endfor %}
                 </div>
                 <span>Дітей мають наставників<br>(активно взаємодіють)</span>
               </div>
@@ -85,7 +83,6 @@
             </div>
           </div>
         {% endfor %}
-
 
       </section>
     </div>

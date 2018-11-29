@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
-{% load static %}
+{% load static common %}
 
 {% block content %}
+  {% get_mentors_count_str as mentors_count_str %}
   <div class="content" id="mentors" v-cloak>
     <div class="container">
       <section class="css-mentor">
@@ -18,10 +19,9 @@
               <div class="css-mentor-title">
                 <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
                 <div class="css counter">
-                  <div class="counter-numb">0</div>
-                  <div class="counter-numb">2</div>
-                  <div class="counter-numb">9</div>
-                  <div class="counter-numb">0</div>
+                  {% for digit in mentors_count_str %}
+                    <div class="counter-numb">{{ digit }}</div>
+                  {% endfor %}
                 </div><span>Дітей мають наставників<br>(активно взаємодіють)</span>
               </div>
             </div>

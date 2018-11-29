@@ -16383,6 +16383,7 @@ select.table-education-name {
           box-shadow: -2px -1px 9px 0 rgba(0, 0, 0, 0.17);
   width: 600px;
   margin: 0 auto;
+  margin-top: 100px;
   position: relative;
   top: 3%;
   padding: 40px 25px 50px 50px;
@@ -17185,6 +17186,7 @@ select.table-education-name {
   width: 510px;
   padding: 40px 25px 75px 55px;
   margin: 0 auto;
+  margin-top: 100px;
   position: relative;
   top: 3%;
 }

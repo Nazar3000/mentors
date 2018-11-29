@@ -1,8 +1,10 @@
 {% extends 'mentors/../base.html' %}
 {% load i18n %}
 {% load static %}
+{% load common %}
 
 {% block content %}
+  {% get_mentors_count_str as mentors_count_str %}
   <div class="content content-font">
     <section class="main-mentor">
       <div class="container">
@@ -18,10 +20,9 @@
           </div>
           <div class="main-mentor-interactiv-item">
             <div class="wrapp-numb">
-              <div class="numb">0</div>
-              <div class="numb">0</div>
-              <div class="numb">4</div>
-              <div class="numb">7</div>
+              {% for digit in mentors_count_str %}
+                <div class="numb">{{ digit }}</div>
+              {% endfor %}
             </div><span>Дітей мають наставників</span>
           </div>
           <div class="main-mentor-interactiv-item">
