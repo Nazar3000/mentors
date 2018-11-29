@@ -13301,7 +13301,7 @@ select.table-education-name {
   line-height: 18px;
 }
 
-.css-main-link a:hover {
+.css-main-link a:hover, .css-mentor-link a:hover {
   -webkit-box-shadow: 2px 5px 10px 0 #037286;
           box-shadow: 2px 5px 10px 0 #037286;
 }
@@ -16258,6 +16258,7 @@ select.table-education-name {
 }
 
 .css-slip {
+  display: none;
   position: fixed;
   left: 0;
   top: 0;
@@ -17165,6 +17166,7 @@ select.table-education-name {
 }
 
 .social-modal {
+  display: none;
   position: fixed;
   left: 0;
   top: 0;

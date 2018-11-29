@@ -114,6 +114,7 @@ const step2Form = new Vue({
       },
     ],
 
+    hasErrors: false,
     errors: {
       educations: [
         {},
@@ -214,6 +215,7 @@ const step2Form = new Vue({
           if (res.status === 'success') {
             window.location.href = "/mentor/register-step3/";
           } else {
+            thisData.hasErrors = true;
             thisData.errors = res;
           }
         }

@@ -31,7 +31,7 @@
             <div class="css-social-add" @click="addPublicService">
               <i class="fas fa-plus"></i><span>Додати організацію</span>
             </div>
-            <div class="css-slip" v-if="publicServiceModalDisplay">
+            <div class="css-slip" v-if="publicServiceModalDisplay" :style="{'display': publicServiceModalDisplay ? 'block' : 'none'}">
               <div class="css-slip-modal">
                 <div class="css-slip-close" @click="publicServiceModalDisplay=false">×</div>
                 <div class="css-slip-main">
