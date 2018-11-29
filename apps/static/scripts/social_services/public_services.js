@@ -156,6 +156,7 @@ const publicServices = new Vue({
           if (res.status === 'success') {
             this.errors = {};
             this.publicServiceModalDisplay = false;
+            this.publicServiceView = true;
           } else {
             this.errors = res;
           }

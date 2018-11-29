@@ -1,5 +1,6 @@
 import re
 
+import rstr
 from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Min, Max
@@ -329,11 +330,19 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
                     mentor.licence_key.key = licence_key
                     mentor.licence_key.save()
                 else:
+                    licence_key = rstr.xeger(MentorLicenceKey.key_validator.regex)
                     key = MentorLicenceKey.objects.create(key=licence_key)
                     mentor.licence_key = key
                 mentor.user.email = form.cleaned_data['email']
                 mentor.user.save()
                 mentor.save()
+                soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
+                return JsonResponse({
+                    'pk': mentor.pk,
+                    'licence_key__key': licence_key,
+                    'docs_status': soc_service_data.docs_status,
+                    'coordinator_id': mentor.coordinator.pk
+                })
             else:
                 return JsonResponse(dict(form.errors.items()))
         elif action == 'change_social_service_center_data':
@@ -411,8 +420,9 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
                 'pk': mentor.pk,
                 'public_service_pk': mentor.coordinator.public_service.pk,
                 'full_name': mentor.first_name + ' ' + mentor.last_name,
-                'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name),
-                'organization_name': mentor.mentoree.organization.name,
+                'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name)
+                if mentor.mentoree else '',
+                'organization_name': mentor.mentoree.organization.name if mentor.mentoree else '',
                 'contract_number': mentor.social_service_center_data.contract_number,
                 'mentoring_start_date':
                     get_date_str_formatted(mentor.meetings.first().date) if mentor.meetings.first() else None,

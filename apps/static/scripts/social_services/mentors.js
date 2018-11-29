@@ -63,6 +63,7 @@ const mentors = new Vue({
               formData.append(key, this.extendedMentor[key]);
           }
       }
+      const thisContext = this;
 
       $.ajax({
         url: '/social-service/mentors/change_extended_data/',
@@ -73,7 +74,22 @@ const mentors = new Vue({
         enctype: 'multipart/form-data',
         type: 'POST',
         success: (res) => {
-          if (res.status === 'success') {
+          if (res.pk) {
+            if (!this.extendedMentor.pk) {
+              const lightMentor = {
+                'pk': res.pk,
+                'coordinator_id': res.coordinator_id,
+                'docs_status': res.docs_status,
+                'full_name': `${this.extendedMentor.first_name} ${this.extendedMentor.last_name}`,
+                'licence_key__key': this.extendedMentor.licence_key__key,
+                'phone_number': this.extendedMentor.phone_number,
+                'responsible': this.extendedMentor.responsible,
+                'status': this.extendedMentor.status,
+                'user_id': res.pk
+              }
+              thisContext.lightMentors.push(lightMentor);
+            }
+            this.mentorModalDisplay = false;
             this.mentorCardView = true;
           } else {
             this.errors = res;

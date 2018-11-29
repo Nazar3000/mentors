@@ -75,6 +75,13 @@ class MentorEditForm(forms.ModelForm):
 
 
 class MentorSocialServiceCenterDataEditForm(forms.ModelForm):
+    passport_copy = forms.BooleanField(widget=forms.CheckboxInput, initial=False, required=False)
+    application = forms.BooleanField(widget=forms.CheckboxInput, initial=False, required=False)
+    certificate_of_good_conduct = forms.BooleanField(widget=forms.CheckboxInput, initial=False, required=False)
+    medical_certificate = forms.BooleanField(widget=forms.CheckboxInput, initial=False, required=False)
+    recommended_to_training = forms.BooleanField(widget=forms.CheckboxInput, initial=False, required=False)
+    admitted_to_child = forms.BooleanField(widget=forms.CheckboxInput, initial=False, required=False)
+
     class Meta:
         model = MentorSocialServiceCenterData
         exclude = (
