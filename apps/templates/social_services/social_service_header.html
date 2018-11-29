@@ -1,16 +1,20 @@
-{% load static %}
+{% load static header_tags %}
+
+{% get_social_service user as social_service %}
 
 <header class="css-header-log">
   <div class="container">
     <nav class="css-header-wrapp">
-      <div class="css-header-logo"><a href="/">
-        <img src="{% static 'img/main-logo.svg' %}" alt=""></a>
+      <div class="css-header-logo">
+        <a href="{% url 'social_services:main' %}">
+          <img src="{% static 'img/main-logo.svg' %}" alt="">
+        </a>
       </div>
       <div class="css-header-notification">
         <a class="header-notification-title" href="question.html">Питання?</a>
         <a href=""><i class="fas fa-bell"></i></a>
         <a class="css-header-company" href="{% url 'social_services:main' %}">
-          <img src="{% static 'img/css-logo.svg' %}"><span>Особистий кабінет<br>Пирятинського ЦСССДМ</span>
+          <span>Особистий кабінет<br>{{ social_service.name }}</span>
         </a>
       </div>
     </nav>
