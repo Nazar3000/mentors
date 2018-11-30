@@ -229,7 +229,7 @@ class PublicService(models.Model):
     status = models.CharField(
         max_length=64,
         choices=PublicServiceStatuses.choices(),
-        default=PublicServiceStatuses.NOT_SPECIFIED
+        default=PublicServiceStatuses.NOT_SPECIFIED.name
     )
     contract_number = models.CharField(
         max_length=32,
