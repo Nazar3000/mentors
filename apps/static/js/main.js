@@ -317,13 +317,13 @@ $(document).ready(function () {
 
     // sort css-social click
 
-    $('.css-sort-mentor').click(function () { // при клике на рисунок
-        if ($(this).find('img').attr('src') == 'img/a-b.svg') { // если в этом элименте мы находим картику с путем катороый равняется аб
-            $(this).find('img').attr('src', 'img/b-a.svg'); // то это меняем картинку на ба
-        } else {
-            $(this).find('img').attr('src', 'img/a-b.svg'); // иначе возвращяем обратно
-        }
-    });
+    // $('.css-sort-mentor').click(function () { // при клике на рисунок
+    //     if ($(this).find('img').attr('src') == 'img/a-b.svg') { // если в этом элименте мы находим картику с путем катороый равняется аб
+    //         $(this).find('img').attr('src', 'img/b-a.svg'); // то это меняем картинку на ба
+    //     } else {
+    //         $(this).find('img').attr('src', 'img/a-b.svg'); // иначе возвращяем обратно
+    //     }
+    // });
 
 
     // sort css-social click phone and change

@@ -24,6 +24,8 @@ const publicServices = new Vue({
     mentorsData: [],
     searchedMentors: [],
     searchString: '',
+    searchedPublicServices: [],
+    publicServiceSearchString: '',
     mentorStatuses: {},
     publicServices: [],
     defaultExtendedMentor: {
@@ -54,6 +56,12 @@ const publicServices = new Vue({
       ba: '/static/img/b-a.svg'
     },
     filterImgPath: '/static/img/a-b.svg',
+    filterElements: {
+      ORG_NAME: 0,
+      MENTOR_NAME: 1,
+      MENTOR_MENTOREE_NAME: 2,
+    },
+    activeFilterElement: 0
   },
   created() {
     this.extendedMentor = this.defaultExtendedMentor;
@@ -63,6 +71,7 @@ const publicServices = new Vue({
     getPublicServiceLightData() {
       $.get('/social-service/public-services/?get_light_public_service_data', (res) => {
         this.lightPublicServices = res.service_data;
+        this.searchedPublicServices = this.lightPublicServices;
         this.publicServiceStatuses = res.public_service_statuses;
         this.mentorList = res.mentor_list;
         this.organizationList = res.organization_list;
@@ -82,6 +91,7 @@ const publicServices = new Vue({
           this.extendedPublicService.mentorPk = '';
           this.extendedPublicService.organizationPk = '';
           this.mentorsData = res.mentors_data;
+          this.searchedMentors = this.mentorsData;
           this.publicServices = res.public_services;
           this.mentorStatuses = res.mentor_statuses;
 
@@ -181,15 +191,15 @@ const publicServices = new Vue({
         return result * sortOrder
       }
     },
-    reverseSort() {
+    reverseSort(objName, field) {
       if (this.filterImgPath === this.filterImgPaths.ab) {
         this.filterImgPath = this.filterImgPaths.ba;
 
-        this.lightPublicServices = this.lightPublicServices.sort(this.dynamicSort('-name'));
+        this.$data[objName] = this.$data[objName].sort(this.dynamicSort(`-${field}`));
       } else {
         this.filterImgPath = this.filterImgPaths.ab;
 
-        this.lightPublicServices = this.lightPublicServices.sort(this.dynamicSort('name'));
+        this.$data[objName] = this.$data[objName].sort(this.dynamicSort(field));
       }
     }
   },
@@ -218,6 +228,39 @@ const publicServices = new Vue({
         }
       },
       deep: true
-    }
+    },
+    searchString: function (newSearchString) {
+      const searchableFields = ['full_name', 'mentoree_full_name', 'organization_name',
+        'contract_number', 'mentoring_start_date'];
+      this.searchedMentors = this.mentorsData.filter(m => {
+        let searched = false;
+
+        for (let field of searchableFields) {
+          if (m[field] && !searched) {
+            searched = m[field].toLowerCase().includes(newSearchString.toLowerCase());
+          }
+        }
+
+        return searched;
+      });
+    },
+    publicServiceSearchString: function (newSearchString) {
+      const searchableFields = ['name', 'licence'];
+      this.searchedPublicServices = this.lightPublicServices.filter(m => {
+        let searched = false;
+
+        for (let field of searchableFields) {
+          if (m[field] && !searched) {
+            searched = m[field].toLowerCase().includes(newSearchString.toLowerCase());
+          }
+        }
+
+        if (!searched) {
+          searched = this.publicServiceStatuses[m['status']].toLowerCase().includes(newSearchString.toLowerCase());
+        }
+
+        return searched;
+      });
+    },
   }
 });

@@ -25,8 +25,9 @@
                 </div><span>Дітей мають наставників<br>(активно взаємодіють)</span>
               </div>
             </div>
-            <div class="css-social-search"><img src="{% static 'img/search.svg' %}">
-              <input type="text" placeholder="Почніть вводити дані тут">
+            <div class="css-social-search">
+              <img src="{% static 'img/search.svg' %}">
+              <input type="text" placeholder="Почніть вводити дані тут" v-model="publicServiceSearchString">
             </div>
             <div class="css-social-add" @click="addPublicService">
               <i class="fas fa-plus"></i><span>Додати організацію</span>
@@ -124,7 +125,11 @@
         </div>
         <div class="css-table">
           <div class="css-header">
-            <div class="css-title-org">Організація<span class="css-sort-mentor" @click="reverseSort"><img :src="filterImgPath"></span></div>
+            <div class="css-title-org">Організація
+              <span class="css-sort-mentor" @click="reverseSort('searchedPublicServices', 'name'); activeFilterElement = filterElements.ORG_NAME; ; activeFilterElement = filterElements.ORG_NAME">
+                <img :src="activeFilterElement === filterElements.ORG_NAME ? filterImgPath : filterImgPaths.ab">
+              </span>
+            </div>
             <div class="css-line"></div>
             <div class="css-title-stat">Статус</div>
             <div class="css-line"></div>
@@ -132,7 +137,7 @@
             <div class="css-line"></div>
             <div class="css-title-val">Кількість пар</div>
           </div>
-          <template v-for="lightPublicService in lightPublicServices">
+          <template v-for="lightPublicService in searchedPublicServices">
             <div class="css-table-block" @click="activeLightPublicServicePk=lightPublicService.pk">
               <div class="css-block-org">
                 <div class="css-block-title" @click="getExtendedPublicServiceData(lightPublicService.pk)">
