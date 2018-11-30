@@ -5919,7 +5919,6 @@ input[type="radio"]:checked:after {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: url(../../img/logo_big_2.png);
   background-size: contain;
   background-position: 50%;
 }
@@ -6030,6 +6029,67 @@ input[type="radio"]:checked:after {
   font-size: 13px;
   letter-spacing: 0.9px;
   line-height: 15px;
+}
+
+.form-dating-modal {
+  position: absolute;
+  width: 730px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 400px;
+  padding: 45px;
+  overflow-y: auto;
+  background: #fff;
+  -webkit-border-radius: 5px;
+          border-radius: 5px;
+  z-index: 11000;
+}
+
+.form-dating-modal_background {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.form-dating-modal .form-dating-subtitle-input {
+  text-align: center;
+}
+
+.form-dating-modal .form-dating-input {
+  margin-bottom: 15px;
+}
+
+.form-dating-modal .form-dating-button {
+  margin: 0 auto;
+}
+
+.form-dating-modal-closed {
+  width: 30px;
+  height: 30px;
+  background: #037286;
+  padding: 1px;
+  -webkit-border-radius: 20px;
+          border-radius: 20px;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  top: 30px;
+  right: 50px;
+  cursor: pointer;
+  -webkit-transition: all 300ms;
+  transition: all 300ms;
+  border: solid 2px #037286;
+}
+
+.form-dating-modal-closed:hover {
+  background: #fff;
+  color: #037286;
 }
 
 .last-input {

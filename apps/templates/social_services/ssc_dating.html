@@ -29,7 +29,37 @@
               </ul>
             </div>
           </div>
-          <div class="form-dating-wrapper-link"><a class="link-dating-for-input" href="javascript: void(0)">Немає вашого Центра?</a></div>
+          <div class="form-dating-wrapper-link">
+            <a class="link-dating-for-input" href="javascript: void(0)" @click="modalView=true;">Немає вашого Центра?</a>
+          </div>
+          <div class="form-dating-modal" :style="{'display': modalView ? 'block' : 'none'}" v-if="modalView">
+            <span class="form-dating-modal-closed" @click="modalView=false">X</span>
+            <div class="form-dating-subtitle-input">Перевірте контактні данні Центра та при необхідності виправте</div>
+            <input class="form-dating-input"
+                   type="text"
+                   placeholder="Місто"
+                   v-model="baseSocialService.city"
+            >
+            <span class="error-form" v-for="err in errors.modal.city">[[ err ]]</span>
+            <input class="form-dating-input"
+                   type="text"
+                   placeholder="Адреса"
+                   v-model="baseSocialService.address"
+            >
+            <span class="error-form" v-for="err in errors.modal.address">[[ err ]]</span>
+            <input class="form-dating-input"
+                   type="text"
+                   placeholder="Контактні телефони (розділити комами)"
+                   v-model="baseSocialService.phone_numbers"
+            >
+            <span class="error-form" v-for="err in errors.modal.phone_numbers">[[ err ]]</span>
+            <input class="form-dating-button"
+                   type="button"
+                   value="Зберегти"
+                   @click="submitModal"
+            >
+          </div>
+          <div :class="{'form-dating-modal_background': modalView}"></div>
           <div class="form-dating-subtitle-input">Перевірте контактні данні Центра та при необхідності виправте</div>
           <input :class="{'form-dating-input': true, 'alert-border': errors['city']}"
                  type="text"

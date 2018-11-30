@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
 from users.constants import UserTypes
-from .models import SocialServiceMasterKey
+from .models import SocialServiceMasterKey, BaseSocialServiceCenter
 from mentors.models import MentorSocialServiceCenterData
 from users.models import Mentor, PublicService, SocialServiceCenter, Coordinator
 
@@ -107,6 +107,17 @@ class PublicServiceEditForm(forms.ModelForm):
 class DatingSocialServiceCenterForm(forms.ModelForm):
     class Meta:
         model = SocialServiceCenter
+        fields = (
+            'name',
+            'city',
+            'address',
+            'phone_numbers',
+        )
+
+
+class DatingBaseSocialServiceCenterForm(forms.ModelForm):
+    class Meta:
+        model = BaseSocialServiceCenter
         fields = (
             'name',
             'city',

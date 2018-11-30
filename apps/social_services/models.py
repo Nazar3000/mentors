@@ -51,10 +51,14 @@ class BaseSocialServiceCenter(models.Model):
     Non user SocialServiceCenter data. Fill it by fixtures.
     """
     name = models.CharField(
-        max_length=256
+        max_length=256,
+        null=True,
+        blank=True
     )
     region = models.CharField(
-        max_length=64
+        max_length=64,
+        null=True,
+        blank=True
     )
     city = models.CharField(
         max_length=256

@@ -17,7 +17,7 @@ from mentors.views import nest_queryset
 from social_services.utils import get_date_str_formatted
 from users.templatetags.date_tags import get_age
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
-    DatingCoordinatorForm, DatingSocialServiceCenterForm
+    DatingCoordinatorForm, DatingSocialServiceCenterForm, DatingBaseSocialServiceCenterForm
 from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
 from users.models import Mentor, SocialServiceCenter, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
@@ -72,6 +72,7 @@ class LoginView(FormView):
 class DatingView(FormView, TemplateView):
     template_name = 'social_services/ssc_dating.html'
     form_class = DatingSocialServiceCenterForm
+    modal_form_class = DatingBaseSocialServiceCenterForm
     coordinator_form_class = DatingCoordinatorForm
 
     def get(self, request, *args, **kwargs):
@@ -84,7 +85,8 @@ class DatingView(FormView, TemplateView):
                 queryset = BaseSocialServiceCenter.objects.all()
             filtered_base_soc_centers = queryset.filter(
                 Q(city__icontains=request.GET['search_value'])
-                | Q(name__icontains=request.GET['search_value'])).values(
+                | Q(name__icontains=request.GET['search_value'])
+                | Q(address__icontains=request.GET['search_value'])).values(
                 'pk',
                 'name',
                 'region',
@@ -95,6 +97,16 @@ class DatingView(FormView, TemplateView):
             )
             return JsonResponse(list(filtered_base_soc_centers), safe=False)
         return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        if 'add_new_base_service' in request.GET.keys():
+            base_service_form = self.modal_form_class(self.request.POST)
+            if base_service_form.is_valid():
+                base_service = base_service_form.save()
+                return JsonResponse({'pk': base_service.pk})
+            else:
+                return JsonResponse(dict(base_service_form.errors.items()))
+        return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
         if 'pk' in self.request.POST:

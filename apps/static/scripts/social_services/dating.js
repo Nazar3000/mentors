@@ -4,6 +4,7 @@ const vm = new Vue({
   data: {
     searchValue: '',
     selectedSocialService: {},
+    baseSocialService: {},
     searchedSocialServices: [],
     coordinator: {
       full_name: '',
@@ -11,7 +12,9 @@ const vm = new Vue({
       email: ''
     },
     modalView: false,
-    errors: {}
+    errors: {
+      modal: {}
+    }
   },
   methods: {
     submitForm() {
@@ -44,6 +47,36 @@ const vm = new Vue({
             window.location.replace('/social-service/main/');
           } else {
             this.errors = res;
+          }
+        }
+      });
+    },
+    submitModal() {
+      const formData = new FormData();
+      const data = this.baseSocialService;
+      data['name'] = data.city + ', ' + data.address;
+
+      for (let key in this.baseSocialService) {
+          if (this.baseSocialService.hasOwnProperty(key)) {
+              formData.append(key, this.baseSocialService[key]);
+          }
+      }
+
+      $.ajax({
+        url: '/social-service/dating/?add_new_base_service',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+        success: (res) => {
+          if (res.pk) {
+            this.selectedSocialService = this.baseSocialService;
+            this.selectedSocialService.pk = res.pk;
+            this.modalView = false;
+          } else {
+            this.errors = {'modal': res};
           }
         }
       });
