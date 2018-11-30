@@ -22,7 +22,7 @@
               <ul class="form-dating-items">
                 <li class="form-dating-item"
                     v-for="socService in searchedSocialServices"
-                    @click="selectedSocialService=socService"
+                    @click="selectedSocialService=socService; searchedSocialServices=[]"
                 >
                   [[ socService.name ]]
                 </li>

@@ -10,6 +10,7 @@ const vm = new Vue({
       phone_numbers: '',
       email: ''
     },
+    modalView: false,
     errors: {}
   },
   methods: {
