@@ -123,8 +123,11 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
         questionnaire = None
         if main_form.is_valid():
             questionnaire = main_form.save(commit=False)
-            questionnaire.mentor = Mentor.objects.get(pk=request.user.pk)
+            mentor = Mentor.objects.get(pk=request.user.pk)
+            questionnaire.mentor = mentor
             questionnaire.save()
+            mentor.questionnaire_creation_date = questionnaire.creation_date
+            mentor.save()
         else:
             errors.update(dict(main_form.errors.items()))
 
