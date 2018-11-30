@@ -177,6 +177,10 @@ const mentors = new Vue({
     },
     getImageUrl(img) {
       return typeof img === 'string' ? img : URL.createObjectURL(img);
+    },
+    getResponsibleName(respPK) {
+      const pubService = this.publicServices.find(p => p.pk === respPK);
+      return pubService ? pubService.name : 'ЦССДМ'
     }
   },
   watch: {

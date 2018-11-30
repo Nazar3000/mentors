@@ -76,7 +76,7 @@
             </div>
             <div>
               <span>Відповідальний:</span>
-              <p>[[ publicServices[extendedMentor.responsible] ? publicServices[extendedMentor.responsible] : 'ЦССДМ'  ]]</p>
+              <p>[[ getResponsibleName(extendedMentor.responsible) ]]</p>
               <span>Ліцензія:</span>
               <p>[[ extendedMentor.licence_key ]]<a href=""><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a></p><span>Дата подачі анкети:</span>
               <p>[[ getDateFormatted(extendedMentor.questionnaire_creation_date) ]]</p>
