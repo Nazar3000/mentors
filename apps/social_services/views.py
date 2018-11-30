@@ -1,4 +1,5 @@
 import re
+from contextlib import suppress
 
 import rstr
 from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
@@ -326,15 +327,18 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
             if form.is_valid():
                 mentor = form.save(commit=False)
                 if not mentor.pk:
-                    mentor.user = User.objects.create(
+                    mentor.user = User.objects.get_or_create(
                         email=form.cleaned_data['email'],
-                        user_type=UserTypes.SOCIAL_SERVICE_CENTER
+                        user_type=UserTypes.MENTOR
                     )
 
-                    try:
-                        coordinator = Coordinator.objects.filter(public_service_id=request.POST['responsible']).first()
-                    except ValidationError:
-                        coordinator = Coordinator.objects.filter(social_service_center_id=self.request.user.pk).first()
+                    coordinator = Coordinator.objects.filter(social_service_center_id=self.request.user.pk).first()
+                    with suppress(ValidationError):
+                        pub_service_coordinator = Coordinator.objects.filter(
+                            public_service_id=request.POST['responsible']).first()
+                        if pub_service_coordinator:
+                            coordinator = pub_service_coordinator
+
                     mentor.coordinator = coordinator
                     mentor.save()
 
