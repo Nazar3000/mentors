@@ -175,8 +175,13 @@ class Roadmap(SignUpStepsAccessMixin, TemplateView):
 
 class RoadmapStepMixin(SignUpStepsAccessMixin, TemplateView):
     def get(self, request, *args, **kwargs):
+        coordinator = Mentor.objects.get(pk=self.request.user.pk).coordinator
+        soc_service = None
+        if coordinator:
+            soc_service = coordinator.social_service_center if coordinator.social_service_center \
+                else coordinator.public_service.social_service_center
         return render(request, self.template_name, {
-            'soc_service': Mentor.objects.get(pk=self.request.user.pk).coordinator.social_service_center,
+            'soc_service': soc_service,
             'questionnaire': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.QUESTIONNAIRE.name).first(),
             'medical_exam': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.MEDICAL_EXAM.name).first(),
             'contract': RoadmapDoc.objects.filter(doc_type=RoadmapDocTypes.CONTRACT.name).first()

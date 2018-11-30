@@ -1,7 +1,8 @@
 {% extends 'mentors/../base.html' %}
-{% load static %}
+{% load static common %}
 
 {% block content %}
+  {% get_mentors_count_str as mentors_count_str %}
   <script>
     window.fbAsyncInit = function() {
       FB.init({
@@ -32,10 +33,9 @@
           <div class="register-block-center"><img src="{% static 'img/parrent.jpg' %}" alt="">
             <div class="main-mentor-interactiv-item">
               <div class="wrapp-numb">
-                <div class="numb">0</div>
-                <div class="numb">0</div>
-                <div class="numb">4</div>
-                <div class="numb">7</div>
+                {% for digit in mentors_count_str %}
+                  <div class="numb">{{ digit }}</div>
+                {% endfor %}
               </div>
             </div><span>Дітей мають наставників</span>
           </div>
