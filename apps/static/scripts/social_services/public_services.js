@@ -22,6 +22,8 @@ const publicServices = new Vue({
     mentorList: [],
     organizationList: [],
     mentorsData: [],
+    searchedMentors: [],
+    searchString: '',
     mentorStatuses: {},
     publicServices: [],
     defaultExtendedMentor: {
@@ -46,7 +48,12 @@ const publicServices = new Vue({
     mentorModalDisplay: false,
     mentorModalView: true,
     publicServiceView: true,
-    publicServiceModalDisplay: false
+    publicServiceModalDisplay: false,
+    filterImgPaths: {
+      ab: '/static/img/a-b.svg',
+      ba: '/static/img/b-a.svg'
+    },
+    filterImgPath: '/static/img/a-b.svg',
   },
   created() {
     this.extendedMentor = this.defaultExtendedMentor;
@@ -162,6 +169,28 @@ const publicServices = new Vue({
           }
         }
       });
+    },
+    dynamicSort(property) {
+      let sortOrder = 1
+      if (property[0] === '-') {
+        sortOrder = -1
+        property = property.substr(1)
+      }
+      return function (a, b) {
+        let result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0
+        return result * sortOrder
+      }
+    },
+    reverseSort() {
+      if (this.filterImgPath === this.filterImgPaths.ab) {
+        this.filterImgPath = this.filterImgPaths.ba;
+
+        this.lightPublicServices = this.lightPublicServices.sort(this.dynamicSort('-name'));
+      } else {
+        this.filterImgPath = this.filterImgPaths.ab;
+
+        this.lightPublicServices = this.lightPublicServices.sort(this.dynamicSort('name'));
+      }
     }
   },
   watch: {

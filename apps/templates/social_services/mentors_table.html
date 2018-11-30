@@ -2,7 +2,7 @@
 
 <div class="css-table">
   <div class="css-table-header">
-    <div class="css-table-title-mentor">Наставник<span class="sort-mentor"><img src="{% static 'img/a-b.svg' %}"></span></div>
+    <div class="css-table-title-mentor">Наставник<span class="sort-mentor" @click="reverseSort"><img :src="filterImgPath"></span></div>
     <div class="css-table-line"></div>
     <div class="css-table-title-stat">Статус</div>
     <div class="css-table-line"></div>

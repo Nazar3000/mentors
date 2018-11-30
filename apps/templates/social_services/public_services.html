@@ -124,7 +124,7 @@
         </div>
         <div class="css-table">
           <div class="css-header">
-            <div class="css-title-org">Організація<span class="css-sort-mentor"><img src="{% static 'img/a-b.svg' %}"></span></div>
+            <div class="css-title-org">Організація<span class="css-sort-mentor" @click="reverseSort"><img :src="filterImgPath"></span></div>
             <div class="css-line"></div>
             <div class="css-title-stat">Статус</div>
             <div class="css-line"></div>

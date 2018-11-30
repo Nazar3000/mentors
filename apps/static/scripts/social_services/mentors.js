@@ -30,6 +30,11 @@ const mentors = new Vue({
     socServiceId: soc_service_id,
     searchString: '',
     docsStatuses: [],
+    filterImgPaths: {
+      ab: '/static/img/a-b.svg',
+      ba: '/static/img/b-a.svg'
+    },
+    filterImgPath: '/static/img/a-b.svg',
     errors: {}
   },
   created() {
@@ -41,6 +46,11 @@ const mentors = new Vue({
       $.get('/social-service/mentors/?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
         this.searchedMentors = this.lightMentors;
+        if (this.filterImgPath === this.filterImgPaths.ab) {
+          this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('-full_name'));
+        } else {
+          this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
+        }
         this.docsStatuses = res.docs_statuses;
         this.mentorStatuses = res.mentor_statuses;
         this.publicServices = res.public_services;
@@ -185,6 +195,28 @@ const mentors = new Vue({
     saveMentoreeName(mentoreeName) {
       $.post('/social-service/mentors/add_mentoree/',
         {'mentoree_full_name': mentoreeName, 'mentor_pk': this.extendedMentor.pk});
+    },
+    dynamicSort(property) {
+      let sortOrder = 1
+      if (property[0] === '-') {
+        sortOrder = -1
+        property = property.substr(1)
+      }
+      return function (a, b) {
+        let result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0
+        return result * sortOrder
+      }
+    },
+    reverseSort() {
+      if (this.filterImgPath === this.filterImgPaths.ab) {
+        this.filterImgPath = this.filterImgPaths.ba;
+
+        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('-full_name'));
+      } else {
+        this.filterImgPath = this.filterImgPaths.ab;
+
+        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
+      }
     }
   },
   watch: {
@@ -240,6 +272,11 @@ const mentors = new Vue({
         }
         return searched;
       });
+      if (this.filterImgPath === this.filterImgPaths.ab) {
+        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('-full_name'));
+      } else {
+        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
+      }
     },
     extendedMentor: {
       handler: function (newObj) {
