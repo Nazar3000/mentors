@@ -372,6 +372,17 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
                 social_service_center_data_obj.save()
             else:
                 return JsonResponse(dict(form.errors.items()))
+        elif action == 'add_mentoree':
+            mentor = Mentor.objects.get(pk=request.POST['mentor_pk'])
+            name_parts = request.POST['mentoree_full_name'].split(' ')
+            if mentor.mentoree:
+                mentor.mentoree.first_name = name_parts[0]
+                mentor.mentoree.last_name = name_parts[1]
+                mentor.mentoree.save()
+            else:
+                mentoree = Mentoree.objects.create(first_name=name_parts[0], last_name=name_parts[1])
+                mentor.mentoree = mentoree
+                mentor.save()
 
         return JsonResponse({'status': 'success'})
 

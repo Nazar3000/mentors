@@ -181,6 +181,10 @@ const mentors = new Vue({
     getResponsibleName(respPK) {
       const pubService = this.publicServices.find(p => p.pk === respPK);
       return pubService ? pubService.name : 'ЦССДМ'
+    },
+    saveMentoreeName(mentoreeName) {
+      $.post('/social-service/mentors/add_mentoree/',
+        {'mentoree_full_name': mentoreeName, 'mentor_pk': this.extendedMentor.pk});
     }
   },
   watch: {
