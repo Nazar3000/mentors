@@ -27,7 +27,7 @@
     {% endif %}
     {% block content %}{% endblock %}
     {% if user.is_authenticated and user.user_type == 1 %}
-      
+      {% include 'prefooter.html' %}
     {% endif %}
     {% include 'footer.html' %}
   </div>

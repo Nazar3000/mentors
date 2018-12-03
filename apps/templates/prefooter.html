@@ -60,7 +60,7 @@
         <h2>Твій координатор</h2>
         {% get_related_coordinator user as coordinator %}
           <div class="pre-footer-item">
-            <div class="pre-footer-img"><img src="{{ coordinator.image.url }}"></div>
+            <div class="pre-footer-img"><img src="{% if coordinator.image %}{{ coordinator.image.url }}{% endif %}"></div>
             <div class="pre-footer-title">
               <div class="pre-footer-title-name">
                 <p>{{ coordinator.full_name }}</p><span>Співробітник центра соц служб</span>

@@ -24,8 +24,7 @@ def get_social_service_centers():
 
 @register.simple_tag
 def get_related_coordinator(user):
-    if Coordinator.objects.filter(mentor__pk=user.id).exists():
-        return Coordinator.objects.get(mentor__pk=user.id)
+    return Mentor.objects.get(user=user).coordinator
 
 
 @register.simple_tag
