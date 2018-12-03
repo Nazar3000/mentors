@@ -517,7 +517,6 @@ def like_news_item(request):
 class MentorSettingsView(UpdateView):
     template_name = 'mentors/mentor_settings.html'
     form_class = MentorSettingsForm
-    questionnaire_form = MentorQuestionnaireSettingsForm
 
     def get_object(self, queryset=None):
         return Mentor.objects.get(pk=self.request.user.id)
@@ -548,33 +547,16 @@ class MentorSettingsView(UpdateView):
         return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
-        mentor = form.save(commit=False)
-        questionnaire_form = self.questionnaire_form(self.request.POST)
-        if questionnaire_form.is_valid():
-            if form.cleaned_data.get('password_new1'):
-                mentor.user.set_password(form.cleaned_data.get('password_new1'))
-            mentor.user.email = questionnaire_form.cleaned_data['email']
-            questionnaire = questionnaire_form.save(commit=False)
-            mentor_questionnaire_dict = {k: v for k, v
-                                         in questionnaire.__dict__.items()
-                                         if v is not None}
+        mentor = form.save()
 
-            mentor.questionnaire.__dict__.update({k: v for k, v in mentor_questionnaire_dict.items() if v})
-            mentor.questionnaire.save()
-            mentor.save()
-        else:
-            return JsonResponse(dict(questionnaire_form.errors.items()))
+        if form.cleaned_data.get('password_new1'):
+            mentor.user.set_password(form.cleaned_data.get('password_new1'))
 
         return JsonResponse({'status': 'success'})
 
     def form_invalid(self, form):
-        questionnaire_form = self.questionnaire_form(self.request.POST)
-        if questionnaire_form.is_valid():
-            return JsonResponse(dict(form.errors.items()))
-        else:
-            errors = dict(form.errors.items())
-            errors.update(dict(questionnaire_form.errors.items()))
-            return JsonResponse(errors)
+        errors = dict(form.errors.items())
+        return JsonResponse(errors)
 
 
 class SscReportView(CreateView):

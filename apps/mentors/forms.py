@@ -159,6 +159,19 @@ class MentorQuestionnaireSettingsForm(forms.ModelForm):
     first_name = forms.CharField()
     last_name = forms.CharField()
 
+    def clean_full_name(self):
+        print(self.cleaned_data)
+        first_name = self.cleaned_data['first_name']
+        last_name = self.cleaned_data['last_name']
+
+        self.cleaned_data['full_name'] = '{} {}'.format(first_name, last_name)
+
+    class Meta:
+        model = MentorQuestionnaire
+        fields = (
+            'email',
+        )
+
 
 class MentorSettingsForm(forms.ModelForm):
     email = forms.EmailField()
