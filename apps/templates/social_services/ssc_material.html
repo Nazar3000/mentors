@@ -45,7 +45,7 @@
                 {% if not material.category %}
                   <div class="css-material-item">
                     <p>{{ material.title }}</p>
-                    <a href="{% url 'social_service:download_file' material.pk %}" target="_blank"><img
+                    <a href="{% url 'social_services:download_file' material.pk %}" target="_blank"><img
                         src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
                   </div>
                 {% endif %}
@@ -74,7 +74,7 @@
                     {% endif %}
                     <p>{{ material.title }}</p>
                     {% if material.file %}
-                      <a href="{% url 'social_service:download_file' material.pk %}" target="_blank"><img
+                      <a href="{% url 'social_services:download_file' material.pk %}" target="_blank"><img
                           src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
                     {% endif %}
                   </div>
