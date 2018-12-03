@@ -26,14 +26,9 @@
       {% include 'header.html' %}
     {% endif %}
     {% block content %}{% endblock %}
-    {% if user.is_authenticated and user.user_type == 1 %}
-      {% include 'prefooter.html' %}
-    {% endif %}
+    {% block prefooter %}{% endblock %}
     {% include 'footer.html' %}
   </div>
   {% block extra_js %}{% endblock %}
-  {% if user.is_authenticated and user.user_type == 1 %}
-    <script src="{% static 'scripts/prefooter_forms.js' %}"></script>
-  {% endif %}
 </body>
 </html>

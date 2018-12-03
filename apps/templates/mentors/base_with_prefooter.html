@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block prefooter %}
+  {% if user.is_authenticated and user.user_type == 1 %}
+    {% include 'prefooter.html' %}
+  {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+  {% if user.is_authenticated and user.user_type == 1 %}
+    <script src="{% static 'scripts/prefooter_forms.js' %}"></script>
+  {% endif %}
+{% endblock %}
