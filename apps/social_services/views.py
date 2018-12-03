@@ -8,6 +8,7 @@ from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import redirect, HttpResponse
+from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
@@ -501,21 +502,30 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
                         return JsonResponse(
                             {'non_field_errors': [_('Користувач з таким email же існує.')]})
                 public_service.save()
-                try:
+
+                if 'pk' in request.POST.keys():
                     coordinator = Coordinator.objects.get(public_service__pk=request.POST['pk'])
-                    if request.POST.get('mentorPk'):
-                        mentor = Mentor.objects.get(pk=request.POST.get('mentorPk'))
-                        mentor.coordinator = coordinator
-                        mentor.save()
-                    elif request.POST.get('organizationPk'):
-                        mentor_pks = Mentoree.objects.filter(organization__id=request.POST.get('organizationPk'))\
-                            .values_list('mentor__pk', flat=True)
-                        Mentor.objects.filter(id__in=mentor_pks).update(
-                            coordinator=coordinator
-                        )
-                except Coordinator.DoesNotExist:
-                    return JsonResponse(
-                        {'non_field_errors': [_('Для даної громадської організації немає координатора.')]})
+                else:
+                    coordinator = Coordinator.objects.create(
+                        full_name='Координатор',
+                        email='coordinator@temp.com',
+                        phone_numbers=['+380000000000'],
+                        public_service=public_service)
+                if request.POST.get('mentorPk'):
+                    mentor = Mentor.objects.get(pk=request.POST.get('mentorPk'))
+                    mentor.coordinator = coordinator
+                    mentor.save()
+                elif request.POST.get('organizationPk'):
+                    mentor_pks = Mentoree.objects.filter(organization__id=request.POST.get('organizationPk'))\
+                        .values_list('mentor__pk', flat=True)
+                    Mentor.objects.filter(id__in=mentor_pks).update(
+                        coordinator=coordinator
+                    )
+                public_service_dict = model_to_dict(public_service, fields=('licence', 'name', 'status'))
+                public_service_dict['pair_count'] = public_service.pair_count
+                public_service_dict['pk'] = public_service.pk
+                return JsonResponse(public_service_dict)
+
             else:
                 return JsonResponse(dict(form.errors.items()))
         return JsonResponse({'status': 'success'})
