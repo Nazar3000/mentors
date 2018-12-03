@@ -594,8 +594,14 @@ class SscReportView(CreateView):
 class SscAssessView(UpdateView):
     form_class = SscAssessForm
 
+    def get_ssc(self):
+        coordinator = Mentor.objects.get(user=self.request.user).coordinator
+        ssc = coordinator.social_service_center \
+            if coordinator.social_service_center else coordinator.public_service.social_service_center
+        return ssc
+
     def get_object(self, queryset=None):
-        ssc = Coordinator.objects.filter(mentor__pk=self.request.user.pk).first().social_service_center
+        ssc = self.get_ssc()
         try:
             return SocialServiceCenterAssessment.objects.get(
                 ssc=ssc, mentor__pk=self.request.user.pk)
@@ -603,7 +609,7 @@ class SscAssessView(UpdateView):
             return None
 
     def form_valid(self, form):
-        ssc = Coordinator.objects.filter(mentor__pk=self.request.user.pk).first().social_service_center
+        ssc = self.get_ssc()
         ssc_assessment = form.save(commit=False)
         ssc_assessment.ssc = ssc
         ssc_assessment.mentor = Mentor.objects.get(user__pk=self.request.user.pk)
