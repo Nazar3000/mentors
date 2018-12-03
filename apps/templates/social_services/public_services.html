@@ -186,7 +186,7 @@
                 </div>
                 <div class="css-org-mentor">
                   <span>Передати пару:</span>
-                  <select class="triangle-green">
+                  <select class="triangle-green" disabled>
                     <option></option>
                     <option v-for="option in mentorList"
                             :value="option.pk"
@@ -196,7 +196,7 @@
                   </select>
 
                   <span>Передати всі пари інтерната:</span>
-                  <select class="triangle-green">
+                  <select class="triangle-green" disabled>
                     <option></option>
                     <option v-for="option in organizationList"
                             :value="option.organization__pk"

@@ -426,6 +426,25 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
             'public_service_statuses': dict(PublicServiceStatuses.choices()),
         })
 
+    @staticmethod
+    def get_mentors_data(mentor_pks):
+        mentors_data = []
+        mentors = Mentor.objects.filter(pk__in=mentor_pks).iterator()
+
+        for mentor in mentors:
+            mentors_data.append({
+                'pk': mentor.pk,
+                'public_service_pk': mentor.coordinator.public_service.pk,
+                'full_name': mentor.first_name + ' ' + mentor.last_name,
+                'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name)
+                if mentor.mentoree else '',
+                'organization_name': mentor.mentoree.organization.name if mentor.mentoree else '',
+                'contract_number': mentor.social_service_center_data.contract_number,
+                'mentoring_start_date':
+                    get_date_str_formatted(mentor.meetings.first().date) if mentor.meetings.first() else None,
+            })
+        return mentors_data
+
     def get_extended_public_service_data(self):
         public_service = PublicService.objects.get(pk=self.request.GET['public_service_pk'])
         public_service_data = model_to_dict(public_service, fields=(
@@ -445,29 +464,14 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
         coordinator_ids = PublicService.objects.filter(social_service_center__pk=self.request.user.pk)\
             .values_list('coordinators', flat=True)
         mentor_pks = Coordinator.objects.filter(id__in=coordinator_ids).values_list('mentors__pk', flat=True)
-        mentors_data = []
-        mentors = Mentor.objects.filter(pk__in=mentor_pks).iterator()
-
         related_public_services = PublicService.objects.filter(
             social_service_center__pk=self.request.user.pk).values('pk', 'name')
-        for mentor in mentors:
-            mentors_data.append({
-                'pk': mentor.pk,
-                'public_service_pk': mentor.coordinator.public_service.pk,
-                'full_name': mentor.first_name + ' ' + mentor.last_name,
-                'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name)
-                if mentor.mentoree else '',
-                'organization_name': mentor.mentoree.organization.name if mentor.mentoree else '',
-                'contract_number': mentor.social_service_center_data.contract_number,
-                'mentoring_start_date':
-                    get_date_str_formatted(mentor.meetings.first().date) if mentor.meetings.first() else None,
-            })
 
         return JsonResponse({
             'public_service_data': public_service_data,
             'mentor_statuses': dict(MentorStatuses.choices()),
             'public_services': list(related_public_services),
-            'mentors_data': mentors_data
+            'mentors_data': self.get_mentors_data(mentor_pks)
         })
 
     def get(self, request, *args, **kwargs):
@@ -518,13 +522,18 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
                 elif request.POST.get('organizationPk'):
                     mentor_pks = Mentoree.objects.filter(organization__id=request.POST.get('organizationPk'))\
                         .values_list('mentor__pk', flat=True)
-                    Mentor.objects.filter(id__in=mentor_pks).update(
+                    Mentor.objects.filter(pk__in=mentor_pks).update(
                         coordinator=coordinator
                     )
                 public_service_dict = model_to_dict(public_service, fields=('licence', 'name', 'status'))
                 public_service_dict['pair_count'] = public_service.pair_count
                 public_service_dict['pk'] = public_service.pk
-                return JsonResponse(public_service_dict)
+
+                coordinator_ids = PublicService.objects.filter(social_service_center__pk=self.request.user.pk) \
+                    .values_list('coordinators', flat=True)
+                mentor_pks = Coordinator.objects.filter(id__in=coordinator_ids).values_list('mentors__pk', flat=True)
+                mentors_data = self.get_mentors_data(mentor_pks)
+                return JsonResponse({'public_service_data': public_service_dict, 'mentors_data': mentors_data})
 
             else:
                 return JsonResponse(dict(form.errors.items()))

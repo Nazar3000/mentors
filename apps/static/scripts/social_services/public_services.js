@@ -170,9 +170,13 @@ const publicServices = new Vue({
         enctype: 'multipart/form-data',
         type: 'POST',
         success: (res) => {
-          if (res.pk) {
-            this.lightPublicServices.push(res);
-            console.log(res)
+          if (res.public_service_data) {
+            if (this.publicServiceModalDisplay) {
+              this.lightPublicServices.push(res);
+            }
+
+            this.mentorsData = res.mentors_data;
+            this.searchedMentors = this.mentorsData;
 
             this.errors = {};
             this.publicServiceModalDisplay = false;
