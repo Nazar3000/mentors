@@ -151,13 +151,20 @@ class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
         context = super(MainPageView, self).get_context_data(**kwargs)
         context['main_video'] = SocialServiceVideo.objects.filter(page=1).first()
 
-        context['licenced'] = Mentor.objects.filter(licenced=True).count()
-        context['psychologist_met'] = MentorSocialServiceCenterData.objects\
-            .filter(psychologist_meeting_date__isnull=False).count()
-        context['infomeeting_made'] = MentorSocialServiceCenterData.objects\
-            .filter(infomeeting_date__isnull=False).count()
+        current_social_service = SocialServiceCenter.objects.get(pk=self.request.user.pk)
+        coordinators = Coordinator.objects.filter(
+            Q(social_service_center=current_social_service)
+            | Q(public_service__in=current_social_service.publicservice_set.all())
+        )
+        total_mentors = Mentor.objects.filter(coordinator__in=coordinators)
 
-        context['total'] = MentorSocialServiceCenterData.objects.all().count()
+        context['licenced'] = total_mentors.filter(licenced=True).count()
+        context['psychologist_met'] = MentorSocialServiceCenterData.objects\
+            .filter(psychologist_meeting_date__isnull=False, mentor__in=total_mentors).count()
+        context['infomeeting_made'] = MentorSocialServiceCenterData.objects\
+            .filter(infomeeting_date__isnull=False, mentor__in=total_mentors).count()
+
+        context['total'] = MentorSocialServiceCenterData.objects.filter(mentor__in=total_mentors).count()
 
         if context['total'] > 0:
 
