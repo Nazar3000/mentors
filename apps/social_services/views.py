@@ -160,7 +160,7 @@ class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
         )
         total_mentors = Mentor.objects.filter(coordinator__in=coordinators)
 
-        context['licenced'] = total_mentors.filter(licenced=True).count()
+        context['licenced'] = total_mentors.filter(social_service_center_data__admitted_to_child=True).count()
         context['psychologist_met'] = MentorSocialServiceCenterData.objects\
             .filter(psychologist_meeting_date__isnull=False, mentor__in=total_mentors).count()
         context['infomeeting_made'] = MentorSocialServiceCenterData.objects\
