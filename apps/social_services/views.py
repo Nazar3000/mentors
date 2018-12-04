@@ -14,7 +14,8 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
 
-from mentors.constants import DocsStatuses
+from mentors.constants import DocsStatuses, Religions, LocalChurchVisitingFrequency, MaritalStatuses, Genders, \
+    HomeTypes, AbleToVisitChildFrequency, MentoringProgramFindOutPlaces, EducationTypes
 from mentors.views import nest_queryset
 from social_services.utils import get_date_str_formatted
 from users.templatetags.date_tags import get_age
@@ -191,6 +192,20 @@ class VideoMentorView(CheckIfUserIsPreSocialServiceCenterMixin, TemplateView):
 class MentorCardView(CheckIfUserIsSocialServiceCenterMixin, DetailView):
     model = Mentor
     template_name = 'social_services/ssc_mentor_card.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'religions': Religions.choices(),
+            'local_church_visiting_frequency': LocalChurchVisitingFrequency.choices(),
+            'marital_statuses': MaritalStatuses.choices(),
+            'genders': Genders.choices(),
+            'home_types': HomeTypes.choices(),
+            'able_to_visit_child_frequency': AbleToVisitChildFrequency.choices(),
+            'mentoring_program_find_out_places': MentoringProgramFindOutPlaces.choices(),
+            'education_types': EducationTypes.choices()
+        })
+        return context
 
 
 class MaterialView(ListView):

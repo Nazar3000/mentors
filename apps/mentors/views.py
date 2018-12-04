@@ -19,9 +19,9 @@ from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
 from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation, RoadmapDoc, \
     MIA
-from users.models import Mentor, Organization, SocialServiceCenterAssessment, Coordinator, SocialServiceCenter
+from users.models import Mentor, Organization, SocialServiceCenterAssessment, SocialServiceCenter
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
-    MentorSettingsForm, MentorQuestionnaireSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
+    MentorSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency, RoadmapDocTypes
 
@@ -121,6 +121,7 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
 
         main_form = self.forms_class.forms['main'](request_body)
         questionnaire = None
+        has_errors = False
         if main_form.is_valid():
             questionnaire = main_form.save(commit=False)
             mentor = Mentor.objects.get(pk=request.user.pk)
@@ -130,6 +131,7 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
             mentor.save()
         else:
             errors.update(dict(main_form.errors.items()))
+            has_errors = True
 
         for form_name in [
             'education',
@@ -149,13 +151,8 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
                     error_list.append({})
                 else:
                     error_list.append(dict(form.errors.items()))
+                    has_errors = True
             errors[form_name + 's'] = error_list
-
-        has_errors = False
-        for value in errors.values():
-            if (type(value) == list and any(len(d) > 0 for d in value)
-                    or type(value) == str and len(value) > 0):
-                has_errors = True
 
         if has_errors:
             if questionnaire:

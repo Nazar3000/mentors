@@ -5,7 +5,7 @@
     <div class="container">
       <section class="css-admin">
         <div class="css-admin-main">
-          <div class="css-admin-info"><img src="{{ object.profile_image.url }}">
+          <div class="css-admin-info"><img src="{% if object.profile_image %}{{ object.profile_image.url }}{% endif %}">
             <div>
               <h4>{{ object.questionnaire.full_name }}<br></h4><span>Телефон:</span>
               <p>{{ object.questionnaire.phone_number }}</p><span>Email:</span>
@@ -21,10 +21,20 @@
                 <p>{{ object.questionnaire.registration_address }}</p><span>Національність/Громадянство:</span>
                 <p>{{ object.questionnaire.registration_address }}</p>
               </div>
-              <div><span>Віросповидання:</span>
-                <p>{{ object.questionnaire.religion }}</p><span>Церква яку відвідує:</span>
+              <div>
+                <span>Віросповідання:</span>
+                {% for key, value in religions %}
+                  {% if object.questionnaire.religion == key %}
+                    <p>{{ value }}</p>
+                  {% endif %}
+                {% endfor %}
+                <span>Церква яку відвідує:</span>
                 <p>{{ object.questionnaire.local_church_visiting }}</p>
-                <p>{{ object.questionnaire.local_church_visiting_frequency }}</p>
+                {% for key, value in local_church_visiting_frequency %}
+                  {% if object.questionnaire.local_church_visiting_frequency == key %}
+                    <p>{{ value }}</p>
+                  {% endif %}
+                {% endfor %}
               </div>
             </div>
           </div>
@@ -62,7 +72,12 @@
               <h5>Сімейний стан:</h5>
               <div class="css-admin-wrapp">
                 <div>
-                  <p>{{ object.questionnaire.marital_status }}</p><span>Члени родини:</span>
+                  {% for key, value in marital_statuses %}
+                    {% if object.questionnaire.marital_status == key %}
+                      <p>{{ value }}</p>
+                    {% endif %}
+                  {% endfor %}
+                  <span>Члени родини:</span>
                   <p>{{ object.questionnaire.home_family_members_data|linebreaksbr }}</p>
                 </div>
               </div>
@@ -72,8 +87,13 @@
             <div class="css-admin-card">
               <h5>Житлово-побутові умови:</h5>
               <div class="css-admin-wrapp">
-                <div><span>Місце проживання на цей момент:</span>
-                  <p>{{ object.questionnaire.home_type }}</p>
+                <div>
+                  <span>Місце проживання на цей момент:</span>
+                  {% for key, value in home_types %}
+                    {% if object.questionnaire.home_type == key %}
+                      <p>{{ value }}</p>
+                    {% endif %}
+                  {% endfor %}
                   <div class="css-admin-wrapp-line">
                     <div><span>Кількість кімнат:</span>
                       <p>{{ object.questionnaire.room_count }}</p>
@@ -125,8 +145,12 @@
               <div class="css-admin-wrapp">
                 <div>
                   {% for education in object.questionnaire.mentorquestionnaireeducation_set.all %}
-                    <span>{{ education.education_type }}</span>
-                    <p>{{ education.institution }}, {{ educationyear_of_admission }}
+                    {% for key, value in education_types %}
+                      {% if education.education_type == key %}
+                        <span>{{ value }}</span>
+                      {% endif %}
+                    {% endfor %}
+                    <p>{{ education.year_of_admission }}
                       - {{ education.year_of_graduation }} р., {{ education.degree }}</p>
                   {% endfor %}
                 </div>
@@ -204,7 +228,11 @@
           </div>
           <div>
             <h4>Як часто я можу відвідувати дитину в закладі?</h4>
-            <span>{{ object.questionnaire.able_to_visit_frequency }}</span>
+            {% for key, value in able_to_visit_child_frequency %}
+              {% if object.questionnaire.able_to_visit_frequency == key %}
+                <span>{{ value }}</span>
+              {% endif %}
+            {% endfor %}
           </div>
           <div>
             <h4>Чи погоджуюся я взаємодіяти з дитиною, яка має інвалідність?</h4>
@@ -220,8 +248,11 @@
             {% endif %}
           </div>
           <div>
-            {% if object.questionnaire.drink_alcohol %}
-              <h4>Я вживав наркотики</h4><span>{{ object.questionnaire.drug_usage_info }}</span>
+            <h4>Я вживав наркотики</h4>
+            {% if object.questionnaire.drug_usage %}
+              <span>Так</span>
+            {% else %}
+              <span>Ні</span>
             {% endif %}
           </div>
           <div>
@@ -251,7 +282,11 @@
           </div>
           <div>
             <h4>Я дізнався про програму наставництва через</h4>
-            <span>{{ object.questionnaire.program_found_out_place }}</span>
+            {% for key, value in mentoring_program_find_out_places %}
+              {% if object.questionnaire.program_found_out_place == key %}
+                <span>{{ value }}</span>
+              {% endif %}
+            {% endfor %}
           </div>
           <div>
             <h4>Мені зручніше всього прийти на консультацію з психологом Центру соціальних служб або Партнерської

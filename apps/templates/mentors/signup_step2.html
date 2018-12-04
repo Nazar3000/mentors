@@ -268,7 +268,7 @@
         </div>
         <h3>6. Сімейний стан:</h3>
         <div class="page-form-family"><span>Оберіть Ваш сімейний стан</span>
-          <select v-model="marital_status" :class="{'alert-border': errors['marital_statuses']}">
+          <select v-model="marital_status" :class="{'alert-border': errors['marital_status']}">
             <option></option>
             <option v-for="key, value in choices.marital_statuses" :value="value">
               [[ key ]]
@@ -409,8 +409,9 @@
                   rows="3"
                   placeholder="Вік, стать, наскільки важливим для вас є характер дитини (зовнішній вигляд, поведінкові особливості)?"
                   v-model="expectations_from_child"
+                  :class="{'alert-border': errors['expectations_from_child']}"
         ></textarea>
-        <span class="error-form" v-for="err in errors.socialization">[[ err ]]</span>
+        <span class="error-form" v-for="err in errors.expectations_from_child">[[ err ]]</span>
         <h3>13.1. За яким напрямком наставництва ви би бажали допомагати дитині?</h3>
         <div class="page-form-wrapp">
           <div class="page-form-choice">
@@ -430,11 +431,12 @@
           <span class="error-form" v-for="err in errors.help_in_education">[[ err ]]</span>
         </div>
         <h3>13.2. Як часто ви можете відвідувати дитину в закладі?</h3>
-        <div class="page-form-wrapp" :class="{'alert-border': errors['able_to_visit_child_frequency']}">
+        <div class="page-form-wrapp" :class="{'alert-border': errors['able_to_visit_frequency']}">
           <label class="form-check" v-for="key, value in choices.able_to_visit_child_frequency">
             <input type="radio" :value="value" v-model="able_to_visit_frequency">
             <span class="form-check-label-md">[[ key ]]</span>
           </label>
+          <span class="error-form" v-for="err in errors.able_to_visit_frequency">[[ err ]]</span>
         </div>
         <span class="error-form" v-for="err in errors.able_to_visit_child_frequency">[[ err ]]</span>
         <h3>13.3. Чи згодні ви взаємодіяти з дитиною, яка має інвалідність?</h3>
@@ -547,13 +549,13 @@
         </div>
         <h3>16. Звідки ви дізналися про програму наставництва?</h3>
         <div class="page-form-select">
-          <select v-model="program_found_out_place" :class="{'alert-border': errors['mentoring_program_find_out_places']}">
+          <select v-model="program_found_out_place" :class="{'alert-border': errors['program_found_out_place']}">
             <option></option>
             <option v-for="key, value in choices.mentoring_program_find_out_places" :value="value">
               [[ key ]]
             </option>
           </select>
-          <span class="error-form" v-for="err in errors.mentoring_program_find_out_places">[[ err ]]</span>
+          <span class="error-form" v-for="err in errors.program_found_out_place">[[ err ]]</span>
         </div>
         <h3>17. В який робочий день та час Вам зручніше всього прийти на консультацію з психологом<br>Центру соціальних служб або Партнерської організації?</h3>
         <div class="page-form-wrapp">
