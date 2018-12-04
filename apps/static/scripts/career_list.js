@@ -21,6 +21,11 @@ const careerList = new Vue({
     showModal: false,
     errors: [],
     searchString: '',
+    map: {},
+    defaultCoordinates: {
+      lat: 50.4501,
+      lng: 30.5234
+    }
   },
   created() {
     this.new_org = this.default_new_org;
@@ -29,6 +34,14 @@ const careerList = new Vue({
       this.proforientations = res;
       this.searchedProforientations = this.proforientations;
     })
+
+
+  },
+  mounted: function () {
+    this.map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 15,
+      center: this.defaultCoordinates
+    });
   },
   methods: {
     selectProforientation(proforientation) {
@@ -45,7 +58,6 @@ const careerList = new Vue({
     submitRelation() {
       if (this.agreed && !(this.selected_proforientation.related_mentors.includes(userId))) {
         this.selected_proforientation.related_mentors.push(userId);
-        console.log(this.proforientations, this.selected_proforientation.id);
         this.proforientations.find(
           p => p.id === this.selected_proforientation.id).related_mentors.push(userId);
       } else if (!this.agreed && this.selected_proforientation.related_mentors.includes(userId)) {
@@ -54,8 +66,6 @@ const careerList = new Vue({
         this.proforientations.find(
           p => p.id === this.selected_proforientation.id).related_mentors.splice(relatedId, 1);
       }
-      console.log(this.proforientations.find(
-        p => p.id === this.selected_proforientation.id));
       this.unselectProforientation();
     },
     submitForm() {
@@ -86,6 +96,25 @@ const careerList = new Vue({
           } else {
             this.errors = res;
           }
+        }
+      });
+    },
+    findOnMap(address) {
+      let map = this.map;
+      let geocoder = new google.maps.Geocoder();
+      geocoder.geocode({'address': address}, function (results, status) {
+        if (status === google.maps.GeocoderStatus.OK) {
+          if (status !== google.maps.GeocoderStatus.ZERO_RESULTS) {
+            map.setCenter(results[0].geometry.location);
+            let marker = new google.maps.Marker({
+              position: results[0].geometry.location,
+              map: map
+            });
+          } else {
+            console.log('No results found')
+          }
+        } else {
+          console.log('Geocode was not successful for the following reason: ' + status)
         }
       });
     }

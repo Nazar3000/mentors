@@ -78,8 +78,11 @@
                 </div>
                 <div class="career-table-item">
                   <p>[[ item.profession_name ]]</p>
-                </div><a class="career-table-item" href="">
-                  <p>[[ item.address ]]</p><i class="fas fa-map-marker-alt"></i></a>
+                </div>
+                  <a class="career-table-item" href="javascript: void(0)" id="map-input" @click="findOnMap(item.address)">
+                    <p>[[ item.address ]]</p>
+                    <i class="fas fa-map-marker-alt"></i>
+                  </a>
                   <div class="career-table-btn"
                        v-if="item.related_mentors.includes(userId)"
                   >
@@ -117,14 +120,33 @@
           </div>
         </div>
         <div class="career-map">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d81323.1837745071!2d30.476906381392816!3d50.434590515786375!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sgoogle!5e0!3m2!1sru!2sua!4v1537353884035" width="1110" height="500" frameborder="0" style="border:0" allowfullscreen=""></iframe>
+          <div id="map"></div>
         </div>
       </section>
     </div>
   </div>
 {% endblock %}
 
+{% block extra_css %}
+  <style>
+    #map {
+      width: 1110px;
+      height: 500px;
+      border: 0;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+{% endblock %}
+
 {% block extra_js %}
+  <script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNMxEA9L4ZhEvydiG_sczKhTX68mAHOSY">
+  </script>
   <script>
     const userId = '{{ user.id }}';
   </script>

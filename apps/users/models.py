@@ -286,12 +286,9 @@ class Volunteer(models.Model):
         max_length=32)
     last_name = models.CharField(
         max_length=32)
-
-    phone_regex = RegexValidator(
-        regex=r'\+?1?\d$')
+    email = models.EmailField()
     phone_number = models.CharField(
-        max_length=17,
-        validators=[phone_regex])
+        max_length=64)
 
     city = models.CharField(
         max_length=64)
@@ -299,21 +296,40 @@ class Volunteer(models.Model):
     mentoring_popularization = models.BooleanField(
         default=True)
 
+    make_master_classes = models.BooleanField(
+        default=True
+    )
     master_classes_names = models.CharField(
-        max_length=512)
+        max_length=512,
+        blank=True,
+        null=True)
 
+    talk_about_profession = models.BooleanField(
+        default=True
+    )
     profession_name = models.CharField(
-        max_length=128)
+        max_length=128,
+        blank=True,
+        null=True)
     profession_company_name = models.CharField(
-        max_length=128)
+        max_length=128,
+        blank=True,
+        null=True)
     profession_company_address = models.CharField(
-        max_length=256)
+        max_length=256,
+        blank=True,
+        null=True)
 
     financial_support = models.BooleanField(
         default=True)
 
+    another_assistance_ways = models.BooleanField(
+        default=True
+    )
     another_assistance_ways_names = models.CharField(
-        max_length=512)
+        max_length=512,
+        blank=True,
+        null=True)
 
 
 class Coordinator(models.Model):
