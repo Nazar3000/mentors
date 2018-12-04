@@ -626,12 +626,25 @@ class ProforientationView(FormView):
                      .objects.get(id=p['id'])
                      .related_mentor.all()
                      .values_list('user_id', flat=True))
-        return nest_queryset(8, list(proforientations))
+        return list(proforientations)
 
     def get(self, request, *args, **kwargs):
         if 'get_careers' in request.GET.keys():
             return JsonResponse(self.get_queryset(), safe=False)
         return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        org = form.save()
+        return JsonResponse({
+            'pk': org.pk,
+            'related_mentors': list(Proforientation
+                                    .objects.get(id=org.pk)
+                                    .related_mentor.all().values_list('user_id', flat=True))
+        })
+
+    def form_invalid(self, form):
+        errs = dict(form.errors.items())
+        return JsonResponse(errs)
 
 
 def get_notifications(request):

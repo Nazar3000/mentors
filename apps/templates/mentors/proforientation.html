@@ -13,26 +13,56 @@
       <section class="career">
         <h2> Профорієнтація</h2><span>Тут ти можеш знайти місце де вихованець може познайомитися з професією</span>
         <div class="career-search"><i class="fas fa-search"></i>
-          <input type="text" placeholder="Почніть вводити запитання або ключові слова">
+          <input type="text" placeholder="Почніть вводити запитання або ключові слова" v-model="searchString">
         </div>
-        <div class="career-add"><i class="fas fa-plus"></i><span>Створити компанію</span></div>
-        <div class="career-modal-reg">
+        <div class="career-add" @click="showModal=true"><i class="fas fa-plus"></i><span>Створити компанію</span></div>
+        <div class="career-modal-reg" :style="{'display': showModal ? 'block' : 'none'}">
           <div class="career-card-reg">
-            <div class="career-card-close">×</div>
+            <div class="career-card-close" @click="showModal=false">×</div>
             <p>Заповніть анкету! Станьте одним із нас!</p>
             <div class="career-card-line"></div>
-            <input type="text" placeholder="Введіть назву компанії">
-            <input type="text" placeholder="Введіть назву професії">
-            <input type="text" placeholder="Введіть адресу">
-            <input type="text" placeholder="Вкажіть зручні дни для зустрічей">
-            <textarea rows="6" placeholder="Опишіть вашу діяльність"></textarea>
-            <input type="text" placeholder="Контактний телефон ">
-            <button>Зберегти</button>
+            <input type="text"
+                   placeholder="Введіть назву компанії"
+                   :class="{'alert-border': errors['company_name']}"
+                   v-model="new_org.company_name"
+            >
+            <span class="error-form" v-for="err in errors.company_name">[[ err ]]</span>
+            <input type="text"
+                   placeholder="Введіть назву професії"
+                   :class="{'alert-border': errors['profession_name']}"
+                   v-model="new_org.profession_name"
+            >
+            <span class="error-form" v-for="err in errors.profession_name">[[ err ]]</span>
+            <input type="text"
+                   placeholder="Введіть адресу"
+                   :class="{'alert-border': errors['address']}"
+                   v-model="new_org.address"
+            >
+            <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
+            <input type="text"
+                   placeholder="Вкажіть зручні дні для зустрічей"
+                   :class="{'alert-border': errors['meeting_days']}"
+                   v-model="new_org.meeting_days"
+            >
+            <span class="error-form" v-for="err in errors.meeting_days">[[ err ]]</span>
+            <textarea rows="6"
+                      placeholder="Опишіть вашу діяльність"
+                      :class="{'alert-border': errors['business_description']}"
+                      v-model="new_org.business_description"
+            ></textarea>
+            <span class="error-form" v-for="err in errors.business_description">[[ err ]]</span>
+            <input type="text"
+                   placeholder="Контактний телефон"
+                   :class="{'alert-border': errors['phone_number']}"
+                   v-model="new_org.phone_number"
+            >
+            <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+            <button @click="submitForm">Зберегти</button>
           </div>
         </div>
         <div class="career-slider">
           <div class="owl-carousel">
-            <div class="career-table" v-for="chunk in proforientations">
+            <div class="career-table">
               <div class="career-table-header">
                 <div class="career-table-title">Професія</div>
                 <div class="career-line"></div>
@@ -42,7 +72,7 @@
                 <div class="career-line"></div>
                 <div class="career-table-title">Статус</div>
               </div>
-                <div class="career-table-line" v-for="item in chunk">
+                <div class="career-table-line" v-for="item in searchedProforientations">
                 <div class="career-table-item">
                   <p>[[ item.company_name ]]</p>
                 </div>

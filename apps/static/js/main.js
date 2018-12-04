@@ -194,13 +194,13 @@ $(document).ready(function () {
 
 
 
-    $('.career-add').click(function () {
-        $('.career-modal-reg').fadeIn(500);
-    });
-
-    $('.career-card-close').click(function () {
-        $('.career-modal-reg').fadeOut(400);
-    });
+    // $('.career-add').click(function () {
+    //     $('.career-modal-reg').fadeIn(500);
+    // });
+    //
+    // $('.career-card-close').click(function () {
+    //     $('.career-modal-reg').fadeOut(400);
+    // });
 
     $('.complaint').click(function () {
         $('.complaint-modal').fadeIn(500);
