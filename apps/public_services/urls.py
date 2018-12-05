@@ -9,4 +9,5 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='po_login'),
     path('main/', views.PublicServiceMainPageView.as_view(), name='main'),
     path('video/', views.PublicServiceVideoMentorView.as_view(), name='video'),
+    path('dating/', views.PublicServiceDatingView.as_view(), name='dating'),
 ]

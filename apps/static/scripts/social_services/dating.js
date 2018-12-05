@@ -35,7 +35,7 @@ const vm = new Vue({
       }
 
       $.ajax({
-        url: '/social-service/dating/',
+        url: '',
         data: formData,
         processData: false,
         contentType: false,
@@ -63,7 +63,7 @@ const vm = new Vue({
       }
 
       $.ajax({
-        url: '/social-service/dating/?add_new_base_service',
+        url: '?add_new_base_service',
         data: formData,
         processData: false,
         contentType: false,
@@ -85,7 +85,7 @@ const vm = new Vue({
   watch: {
     searchValue: function (newVal) {
       if (newVal) {
-        $.get(`/social-service/dating/?search_value=${newVal}&filter=unlinked`, (res) => {
+        $.get(`?search_value=${newVal}&filter=unlinked`, (res) => {
           this.searchedSocialServices = res;
         });
       } else {

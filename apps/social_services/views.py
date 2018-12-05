@@ -1,4 +1,3 @@
-import re
 from contextlib import suppress
 
 import rstr
@@ -77,14 +76,18 @@ class DatingView(FormView, TemplateView):
     modal_form_class = DatingBaseSocialServiceCenterForm
     coordinator_form_class = DatingCoordinatorForm
 
+    def get_queryset(self, q_filter):
+        queryset = BaseSocialServiceCenter.objects.none()
+        if q_filter == 'unlinked':
+            queryset = BaseSocialServiceCenter.objects.unlinked()
+        elif q_filter == 'all':
+            queryset = BaseSocialServiceCenter.objects.all()
+        return queryset
+
     def get(self, request, *args, **kwargs):
         if 'search_value' in request.GET.keys():
-            queryset = BaseSocialServiceCenter.objects.none()
             q_filter = request.GET.get('filter')
-            if q_filter == 'unlinked':
-                queryset = BaseSocialServiceCenter.objects.unlinked()
-            elif q_filter == 'all':
-                queryset = BaseSocialServiceCenter.objects.all()
+            queryset = self.get_queryset(q_filter)
             filtered_base_soc_centers = queryset.filter(
                 Q(city__icontains=request.GET['search_value'])
                 | Q(name__icontains=request.GET['search_value'])

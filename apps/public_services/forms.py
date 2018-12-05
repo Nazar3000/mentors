@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from users.constants import UserTypes
+from users.models import PublicService
 from .models import PublicServiceMasterKey
 from social_services.forms import SignUpStep0Form
 from django.contrib.auth.forms import UserCreationForm
