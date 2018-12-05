@@ -7,13 +7,13 @@ from social_services.forms import DatingCoordinatorForm
 from social_services.models import BaseSocialServiceCenter
 from social_services.views import SignUpFormView, DatingView
 from users.models import PublicService
-from .forms import PublicOrganizationSignUpStep0Form
+from .forms import PublicServiceSignUpStep0Form, PublicServiceForm
 from django.views.generic import TemplateView
 from .models import PublicServiceVideo
 
 
 class PublicServiceSignUpFormView(SignUpFormView):
-    form_class = PublicOrganizationSignUpStep0Form
+    form_class = PublicServiceSignUpStep0Form
 
     def form_valid(self, form):
         user = form.save()
@@ -32,42 +32,39 @@ class PublicServiceVideoMentorView(TemplateView):
 
 class PublicServiceDatingView(DatingView):
     template_name = 'public_services/dating.html'
-    form_class = DatingCoordinatorForm
-
-    def get_queryset(self, q_filter):
-        return BaseSocialServiceCenter.objects.all()
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        if 'data' in kwargs.keys():
-            kwargs['data'] = dict(kwargs['data'])
-            if 'coordinator_phone_numbers' in kwargs['data'].keys():
-                kwargs['data']['phone_numbers'] = kwargs['data']['coordinator_phone_numbers']
-                kwargs['data']['email'] = kwargs['data']['email'][0]
-        return kwargs
+    form_class = PublicServiceForm
 
     def form_valid(self, form):
-        if 'pk' in self.request.POST.keys():
+        if 'pk' in self.request.POST:
             service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk']).service
-            if service is not None:
-                public_service = PublicService.objects.create(
-                    user=self.request.user,
-                    social_service_center=service)
+            if service is None:
+                return JsonResponse({'non_field_errors': _('Обраний ЦСССДМ це не зареєстрований.')})
 
-                coordinator = form.save(commit=False)
-                coordinator.public_service = public_service
+            public_service = form.save(commit=False)
+            public_service.user = self.request.user
+            public_service.social_service_center = service
+            public_service.save()
+
+            data = {
+                'phone_numbers': self.request.POST.get('coordinator_phone_numbers'),
+                'email': self.request.POST.get('email'),
+                'full_name': self.request.POST.get('coordinator_phone_numbers')
+            }
+            coordinator_form = self.coordinator_form_class(data)
+
+            if coordinator_form.is_valid():
+                coordinator = coordinator_form.save(commit=False)
+                coordinator.social_service_center_id = self.request.user.pk
                 coordinator.save()
-
-                return JsonResponse({'status': 'success'})
             else:
-                JsonResponse({'non_field_errors': _('Обраний ЦСССДМ не зареєстрований.')})
-        return JsonResponse({'non_field_errors': _('Оберіть центр зі списку')})
-
-    def form_invalid(self, form):
-        errs = dict(form.errors.items())
-        if 'phone_numbers' in errs.keys():
-            errs['coordinator_phone_numbers'] = errs['phone_numbers']
-        return JsonResponse(errs)
+                errs = dict(coordinator_form.errors.items())
+                if 'phone_numbers' in errs.keys():
+                    errs['coordinator_phone_numbers'] = errs['phone_numbers']
+                    del errs['phone_numbers']
+                return JsonResponse(errs)
+        else:
+            return JsonResponse({'non_field_errors': _('Оберіть центр зі списку')})
+        return JsonResponse({'status': 'success'})
 
 
 class PublicServiceMainPageView(TemplateView):

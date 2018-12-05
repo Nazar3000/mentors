@@ -1,3 +1,4 @@
+from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from users.constants import UserTypes
@@ -9,7 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 User = get_user_model()
 
 
-class PublicOrganizationSignUpStep0Form(SignUpStep0Form):
+class PublicServiceSignUpStep0Form(SignUpStep0Form):
 
     def clean_master_key(self):
         master_key = self.cleaned_data['master_key']
@@ -28,5 +29,14 @@ class PublicOrganizationSignUpStep0Form(SignUpStep0Form):
         return user
 
 
-
-
+class PublicServiceForm(forms.ModelForm):
+    class Meta:
+        model = PublicService
+        fields = (
+            'name',
+            'phone_number',
+            'address',
+            'website',
+            'contract_number',
+            'licence',
+        )
