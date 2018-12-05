@@ -500,7 +500,7 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
 
     def post(self, request, *args, **kwargs):
         action = kwargs['action']
-        if action == 'change_light_data':
+        if action == 'change_light_data' and 'pk' in request.POST.keys():
             public_service = PublicService.objects.get(pk=request.POST['pk'])
             public_service.status = request.POST['status']
             public_service.save()

@@ -22,6 +22,8 @@
       {% include 'mentor_header.html' %}
     {% elif user.is_authenticated and user.user_type == 2 %}
         {% include 'social_services/social_service_header.html' %}
+    {% elif user.is_authenticated and user.user_type == 3 %}
+      {% include 'public_services/public_service_header.html' %}
     {% else %}
       {% include 'header.html' %}
     {% endif %}

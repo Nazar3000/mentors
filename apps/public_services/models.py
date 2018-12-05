@@ -2,7 +2,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 
-class PublicOrganizationMasterKey(models.Model):
+class PublicServiceMasterKey(models.Model):
     master_key_validator = RegexValidator(
         regex=r'^.{8,12}$')
     master_key = models.CharField(
@@ -10,7 +10,7 @@ class PublicOrganizationMasterKey(models.Model):
         validators=[master_key_validator])
 
 
-class PublicOrganizationVideo(models.Model):
+class PublicServiceVideo(models.Model):
 
     PAGE_CHOICES = ((1, 'Main'),
                     (2, 'Video Mentor'),

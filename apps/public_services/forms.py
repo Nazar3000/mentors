@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from users.constants import UserTypes
-from .models import PublicOrganizationMasterKey
+from .models import PublicServiceMasterKey
 from social_services.forms import SignUpStep0Form
 from django.contrib.auth.forms import UserCreationForm
 
@@ -12,7 +12,7 @@ class PublicOrganizationSignUpStep0Form(SignUpStep0Form):
 
     def clean_master_key(self):
         master_key = self.cleaned_data['master_key']
-        if not PublicOrganizationMasterKey.objects.filter(master_key=master_key).exists():
+        if not PublicServiceMasterKey.objects.filter(master_key=master_key).exists():
             raise ValidationError('Невірний ключ.')
         return master_key
 

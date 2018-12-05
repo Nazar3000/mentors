@@ -20,7 +20,7 @@ class SignInView(LoginView):
         elif user_type == UserTypes.SOCIAL_SERVICE_CENTER:
             return resolve_url('social_services:main')
         elif user_type == UserTypes.PUBLIC_SERVICE:
-            return resolve_url('public_organizations:main')
+            return resolve_url('public_services:main')
         elif user_type == UserTypes.GOVERN_USER:
             pass
 

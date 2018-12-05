@@ -25,7 +25,7 @@ urlpatterns = [
     path('mentor/', include('mentors.urls')),
     path('volunteer/', include('volunteers.urls')),
     path('social-service/', include('social_services.urls')),
-    path('public-organizations/', include('public_organizations.urls')),
+    path('public-organization/', include('public_services.urls')),
     path('social-policy/', include('social_policy.urls')),
     path('', include('django.contrib.auth.urls')),
 ] \

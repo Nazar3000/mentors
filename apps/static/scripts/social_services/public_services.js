@@ -172,7 +172,7 @@ const publicServices = new Vue({
         success: (res) => {
           if (res.public_service_data) {
             if (this.publicServiceModalDisplay) {
-              this.lightPublicServices.push(res);
+              this.lightPublicServices.push(res.public_service_data);
             }
 
             this.mentorsData = res.mentors_data;
