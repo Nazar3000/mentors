@@ -44,9 +44,15 @@
               {% for material in object_list %}
                 {% if not material.category %}
                   <div class="css-material-item">
+                    {% if material.video_link %}
+                      <iframe width="640" height="420" src="{{ material.video_link }}" frameborder="0"
+                              allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+                    {% endif %}
                     <p>{{ material.title }}</p>
-                    <a href="{% url 'social_services:download_file' material.pk %}" target="_blank"><img
-                        src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                    {% if material.file %}
+                      <a href="{{ material.file.url }}" target="_blank" download><img
+                          src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                    {% endif %}
                   </div>
                 {% endif %}
               {% endfor %}
@@ -69,12 +75,12 @@
                 {% if material.category == category %}
                   <div class="css-material-video">
                     {% if material.video_link %}
-                      <iframe width="640" height="420" src="https://www.youtube.com/embed/rReXd742OUE" frameborder="0"
+                      <iframe width="640" height="420" src="{{ material.video_link }}" frameborder="0"
                               allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
                     {% endif %}
                     <p>{{ material.title }}</p>
                     {% if material.file %}
-                      <a href="{% url 'social_services:download_file' material.pk %}" target="_blank"><img
+                      <a href="{{ material.file.url }}" target="_blank" download><img
                           src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
                     {% endif %}
                   </div>

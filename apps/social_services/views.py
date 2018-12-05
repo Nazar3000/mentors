@@ -2,13 +2,12 @@ import re
 from contextlib import suppress
 
 import rstr
-from django.contrib.auth.mixins import AccessMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError
 from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import redirect, HttpResponse
-from django.utils.datastructures import MultiValueDictKeyError
 from django.views.generic import TemplateView, FormView, DetailView, ListView
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
@@ -214,6 +213,7 @@ class MaterialView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(MaterialView, self).get_context_data(**kwargs)
+        context['object_list'] = context['object_list'].order_by('id')
         context['categories'] = MaterialCategory.objects.all()
         return context
 
