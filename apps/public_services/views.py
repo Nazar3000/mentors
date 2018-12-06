@@ -1,13 +1,25 @@
 from django.contrib.auth import login
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
 from social_services.models import BaseSocialServiceCenter
-from social_services.views import SignUpFormView, DatingView
+from social_services.views import SignUpFormView, DatingView, MainPageView
+from users.constants import UserTypes
+from users.models import SocialServiceCenter, PublicService
 from .forms import PublicServiceSignUpStep0Form, PublicServiceForm
 from django.views.generic import TemplateView
 from .models import PublicServiceVideo
+
+
+class CheckIfUserIsPublicServiceMixin(UserPassesTestMixin):
+    def test_func(self):
+        try:
+            PublicService.objects.get(user=self.request.user)
+            return self.request.user.user_type == UserTypes.PUBLIC_SERVICE
+        except (PublicService.DoesNotExist, TypeError):
+            return False
 
 
 class PublicServiceSignUpFormView(SignUpFormView):
@@ -68,10 +80,11 @@ class PublicServiceDatingView(DatingView):
         return JsonResponse({'status': 'success'})
 
 
-class PublicServiceMainPageView(TemplateView):
+class PublicServiceMainPageView(CheckIfUserIsPublicServiceMixin, MainPageView):
     template_name = 'public_services/main.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['main_video'] = PublicServiceVideo.objects.filter(page=1).first()
-        return context
+    def get_object(self):
+        return SocialServiceCenter.objects.get(publicservice__pk=self.request.user.pk)
+
+    def get_main_video(self):
+        return PublicServiceVideo.objects.filter(page=1).first()

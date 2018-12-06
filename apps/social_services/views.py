@@ -151,11 +151,17 @@ class DatingView(FormView, TemplateView):
 class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
     template_name = 'social_services/main.html'
 
+    def get_object(self):
+        return SocialServiceCenter.objects.get(pk=self.request.user.pk)
+
+    def get_main_video(self):
+        return SocialServiceVideo.objects.filter(page=1).first()
+
     def get_context_data(self, **kwargs):
         context = super(MainPageView, self).get_context_data(**kwargs)
-        context['main_video'] = SocialServiceVideo.objects.filter(page=1).first()
+        context['main_video'] = self.get_main_video()
 
-        current_social_service = SocialServiceCenter.objects.get(pk=self.request.user.pk)
+        current_social_service = self.get_object()
         coordinators = Coordinator.objects.filter(
             Q(social_service_center=current_social_service)
             | Q(public_service__in=current_social_service.publicservice_set.all())

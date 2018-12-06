@@ -1,24 +1,25 @@
-{% load static %}
+{% load static header_tags %}
 
-<header class="header-green">
+{% get_public_service user as public_service %}
+
+<header class="css-header-log">
   <div class="container">
-    <nav class="header-wrapp">
-      <div class="header-logo"><a href="/"><img src="{% static 'img/main-logo.svg' %}" alt=""></a></div>
-      <a class="header-trigger" href="#"><i class="fas fa-bars"></i></a>
-      <ul class="header-wrapp-link">
-        <li><a class="header-link" href="about.html">Про<br>наставництво</a></li>
-        <li class="header-wrapp-linkdropdown"><a class="header-link" href="#">Спеціалістам<br> з
-          наставництва<span><i class="fas fa-caret-down"></i></span></a>
-          <ul class="header-dropdown">
-            <li class="header-dropdown-item"><a class="header-dropdown-link" href="material.html">ЦСССДМ</a><a
-                class="header-dropdown-link" href="#">ССД</a><a class="header-dropdown-link" href="#">Заклады</a>
-            </li>
-          </ul>
-        </li>
-        <li class="header-dropp"><a class="header-link" href="volunteer.html">Допомогти<br>наставництву</a></li>
-      </ul>
-      <div class="header-btn"><a class="header-link header-login" href="log-in.html">Вхід<br> для
-        наставників</a><a class="header-link header-donate" href="#">Допомогти<br> фінансово</a></div>
+    <nav class="css-header-wrapp">
+      <div class="css-header-logo">
+        <a href="{% url 'public_services:main' %}">
+          <img src="{% static 'img/main-logo.svg' %}" alt="">
+        </a>
+      </div>
+      <div class="css-header-notification">
+        <a class="header-notification-title" href="question.html">Питання?</a>
+        <a href=""><i class="fas fa-bell"></i></a>
+        <a class="css-header-company" href="{% url 'public_services:main' %}">
+          <span>Особистий кабінет<br>{{ public_service.name }}</span>
+        </a>
+        <a class="css-header-company" href="{% url 'users:logout' %}">
+          Вийти
+        </a>
+      </div>
     </nav>
   </div>
 </header>
