@@ -38,5 +38,4 @@ class PublicServiceForm(forms.ModelForm):
             'address',
             'website',
             'contract_number',
-            'licence',
         )

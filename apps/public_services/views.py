@@ -3,10 +3,8 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
-from social_services.forms import DatingCoordinatorForm
 from social_services.models import BaseSocialServiceCenter
 from social_services.views import SignUpFormView, DatingView
-from users.models import PublicService
 from .forms import PublicServiceSignUpStep0Form, PublicServiceForm
 from django.views.generic import TemplateView
 from .models import PublicServiceVideo
@@ -34,11 +32,14 @@ class PublicServiceDatingView(DatingView):
     template_name = 'public_services/dating.html'
     form_class = PublicServiceForm
 
+    def get_queryset(self, q_filter):
+        return BaseSocialServiceCenter.objects.all()
+
     def form_valid(self, form):
-        if 'pk' in self.request.POST:
+        if 'pk' in self.request.POST.keys():
             service = BaseSocialServiceCenter.objects.get(pk=self.request.POST['pk']).service
             if service is None:
-                return JsonResponse({'non_field_errors': _('Обраний ЦСССДМ це не зареєстрований.')})
+                return JsonResponse({'non_field_errors': [_('Обраний ЦСССДМ ще не зареєстрований.')]})
 
             public_service = form.save(commit=False)
             public_service.user = self.request.user
@@ -54,7 +55,7 @@ class PublicServiceDatingView(DatingView):
 
             if coordinator_form.is_valid():
                 coordinator = coordinator_form.save(commit=False)
-                coordinator.social_service_center_id = self.request.user.pk
+                coordinator.public_service = public_service
                 coordinator.save()
             else:
                 errs = dict(coordinator_form.errors.items())
@@ -63,7 +64,7 @@ class PublicServiceDatingView(DatingView):
                     del errs['phone_numbers']
                 return JsonResponse(errs)
         else:
-            return JsonResponse({'non_field_errors': _('Оберіть центр зі списку')})
+            return JsonResponse({'non_field_errors': [_('Оберіть центр зі списку')]})
         return JsonResponse({'status': 'success'})
 
 

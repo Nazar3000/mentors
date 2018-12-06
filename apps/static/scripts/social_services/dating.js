@@ -4,6 +4,14 @@ const vm = new Vue({
   data: {
     searchValue: '',
     selectedSocialService: {},
+    publicService: {
+      name: '',
+      phone_number: '',
+      address: '',
+      website: '',
+      contract_number: '',
+      licence: ''
+    },
     baseSocialService: {},
     searchedSocialServices: [],
     coordinator: {
@@ -17,14 +25,22 @@ const vm = new Vue({
     }
   },
   methods: {
-    submitForm() {
+    submitForm(addPublicService=false) {
       const formData = new FormData();
-      const mergedObj = {...this.selectedSocialService, ...this.coordinator};
-      if (typeof this.selectedSocialService.phone_numbers === 'string') {
-        mergedObj.phone_numbers = this.selectedSocialService.phone_numbers.split(',');
+      let mergedObj = {};
+
+      if (addPublicService) {
+        mergedObj = {...this.publicService, ...this.coordinator};
+        mergedObj.pk = this.selectedSocialService.pk;
       } else {
-        mergedObj.phone_numbers = this.selectedSocialService.phone_numbers;
+        mergedObj = {...this.selectedSocialService, ...this.coordinator};
+        if (typeof this.selectedSocialService.phone_numbers === 'string') {
+          mergedObj.phone_numbers = this.selectedSocialService.phone_numbers.split(',');
+        } else {
+          mergedObj.phone_numbers = this.selectedSocialService.phone_numbers;
+        }
       }
+
       if (this.coordinator.phone_numbers) {
         mergedObj.coordinator_phone_numbers = this.coordinator.phone_numbers.split(',');
       }
@@ -44,7 +60,11 @@ const vm = new Vue({
         type: 'POST',
         success: (res) => {
           if (res.status === 'success') {
-            window.location.replace('/social-service/main/');
+            if (addPublicService) {
+              window.location.replace('/public-service/main/');
+            } else {
+              window.location.replace('/social-service/main/');
+            }
           } else {
             this.errors = res;
           }

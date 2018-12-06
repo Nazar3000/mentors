@@ -16,6 +16,7 @@
                    type="text"
                    placeholder="Почніть вводити назву Центру починаючи з міста"
                    v-model="searchValue">
+            <span class="error-form" v-for="err in errors.non_field_errors">[[ err ]]</span>
             <div class="form-dating-box-items">
               <ul class="form-dating-items">
                 <li class="form-dating-item"
@@ -27,6 +28,33 @@
               </ul>
             </div>
           </div>
+
+          <div class="form-dating-subtitle-input">Введіть дані організації</div>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['name']}"
+                 type="text"
+                 placeholder="Назва громадської організації"
+                 v-model="publicService.name">
+          <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['phone_number']}"
+                 type="text"
+                 placeholder="Контактний телефон"
+                 v-model="publicService.phone_number">
+          <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['address']}"
+                 type="text"
+                 placeholder="Адреса"
+                 v-model="publicService.address">
+          <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['website']}"
+                 type="text"
+                 placeholder="Сайт"
+                 v-model="publicService.website">
+          <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
+          <input :class="{'form-dating-input': true, 'alert-border': errors['contract_number']}"
+                 type="text"
+                 placeholder="Номер договору"
+                 v-model="publicService.contract_number">
+          <span class="error-form" v-for="err in errors.contract_number">[[ err ]]</span>
 
           <div class="form-dating-subtitle-input">Контактні данні співробітника, що контактує з Наставниками<span>(Ви завжди можете змінити цю інформацію)</span></div>
           <input :class="{'form-dating-input': true, 'alert-border': errors['full_name']}"
@@ -44,7 +72,7 @@
                  placeholder="Email"
                  v-model="coordinator.email">
           <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
-          <input class="form-dating-button" type="button" value="Зберегти" @click="submitForm">
+          <input class="form-dating-button" type="button" value="Зберегти" @click="submitForm(true)">
         </form>
       </div>
       <div class="col-md-2"></div>

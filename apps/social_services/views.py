@@ -141,7 +141,7 @@ class DatingView(FormView, TemplateView):
                     del errs['phone_numbers']
                 return JsonResponse(errs)
         else:
-            return JsonResponse({'non_field_errors': _('Оберіть центр зі списку')})
+            return JsonResponse({'non_field_errors': [_('Оберіть центр зі списку')]})
         return JsonResponse({'status': 'success'})
 
     def form_invalid(self, form):
