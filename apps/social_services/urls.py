@@ -15,7 +15,7 @@ urlpatterns = [
 
     path('main/', views.MainPageView.as_view(), name='main'),
     path('video/', views.VideoMentorView.as_view(), name='video'),
-    re_path(r'^mentor-card/(?P<pk>[\w-]+)/$', views.MentorCardView.as_view(), name='mentor_card'),
+    re_path(r'^mentors/mentor-card/(?P<pk>[\w-]+)/$', views.MentorCardView.as_view(), name='mentor_card'),
     path('material/', views.MaterialView.as_view(), name='material'),
     path('download_file/<int:material_id>/', views.download_file, name='download_file'),
     path('mentors/', views.MentorsView.as_view(), name='mentors'),

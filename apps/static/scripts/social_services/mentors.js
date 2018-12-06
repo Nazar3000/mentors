@@ -43,7 +43,7 @@ const mentors = new Vue({
   },
   methods: {
     getLightData() {
-      $.get('/social-service/mentors/?get_light_data', (res) => {
+      $.get('?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
         this.searchedMentors = this.lightMentors;
         if (this.filterImgPath === this.filterImgPaths.ab) {
@@ -60,7 +60,7 @@ const mentors = new Vue({
       this.expanded = !this.expanded;
 
       if (this.expanded) {
-        $.get(`/social-service/mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
+        $.get(`?get_extended_data&mentor_id=${mentorId}`, (res) => {
           this.extendedMentor = res.mentor_data;
           this.mentorSocServiceData = res.mentor_social_service_center_data;
         });
@@ -76,7 +76,7 @@ const mentors = new Vue({
       const thisContext = this;
 
       $.ajax({
-        url: '/social-service/mentors/change_extended_data/',
+        url: 'change_extended_data/',
         data: formData,
         processData: false,
         contentType: false,
@@ -118,7 +118,7 @@ const mentors = new Vue({
       }
 
       $.ajax({
-        url: '/social-service/mentors/change_social_service_center_data/',
+        url: 'change_social_service_center_data/',
         data: formData,
         processData: false,
         contentType: false,
@@ -193,7 +193,7 @@ const mentors = new Vue({
       return pubService ? pubService.name : 'ЦССДМ'
     },
     saveMentoreeName(mentoreeName) {
-      $.post('/social-service/mentors/add_mentoree/',
+      $.post('add_mentoree/',
         {'mentoree_full_name': mentoreeName, 'mentor_pk': this.extendedMentor.pk});
     },
     dynamicSort(property) {
@@ -232,7 +232,7 @@ const mentors = new Vue({
           }
 
           $.ajax({
-            url: '/social-service/mentors/change_light_data/',
+            url: 'change_light_data/',
             data: formData,
             processData: false,
             contentType: false,

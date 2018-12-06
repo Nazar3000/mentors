@@ -5,9 +5,9 @@ from django.shortcuts import redirect
 from django.utils.translation import gettext_lazy as _
 
 from social_services.models import BaseSocialServiceCenter
-from social_services.views import SignUpFormView, DatingView, MainPageView
+from social_services.views import SignUpFormView, DatingView, MainPageView, MentorsView, MentorCardView, MaterialView
 from users.constants import UserTypes
-from users.models import SocialServiceCenter, PublicService
+from users.models import SocialServiceCenter, PublicService, Mentor
 from .forms import PublicServiceSignUpStep0Form, PublicServiceForm
 from django.views.generic import TemplateView
 from .models import PublicServiceVideo
@@ -88,3 +88,27 @@ class PublicServiceMainPageView(CheckIfUserIsPublicServiceMixin, MainPageView):
 
     def get_main_video(self):
         return PublicServiceVideo.objects.filter(page=1).first()
+
+
+class PublicServiceMentorsView(CheckIfUserIsPublicServiceMixin, MentorsView):
+    template_name = 'public_services/mentors.html'
+
+    def get_mentors_query_data(self, fields_select_query):
+        mentors_query_data = Mentor.objects.raw("""
+            SELECT
+                users_mentor.user_id,
+                {fields_select_query}
+            FROM users_mentor
+                JOIN users_coordinator ON users_mentor.coordinator_id = users_coordinator.id
+                JOIN mentors_mentorlicencekey ON users_mentor.licence_key_id = mentors_mentorlicencekey.id
+            WHERE users_coordinator.public_service_id = '{current_pub_service_id}'
+        """.format(current_pub_service_id=self.request.user.id, fields_select_query=fields_select_query))
+        return mentors_query_data
+
+
+class PublicServiceMentorCardView(CheckIfUserIsPublicServiceMixin, MentorCardView):
+    pass
+
+
+class PublicServiceMaterialView(MaterialView):
+    template_name = 'public_services/material.html'

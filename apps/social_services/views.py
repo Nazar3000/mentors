@@ -359,7 +359,7 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
             if form.is_valid():
                 mentor = form.save(commit=False)
                 if not mentor.pk:
-                    mentor.user = User.objects.get_or_create(
+                    mentor.user, created = User.objects.get_or_create(
                         email=form.cleaned_data['email'],
                         user_type=UserTypes.MENTOR
                     )
