@@ -1,0 +1,60 @@
+<div class="social-modal" v-if="mentorModalDisplay" :style="{'display': mentorModalDisplay ? 'block' : 'none'}">
+  <div class="social-modal-card">
+    <div class="social-info-edit">
+      <div class="social-card-img-edit">
+        <img :src="getImageUrl(extendedMentor.profile_image)" alt="" :class="{'alert-border': errors['profile_image']}">
+        <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
+      </div>
+      <div class="social-card-icon">
+        <label class="add-img" for="files">
+          <i class="fas fa-plus"></i>
+        </label>
+        <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
+        <a class="delete-img" href="javascript: void(0)" title="Delete image" @click="deleteProfileImage"><i class="fas fa-trash"></i></a>
+      </div>
+      <div class="social-card-title">
+        <h2>Наставник</h2>
+        <input class="social-input-name" type="text" placeholder="Ім’я" v-model="extendedMentor.first_name" :class="{'alert-border': errors['first_name']}">
+        <span class="error-form" v-for="err in errors.first_name">[[ err ]]</span>
+        <input class="social-input-surname" type="text" placeholder="Прізвище" v-model="extendedMentor.last_name" :class="{'alert-border': errors['last_name']}">
+        <span class="error-form" v-for="err in errors.last_name">[[ err ]]</span>
+        <span>Дата народження</span>
+        <input class="social-input-birth" type="text" placeholder="" v-model="extendedMentor.date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
+        <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
+      </div>
+      <div class="social-card-edit" @click="submitMentorCard"><i class="fas fa-check"></i></div>
+      <div class="social-card-close" ref="closeAddMentorModal" @click="closeMentorCard"><i class="fas fa-times"></i></div>
+    </div>
+    <div class="social-card-line"></div>
+    <div class="social-card-stat">
+      <div class="social-card-wrapp">
+        <div>
+          <span>Статус:</span>
+          <select class="triangle-green" v-model="extendedMentor.status" :class="{'alert-border': errors['status']}">
+            <option v-for="key, value in mentorStatuses"
+                    :value="value"
+            >
+              [[ key ]]
+            </option>
+          </select>
+          <span class="error-form" v-for="err in errors.status">[[ err ]]</span>
+          <span>Телефон:</span>
+          <input type="text" v-model="extendedMentor.phone_number" :class="{'alert-border': errors['phone_number']}">
+          <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+          <span>Email:</span>
+          <input type="text" v-model="extendedMentor.email" :class="{'alert-border': errors['email']}">
+          <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+        </div>
+        <div>
+          <span class="error-form" v-for="err in errors.responsible" :class="{'alert-border': errors['responsible']}">[[ err ]]</span>
+          <span>Адреса:</span>
+          <input type="text" v-model="extendedMentor.actual_address" :class="{'alert-border': errors['actual_address']}">
+          <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
+          <span>Дата подачі анкети:</span>
+          <input type="text" placeholder="дд.мм.рррр" v-model="extendedMentor.questionnaire_creation_date" :class="{'alert-border': errors['questionnaire_creation_date']}">
+          <span class="error-form" v-for="err in errors.questionnaire_creation_date">[[ err ]]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

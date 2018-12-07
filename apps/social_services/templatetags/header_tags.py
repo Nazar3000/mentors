@@ -1,5 +1,7 @@
 from django import template
 
+from users.models import PublicService
+
 register = template.Library()
 
 
@@ -10,4 +12,7 @@ def get_social_service(user):
 
 @register.simple_tag
 def get_public_service(user):
-    return user.publicservice
+    try:
+        return PublicService.objects.get(user=user)
+    except:
+        return ''

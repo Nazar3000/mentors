@@ -28,7 +28,7 @@ class PublicServiceSignUpFormView(SignUpFormView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('public_services:video')
+        return redirect('public_services:dating')
 
 
 class PublicServiceVideoMentorView(TemplateView):
