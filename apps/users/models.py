@@ -381,3 +381,16 @@ class Coordinator(models.Model):
             raise Coordinator.DoesNotExist
 
         return coordinator
+
+
+class UsefulContact(models.Model):
+    name = models.CharField(max_length=256)
+    logo = models.ImageField(upload_to='useful_contacts')
+    description = models.TextField()
+    phone_regex = RegexValidator(
+        regex=r'\+?1?\d$')
+    phone_number = models.CharField(
+        max_length=17,
+        validators=[phone_regex])
+    email = models.EmailField()
+    address = models.CharField(max_length=4096)

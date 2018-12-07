@@ -17,9 +17,9 @@ from govern_users.models import MentorSchoolVideo, MentorTip, TipOfTheDay
 from social_services.models import BaseSocialServiceCenter
 from users.constants import UserTypes
 from users.templatetags.date_tags import get_time_spent, get_age
-from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation, RoadmapDoc, \
-    MIA
-from users.models import Mentor, Organization, SocialServiceCenterAssessment, SocialServiceCenter
+from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, MeetingImage, Proforientation, \
+    RoadmapDoc, MIA
+from users.models import Mentor, Organization, SocialServiceCenterAssessment, UsefulContact
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
     MentorSettingsForm, SscReportForm, SscAssessForm, ProforientationForm, QuestionForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
@@ -600,9 +600,21 @@ class SscAssessView(UpdateView):
         return JsonResponse(dict(form.errors.items()))
 
 
-class UsefulContactsView(ListView):
+class UsefulContactsView(TemplateView):
     template_name = 'mentors/contacts.html'
-    queryset = SocialServiceCenter.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        if 'get_contacts' in request.GET.keys():
+            useful_contacts = UsefulContact.objects.all().values(
+                'name',
+                'logo',
+                'description',
+                'phone_number',
+                'email',
+                'address',
+            )
+            return JsonResponse(nest_queryset(3, useful_contacts), safe=False)
+        return super().get(request, *args, **kwargs)
 
 
 class ProforientationView(FormView):

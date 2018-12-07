@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from users.models import UsefulContact
 from .models import (
     MentorLicenceKey,
     Mentoree,
@@ -95,4 +96,9 @@ class RoadmapDocAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(UsefulContact)
+class UsefulContactAdmin(admin.ModelAdmin):
     pass
