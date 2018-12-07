@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .models import Meeting, MeetingImage, MentorQuestionnaire, MentorQuestionnaireEducation, \
     MentorQuestionnaireJob, MentorQuestionnaireFamilyMember, MentorQuestionnaireChildrenWorkExperience, Mentoree, Post, \
-    Proforientation
+    Proforientation, Question
 from users.constants import UserTypes
 from users.models import Mentor, SocialServiceCenterReport, SocialServiceCenterAssessment
 
@@ -231,4 +231,12 @@ class ProforientationForm(forms.ModelForm):
             'meeting_days',
             'business_description',
             'phone_number',
+        )
+
+
+class QuestionForm(forms.ModelForm):
+    class Meta:
+        model = Question
+        fields = (
+            'body',
         )

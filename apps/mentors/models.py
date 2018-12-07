@@ -669,3 +669,11 @@ class RoadmapDoc(models.Model):
     file = models.FileField(
         upload_to='mentorees/roadmap_docs'
     )
+
+
+class Question(models.Model):
+    mentor = models.ForeignKey(
+        to='users.Mentor',
+        on_delete=models.CASCADE
+    )
+    body = models.TextField()

@@ -10,7 +10,7 @@
         </a>
       </div>
       <div class="header-notification" id="notifications">
-        <a class="header-notification-title" href="">Питання?</a>
+        <a class="header-notification-title" href="{% url 'mentors:question' %}">Питання?</a>
         <div class="message"
              v-if="currentMode === modes.nonEmptySwallowed || currentMode === modes.nonEmptyExpanded"
         >

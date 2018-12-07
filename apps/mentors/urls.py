@@ -24,6 +24,7 @@ urlpatterns = [
     path('settings/', login_required(views.MentorSettingsView.as_view()), name='mentor_settings'),
     path('contacts/', login_required(views.UsefulContactsView.as_view()), name='useful_contacts'),
     path('proforientation/', login_required(views.ProforientationView.as_view()), name='proforientation'),
+    path('question/', login_required(views.QuestionView.as_view()), name='question'),
 
     path('prefooter/report-ssc/', login_required(views.SscReportView.as_view()), name='ssc_report'),
     path('prefooter/assess-ssc/', login_required(views.SscAssessView.as_view()), name='ssc_assess'),

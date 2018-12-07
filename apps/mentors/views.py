@@ -21,7 +21,7 @@ from .models import MentorLicenceKey, Post, PostComment, StoryImage, Meeting, Me
     MIA
 from users.models import Mentor, Organization, SocialServiceCenterAssessment, SocialServiceCenter
 from .forms import SignUpStep0Form, SignUpStep1Form, SignUpStep2Forms, MeetingForm, MentoreeEditForm, PostForm, \
-    MentorSettingsForm, SscReportForm, SscAssessForm, ProforientationForm
+    MentorSettingsForm, SscReportForm, SscAssessForm, ProforientationForm, QuestionForm
 from .constants import Religions, MaritalStatuses, Genders, HomeTypes, AbleToVisitChildFrequency, \
     MentoringProgramFindOutPlaces, EducationTypes, LocalChurchVisitingFrequency, RoadmapDocTypes
 
@@ -645,6 +645,18 @@ class ProforientationView(FormView):
     def form_invalid(self, form):
         errs = dict(form.errors.items())
         return JsonResponse(errs)
+
+
+class QuestionView(CreateView):
+    template_name = 'mentors/question.html'
+    form_class = QuestionForm
+    success_url = reverse_lazy('mentors:question')
+
+    def form_valid(self, form):
+        question = form.save(commit=False)
+        question.mentor_id = self.request.user.pk
+        question.save()
+        return redirect(self.success_url)
 
 
 def get_notifications(request):
