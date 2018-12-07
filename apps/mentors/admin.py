@@ -53,11 +53,6 @@ class PostCommentAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(RoadmapDoc)
-class RoadmapDocAdmin(admin.ModelAdmin):
-    pass
-
-
 @admin.register(MentorQuestionnaire)
 class MentorQuestionnaireAdmin(admin.ModelAdmin):
     pass
