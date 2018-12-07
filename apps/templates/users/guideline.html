@@ -185,8 +185,14 @@
             <p class="block-right">Вітаємо! наразі<br> немає перепон для<br> того, щоб ти став<br> наставником!</p>
           </div>
           <div class="main-be-mentor-line-btn">
-            <div class="link-wrapp"><a class="link-wrapp-face" href=""><i class="fab fa-facebook-f"></i></a><a class="link-wrapp-tweet" href=""><i class="fab fa-twitter"></i></a><a class="link-wrapp-google" href=""><i class="fab fa-google-plus-g"></i></a></div><a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a>
-            <a class="link-wrapp-btn-yellow" href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати наставником</a>
+            <div class="link-wrapp">
+              <a class="link-wrapp-face" onclick="share('http://www.facebook.com/sharer/sharer.php?u=')"><i class="fab fa-facebook-f"></i></a>
+              <a class="link-wrapp-tweet" onclick="share('https://twitter.com/intent/tweet?url=')"><i class="fab fa-twitter"></i></a>
+              <a class="link-wrapp-google" onclick="share('https://plus.google.com/share?url=')"><i
+                  class="fab fa-google-plus-g"></i></a></div>
+              <a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a>
+              <a class="link-wrapp-btn-yellow" href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати
+              наставником</a>
           </div>
         </div>
       </div>
@@ -221,4 +227,17 @@
       </div>
     </section>
   </div>
+{% endblock %}
+
+
+{% block extra_js %}
+  <script>
+    function share(basePath) {
+      window.open(`${basePath}${window.location.href}`,
+        'Поділитися',
+        'resizable,height=260,width=370'
+      );
+    }
+
+  </script>
 {% endblock %}
