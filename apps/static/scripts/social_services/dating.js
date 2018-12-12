@@ -73,8 +73,6 @@ const vm = new Vue({
     },
     submitModal() {
       const formData = new FormData();
-      const data = this.baseSocialService;
-      data['name'] = data.city + ', ' + data.address;
 
       for (let key in this.baseSocialService) {
           if (this.baseSocialService.hasOwnProperty(key)) {

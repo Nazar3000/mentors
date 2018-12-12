@@ -37,6 +37,12 @@
             <div class="form-dating-subtitle-input">Перевірте контактні данні Центра та при необхідності виправте</div>
             <input class="form-dating-input"
                    type="text"
+                   placeholder="Назва (включаючи місто)"
+                   v-model="baseSocialService.name"
+            >
+            <span class="error-form" v-for="err in errors.modal.name">[[ err ]]</span>
+            <input class="form-dating-input"
+                   type="text"
                    placeholder="Місто"
                    v-model="baseSocialService.city"
             >
@@ -93,7 +99,7 @@
                  placeholder="Email"
                  v-model="coordinator.email">
           <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
-          <input class="form-dating-button" type="button" value="Зберегти" @click="submitForm">
+          <input class="form-dating-button" type="button" value="Зберегти" @click="submitForm()">
         </form>
       </div>
       <div class="col-md-2"></div>
