@@ -584,7 +584,9 @@ class Meeting(models.Model):
     date = models.DateField()
     description = models.TextField()
     observation = models.TextField()
-    note_for_next_meeting = models.TextField()
+    note_for_next_meeting = models.TextField(
+        blank=True
+    )
 
 
 class MeetingImage(models.Model):

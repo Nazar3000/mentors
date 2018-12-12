@@ -93,16 +93,16 @@ $(document).ready(function () {
 
     // slider diary
 
-    $('#vertical').lightSlider({
-        gallery: true,
-        item: 1,
-        vertical: true,
-        verticalHeight: 250,
-        vThumbWidth: 70,
-        thumbItem: 4,
-        thumbMargin: 0,
-        slideMargin: 0,
-    });
+    // $('.vertical').lightSlider({
+    //     gallery: true,
+    //     item: 1,
+    //     vertical: true,
+    //     verticalHeight: 250,
+    //     vThumbWidth: 70,
+    //     thumbItem: 4,
+    //     thumbMargin: 0,
+    //     slideMargin: 0,
+    // });
 
 
     // add img

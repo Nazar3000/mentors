@@ -10,7 +10,7 @@
       </div>
     </section>
     <section class="diary">
-      <div class="container" id="meeting-list">
+      <div class="container" id="meeting-list" v-cloak>
         <div class="diary-header">
           <div class="diary-header-link" v-if="!itemAdding">
             <a href="javascript: void(0)" @click="insertNewMeeting" ref="addNewBtn">
@@ -189,5 +189,4 @@
     const userId = '{{ user.pk }}';
   </script>
   <script src="{% static 'scripts/meeting_list.js' %}"></script>
-
 {% endblock %}
