@@ -114,16 +114,28 @@ class MentorQuestionnaire(models.Model):
     # 7. Living conditions
     home_type = models.CharField(
         max_length=20,
-        choices=HomeTypes.choices()
+        choices=HomeTypes.choices(),
+        blank=True,
+        null=True
     )
     room_count = models.PositiveSmallIntegerField(
-        default=1
+        default=1,
+        blank=True,
+        null=True
     )
     people_per_room = models.PositiveSmallIntegerField(
-        default=1
+        default=1,
+        blank=True,
+        null=True
     )
-    home_family_members_data = models.TextField()
-    pets_data = models.TextField()
+    home_family_members_data = models.TextField(
+        blank=True,
+        null=True
+    )
+    pets_data = models.TextField(
+        blank=True,
+        null=True
+    )
 
     # 8. Work with children experience
     # See MentorQuestionnaireChildrenWorkExperience model
