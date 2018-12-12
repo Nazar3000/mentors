@@ -5,10 +5,10 @@ const reportSsc = new Vue({
     selected_ssc: null,
     content: ''
   },
+  created() {
+    this.selected_ssc = center_id;
+  },
   methods: {
-    selectSsc(sccId) {
-      this.selected_ssc = sccId;
-    },
     submitReport() {
       $.post('/mentor/prefooter/report-ssc/', this.$data, () => {
         $('.complaint-modal').fadeOut(400);

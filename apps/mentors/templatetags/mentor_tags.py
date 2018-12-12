@@ -1,7 +1,7 @@
 from django import template
 from django.db.models.fields.files import ImageFieldFile, FieldFile
 
-from users.models import Mentor, SocialServiceCenter, Coordinator
+from users.models import Mentor, SocialServiceCenter
 
 register = template.Library()
 
@@ -20,6 +20,14 @@ def get_mentor_data(user, attr):
 @register.simple_tag
 def get_social_service_centers():
     return SocialServiceCenter.objects.all().values('pk', 'name')
+
+
+@register.simple_tag
+def get_mentor_social_service_center(user):
+    coordinator = Mentor.objects.get(user=user).coordinator
+    center = coordinator.social_service_center \
+        if coordinator.social_service_center else coordinator.public_service.social_service_center
+    return center
 
 
 @register.simple_tag

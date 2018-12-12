@@ -162,11 +162,6 @@ class SocialServiceCenter(models.Model):
         )
     )
 
-    # def clean_fields(self, exclude=None):
-    #     super().clean_fields(exclude=exclude)
-    #     if self.user.user_type != UserTypes.SOCIAL_SERVICE_CENTER:
-    #         raise ValidationError({'user': _('Користувач має бути типу "ЦССДМ".')})
-
 
 class SocialServiceCenterReport(models.Model):
     ssc = models.ForeignKey(
@@ -251,11 +246,6 @@ class PublicService(models.Model):
         for c in self.coordinators.all().iterator():
             pair_count += c.mentors.count()
         return pair_count
-
-    # def clean_fields(self, exclude=None):
-    #     super().clean_fields(exclude=exclude)
-    #     if self.user.user_type != UserTypes.PUBLIC_SERVICE:
-    #         raise ValidationError({'user': _('Користувач має бути типу "громадська організація".')})
 
     def save(self, *args, **kwargs):
         if not self.licence:

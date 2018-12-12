@@ -1,21 +1,12 @@
 {% load static mentor_tags %}
+{% get_mentor_social_service_center user as social_service_center %}
 
 <section class="pre-footer-contact">
   <div class="container">
     <div class="pre-footer-wrapp">
       <div class="pre-footer-share">
-        <h2>Поділись своєю<br>думкою</h2><span>Поскаржитись на</span>
+        <h2>Поділись своєю<br>думкою</h2><span>Поскаржитись на {{ social_service_center.name }}</span>
         <div class="pre-footer-search" id="prefooter-report">
-          {% get_social_service_centers as social_service_centers %}
-          <select @change="selectSsc($event.target.value)">
-            <option value="" hidden="">Центр соц служб</option>
-            {% for center in social_service_centers %}
-              <option value="{{ center.pk }}"
-              >
-                {{ center.name }}
-              </option>
-            {% endfor %}
-          </select>
           <button class="complaint" :disabled="!selected_ssc">Надіслати</button>
           <div class="complaint-modal">
             <div class="complaint-card">
@@ -100,3 +91,7 @@
     </div>
   </div>
 </section>
+
+<script>
+  let center_id = '{{ social_service_center.pk }}';
+</script>
