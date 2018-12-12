@@ -92,7 +92,7 @@
             <div class="page-form-symptom">
               <div class="page-form-symptom-item">
                 <p>Нарколога</p>
-                <div class="page-form-check-symptom">
+                <div class="page-form-check-symptom" :class="{'alert-border': errors['narcologist']}">
                   <label class="form-check">
                     <input type="radio" value="Yes" v-model="narcologist"><span class="form-check-label-sm">Так</span>
                   </label>
@@ -100,10 +100,11 @@
                     <input type="radio" value="No" v-model="narcologist" checked="checked"><span class="form-check-label-sm">Hi</span>
                   </label>
                 </div>
+                <span class="error-form" v-for="err in errors.narcologist">[[ err ]]</span>
               </div>
               <div class="page-form-symptom-item">
                 <p>Психіатра</p>
-                <div class="page-form-check-symptom">
+                <div class="page-form-check-symptom" :class="{'alert-border': errors['psychiatrist']}">
                   <label class="form-check">
                     <input type="radio" value="Yes" v-model="psychiatrist"><span class="form-check-label-sm">Так</span>
                   </label>
@@ -111,10 +112,11 @@
                     <input type="radio" value="No" v-model="psychiatrist" checked="checked"><span class="form-check-label-sm">Hi</span>
                   </label>
                 </div>
+                <span class="error-form" v-for="err in errors.psychiatrist">[[ err ]]</span>
               </div>
               <div class="page-form-symptom-item">
                 <p>Фтизіатра</p>
-                <div class="page-form-check-symptom">
+                <div class="page-form-check-symptom" :class="{'alert-border': errors['phthisiatrician']}">
                   <label class="form-check">
                     <input type="radio" value="Yes" v-model="phthisiatrician"><span class="form-check-label-sm">Так</span>
                   </label>
@@ -122,10 +124,11 @@
                     <input type="radio" value="No" v-model="phthisiatrician" checked="checked"><span class="form-check-label-sm">Hi</span>
                   </label>
                 </div>
+                <span class="error-form" v-for="err in errors.phthisiatrician">[[ err ]]</span>
               </div>
               <div class="page-form-symptom-item">
                 <p>Терапевта</p>
-                <div class="page-form-check-symptom">
+                <div class="page-form-check-symptom" :class="{'alert-border': errors['therapist']}">
                   <label class="form-check">
                     <input type="radio" value="Yes" v-model="therapist"><span class="form-check-label-sm">Так</span>
                   </label>
@@ -133,12 +136,13 @@
                     <input type="radio" value="No" v-model="therapist" checked="checked"><span class="form-check-label-sm">Hi</span>
                   </label>
                 </div>
+                <span class="error-form" v-for="err in errors.therapist">[[ err ]]</span>
               </div>
             </div>
             <div class="page-form-symptom">
               <div class="page-form-symptom-item-new">
                 <p>Дерматовенеролога</p>
-                <div class="page-form-check-symptom-new">
+                <div class="page-form-check-symptom-new" :class="{'alert-border': errors['dermatovenereologist']}">
                   <label class="form-check">
                     <input type="radio" value="Yes" v-model="dermatovenereologist"><span class="form-check-label-sm">Так</span>
                   </label>
@@ -146,6 +150,7 @@
                     <input type="radio" value="No" v-model="dermatovenereologist" checked="checked"><span class="form-check-label-sm">Hi</span>
                   </label>
                 </div>
+                <span class="error-form" v-for="err in errors.dermatovenereologist">[[ err ]]</span>
               </div>
             </div>
             <div class="blue-title">* Якщо так, то вкажіть назву медичної установи, термін перебування</div>

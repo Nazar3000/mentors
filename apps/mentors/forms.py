@@ -54,6 +54,12 @@ class SignUpStep1Form(forms.ModelForm):
 
 
 class MentorQuestionnaireForm(forms.ModelForm):
+    narcologist = forms.BooleanField(required=True)
+    psychiatrist = forms.BooleanField(required=True)
+    phthisiatrician = forms.BooleanField(required=True)
+    therapist = forms.BooleanField(required=True)
+    dermatovenereologist = forms.BooleanField(required=True)
+
     class Meta:
         model = MentorQuestionnaire
         exclude = (
