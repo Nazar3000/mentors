@@ -123,22 +123,5 @@ const meetingList = new Vue({
       });
       this.itemAdding = true;
     }
-  },
-  watch: {
-    meetings: {
-      handler: function (newMeetings) {
-        $('.vertical').lightSlider({
-          gallery: true,
-          item: 1,
-          vertical: true,
-          verticalHeight: 250,
-          vThumbWidth: 70,
-          thumbItem: 4,
-          thumbMargin: 0,
-          slideMargin: 0,
-        });
-      },
-      deep: true
-    },
   }
 });

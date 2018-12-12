@@ -47,3 +47,8 @@ class PublicServiceStatuses(ChoicesEnum):
     KNOW_ABOUT_EXISTING = _('Знаємо про її існування')
     COOPERATION_AGREEMENT = _('Домовленість про співпрацю')
     CONTRACT_SIGNED = _('Підписаний договір')
+
+
+class MaterialTypes(ChoicesEnum):
+    ORGANIZATION = _('organization')
+    SSD = _('ssd')

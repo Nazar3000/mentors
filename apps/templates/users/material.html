@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <div class="container">
+      <section class="material">
+        <h2>Матеріали для закладів</h2>
+        <div class="material-doc">
+          <div class="material-block-left">
+            <div class="material-blue-doc"><img src="{% static 'img/book.svg' %}">
+              <p>Законодавча база</p>
+              <p>Методологія</p>
+              <p>Договори</p>
+              <p>Література</p>
+            </div>
+          </div>
+          <div class="material-block-right">
+            <div class="material-block-one">
+              {% for material in object_list %}
+                {% if not material.category %}
+                  <div class="material-download">
+                    {% if material.video_link %}
+                      <iframe width="640" height="420" src="{{ material.video_link }}" frameborder="0"
+                              allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+                    {% endif %}
+                    <p>{{ material.title }}</p>
+                    {% if material.file %}
+                      <a href="{{ material.file.url }}" target="_blank" download><img
+                          src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% for category in categories %}
+          <div class="material-wrapp">
+            <div class="material-block-left">
+              <div class="material-blue-video">
+                {% if category.icon %}
+                  <img src="{{ category.icon.url }}">
+                {% endif %}
+                <p>{{ category.title }}</p>
+              </div>
+            </div>
+            <div class="material-block-right">
+              {% for material in object_list %}
+                {% if material.category == category %}
+                  <div class="material-block-frame">
+                    {% if material.video_link %}
+                      <iframe width="640" height="420" src="{{ material.video_link }}" frameborder="0"
+                              allow="autoplay; encrypted-media" allowfullscreen=""></iframe>
+                    {% endif %}
+                    <p>{{ material.title }}</p>
+                    {% if material.file %}
+                      <a href="{{ material.file.url }}" target="_blank" download><img
+                          src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    </div>
+  </div>
+{% endblock %}

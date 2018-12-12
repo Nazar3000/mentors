@@ -15,10 +15,10 @@
           <a class="header-link" href="#">Спеціалістам<br> з наставництва<span><i class="fas fa-caret-down"></i></span></a>
           <ul class="header-dropdown">
             <li class="header-dropdown-item">
-              <a class="header-dropdown-link" href="{% url 'social_services:main' %}">ЦСССДМ</a>
-              <a class="header-dropdown-link" href="#">Заклад</a>
-              <a class="header-dropdown-link" href="#">ССД</a>
-              <a class="header-dropdown-link" href="#">Матеріали</a>
+              <a class="header-dropdown-link" href="{% url 'social_services:ssc_login' %}">ЦСССДМ</a>
+              <a class="header-dropdown-link" href="{% url 'public_services:po_login' %}">Громадська організація</a>
+              <a class="header-dropdown-link" href="{% url 'users:organization_material' %}">Заклад</a>
+              <a class="header-dropdown-link" href="{% url 'users:ssd_material' %}">ССД</a>
             </li>
           </ul>
         </li>

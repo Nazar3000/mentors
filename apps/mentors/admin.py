@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.models import UsefulContact
+from users.models import UsefulContact, MaterialCategory, Material
 from .models import (
     MentorLicenceKey,
     Mentoree,
@@ -101,4 +101,14 @@ class QuestionAdmin(admin.ModelAdmin):
 
 @admin.register(UsefulContact)
 class UsefulContactAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(MaterialCategory)
+class MaterialCategoryAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
     pass

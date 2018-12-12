@@ -1,17 +1,14 @@
 import uuid
-from contextlib import suppress
 
 import rstr
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.postgres.fields import ArrayField
-from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, MaxValueValidator
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from .constants import UserTypes, MentorStatuses, PublicServiceStatuses
+from .constants import UserTypes, MentorStatuses, PublicServiceStatuses, MaterialTypes
 
 
 class UserManager(BaseUserManager):
@@ -384,3 +381,30 @@ class UsefulContact(models.Model):
         validators=[phone_regex])
     email = models.EmailField()
     address = models.CharField(max_length=4096)
+
+
+class MaterialCategory(models.Model):
+    title = models.CharField(max_length=256)
+    icon = models.ImageField(upload_to='icons', blank=True, null=True)
+    material_type = models.CharField(
+        max_length=10,
+        choices=MaterialTypes.choices()
+    )
+
+    class Meta:
+        verbose_name = "Material category"
+        verbose_name_plural = "Material categories"
+
+    def __str__(self):
+        return "{}".format(self.title)
+
+
+class Material(models.Model):
+    title = models.CharField(max_length=256)
+    file = models.FileField(blank=True, null=True)
+    video_link = models.URLField(blank=True, null=True)
+    category = models.ForeignKey(MaterialCategory, blank=True, null=True, on_delete=models.SET_NULL)
+    material_type = models.CharField(
+        max_length=10,
+        choices=MaterialTypes.choices()
+    )

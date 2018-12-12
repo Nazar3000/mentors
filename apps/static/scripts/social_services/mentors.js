@@ -190,7 +190,7 @@ const mentors = new Vue({
     },
     getResponsibleName(respPK) {
       const pubService = this.publicServices.find(p => p.pk === respPK);
-      return pubService ? pubService.name : 'ЦССДМ'
+      return pubService ? pubService.name : 'ЦСССДМ'
     },
     saveMentoreeName(mentoreeName) {
       $.post('add_mentoree/',
@@ -268,7 +268,7 @@ const mentors = new Vue({
         }
 
         if (!searched) {
-          searched = 'ЦССДМ'.toLowerCase().includes(newSearchString.toLowerCase());
+          searched = 'ЦСССДМ'.toLowerCase().includes(newSearchString.toLowerCase());
         }
         return searched;
       });
