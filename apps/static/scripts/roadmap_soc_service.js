@@ -6,13 +6,16 @@ const careerList = new Vue({
     selectedSocialService: {},
     searchedSocialServices: []
   },
-  created() {
-  },
   methods: {
+    selectSocialService(socService) {
+      this.selectedSocialService=socService;
+      this.searchedSocialServices=[];
+      this.searchValue = this.selectedSocialService.name;
+    }
   },
   watch: {
     searchValue: function (newVal) {
-      if (newVal) {
+      if (newVal && this.selectedSocialService.name !== this.searchValue) {
         $.get(`/social-service/dating/?search_value=${newVal}&filter=all`, (res) => {
           this.searchedSocialServices = res;
         });

@@ -98,11 +98,16 @@ const vm = new Vue({
           }
         }
       });
+    },
+    selectSocialService(socService) {
+      this.selectedSocialService=socService;
+      this.searchedSocialServices=[];
+      this.searchValue = this.selectedSocialService.name;
     }
   },
   watch: {
     searchValue: function (newVal) {
-      if (newVal) {
+      if (newVal && this.selectedSocialService.name !== this.searchValue) {
         $.get(`?search_value=${newVal}&filter=unlinked`, (res) => {
           this.searchedSocialServices = res;
         });
