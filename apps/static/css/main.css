@@ -15528,7 +15528,8 @@ select.table-education-name {
 
 .css-material-item {
   width: 600px;
-  height: 170px;
+  min-height: 170px;
+  max-height:400px;
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -16579,13 +16580,13 @@ select.table-education-name {
   -webkit-justify-content: space-between;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  /*-webkit-flex-wrap: wrap;*/
+      /*-ms-flex-wrap: wrap;*/
+          /*flex-wrap: wrap;*/
+  -webkit-box-align: start;
+  -webkit-align-items: start;
+      -ms-flex-align: start;
+          align-items: start;
   margin-bottom: 60px;
 }
 
@@ -20965,5 +20966,16 @@ select.table-education-name {
 .issues-title img {
   width: 10%;
 }
-
+/*styles update 13.12.2018*/
+.css-material-video{
+  width: 666px;
+  margin: 20px 0px;
+}
+.css-material-video > p{
+  word-break: break-all;
+}
+.css-material-item p{
+  -ms-word-break: break-all;
+  word-break: break-all;
+}
 /*# sourceMappingURL=../css/main.css.map */
