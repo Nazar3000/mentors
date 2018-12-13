@@ -58,7 +58,6 @@ class AuthenticationForm(forms.Form):
 
 
 class MentorEditForm(forms.ModelForm):
-    date_of_birth = forms.DateField(input_formats=['%d.%m.%Y'])
     email = forms.EmailField()
 
     class Meta:

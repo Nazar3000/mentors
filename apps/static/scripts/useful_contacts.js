@@ -4,7 +4,8 @@ new Vue({
   data: {
     contacts: [],
     searchedContacts: [],
-    searchString: ''
+    searchString: '',
+    activePage: 1
   },
   created() {
     $.get('?get_contacts', (res) => {

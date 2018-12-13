@@ -19,7 +19,7 @@
           <div class="contacts-slide">
             <div class="contacts-slider">
               <template v-if="searchString === ''">
-                <div class="question-slide" v-for="chunk in contacts">
+                <div class="question-slide" v-for="chunk in contacts.slice(activePage - 1, activePage)">
                   <div class="issues" v-for="contact in chunk">
                     <h3 class="issues-title">[[ contact.name ]]<img :src="`/media/${contact.logo}`" alt=""></h3>
                     <div class="issues-content">
@@ -39,6 +39,9 @@
                 </div>
               </template>
             </div>
+            <section class="btn-box" v-if="searchString === ''">
+              <button :class="{'btn-active_dots': activePage === i, 'btn_dots': activePage !== i}" v-for="i in contacts.length"></button>
+            </section>
           </div>
       </div>
     </section>

@@ -20966,7 +20966,7 @@ select.table-education-name {
 .issues-title img {
   width: 10%;
 }
-/*styles update 13.12.2018*/
+
 .css-material-video{
   width: 666px;
   margin: 20px 0px;
@@ -20977,5 +20977,23 @@ select.table-education-name {
 .css-material-item p{
   -ms-word-break: break-all;
   word-break: break-all;
+}
+
+.btn-active_dots{
+  width: 21px;
+  height: 21px;
+  border:none;
+  background-color: #368cca !important;
+  margin: 0 20px;
+  border-radius: 50px;
+}
+.btn_dots{
+  width: 21px;
+  height: 21px;
+  border:none;
+  background-color: #368cca !important;
+  opacity: 0.3;
+  margin: 0 20px;
+  border-radius: 50px;
 }
 /*# sourceMappingURL=../css/main.css.map */
