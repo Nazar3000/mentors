@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  $('#next-tip').click(function (e) {
+  $('#next-tip').on('click', function (e) {
     e.preventDefault();
 
     const dataId = $(this).attr('data-id');
