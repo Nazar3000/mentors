@@ -16,26 +16,30 @@
           <input type="text" placeholder="Почніть вводити назву організації або ключові слова" v-model="searchString">
         </div>
         <a class="contacts-prof" href="{% url 'mentors:proforientation' %}">Перейти в розділ “Профорієнтація”</a>
-        <div class="contacts-slide">
-          <div class="carousel">
-            <template v-if="searchString === ''">
-              <div class="contacts-all" v-for="chunk in contacts">
-                <div class="contacts-all-item" v-for="contact in chunk">
-                  <p>[[ contact.name ]]</p>
-                  <div class="contacts-all-img"><img :src="`/media/${contact.logo}`" alt=""></div>
+          <div class="contacts-slide">
+            <div class="contacts-slider">
+              <template v-if="searchString === ''">
+                <div class="question-slide" v-for="chunk in contacts">
+                  <div class="issues" v-for="contact in chunk">
+                    <h3 class="issues-title">[[ contact.name ]]<img :src="`/media/${contact.logo}`" alt=""></h3>
+                    <div class="issues-content">
+                      <p>[[ contact.description ]]</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </template>
-            <template v-else>
-              <div class="contacts-all">
-                <div class="contacts-all-item" v-for="contact in searchedContacts">
-                  <p>[[ contact.name ]]</p>
-                  <div class="contacts-all-img"><img :src="`/media/${contact.logo}`" alt=""></div>
+              </template>
+              <template v-else>
+                <div class="question-slide">
+                  <div class="issues" v-for="contact in searchedContacts">
+                    <h3 class="issues-title">[[ contact.name ]]<img :src="`/media/${contact.logo}`" alt=""></h3>
+                    <div class="issues-content">
+                      <p>[[ contact.description ]]</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </template>
+              </template>
+            </div>
           </div>
-        </div>
       </div>
     </section>
   </div>

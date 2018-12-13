@@ -568,7 +568,7 @@
           <span class="error-form" v-for="err in errors.convenient_meeting_conditions">[[ err ]]</span>
         </div>
         <button type="button" @click="submitForm">Зберегти</button>
-        <span class="error-form" v-if="hasErrors">Увага! Є помилки в заповненні, або наявні незаповнені обов'язкові поля.<br>Будь ласка поверніться до початку анкети.</span>
+        <span class="step2-has-errors" v-if="hasErrors">Увага! Є помилки в заповненні, або наявні незаповнені обов'язкові поля.<br>Будь ласка поверніться до початку анкети.</span>
       </div>
     </section>
   </div>
