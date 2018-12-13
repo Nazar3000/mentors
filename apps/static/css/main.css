@@ -6011,16 +6011,6 @@ input[type="radio"]:checked:after {
   position: relative;
 }
 
-.form-dating-wrapper-input::before {
-  content: "";
-  position: absolute;
-  z-index: 10;
-  right: 20px;
-  top: 15px;
-  border: 8px solid transparent;
-  border-top: 8px solid #037286;
-}
-
 .link-dating-for-input {
   display: inline-block;
   text-decoration: underline;
