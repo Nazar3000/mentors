@@ -408,3 +408,7 @@ class Material(models.Model):
         max_length=10,
         choices=MaterialTypes.choices()
     )
+
+
+class Improvement(models.Model):
+    content = models.TextField()

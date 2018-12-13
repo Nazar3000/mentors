@@ -444,7 +444,6 @@ $(document).ready(function () {
         });
         $('.form-dating-box-items').toggle();
     });
-
 });
 
 

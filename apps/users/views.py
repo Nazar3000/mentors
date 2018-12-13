@@ -1,17 +1,12 @@
-from django.conf import settings
 from django.contrib.auth.views import LoginView, LogoutView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import resolve_url
 from django.utils.decorators import method_decorator
-from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView, ListView
-from django.contrib.auth import (
-    REDIRECT_FIELD_NAME, get_user_model, login as auth_login,
-    logout as auth_logout, update_session_auth_hash,
-)
+from django.contrib.auth import logout as auth_logout
 
-from users.models import Material, MaterialCategory
+from users.models import Material, MaterialCategory, Improvement
 from .constants import UserTypes, MaterialTypes
 
 
@@ -80,3 +75,9 @@ class SSDMaterialView(OrganizationMaterialView):
             .filter(material_type=MaterialTypes.SSD.name).order_by('id')
         context['categories'] = MaterialCategory.objects.filter()
         return context
+
+
+def offer_improvement(request):
+    if request.method == 'POST':
+        Improvement.objects.create(content=request.POST.get('context'))
+    return JsonResponse({'status': 'success'})
