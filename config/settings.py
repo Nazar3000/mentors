@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'jsonify',
     'debug_toolbar',
     'widget_tweaks',
+    'wkhtmltopdf',
 
     'users',
     'mentors',
@@ -166,3 +167,11 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+
+
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
+    'allow': '/tmp',
+    'javascript-delay': 1000,
+    'enable-local-file-access': True,
+}

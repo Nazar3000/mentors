@@ -39,11 +39,11 @@
             </div>
             <p>2. Роздрукуй свою анкету кандидата в наставники і<br>візьми її з собою в Центр соц. служб, щоб заощадити<br>свій час:</p>
             <div class="first-stage-doc">
-              <a href="{{ questionnaire.file.url }}" target="_blank">
+              <a href="{% url 'mentors:questionnaire_pdf' pk=user.pk %}" target="_blank">
                 <img src="{% static 'img/download.svg' %}" alt="">
                 <span>Завантажити</span>
               </a>
-              <a href="{{ questionnaire.file.url }}" onclick="open(this.href).print(); return false" target="_blank">
+              <a href="{% url 'mentors:questionnaire_pdf_print' pk=user.pk %}" onclick="open(this.href).print(); return false">
                 <img src="{% static 'img/print.svg' %}" alt="">
                 <span>Друкувати</span>
               </a>

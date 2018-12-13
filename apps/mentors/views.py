@@ -12,6 +12,7 @@ from django.views import View
 from django.views.generic import TemplateView, FormView, DetailView, ListView, UpdateView, CreateView
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from wkhtmltopdf.views import PDFTemplateView
 
 from govern_users.models import MentorSchoolVideo, MentorTip, TipOfTheDay
 from social_services.models import BaseSocialServiceCenter
@@ -697,3 +698,23 @@ def get_mia_list(request):
         mia.lng = data['lng']
         mia.save()
     return JsonResponse({})
+
+
+class QuestionnairePdf(PDFTemplateView):
+    filename = 'anketa.pdf'
+    template_name = 'mentors/pair_detail_pdf.html'
+    cmd_options = {
+        'javascript-delay': 2000,
+        'allow': True,
+    }
+
+    def get_context_data(self, **kwargs):
+        mentor = Mentor.objects.get(pk=kwargs['pk'])
+
+        context = {
+            'meetings': nest_queryset(2, mentor.meetings.all()),
+            'mentor_age': get_age(mentor.date_of_birth) if mentor.date_of_birth else '',
+            'mentoree_age': get_age(mentor.mentoree.date_of_birth) if mentor.mentoree else '',
+            'mentor': mentor
+        }
+        return context

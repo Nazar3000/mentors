@@ -32,4 +32,8 @@ urlpatterns = [
     path('next-tip/', login_required(views.get_next_tip), name='next_tip'),
     path('notifications/', login_required(views.get_notifications), name='notifications'),
     path('mia_list/', login_required(views.get_mia_list), name='mia_list'),
+    path('questionnaire-pdf/<uuid:pk>/', views.QuestionnairePdf.as_view(), name='questionnaire_pdf'),
+    path('questionnaire-pdf-print/<uuid:pk>/',
+         views.QuestionnairePdf.as_view(filename=None),
+         name='questionnaire_pdf_print'),
 ]
