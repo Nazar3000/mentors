@@ -2,14 +2,15 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from social_services.models import BaseSocialServiceCenter
 from social_services.views import SignUpFormView, DatingView, MainPageView, MentorsView, MentorCardView, MaterialView
 from users.constants import UserTypes
 from users.models import SocialServiceCenter, PublicService, Mentor
-from .forms import PublicServiceSignUpStep0Form, PublicServiceForm
-from django.views.generic import TemplateView
+from .forms import PublicServiceSignUpStep0Form, PublicServiceForm, QuestionForm
+from django.views.generic import TemplateView, CreateView
 from .models import PublicServiceVideo
 
 
@@ -112,3 +113,15 @@ class PublicServiceMentorCardView(CheckIfUserIsPublicServiceMixin, MentorCardVie
 
 class PublicServiceMaterialView(MaterialView):
     template_name = 'public_services/material.html'
+
+
+class QuestionView(CreateView):
+    template_name = 'mentors/question.html'
+    form_class = QuestionForm
+    success_url = reverse_lazy('public_services:question')
+
+    def form_valid(self, form):
+        question = form.save(commit=False)
+        question.public_service_id = self.request.user.pk
+        question.save()
+        return redirect(self.success_url)

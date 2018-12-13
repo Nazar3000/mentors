@@ -7,7 +7,8 @@ from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import redirect, HttpResponse
-from django.views.generic import TemplateView, FormView, DetailView, ListView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -18,7 +19,7 @@ from mentors.views import nest_queryset
 from social_services.utils import get_date_str_formatted
 from users.templatetags.date_tags import get_age
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
-    DatingCoordinatorForm, DatingSocialServiceCenterForm, DatingBaseSocialServiceCenterForm
+    DatingCoordinatorForm, DatingSocialServiceCenterForm, DatingBaseSocialServiceCenterForm, QuestionForm
 from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
 from users.models import Mentor, SocialServiceCenter, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
@@ -617,3 +618,15 @@ class PairDetailView(CheckIfUserIsSocialServiceCenterMixin, DetailView):
             })
 
         return super().get(request, *args, **kwargs)
+
+
+class QuestionView(CreateView):
+    template_name = 'mentors/question.html'
+    form_class = QuestionForm
+    success_url = reverse_lazy('social_services:question')
+
+    def form_valid(self, form):
+        question = form.save(commit=False)
+        question.social_service_center_id = self.request.user.pk
+        question.save()
+        return redirect(self.success_url)

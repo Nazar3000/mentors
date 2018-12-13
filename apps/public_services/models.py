@@ -19,3 +19,10 @@ class PublicServiceVideo(models.Model):
     video_link = models.URLField()
     page = models.IntegerField(choices=PAGE_CHOICES)
 
+
+class Question(models.Model):
+    public_service = models.ForeignKey(
+        to='users.PublicService',
+        on_delete=models.CASCADE
+    )
+    body = models.TextField()

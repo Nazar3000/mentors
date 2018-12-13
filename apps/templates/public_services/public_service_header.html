@@ -11,7 +11,7 @@
         </a>
       </div>
       <div class="css-header-notification">
-        <a class="header-notification-title" href="question.html">Питання?</a>
+        <a class="header-notification-title" href="{% url 'public_services:question' %}">Питання?</a>
         <a href=""><i class="fas fa-bell"></i></a>
         <a class="css-header-company" href="{% url 'public_services:main' %}">
           <span>Особистий кабінет<br>{{ public_service.name }}</span>

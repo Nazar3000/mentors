@@ -92,3 +92,11 @@ class BaseSocialServiceCenter(models.Model):
             for mentor in self.mentor_set.all():
                 mentor.coordinator = coordinator
                 mentor.save()
+
+
+class Question(models.Model):
+    social_service_center = models.ForeignKey(
+        to='users.SocialServiceCenter',
+        on_delete=models.CASCADE
+    )
+    body = models.TextField()

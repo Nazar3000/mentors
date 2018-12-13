@@ -13,5 +13,6 @@ urlpatterns = [
     path('video/', views.PublicServiceVideoMentorView.as_view(), name='video'),
     path('dating/', views.PublicServiceDatingView.as_view(), name='dating'),
     path('material/', views.PublicServiceMaterialView.as_view(), name='material'),
+    path('question/', views.QuestionView.as_view(), name='question'),
     re_path(r'^mentors/mentor-card/(?P<pk>[\w-]+)/$', views.PublicServiceMentorCardView.as_view(), name='mentor_card'),
 ]
