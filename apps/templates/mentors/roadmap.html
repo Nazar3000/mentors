@@ -33,7 +33,7 @@
           </div>
           <div class="stage-wrapp-item">
             <p class="stage-wrapp-four">Я вже взаємодію<br>з дитиною<br>(є підписаний договір)</p>
-            <a href="{% url 'mentors:mentor_office' %}">
+            <a href="{% if mentor.licenced %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:mentor_roadmap_step3' %}{% endif %}">
               <div class="stage-wrapp-icon-end"><img src="{% static 'img/baby.png' %}" alt=""></div>
             </a>
           </div>
