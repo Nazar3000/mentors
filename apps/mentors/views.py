@@ -702,19 +702,24 @@ def get_mia_list(request):
 
 class QuestionnairePdf(PDFTemplateView):
     filename = 'anketa.pdf'
-    template_name = 'mentors/pair_detail_pdf.html'
+    template_name = 'mentors/mentor_card_pdf.html'
     cmd_options = {
         'javascript-delay': 2000,
         'allow': True,
     }
 
     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         mentor = Mentor.objects.get(pk=kwargs['pk'])
-
-        context = {
-            'meetings': nest_queryset(2, mentor.meetings.all()),
-            'mentor_age': get_age(mentor.date_of_birth) if mentor.date_of_birth else '',
-            'mentoree_age': get_age(mentor.mentoree.date_of_birth) if mentor.mentoree else '',
-            'mentor': mentor
-        }
+        context.update({
+            'religions': Religions.choices(),
+            'local_church_visiting_frequency': LocalChurchVisitingFrequency.choices(),
+            'marital_statuses': MaritalStatuses.choices(),
+            'genders': Genders.choices(),
+            'home_types': HomeTypes.choices(),
+            'able_to_visit_child_frequency': AbleToVisitChildFrequency.choices(),
+            'mentoring_program_find_out_places': MentoringProgramFindOutPlaces.choices(),
+            'education_types': EducationTypes.choices(),
+            'object': mentor
+        })
         return context

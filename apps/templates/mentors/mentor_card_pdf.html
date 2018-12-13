@@ -1,0 +1,322 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mentors</title>
+    <link href="{% static 'css/libs.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    {% block extra_css %}{% endblock %}
+  </head>
+<body>
+  <script src="{% static 'js/libs.min.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  <script src="{% static 'js/ajax_setup.js' %}"></script>
+  <script src="{% static 'js/vue.js' %}"></script>
+  <div class="wrapper">
+    <div class="content">
+      <div class="container">
+        <section class="css-admin">
+          <div class="css-admin-main">
+            <div class="css-admin-info"><img src="{% if object.profile_image %}{{ object.profile_image.url }}{% endif %}">
+              <div>
+                <h4>{{ object.questionnaire.full_name }}<br></h4><span>Телефон:</span>
+                <p>{{ object.questionnaire.phone_number }}</p><span>Email:</span>
+                <p>{{ object.questionnaire.email }}</p>
+              </div>
+            </div>
+            <div class="css-admin-main-card">
+              <h5>Загальні відомості:</h5>
+              <div class="css-admin-wrapp">
+                <div><span>Дата народження</span>
+                  <p>{{ object.questionnaire.date_of_birth }}</p><span>Адреса фактичного місця проживання:</span>
+                  <p>{{ object.questionnaire.actual_address }}</p><span>Адреса реєстрації:</span>
+                  <p>{{ object.questionnaire.registration_address }}</p><span>Національність/Громадянство:</span>
+                  <p>{{ object.questionnaire.registration_address }}</p>
+                </div>
+                <div>
+                  <span>Віросповідання:</span>
+                  {% for key, value in religions %}
+                    {% if object.questionnaire.religion == key %}
+                      <p>{{ value }}</p>
+                    {% endif %}
+                  {% endfor %}
+                  <span>Церква яку відвідує:</span>
+                  <p>{{ object.questionnaire.local_church_visiting }}</p>
+                  {% for key, value in local_church_visiting_frequency %}
+                    {% if object.questionnaire.local_church_visiting_frequency == key %}
+                      <p>{{ value }}</p>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="css-admin-line"></div>
+          <div class="css-admin-life">
+            <div class="css-admin-left">
+              <div class="css-admin-card">
+                <h5>Стан здоров’я:</h5>
+                <div class="css-admin-wrapp">
+                  <div><span>Я оцінюю свій стан здоров’я як</span>
+                    <p>{{ object.questionnaire.health_self_estimation }}</p>
+                    <div class="css-admin-wrapp-line">
+                      <div><span>Серйозні захворювання:</span>
+                        {% if object.questionnaire.serious_diseases %}
+                          <p>Так</p>
+                        {% else %}
+                          <p>Ні</p>
+                        {% endif %}
+                      </div>
+                      <div><span>Я ВІЛ-інфікований</span>
+                        {% if object.questionnaire.hiv_infected %}
+                          <p>Так</p>
+                        {% else %}
+                          <p>Ні</p>
+                        {% endif %}
+                      </div>
+                    </div>
+                    <span>Перебуваю на обліку в:</span>
+                    <p>Терапевта<br>{{ object.questionnaire.hospital_data }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="css-admin-card">
+                <h5>Сімейний стан:</h5>
+                <div class="css-admin-wrapp">
+                  <div>
+                    {% for key, value in marital_statuses %}
+                      {% if object.questionnaire.marital_status == key %}
+                        <p>{{ value }}</p>
+                      {% endif %}
+                    {% endfor %}
+                    <span>Члени родини:</span>
+                    <p>{{ object.questionnaire.home_family_members_data|linebreaksbr }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="css-admin-right">
+              <div class="css-admin-card">
+                <h5>Житлово-побутові умови:</h5>
+                <div class="css-admin-wrapp">
+                  <div>
+                    <span>Місце проживання на цей момент:</span>
+                    {% for key, value in home_types %}
+                      {% if object.questionnaire.home_type == key %}
+                        <p>{{ value }}</p>
+                      {% endif %}
+                    {% endfor %}
+                    <div class="css-admin-wrapp-line">
+                      <div><span>Кількість кімнат:</span>
+                        <p>{{ object.questionnaire.room_count }}</p>
+                      </div>
+                      <div><span>К-сть осіб, які проживають в одній кімнаті:</span>
+                        <p>{{ object.questionnaire.people_per_room }}</p>
+                      </div>
+                    </div>
+                    <span>Інші члени сім’ї, які проживають разом зі мною:</span>
+                    <p>{{ object.questionnaire.home_family_members_data|linebreaksbr }}</p><span>Домашні тварини:</span>
+                    <p>{{ object.questionnaire.pets_data|linebreaksbr }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="css-admin-line"></div>
+          <div class="css-admin-hobby">
+            <div class="css-admin-left">
+              <div class="css-admin-card">
+                <h5>Інтереси, хобі:</h5>
+                <div class="css-admin-wrapp">
+                  <p>{{ object.questionnaire.interests_and_hobbies|linebreaksbr }}</p>
+                </div>
+              </div>
+              <div class="css-admin-card">
+                <h5>Працевлаштування:</h5>
+                <div class="css-admin-wrapp">
+                  <div>
+                    {% for job in object.questionnaire.mentorquestionnairejob_set.all %}
+                      {% if job.is_current %}
+                        <span>Місце роботи на цей момент:</span>
+                      {% else %}
+                        <span>Місце попередньої роботи:</span>
+                      {% endif %}
+                      <p>{{ job.organization_name }}, {{ job.date_since }}
+                        - {{ job.date_till }}, {{ job.contact_info }}</p>
+                      <strong>{{ job.position }}.</strong>
+                      <span>Причина звільнення:</span>
+                      <p>{{ job.reason_for_leaving }}</p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="css-admin-right">
+              <div class="css-admin-card">
+                <h5>Освіта:</h5>
+                <div class="css-admin-wrapp">
+                  <div>
+                    {% for education in object.questionnaire.mentorquestionnaireeducation_set.all %}
+                      {% for key, value in education_types %}
+                        {% if education.education_type == key %}
+                          <span>{{ value }}</span>
+                        {% endif %}
+                      {% endfor %}
+                      <p>{{ education.year_of_admission }}
+                        - {{ education.year_of_graduation }} р., {{ education.degree }}</p>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="css-admin-card">
+                <h5>Досвід роботи з дітьми:</h5>
+                <div class="css-admin-wrapp">
+                  <div>
+                    {% for item in object.questionnaire.mentorquestionnairechildrenworkexperience_set.all %}
+                      <span>Організація:</span>
+                      <p>{{ item.organization_name }}, {{ item.date_since }}
+                        - {{ item.date_till }}, {{ item.contact_info }}</p>
+                      <strong>{{ item.position }}, {{ item.duties }}, {{ item.children_age_group }} років</strong>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="css-admin-line"></div>
+          <div class="css-admin-description">
+            <div class="css-admin-left">
+              <div class="css-admin-card">
+                <h5>Чому я хочу стати наставником?</h5>
+                <div class="css-admin-wrapp">
+                  <p>{{ object.questionnaire.join_reason|linebreaksbr }}</p>
+                </div>
+              </div>
+              <div class="css-admin-card">
+                <h5>Я себе охарактеризовую так:</h5>
+                <div class="css-admin-wrapp">
+                  <p>{{ object.questionnaire.self_char|linebreaksbr }}</p>
+                </div>
+              </div>
+              <div class="css-admin-card">
+                <h5>Мої очікування від дитини, з якою я хочу взаємодіяти:</h5>
+                <div class="css-admin-wrapp">
+                  <p>{{ object.questionnaire.expectations_from_child|linebreaksbr }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="css-admin-right">
+              <div class="css-admin-card">
+                <h5>Якості характеру, особливі знання та навички, які, на мою думку, можуть допомогти становленню та
+                  розвитку дитини із закладу?</h5>
+                <div class="css-admin-wrapp">
+                  <p>{{ object.questionnaire.helpful_specifics|linebreaksbr }}</p>
+                </div>
+              </div>
+              <div class="css-admin-card">
+                <h5>Я хочу допомагати дитині-сироті тому що:</h5>
+                <div class="css-admin-wrapp">
+                  <p>{{ object.questionnaire.want_to_help_reason|linebreaksbr }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="css-admin-line"></div>
+          <div class="css-admin-rest">
+            <div>
+              <h4>Напрямки наставництва за яким я бажаю допомагати дитині:</h4>
+              {% if object.questionnaire.socialization %}
+                <div class="css-card-check">
+                  <input class="css-font" id="box3" type="checkbox" checked="checked">
+                  <label for="box3">Напрям «Соціалізація»</label>
+                </div>
+              {% endif %}
+              {% if object.questionnaire.proforientation %}
+                <div class="css-card-check">
+                  <input class="css-font" id="box4" type="checkbox" checked="checked">
+                  <label for="box4">Напрям «Профорієнтація»</label>
+                </div>
+              {% endif %}
+            </div>
+            <div>
+              <h4>Як часто я можу відвідувати дитину в закладі?</h4>
+              {% for key, value in able_to_visit_child_frequency %}
+                {% if object.questionnaire.able_to_visit_frequency == key %}
+                  <span>{{ value }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div>
+              <h4>Чи погоджуюся я взаємодіяти з дитиною, яка має інвалідність?</h4>
+              {% if object.questionnaire.ready_for_child_with_disabilities %}
+                <span>Так</span>
+              {% else %}
+                <span>Ні</span>
+              {% endif %}
+            </div>
+            <div>
+              {% if object.questionnaire.drink_alcohol %}
+                <h4>Зазвичай я вживаю:</h4><span>Алкоголь, {{ object.questionnaire.drink_alcohol_frequency }}</span>
+              {% endif %}
+            </div>
+            <div>
+              <h4>Я вживав наркотики</h4>
+              {% if object.questionnaire.drug_usage %}
+                <span>Так</span>
+              {% else %}
+                <span>Ні</span>
+              {% endif %}
+            </div>
+            <div>
+              <h4>Я був засуджений</h4>
+              {% if object.questionnaire.crime_convicted %}
+                <span>Так</span>
+              {% else %}
+                <span>Ні</span>
+              {% endif %}
+            </div>
+            <div>
+              <h4>Я був позбавлений батьківських прав</h4>
+              {% if object.questionnaire.parental_rights_deprived %}
+                <span>Так</span>
+              {% else %}
+                <span>Ні</span>
+              {% endif %}
+            </div>
+            <div>
+              <h4>Я дозволяю використовувати мої фотографії і коментарі, зроблені в процесі моєї участі в програмі, на
+                інформаційних носіях, з метою популяризації ідеї наставництва</h4>
+              {% if object.questionnaire.allow_to_use_personal_data %}
+                <span>Так</span>
+              {% else %}
+                <span>Ні</span>
+              {% endif %}
+            </div>
+            <div>
+              <h4>Я дізнався про програму наставництва через</h4>
+              {% for key, value in mentoring_program_find_out_places %}
+                {% if object.questionnaire.program_found_out_place == key %}
+                  <span>{{ value }}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div>
+              <h4>Мені зручніше всього прийти на консультацію з психологом Центру соціальних служб або Партнерської
+                організації в один з днів:</h4><span>{{ object.questionnaire.convenient_meeting_conditions }}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <script>
+    const soc_service_id = '{{ user.id }}';
+  </script>
+  <script src="{% static 'scripts/social_services/pair_detail.js' %}"></script>
+</body>
+</html>
