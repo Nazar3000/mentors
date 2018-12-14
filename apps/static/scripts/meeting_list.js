@@ -9,7 +9,8 @@ const meetingList = new Vue({
       expanded: 1,
       edit: 2
     },
-    itemAdding: false
+    itemAdding: false,
+    imgAdded: false
   },
   created() {
     $.get('?get_meetings_data', (data) => {
@@ -19,6 +20,7 @@ const meetingList = new Vue({
           return m;
         });
       }
+      this.imgAdded = true;
     });
     if (window.location.search.substring(1).includes('newMeeting')) {
       this.insertNewMeeting();
@@ -66,6 +68,7 @@ const meetingList = new Vue({
       } else {
         this.addImage(event, meeting.id)
       }
+      this.imgAdded = true;
     },
     changeMeeting(meeting) {
       const formData = new FormData();
@@ -122,6 +125,30 @@ const meetingList = new Vue({
         mode: this.modes.edit
       });
       this.itemAdding = true;
+    },
+  },
+  watch: {
+    imgAdded: function (value) {
+      if (value) {
+        setTimeout(function() {
+          console.log($('.lSSlideOuter').length)
+          if ($('.lSSlideOuter').length) {
+            $('.lSSlideOuter').lightSlider().destroy()
+            // slider.destroy();
+          }
+          $('.vertical').lightSlider({
+              gallery: true,
+              item: 1,
+              vertical: true,
+              verticalHeight: 250,
+              vThumbWidth: 70,
+              thumbItem: 4,
+              thumbMargin: 0,
+              slideMargin: 0,
+          });
+        }, 300);
+      }
+      this.imgAdded = false;
     }
   }
 });

@@ -96,7 +96,7 @@ const mentors = new Vue({
                 'responsible': this.extendedMentor.responsible,
                 'status': this.extendedMentor.status,
                 'user_id': res.pk
-              }
+              };
               thisContext.lightMentors.push(lightMentor);
             }
             this.mentorModalDisplay = false;
@@ -197,13 +197,13 @@ const mentors = new Vue({
         {'mentoree_full_name': mentoreeName, 'mentor_pk': this.extendedMentor.pk});
     },
     dynamicSort(property) {
-      let sortOrder = 1
+      let sortOrder = 1;
       if (property[0] === '-') {
-        sortOrder = -1
+        sortOrder = -1;
         property = property.substr(1)
       }
       return function (a, b) {
-        let result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0
+        let result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
         return result * sortOrder
       }
     },
@@ -296,7 +296,7 @@ const mentors = new Vue({
             'responsible': newObj.responsible,
             'docs_status': lightObj.docs_status,
             'phone_number': newObj.phone_number,
-          }
+          };
           this.lightMentors.splice(index, 1);
           this.lightMentors.splice(index, 0, newLightMentor);
         }
@@ -315,6 +315,32 @@ const mentors = new Vue({
           activeLightMentor.docs_status = 'NOT_ALL';
         } else {
           activeLightMentor.docs_status = 'NOTHING';
+        }
+
+        if (newObj.infomeeting_date && activeLightMentor.status === 'NOT_SPECIFIED') {
+            activeLightMentor.status = 'PASSED_INFO_MEETING';
+        }
+
+        if (newObj.psychologist_meeting_date
+          && (activeLightMentor.status === 'NOT_SPECIFIED'
+            || activeLightMentor.status === 'PASSED_INFO_MEETING'
+          )) {
+          activeLightMentor.status = 'PASSED_INTERVIEW_WITH_PSYCHOLOGIST';
+        }
+        if (newObj.training_date
+          && (activeLightMentor.status === 'NOT_SPECIFIED'
+            || activeLightMentor.status === 'PASSED_INFO_MEETING'
+            || activeLightMentor.status === 'PASSED_INTERVIEW_WITH_PSYCHOLOGIST'
+          )) {
+            activeLightMentor.status = 'PASSED_TRAINING';
+        }
+        if (newObj.mentoree_name
+          && (activeLightMentor.status === 'NOT_SPECIFIED'
+            || activeLightMentor.status === 'PASSED_INFO_MEETING'
+            || activeLightMentor.status === 'PASSED_TRAINING'
+            || activeLightMentor.status === 'PASSED_INTERVIEW_WITH_PSYCHOLOGIST'
+          )) {
+          activeLightMentor.status = 'SELECTED_FOR_MENTOREE';
         }
 
         this.submitMentorSocServeData();

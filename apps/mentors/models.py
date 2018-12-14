@@ -346,15 +346,18 @@ class MentorSocialServiceCenterData(models.Model):
         # set mentor status
         if self.infomeeting_date and self.mentor.status == MentorStatuses.NOT_SPECIFIED:
             self.mentor.status = MentorStatuses.PASSED_INFO_MEETING
-        if self.training_date \
-                and self.mentor.status in (MentorStatuses.NOT_SPECIFIED, MentorStatuses.PASSED_INFO_MEETING):
-            self.mentor.status = MentorStatuses.PASSED_TRAINING
+
         if self.psychologist_meeting_date \
                 and self.mentor.status in (
                     MentorStatuses.NOT_SPECIFIED,
-                    MentorStatuses.PASSED_INFO_MEETING,
-                    MentorStatuses.PASSED_TRAINING):
+                    MentorStatuses.PASSED_INFO_MEETING):
             self.mentor.status = MentorStatuses.PASSED_INTERVIEW_WITH_PSYCHOLOGIST
+        if self.training_date \
+                and self.mentor.status in (
+                MentorStatuses.NOT_SPECIFIED,
+                MentorStatuses.PASSED_INFO_MEETING,
+                MentorStatuses.PASSED_INTERVIEW_WITH_PSYCHOLOGIST):
+            self.mentor.status = MentorStatuses.PASSED_TRAINING
         if self.mentor.mentoree \
             and self.mentor.status in (
                 MentorStatuses.NOT_SPECIFIED,
