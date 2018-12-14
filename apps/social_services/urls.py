@@ -25,5 +25,6 @@ urlpatterns = [
     path('dating/', views.DatingView.as_view(), name='dating'),
     path('pair/<uuid:pk>/', views.PairDetailView.as_view(), name='pair_detail'),
     path('question/', views.QuestionView.as_view(), name='question'),
+    path('pairs/', views.PairsView.as_view(), name='pairs'),
     path('send-email/', views.send_email, name='send_email'),
 ]

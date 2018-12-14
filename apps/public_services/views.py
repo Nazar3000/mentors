@@ -1,4 +1,5 @@
-from django.contrib.auth import login
+from django.contrib import messages
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -6,7 +7,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from social_services.models import BaseSocialServiceCenter
-from social_services.views import SignUpFormView, DatingView, MainPageView, MentorsView, MentorCardView, MaterialView
+from social_services.views import SignUpFormView, DatingView, MainPageView, MentorsView, MentorCardView, MaterialView, \
+    LoginView
 from users.constants import UserTypes
 from users.models import SocialServiceCenter, PublicService, Mentor
 from .forms import PublicServiceSignUpStep0Form, PublicServiceForm, QuestionForm
@@ -21,6 +23,20 @@ class CheckIfUserIsPublicServiceMixin(UserPassesTestMixin):
             return self.request.user.user_type == UserTypes.PUBLIC_SERVICE
         except (PublicService.DoesNotExist, TypeError):
             return False
+
+
+class PublicServiceLoginView(LoginView):
+    def form_valid(self, form):
+        email = form.cleaned_data['email']
+        password = form.cleaned_data['password']
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            if user.is_active:
+                login(self.request, user)
+        else:
+            messages.error(self.request, 'Невірний пароль.')
+            return redirect('public_services:po_login')
+        return redirect('public_services:main')
 
 
 class PublicServiceSignUpFormView(SignUpFormView):
