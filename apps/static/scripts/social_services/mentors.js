@@ -217,6 +217,9 @@ const mentors = new Vue({
 
         this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
       }
+    },
+    sendEmail(licenceKey, email) {
+      $.post('/social-service/send-email/', {'licence_key': licenceKey, 'email': email});
     }
   },
   watch: {

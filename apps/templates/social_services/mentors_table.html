@@ -78,7 +78,10 @@
               <span>Відповідальний:</span>
               <p>[[ getResponsibleName(extendedMentor.responsible) ]]</p>
               <span>Ліцензія:</span>
-              <p>[[ extendedMentor.licence_key ]]<a href=""><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a></p><span>Дата подачі анкети:</span>
+              <p>
+                [[ extendedMentor.licence_key ]]
+                <a href="javascript: void(0)" @click="sendEmail(extendedMentor.licence_key, extendedMentor.email)"><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a>
+              </p>
               <p>[[ getDateFormatted(extendedMentor.questionnaire_creation_date) ]]</p>
               <a :href="`mentor-card/${extendedMentor.pk}/`">Переглянути анкету</a>
             </div>

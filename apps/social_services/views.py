@@ -3,6 +3,7 @@ from contextlib import suppress
 import rstr
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db.models import Q, Min, Max
 from django.forms import model_to_dict
 from django.http import JsonResponse
@@ -630,3 +631,14 @@ class QuestionView(CreateView):
         question.social_service_center_id = self.request.user.pk
         question.save()
         return redirect(self.success_url)
+
+
+def send_email(request):
+    if request.method == 'POST':
+        send_mail(
+            'Ліцензійний ключ',
+            'Ваш ліцензійний ключ: {}'.format(request.POST['licence_key']),
+            'sender@example.com',
+            [request.POST['email']]
+        )
+    return JsonResponse({'status': 'success'})
