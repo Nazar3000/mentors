@@ -79,5 +79,5 @@ class SSDMaterialView(OrganizationMaterialView):
 
 def offer_improvement(request):
     if request.method == 'POST':
-        Improvement.objects.create(content=request.POST.get('context'))
+        Improvement.objects.create(content=request.POST.get('content'))
     return JsonResponse({'status': 'success'})
