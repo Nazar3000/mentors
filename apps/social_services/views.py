@@ -647,39 +647,42 @@ def send_email(request):
 class PairsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/pairs.html'
 
-    # def get_light_data(self):
-    #     mentor_statuses = dict(MentorStatuses.choices())
-    #     related_public_services = PublicService.objects.filter(
-    #         social_service_center__pk=self.request.user.pk).values('pk', 'name')
-    #     mentors_query_data = self.get_mentors_query_data(
-    #         """
-    #             users_mentor.first_name || ' ' || users_mentor.last_name as full_name,
-    #             users_mentor.phone_number,
-    #             mentors_mentorlicencekey.key as licence_key__key,
-    #             users_mentor.status,
-    #             users_mentor.coordinator_id,
-    #             (CASE WHEN (users_coordinator.social_service_center_id IS NOT NULL )
-    #              THEN users_coordinator.social_service_center_id
-    #              ELSE users_coordinator.public_service_id END
-    #              ) as responsible
-    #         """
-    #     )
-    #
-    #     mentors_data = []
-    #     for mentor in mentors_query_data.iterator():
-    #         mentor_dict = mentor.__dict__
-    #         soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
-    #         mentor_dict['docs_status'] = soc_service_data.docs_status
-    #         mentor_dict['pk'] = mentor.pk
-    #         del mentor_dict['_state']
-    #         mentors_data.append(mentor_dict)
-    #
-    #     return JsonResponse({
-    #         'mentors_data': mentors_data,
-    #         'mentor_statuses': mentor_statuses,
-    #         'docs_statuses': dict(DocsStatuses.choices()),
-    #         'public_services': list(related_public_services)
-    #     })
+    def get_light_data(self):
+        mentor_statuses = dict(MentorStatuses.choices())
+        related_public_services = PublicService.objects.filter(
+            social_service_center__pk=self.request.user.pk).values('pk', 'name')
+        mentors_query_data = self.get_mentors_query_data(
+            """
+                users_mentor.first_name || ' ' || users_mentor.last_name as full_name,
+                users_mentor.phone_number,
+                mentors_mentorlicencekey.key as licence_key__key,
+                users_mentor.status,
+                users_mentor.coordinator_id,
+                (CASE WHEN (users_coordinator.social_service_center_id IS NOT NULL )
+                 THEN users_coordinator.social_service_center_id
+                 ELSE users_coordinator.public_service_id END
+                 ) as responsible
+            """
+        )
+
+        mentors_data = []
+        for mentor in mentors_query_data.iterator():
+            mentor_dict = mentor.__dict__
+            soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
+            mentor_dict['docs_status'] = soc_service_data.docs_status
+            mentor_dict['pk'] = mentor.pk
+            mentor_dict['organization'] = mentor.mentoree.organization.name if mentor.mentoree else ''
+            mentor_dict['mentoree_name'] = '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name) \
+                if mentor.mentoree else ''
+            del mentor_dict['_state']
+            mentors_data.append(mentor_dict)
+
+        return JsonResponse({
+            'mentors_data': mentors_data,
+            'mentor_statuses': mentor_statuses,
+            'docs_statuses': dict(DocsStatuses.choices()),
+            'public_services': list(related_public_services)
+        })
 
     def get(self, request, *args, **kwargs):
         if 'get_light_data' in request.GET.keys():

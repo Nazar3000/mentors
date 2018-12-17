@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static common %}
+
+{% block content %}
+  <div class="content" id="mentors" v-cloak>
+    <div class="container">
+      <section class="css-mentor">
+        <div class="css-mentor-main">
+          <div class="css-mentor-info">
+            <div class="css-mentor-info-wrapp">
+              <div class="css-mentor-link">
+                <a href="{% url 'social_services:main' %}">Головна</a>
+                <a href="{% url 'social_services:mentors' %}">Наставники</a>
+                <a href="{% url 'social_services:pairs' %}">Пари</a>
+                <a href="{% url 'social_services:public_services' %}">Громадські організації</a>
+                <a href="{% url 'social_services:material' %}">Матеріали</a>
+              </div>
+              <div class="css-mentor-title">
+                <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
+                <div class="css counter">
+                  {% for digit in mentors_count_str %}
+                    <div class="counter-numb">{{ digit }}</div>
+                  {% endfor %}
+                </div><span>Дітей мають наставників<br>(активно взаємодіють)</span>
+              </div>
+            </div>
+            <div class="css-mentor-search"><img src="{% static 'img/search.svg' %}">
+              <input type="text" placeholder="Почніть вводити дані тут" v-model="searchString">
+            </div>
+            <div class="css-mentor-add" @click="addMentorModal"><i class="fas fa-plus"></i><span>Додати Наставника</span></div>
+          </div>
+          <div class="css-mentor-img"><img src="{% static 'img/baby-nice.jpg' %}"></div>
+        </div>
+        <!-- start edit modal mentor-->
+          {% include 'social_services/mentor_modal.html' %}
+        <!-- end edit modal mentor-->
+        {% include 'social_services/pairs_table.html' %}
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        const soc_service_id = '{{ user.id }}';
+    </script>
+    <script src="{% static 'scripts/social_services/pairs.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,305 @@
+{% load static %}
+
+<div class="css-table">
+  <div class="css-table-header">
+    <div class="css-table-title-mentor">Наставник<span class="sort-mentor" @click="reverseSort"><img :src="filterImgPath"></span></div>
+    <div class="css-table-line"></div>
+    <div class="css-table-title-stat">Вихованець</div>
+    <div class="css-table-line"></div>
+    <div class="css-table-title-license">Історія взаємодії</div>
+    <div class="css-table-line"></div>
+    <div class="css-table-title-doc">Заклад</div>
+    <div class="css-table-line"></div>
+    <div class="css-table-title-respon">Відповідальний</div>
+  </div>
+  <template v-for="lightMentor in searchedMentors">
+    <div class="css-table-mentor-line" @click="activeLightMentorPk = lightMentor.pk">
+      <div class="css-table-block-mentor">
+          <span class="mentor-phone" v-if="phoneView">[[ lightMentor.phone_number ]]</span>
+          <span class="mentor-title" v-else>[[ lightMentor.full_name ]]</span>
+          <span class="mentor-phone-img" @click="phoneView=!phoneView">
+            <img src="{% static 'img/green-tel.svg' %}" v-if="phoneView">
+            <img src="{% static 'img/blue-tel.svg' %}" v-else>
+          </span>
+      </div>
+      <div class="css-table-block-doc"><span>[[ lightMentor.mentoree_name ]]</span></div>
+      <div class="css-table-block-license"><a :href="`/social-service/pair/${lightMentor.pk}/`">Історія взаємодії</a></div>
+      <div class="css-table-block-doc"><span>[[ lightMentor.organization ]]</span></div>
+      <div class="css-table-block-respon">
+        <select class="triangle-green" v-model="lightMentor.responsible">
+          <option :value="socServiceId">ЦСССДМ</option>
+          <option v-for="service in publicServices"
+                  :value="service.pk"
+          >
+            [[ service.name ]]
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="css-card"
+         v-if="extendedMentor.pk === activeLightMentorPk
+              && lightMentor.pk === activeLightMentorPk
+              && expanded"
+    >
+    <div class="css-card-wrapp">
+      <!-- start card mentor-->
+      <div class="css-card-left" v-if="mentorCardView">
+        <div class="css-card-info">
+          <div class="css-card-img"><img :src="extendedMentor.profile_image" alt=""></div>
+          <div class="css-card-title">
+            <h2>Наставник</h2>
+            <p>[[ extendedMentor.first_name ]]<br>[[ extendedMentor.last_name ]]</p><span>Дата народження</span>
+            <p>[[ extendedMentor.date_of_birth ]] ([[ getAge(extendedMentor.date_of_birth) ]]  років)</p>
+          </div>
+          <div class="css-card-edit">
+            <a href="javascript: void(0)" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+          </div>
+        </div>
+        <div class="css-card-line"></div>
+        <div class="css-card-stat">
+          <div class="css-card-stat-wrapp">
+            <div>
+              <span>Статус:</span>
+              <p>[[ mentorStatuses[extendedMentor.status] ]]</p>
+              <span>Телефон:</span>
+              <p>[[ extendedMentor.phone_number ]]</p><span>Email:</span>
+              <p>[[ extendedMentor.email ]]</p><span>Адреса:</span>
+              <p>[[ extendedMentor.actual_address ]]</p>
+            </div>
+            <div>
+              <span>Відповідальний:</span>
+              <p>[[ getResponsibleName(extendedMentor.responsible) ]]</p>
+              <span>Ліцензія:</span>
+              <p>
+                [[ extendedMentor.licence_key ]]
+                <a href="javascript: void(0)" @click="sendEmail(extendedMentor.licence_key, extendedMentor.email)"><i class="fas fa-envelope"></i><span class="css-card-bage">Натисни щоб<br>надіслати ліцензію<br>наставнику на Email</span></a>
+              </p>
+              <p>[[ getDateFormatted(extendedMentor.questionnaire_creation_date) ]]</p>
+              <a :href="`mentor-card/${extendedMentor.pk}/`">Переглянути анкету</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end card mentor-->
+      <!-- start edit card mentor-->
+      <div class="css-card-left" v-else>
+        <div class="css-card-info">
+          <div class="css-card-img"><img :src="getImageUrl(extendedMentor.profile_image)" alt=""></div>
+          <div class="social-card-icon">
+            <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
+            <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
+            <a class="delete-img" href="javascript: void(0)" title="Delete image" @click="deleteProfileImage()">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+          <div class="css-card-title">
+            <h2>Наставник</h2>
+            <input class="css-input-name"
+                   type="text" placeholder="Ім’я"
+                   v-model="extendedMentor.first_name"
+                   :class="{'alert-border': errors['first_name']}"
+              >
+              <span class="error-form" v-for="err in errors.first_name">[[ err ]]</span>
+            <input class="css-input-prename"
+                   type="text"
+                   placeholder="Прізвище"
+                   v-model="extendedMentor.last_name"
+                   :class="{'alert-border': errors['last_name']}"
+              >
+              <span class="error-form" v-for="err in errors.last_name">[[ err ]]</span>
+            <span>Дата народження</span>
+            <input class="css-input-birth"
+                   type="text"
+                   v-model="extendedMentor.date_of_birth"
+                   :class="{'alert-border': errors['date_of_birth']}"
+              >
+              <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
+          </div>
+          <div class="css-card-edit">
+            <a href="javascript: void(0)" title="Edit" @click="submitMentorCard"><i class="fas fa-check"></i></a>
+          </div>
+        </div>
+        <div class="css-card-line"></div>
+        <div class="css-card-stat">
+          <div class="css-card-stat-wrapp">
+            <div>
+              <span>Статус:</span>
+              <select class="triangle-green" v-model="extendedMentor.status">
+                <option v-for="key, value in mentorStatuses"
+                        :value="value"
+                >
+                  [[ key ]]
+                </option>
+              </select>
+              <span>Телефон:</span>
+              <input class="css-input-card"
+                     type="text"
+                     placeholder="Ваш телефон"
+                     v-model="extendedMentor.phone_number"
+                     :class="{'alert-border': errors['phone_number']}"
+              >
+              <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+              <span>Email:</span>
+              <input class="css-input-card"
+                     type="text"
+                     placeholder="Ваш Email"
+                     v-model="extendedMentor.email"
+                     :class="{'alert-border': errors['email']}"
+              >
+              <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+              <span>Адреса:</span>
+              <input class="css-input-card"
+                     type="text"
+                     placeholder="Ваша адреса"
+                     v-model="extendedMentor.actual_address"
+                     :class="{'alert-border': errors['actual_address']}"
+              >
+              <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
+            </div>
+            <div>
+              <span>Відповідальний:</span>
+              <select class="triangle-green">
+                <option>ЦСССДМ</option>
+                <option v-for="service in publicServices"
+                        :value="service.pk"
+                >
+                  [[ service.name ]]
+                </option>
+              </select>
+              <span>Ліцензія:</span>
+              <input class="css-input-card" type="text" placeholder="Номер ліцензії" v-model="extendedMentor.licence_key">
+              <span>Дата подачі анкети:</span>
+              <p>[[ extendedMentor.questionnaire_creation_date ]]</p>
+              <a href="css-admin.html">Переглянути анкету</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end edit card mentor-->
+      <!-- start edit card info-->
+      <div class="css-card-right">
+        <span>Дата проходження інфо-зустрічі:</span>
+        <input class="css-input-card" type="date" v-model="mentorSocServiceData.infomeeting_date"/>
+        <span>Наявність документів:</span>
+        <div class="css-card-check-wrapp">
+          <div class="css-card-check">
+            <input class="css-font"
+                   id="good-conduct"
+                   type="checkbox"
+                   v-model="mentorSocServiceData.certificate_of_good_conduct"
+                   :disabled="!mentorSocServiceData.infomeeting_date"
+            >
+            <label for="good-conduct">Довідка про несудимість</label>
+          </div>
+          <div class="css-card-check">
+            <input class="css-font"
+                   id="med-cert"
+                   type="checkbox"
+                   v-model="mentorSocServiceData.medical_certificate"
+                   :disabled="!mentorSocServiceData.infomeeting_date"
+            >
+            <label for="med-cert">Мед. довідка</label>
+          </div>
+        </div>
+        <div class="css-card-check-wrapp">
+          <div class="css-card-check">
+            <input class="css-font"
+                   id="passport-copy"
+                   type="checkbox"
+                   v-model="mentorSocServiceData.passport_copy"
+                   :disabled="!mentorSocServiceData.infomeeting_date"
+            >
+            <label for="passport-copy">Копія паспорта</label>
+          </div>
+          <div class="css-card-check">
+            <input class="css-font"
+                   id="application"
+                   type="checkbox"
+                   v-model="mentorSocServiceData.application"
+                   :disabled="!mentorSocServiceData.infomeeting_date"
+            >
+            <label for="application">Заява</label>
+          </div>
+        </div>
+        <span>Дата проходження консультації з психологом:</span>
+        <input class="css-input-card"
+               type="date"
+               v-model="mentorSocServiceData.psychologist_meeting_date"
+               :disabled="!(lightMentors.find(m => m.pk === activeLightMentorPk).docs_status === 'ALL')"
+        >
+        <div class="css-card-subtitle"><span>Висновок психолога:</span>
+          <div>
+            <h5>поведінка:</h5>
+            <textarea rows="5"
+                      placeholder="Введіть ваше повідомлення"
+                      v-model="mentorSocServiceData.psychologist_summary"
+                      :disabled="!mentorSocServiceData.psychologist_meeting_date"
+            ></textarea>
+          </div>
+        </div>
+        <div class="css-card-check">
+          <input class="css-font" id="training-recommended"
+                 type="checkbox"
+                 v-model="mentorSocServiceData.recommended_to_training"
+                 :disabled="!mentorSocServiceData.psychologist_summary"
+          >
+          <label for="training-recommended">Рекомендований для участі в тренінгу</label>
+        </div>
+        <span>Дата тренінга:</span>
+        <input class="css-input-card"
+               type="date"
+               v-model="mentorSocServiceData.training_date"
+               :disabled="!mentorSocServiceData.recommended_to_training"
+        >
+        <div class="css-card-subtitle"><span>Висновок тренера:</span>
+          <div>
+            <h5>поведінка:</h5>
+            <textarea rows="5"
+                      placeholder="Введіть ваше повідомлення"
+                      v-model="mentorSocServiceData.trainer_summary"
+                      :disabled="!mentorSocServiceData.training_date"
+            ></textarea>
+          </div>
+        </div>
+        <div class="css-card-check">
+          <input class="css-font"
+                 id="child-admitted"
+                 type="checkbox"
+                 v-model="mentorSocServiceData.admitted_to_child"
+                 :disabled="!mentorSocServiceData.trainer_summary"
+          >
+          <label for="child-admitted">Допущений до дитини</label>
+        </div>
+        <div class="access-yes" v-if="mentorSocServiceData.admitted_to_child">
+          <input type="text" placeholder="Впиши ПІБ вихованця" v-model="mentorSocServiceData.mentoree_name"/>
+          <button @click="saveMentoreeName(mentorSocServiceData.mentoree_name)">Зберегти</button>
+        </div>
+        <div class="contract-wrapp">
+          <div class="contract-num"><span>Номер договору:</span>
+            <input class="m-0 css-input-card"
+                   type="text"
+                   placeholder="Номер договору"
+                   v-model="mentorSocServiceData.contract_number"
+                   :disabled="!mentorSocServiceData.admitted_to_child"
+            >
+          </div>
+          <div class="contract-date"><span>Дата договору:</span>
+            <input class="m-0 css-input-card"
+                   type="date"
+                   v-model="mentorSocServiceData.contract_date"
+                   :disabled="!mentorSocServiceData.admitted_to_child"
+            >
+          </div>
+        </div>
+        <div class="css-card-subtitle"><span>Коментар:</span>
+          <div>
+            <h5>поведінка:</h5>
+            <textarea rows="5" placeholder="Введіть ваше повідомлення" v-model="mentorSocServiceData.comment"></textarea>
+          </div>
+        </div>
+      </div>
+      <!-- end edit card info-->
+    </div>
+  </div>
+  </template>
+</div>
