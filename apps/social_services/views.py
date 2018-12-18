@@ -46,7 +46,7 @@ class CheckIfUserIsSocialServiceCenterMixin(UserPassesTestMixin):
 
 
 class SignUpFormView(FormView):
-    template_name = 'social_services/ssc_register.html'
+    template_name = 'social_services/register.html'
     form_class = SignUpStep0Form
 
     def form_valid(self, form):
@@ -56,7 +56,7 @@ class SignUpFormView(FormView):
 
 
 class LoginView(FormView):
-    template_name = 'social_services/ssc_login.html'
+    template_name = 'social_services/login.html'
     form_class = AuthenticationForm
 
     def form_valid(self, form):
@@ -190,8 +190,8 @@ class MainPageView(CheckIfUserIsSocialServiceCenterMixin, TemplateView):
         return context
 
 
-class VideoMentorView(CheckIfUserIsPreSocialServiceCenterMixin, TemplateView):
-    template_name = 'social_services/ssc_video_mentor.html'
+class VideoMentorView(TemplateView):
+    template_name = 'social_services/video_mentor.html'
 
     def get_context_data(self, **kwargs):
         context = super(VideoMentorView, self).get_context_data(**kwargs)

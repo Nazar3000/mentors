@@ -6,7 +6,7 @@
       <div class="footer-wrapp">
         <div class="footer-logo"><img src="{% static 'img/footer-logo.svg' %}" alt=""></div>
         <div class="footer-nav">
-          <div class="footer-nav-item" style="margin-left: -80px"><a href="">Допомогти наставництву</a></div>
+          <div class="footer-nav-item" style="margin-left: -80px"><a href="{% url 'volunteers:volunteer_signup' %}">Допомогти наставництву</a></div>
           <div class="footer-nav-item"><a href="">Про наставництво</a></div>
         </div>
         <div class="footer-btn"><a href="javascript: void(0)" @click="modalOpened=true">Запропонувати<br> покращення</a></div>
@@ -17,7 +17,7 @@
   <div class="complaint-modal" :style="{'display': modalOpened ? 'block' : 'none'}">
     <div class="complaint-card">
       <div class="complaint-close" @click="modalOpened=false">×</div>
-      <p>Поскаржитися</p>
+      <p>Запропонувати покращення</p>
       <div class="complaint-line"></div>
       <textarea rows="6"
                 placeholder="Опишіть суть проблеми"
