@@ -3,6 +3,7 @@
 {% load static common %}
 
 {% block content %}
+  {% get_mentors_count_str as mentors_count_str %}
   <div class="content" id="mentors" v-cloak>
     <div class="container">
       <section class="css-mentor">

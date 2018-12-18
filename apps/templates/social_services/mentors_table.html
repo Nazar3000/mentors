@@ -280,7 +280,7 @@
         </div>
         <div class="access-yes" v-if="mentorSocServiceData.admitted_to_child">
           <input type="text" placeholder="Впиши ПІБ вихованця" v-model="mentorSocServiceData.mentoree_name"/>
-          <button @click="saveMentoreeName(mentorSocServiceData.mentoree_name)">Зберегти</button>
+          <button @click="saveMentoreeName(mentorSocServiceData.mentoree_name)" class="save-child">Зберегти</button>
         </div>
         <div class="contract-wrapp">
           <div class="contract-num"><span>Номер договору:</span>

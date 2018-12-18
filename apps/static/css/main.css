@@ -20996,4 +20996,8 @@ select.table-education-name {
   margin: 0 20px;
   border-radius: 50px;
 }
+
+.save-child {
+  cursor: pointer;
+}
 /*# sourceMappingURL=../css/main.css.map */

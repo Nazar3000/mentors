@@ -464,7 +464,8 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
                 'full_name': mentor.first_name + ' ' + mentor.last_name,
                 'mentoree_full_name': '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name)
                 if mentor.mentoree else '',
-                'organization_name': mentor.mentoree.organization.name if mentor.mentoree else '',
+                'organization_name': mentor.mentoree.organization.name
+                if mentor.mentoree and mentor.mentoree.organization else '',
                 'contract_number': mentor.social_service_center_data.contract_number,
                 'mentoring_start_date':
                     get_date_str_formatted(mentor.meetings.first().date) if mentor.meetings.first() else None,
@@ -671,7 +672,10 @@ class PairsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMe
             soc_service_data, created = MentorSocialServiceCenterData.objects.get_or_create(mentor=mentor)
             mentor_dict['docs_status'] = soc_service_data.docs_status
             mentor_dict['pk'] = mentor.pk
-            mentor_dict['organization'] = mentor.mentoree.organization.name if mentor.mentoree else ''
+            if mentor.mentoree and mentor.mentoree.organization:
+                mentor_dict['organization'] = mentor.mentoree.organization.name
+            else:
+                mentor_dict['organization'] = ''
             mentor_dict['mentoree_name'] = '{} {}'.format(mentor.mentoree.first_name, mentor.mentoree.last_name) \
                 if mentor.mentoree else ''
             del mentor_dict['_state']
