@@ -17474,6 +17474,10 @@ select.table-education-name {
   margin-bottom: 20px;
 }
 
+.css-table {
+  margin-bottom: 150px;
+}
+
 .css-header {
   display: -webkit-box;
   display: -webkit-flex;
@@ -20999,5 +21003,9 @@ select.table-education-name {
 
 .save-child {
   cursor: pointer;
+}
+
+.check-padded {
+  margin-bottom: 20px;
 }
 /*# sourceMappingURL=../css/main.css.map */
