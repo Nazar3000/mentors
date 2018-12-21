@@ -158,6 +158,8 @@ class SocialServiceCenter(models.Model):
             max_length=128
         )
     )
+    profile_image = models.ImageField(
+        upload_to='social_services/profile_images')
 
 
 class SocialServiceCenterReport(models.Model):

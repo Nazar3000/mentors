@@ -27,4 +27,5 @@ urlpatterns = [
     path('question/', views.QuestionView.as_view(), name='question'),
     path('pairs/', views.PairsView.as_view(), name='pairs'),
     path('send-email/', views.send_email, name='send_email'),
+    path('settings/', views.SettingsView.as_view(), name='settings'),
 ]

@@ -1,4 +1,4 @@
-{% load static header_tags %}
+{% load static header_tags soc_service_center_tags %}
 
 {% get_social_service user as social_service %}
 
@@ -13,12 +13,16 @@
       <div class="css-header-notification">
         <a class="header-notification-title" href="{% url 'social_services:question' %}">Питання?</a>
         <a href=""><i class="fas fa-bell"></i></a>
-        <a class="css-header-company" href="{% url 'social_services:main' %}">
-          <span>Особистий кабінет<br>{{ social_service.name }}</span>
-        </a>
-        <a class="css-header-company" href="{% url 'users:logout' %}">
-          Вийти
-        </a>
+        <div class="admin">
+          <img src="{{ user|get_service_data:'profile_image' }}" alt="">
+          <div class="admin-title"><span>Особистий кабінет наставника</span>
+            <div class="admin-menu-off">{{ social_service.name }}<i class="fas fa-caret-down"></i>
+              <div class="admin-menu-on" style="display: none;">
+                <a href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt"></i>Вихід з акаунта</a>
+                <a href="{% url 'social_services:settings' %}"><i class="fas fa-cog"></i>Налаштування профілю</a></div>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
   </div>

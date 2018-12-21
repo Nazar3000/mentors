@@ -9,7 +9,7 @@ from django.forms import model_to_dict
 from django.http import JsonResponse
 from django.shortcuts import redirect, HttpResponse
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView
+from django.views.generic import TemplateView, FormView, DetailView, ListView, CreateView, UpdateView
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib import messages
 from django.utils.translation import gettext_lazy as _
@@ -20,7 +20,8 @@ from mentors.views import nest_queryset
 from social_services.utils import get_date_str_formatted
 from users.templatetags.date_tags import get_age
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
-    DatingCoordinatorForm, DatingSocialServiceCenterForm, DatingBaseSocialServiceCenterForm, QuestionForm
+    DatingCoordinatorForm, DatingSocialServiceCenterForm, DatingBaseSocialServiceCenterForm, QuestionForm, \
+    SettingsSocialServiceCenterForm
 from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
 from users.models import Mentor, SocialServiceCenter, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
@@ -693,3 +694,48 @@ class PairsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMe
             return self.get_light_data()
 
         return super().get(request, *args, **kwargs)
+
+
+class SettingsView(UpdateView):
+    template_name = 'social_services/settings.html'
+    form_class = SettingsSocialServiceCenterForm
+
+    def get_object(self, queryset=None):
+        return SocialServiceCenter.objects.get(pk=self.request.user.id)
+
+    def get(self, request, *args, **kwargs):
+        # if 'get_mentor_data' in request.GET.keys():
+        #     mentor_data = model_to_dict(
+        #         self.get_object(),
+        #         fields=(
+        #             'first_name',
+        #             'last_name',
+        #             'phone_number',
+        #         )
+        #     )
+        #     mentor_questionnaire_data = model_to_dict(
+        #         self.get_object().questionnaire,
+        #         fields=(
+        #             'date_of_birth',
+        #             'phone_number',
+        #             'email',
+        #             'actual_address',
+        #         )
+        #     )
+        #     mentor_questionnaire_data['date_of_birth'] = \
+        #         datetime.strftime(mentor_questionnaire_data['date_of_birth'], '%d.%m.%Y')
+        #     mentor_data.update(mentor_questionnaire_data)
+        #     return JsonResponse(mentor_data)
+        return super().get(request, *args, **kwargs)
+
+    # def form_valid(self, form):
+    #     mentor = form.save()
+    #
+    #     if form.cleaned_data.get('password_new1'):
+    #         mentor.user.set_password(form.cleaned_data.get('password_new1'))
+    #
+    #     return JsonResponse({'status': 'success'})
+    #
+    # def form_invalid(self, form):
+    #     errors = dict(form.errors.items())
+    #     return JsonResponse(errors)

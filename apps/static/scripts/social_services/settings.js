@@ -1,14 +1,14 @@
-const mentorEdit = new Vue({
-  el: '#mentor-edit',
+new Vue({
+  el: '#social-service-edit',
   delimiters: ['[[', ']]'],
   data: {
     service: {
-      'first_name': '',
-      'last_name': '',
-      'date_of_birth': '',
-      'phone_number': '',
+      'name' : '',
+      'city' : '',
+      'address' : '',
+      'phone_numbers' : '',
+      'profile_image' : '',
       'email': '',
-      'actual_address': '',
 
       'password_old': '',
       'password_new1': '',
@@ -18,14 +18,14 @@ const mentorEdit = new Vue({
   },
   created() {
     $.get('?get_mentor_data', (res) => {
-      this.mentor = Object.assign(this.mentor, res);
+      this.service = Object.assign(this.service, res);
     });
   },
   methods: {
-    updateMentor() {
-      $.post('', this.mentor, (res) => {
+    updateService() {
+      $.post('', this.service, (res) => {
         if (res.hasOwnProperty('status') && res.status === 'success') {
-          window.location.href = "/mentor/office/";
+          window.location.href = "/social-service/main/";
         } else {
           this.errors = res;
         }

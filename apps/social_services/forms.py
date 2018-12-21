@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
+from mentors.forms import MentorSettingsForm
 from users.constants import UserTypes
 from .models import SocialServiceMasterKey, BaseSocialServiceCenter, Question
 from mentors.models import MentorSocialServiceCenterData
@@ -140,4 +141,16 @@ class QuestionForm(forms.ModelForm):
         model = Question
         fields = (
             'body',
+        )
+
+
+class SettingsSocialServiceCenterForm(MentorSettingsForm):
+    class Meta:
+        model = SocialServiceCenter
+        fields = (
+            'name',
+            'city',
+            'address',
+            'phone_numbers',
+            'profile_image',
         )

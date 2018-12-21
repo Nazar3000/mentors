@@ -1,0 +1,62 @@
+{% extends 'mentors/base_with_prefooter.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <div class="container">
+      <section class="admin-log" id="social-service-edit">
+        <div class="admin-log-card">
+          <div class="admin-log-head">
+            <div class="admin-log-img">
+              <img src="{% static 'img/empty-img.png' %}" alt="">
+              <div class="setting-card-icon">
+                <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
+                <input id="files" style="display:none;" type="file">
+                <a class="delete-img" href="" title="Delete image">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </div>
+            <div class="admin-log-title">
+              <input type="text" placeholder="Назва" v-model="service.name" :class="{'alert-border': errors['name']}">
+              <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
+              <span>Дата народження</span>
+              <input type="date" placeholder="дд.мм.рррр" v-model="service.date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
+              <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
+            </div>
+          </div>
+          <div class="admin-log-line"></div>
+          <div class="admin-log-info">
+            <div class="admin-log-description">
+              <span>Email:</span>
+              <input type="text" placeholder="Email" v-model="service.email" :class="{'alert-border': errors['email']}">
+              <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+              <span>Місто:</span>
+              <input type="text" placeholder="Місто" v-model="service.city" :class="{'alert-border': errors['city']}">
+              <span class="error-form" v-for="err in errors.city">[[ err ]]</span>
+              <span>Адреса:</span>
+              <input type="text" placeholder="Адреса" v-model="service.actual_address" :class="{'alert-border': errors['actual_address']}">
+              <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
+              <span>Контактні телефони (розділити комами):</span>
+              <input type="text" placeholder="Номери телефонів" v-model="service.phone_numbers" :class="{'alert-border': errors['phone_numbers']}">
+              <span class="error-form" v-for="err in errors.phone_numbers">[[ err ]]</span>
+            </div>
+            <div class="admin-log-password"><span>Змінити пароль:</span>
+              <input type="password" placeholder="Введіть старий пароль" v-model="service.password_old" :class="{'alert-border': errors['password_old']}">
+              <span class="error-form" v-for="err in errors.password_old">[[ err ]]</span>
+              <input type="password" placeholder="Введіть новий пароль" v-model="service.password_new1" :class="{'alert-border': errors['password_new1']}">
+              <span class="error-form" v-for="err in errors.password_new1">[[ err ]]</span>
+              <input type="password" placeholder="Підтвердіть новий пароль" v-model="service.password_new2" :class="{'alert-border': errors['password_new2']}">
+              <span class="error-form" v-for="err in errors.password_new2">[[ err ]]</span>
+            </div>
+          </div>
+          <button @click="updateService">Зберегти</button>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static 'scripts/social_services/settings.js' %}"></script>
+{% endblock %}
