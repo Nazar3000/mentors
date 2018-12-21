@@ -20,9 +20,6 @@
             <div class="admin-log-title">
               <input type="text" placeholder="Назва" v-model="service.name" :class="{'alert-border': errors['name']}">
               <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
-              <span>Дата народження</span>
-              <input type="date" placeholder="дд.мм.рррр" v-model="service.date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
-              <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
             </div>
           </div>
           <div class="admin-log-line"></div>
@@ -35,8 +32,8 @@
               <input type="text" placeholder="Місто" v-model="service.city" :class="{'alert-border': errors['city']}">
               <span class="error-form" v-for="err in errors.city">[[ err ]]</span>
               <span>Адреса:</span>
-              <input type="text" placeholder="Адреса" v-model="service.actual_address" :class="{'alert-border': errors['actual_address']}">
-              <span class="error-form" v-for="err in errors.actual_address">[[ err ]]</span>
+              <input type="text" placeholder="Адреса" v-model="service.address" :class="{'alert-border': errors['address']}">
+              <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
               <span>Контактні телефони (розділити комами):</span>
               <input type="text" placeholder="Номери телефонів" v-model="service.phone_numbers" :class="{'alert-border': errors['phone_numbers']}">
               <span class="error-form" v-for="err in errors.phone_numbers">[[ err ]]</span>

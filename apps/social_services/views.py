@@ -704,28 +704,34 @@ class SettingsView(UpdateView):
         return SocialServiceCenter.objects.get(pk=self.request.user.id)
 
     def get(self, request, *args, **kwargs):
-        # if 'get_mentor_data' in request.GET.keys():
-        #     mentor_data = model_to_dict(
-        #         self.get_object(),
-        #         fields=(
-        #             'first_name',
-        #             'last_name',
-        #             'phone_number',
-        #         )
-        #     )
-        #     mentor_questionnaire_data = model_to_dict(
-        #         self.get_object().questionnaire,
-        #         fields=(
-        #             'date_of_birth',
-        #             'phone_number',
-        #             'email',
-        #             'actual_address',
-        #         )
-        #     )
-        #     mentor_questionnaire_data['date_of_birth'] = \
-        #         datetime.strftime(mentor_questionnaire_data['date_of_birth'], '%d.%m.%Y')
-        #     mentor_data.update(mentor_questionnaire_data)
-        #     return JsonResponse(mentor_data)
+        if 'get_mentor_data' in request.GET.keys():
+            mentor_data = model_to_dict(
+                self.get_object(),
+                fields=(
+                    'name',
+                    'city',
+                    'address',
+                    'phone_numbers',
+                    'email',
+                )
+            )
+            mentor_data['profile_image'] = self.get_object().profile_image.url \
+                if self.get_object().profile_image else ''
+            mentor_data['email'] = self.get_object().user.email
+            print(self.get_object().address)
+            # mentor_questionnaire_data = model_to_dict(
+            #     self.get_object().questionnaire,
+            #     fields=(
+            #         'date_of_birth',
+            #         'phone_number',
+            #         'email',
+            #         'actual_address',
+            #     )
+            # )
+            # mentor_questionnaire_data['date_of_birth'] = \
+            #     datetime.strftime(mentor_questionnaire_data['date_of_birth'], '%d.%m.%Y')
+            # mentor_data.update(mentor_questionnaire_data)
+            return JsonResponse(mentor_data)
         return super().get(request, *args, **kwargs)
 
     # def form_valid(self, form):
