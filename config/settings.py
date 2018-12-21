@@ -160,8 +160,8 @@ LOGOUT_REDIRECT_URL = 'users:signin'
 
 
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'Ch2mEc_l'
-EMAIL_HOST_USER = 'nastavniki.service@gmail.com'
+EMAIL_HOST_PASSWORD = 'pass12pass'
+EMAIL_HOST_USER = 'nastavnyk.service@gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
