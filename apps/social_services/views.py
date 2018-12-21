@@ -485,7 +485,7 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
             'licence',
         ))
         public_service_data['pk'] = public_service.pk
-        public_service_data['profile_image'] = public_service.profile_image.url
+        public_service_data['profile_image'] = public_service.profile_image.url if public_service.profile_image else ''
         public_service_data['pair_count'] = public_service.pair_count
 
         coordinator_ids = PublicService.objects.filter(social_service_center__pk=self.request.user.pk)\
