@@ -2,13 +2,13 @@
 
 <div class="css-table">
   <div class="css-table-header">
-    <div class="css-table-title-mentor">Наставник<span class="sort-mentor" @click="reverseSort"><img :src="filterImgPath"></span></div>
+    <div class="css-table-title-mentor">Наставник<span class="sort-mentor" @click="reverseSort('full_name')"><img :src="filterImgPath"></span></div>
     <div class="css-table-line"></div>
-    <div class="css-table-title-stat">Статус</div>
+    <div class="css-table-title-stat">Статус<span class="sort-mentor" @click="reverseSort('status')"><img :src="filterImgPath"></span></div>
     <div class="css-table-line"></div>
     <div class="css-table-title-license">Ліцензія</div>
     <div class="css-table-line"></div>
-    <div class="css-table-title-doc">Наявність<br>документів</div>
+    <div class="css-table-title-doc">Наявність<br>документів<span class="sort-mentor" @click="reverseSort('docs_status')"><img :src="filterImgPath"></span></div>
   </div>
   <template v-for="lightMentor in searchedMentors">
     <div class="css-table-mentor-line" @click="activeLightMentorPk = lightMentor.pk">

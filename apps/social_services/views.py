@@ -577,7 +577,7 @@ class PairDetailView(CheckIfUserIsSocialServiceCenterMixin, DetailView):
         context['meetings'] = nest_queryset(2, self.object.meetings.all())
 
         context['mentor_age'] = get_age(self.object.date_of_birth)
-        context['mentoree_age'] = get_age(self.object.mentoree.date_of_birth)
+        context['mentoree_age'] = get_age(self.object.mentoree.date_of_birth) if self.object.mentoree else 0
         return context
 
     @staticmethod

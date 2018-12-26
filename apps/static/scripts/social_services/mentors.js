@@ -34,7 +34,12 @@ const mentors = new Vue({
       ab: '/static/img/a-b.svg',
       ba: '/static/img/b-a.svg'
     },
-    filterImgPath: '/static/img/a-b.svg',
+    activeFilterImgPaths: {
+      full_name: '/static/img/a-b.svg',
+      status: '/static/img/a-b.svg',
+      docs_status: '/static/img/a-b.svg',
+      responsible: '/static/img/a-b.svg'
+    },
     errors: {}
   },
   created() {
@@ -46,7 +51,7 @@ const mentors = new Vue({
       $.get('?get_light_data', (res) => {
         this.lightMentors = res.mentors_data;
         this.searchedMentors = this.lightMentors;
-        if (this.filterImgPath === this.filterImgPaths.ab) {
+        if (this.activeFilterImgPaths.full_name === this.filterImgPaths.ab) {
           this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('-full_name'));
         } else {
           this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
@@ -207,15 +212,20 @@ const mentors = new Vue({
         return result * sortOrder
       }
     },
-    reverseSort() {
-      if (this.filterImgPath === this.filterImgPaths.ab) {
-        this.filterImgPath = this.filterImgPaths.ba;
-
-        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('-full_name'));
+    reverseSort(field) {
+      if (this.activeFilterImgPaths[field] === this.filterImgPaths.ab) {
+        this.activeFilterImgPaths[field] = this.filterImgPaths.ba;
+        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort(`-${field}`));
       } else {
-        this.filterImgPath = this.filterImgPaths.ab;
+        this.activeFilterImgPaths[field] = this.filterImgPaths.ab;
 
-        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
+        this.searchedMentors = this.searchedMentors.sort(this.dynamicSort(field));
+      }
+
+      for (let f in this.activeFilterImgPaths) {
+        if (f !== field) {
+          this.activeFilterImgPaths[f] = this.filterImgPaths.ab;
+        }
       }
     },
     sendEmail(licenceKey, email) {
@@ -275,7 +285,7 @@ const mentors = new Vue({
         }
         return searched;
       });
-      if (this.filterImgPath === this.filterImgPaths.ab) {
+      if (this.activeFilterImgPaths.full_name=== this.filterImgPaths.ab) {
         this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('-full_name'));
       } else {
         this.searchedMentors = this.searchedMentors.sort(this.dynamicSort('full_name'));
