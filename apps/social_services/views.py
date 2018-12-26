@@ -718,30 +718,17 @@ class SettingsView(UpdateView):
             mentor_data['profile_image'] = self.get_object().profile_image.url \
                 if self.get_object().profile_image else ''
             mentor_data['email'] = self.get_object().user.email
-            print(self.get_object().address)
-            # mentor_questionnaire_data = model_to_dict(
-            #     self.get_object().questionnaire,
-            #     fields=(
-            #         'date_of_birth',
-            #         'phone_number',
-            #         'email',
-            #         'actual_address',
-            #     )
-            # )
-            # mentor_questionnaire_data['date_of_birth'] = \
-            #     datetime.strftime(mentor_questionnaire_data['date_of_birth'], '%d.%m.%Y')
-            # mentor_data.update(mentor_questionnaire_data)
             return JsonResponse(mentor_data)
         return super().get(request, *args, **kwargs)
 
-    # def form_valid(self, form):
-    #     mentor = form.save()
-    #
-    #     if form.cleaned_data.get('password_new1'):
-    #         mentor.user.set_password(form.cleaned_data.get('password_new1'))
-    #
-    #     return JsonResponse({'status': 'success'})
-    #
-    # def form_invalid(self, form):
-    #     errors = dict(form.errors.items())
-    #     return JsonResponse(errors)
+    def form_valid(self, form):
+        service = form.save()
+
+        if form.cleaned_data.get('password_new1'):
+            service.user.set_password(form.cleaned_data.get('password_new1'))
+
+        return JsonResponse({'status': 'success'})
+
+    def form_invalid(self, form):
+        errors = dict(form.errors.items())
+        return JsonResponse(errors)

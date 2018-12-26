@@ -15,7 +15,7 @@
         <a href=""><i class="fas fa-bell"></i></a>
         <div class="admin">
           <img src="{{ user|get_service_data:'profile_image' }}" alt="">
-          <div class="admin-title"><span>Особистий кабінет наставника</span>
+          <div class="admin-title"><span>Особистий кабінет</span>
             <div class="admin-menu-off">{{ social_service.name }}<i class="fas fa-caret-down"></i>
               <div class="admin-menu-on" style="display: none;">
                 <a href="{% url 'users:logout' %}"><i class="fas fa-sign-out-alt"></i>Вихід з акаунта</a>

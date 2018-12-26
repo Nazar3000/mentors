@@ -8,11 +8,12 @@
         <div class="admin-log-card">
           <div class="admin-log-head">
             <div class="admin-log-img">
-              <img src="{% static 'img/empty-img.png' %}" alt="">
+              {# <img src="{% static 'img/empty-img.png' %}" alt=""> #}
+              <img :src="getImageUrl(service.profile_image)" alt="">
               <div class="setting-card-icon">
                 <label class="add-img" for="files"><i class="fas fa-plus"></i></label>
-                <input id="files" style="display:none;" type="file">
-                <a class="delete-img" href="" title="Delete image">
+                <input id="files" style="display:none;" type="file" @change="changeProfileImage($event)">
+                <a class="delete-img" href="javascript: void(0)" title="Delete image" @click="deleteProfileImage()">
                   <i class="fas fa-trash"></i>
                 </a>
               </div>
