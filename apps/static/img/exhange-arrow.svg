@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="29px" viewBox="0 0 17 29" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 12</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="Main-page-Admin-главная" transform="translate(-1479.000000, -2970.000000)" fill="#FFFFFF" stroke="#FFFFFF">
+            <g id="Group-12" transform="translate(1479.000000, 2970.000000)">
+                <g id="Group-6">
+                    <path d="M3.5,0.5 L3.5,28.5" id="Line-3"></path>
+                    <path id="Line-3-decoration-1" d="M3.5,28.5 L6.5,17.7 L0.5,17.7 L3.5,28.5 Z"></path>
+                </g>
+                <g id="Group-6" transform="translate(13.500000, 14.500000) scale(1, -1) translate(-13.500000, -14.500000) translate(10.000000, 0.000000)">
+                    <path d="M3.5,0.5 L3.5,28.5" id="Line-3"></path>
+                    <path id="Line-3-decoration-1" d="M3.5,28.5 L6.5,17.7 L0.5,17.7 L3.5,28.5 Z"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

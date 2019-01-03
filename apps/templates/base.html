@@ -24,6 +24,8 @@
         {% include 'social_services/social_service_header.html' %}
     {% elif user.is_authenticated and user.user_type == 3 %}
       {% include 'public_services/public_service_header.html' %}
+    {% elif user.is_authenticated and user.user_type == 7 %}
+      {% include 'social_policy/social_policy_header.html' %}
     {% else %}
       {% include 'header.html' %}
     {% endif %}
