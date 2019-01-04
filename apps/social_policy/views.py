@@ -8,7 +8,7 @@ from django.contrib import messages
 from mentors.models import MentorSocialServiceCenterData
 from social_services.models import SocialServiceVideo, BaseSocialServiceCenter
 from users.constants import MentorStatuses
-from users.models import Mentor, Coordinator
+from users.models import Mentor, Coordinator, SocialServiceCenter
 from .forms import SPAuthenticationForm
 
 
@@ -68,6 +68,31 @@ class MainPageView(TemplateView):
             context['contract_subscribed_percentage'] = 0
         return context
 
+    @staticmethod
+    def get_social_service_stats(district_data, service):
+        district_data['public_service_count'] += service.publicservice_set.count()
+
+        related_coordinators = Coordinator.objects.filter(
+            (Q(social_service_center=service)
+             | Q(public_service__in=service.publicservice_set.all())
+             & Q(mentors__isnull=False)
+             & Q(mentors__mentoree__isnull=False)
+             )
+        )
+        district_data['child_count'] += related_coordinators.count()
+
+        related_mentors = Mentor.objects.filter(coordinator__in=related_coordinators)
+        district_data['licenced_mentor_count'] += related_mentors.filter(licenced=True).count()
+        district_data['psychologist_mentor_count'] += related_mentors \
+            .exclude(social_service_center_data__psychologist_meeting_date__isnull=True).count()
+        district_data['infomeeting_mentor_count'] += related_mentors \
+            .exclude(social_service_center_data__infomeeting_date__isnull=True).count()
+        district_data['applied_questionnaire_count'] += related_mentors \
+            .exclude(questionnaire__isnull=True).count()
+        district_data['pairs_disbanded_count'] += related_mentors \
+            .filter(status=MentorStatuses.PAIR_DISBANDED.name).count()
+        return district_data
+
     def get_district_data(self, request):
         if request.GET['district_id'] == 'Київська':
             base_centers = BaseSocialServiceCenter \
@@ -79,6 +104,7 @@ class MainPageView(TemplateView):
 
         district_data = {
             'district_name': '{} область'.format(request.GET['district_id']),
+            'social_service_center_count': 0,
             'public_service_count': 0,
             'child_count': 0,
             'licenced_mentor_count': 0,
@@ -90,31 +116,42 @@ class MainPageView(TemplateView):
 
         for base_service in services_related:
             if base_service.service:
-                district_data['public_service_count'] += base_service.service.publicservice_set.count()
+                district_data['social_service_center_count'] += 1
+                district_data = self.get_social_service_stats(district_data, base_service.service)
 
-                related_coordinators = Coordinator.objects.filter(
-                    (Q(social_service_center=base_service.service)
-                     | Q(public_service__in=base_service.service.publicservice_set.all())
-                     & Q(mentors__isnull=False)
-                     & Q(mentors__mentoree__isnull=False)
-                     )
-                )
-                district_data['child_count'] += related_coordinators.count()
-
-                related_mentors = Mentor.objects.filter(coordinator__in=related_coordinators)
-                district_data['licenced_mentor_count'] += related_mentors.filter(licenced=True).count()
-                district_data['psychologist_mentor_count'] += related_mentors \
-                    .exclude(social_service_center_data__psychologist_meeting_date__isnull=True).count()
-                district_data['infomeeting_mentor_count'] += related_mentors \
-                    .exclude(social_service_center_data__infomeeting_date__isnull=True).count()
-                district_data['applied_questionnaire_count'] += related_mentors \
-                    .exclude(questionnaire__isnull=True).count()
-                district_data['pairs_disbanded_count'] += related_mentors \
-                    .filter(status=MentorStatuses.PAIR_DISBANDED.name).count()
         return district_data
 
     def get(self, request, *args, **kwargs):
-        if 'district_id' in request.GET.keys():
+        if 'district_id' in request.GET.keys() and 'search_value' not in request.GET.keys():
             return JsonResponse(self.get_district_data(request))
+        elif 'search_value' in request.GET.keys():
+            if request.GET['district_id'] == 'Київська':
+                q_region = Q(basesocialservicecenter__region=request.GET['district_id']) \
+                           | Q(basesocialservicecenter__region='Київ')
+            else:
+                q_region = Q(basesocialservicecenter__region=request.GET['district_id'])
+
+            filtered_base_soc_centers = SocialServiceCenter.objects.filter(
+                (Q(city__icontains=request.GET['search_value'])
+                 | Q(name__icontains=request.GET['search_value'])
+                 | Q(address__icontains=request.GET['search_value']))
+                & q_region).values(
+                'pk',
+                'name',
+            )
+            return JsonResponse(list(filtered_base_soc_centers), safe=False)
+        elif 'social_service_id' in request.GET.keys():
+            service_data = {
+                'public_service_count': 0,
+                'child_count': 0,
+                'licenced_mentor_count': 0,
+                'psychologist_mentor_count': 0,
+                'infomeeting_mentor_count': 0,
+                'applied_questionnaire_count': 0,
+                'pairs_disbanded_count': 0,
+            }
+            service_data = self.get_social_service_stats(
+                service_data, SocialServiceCenter.objects.get(pk=request.GET['social_service_id']))
+            return JsonResponse(service_data)
 
         return super().get(request, *args, **kwargs)

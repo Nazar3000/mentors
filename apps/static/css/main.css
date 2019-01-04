@@ -21136,7 +21136,7 @@ select.table-education-name {
 }
 
 .gr-o-maps-item-findbox::before {
-  content: "";
+  /*content: "";*/
   background-image: url(/static/img/maps-item-background-findbox.svg);
   background-size: 50%;
   position: absolute;
