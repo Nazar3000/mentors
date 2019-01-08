@@ -429,6 +429,10 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
 class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/public_services.html'
 
+    def filter_public_service(self):
+        service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id)
+        return service_data
+
     def get_light_public_service_data(self):
         mentors_query_data = self.get_mentors_query_data(
             """
@@ -443,8 +447,7 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
         organization_list = Mentoree.objects.filter(pk__in=mentoree_ids) \
             .distinct().values('organization__pk', 'organization__name')
 
-        service_data = PublicService.objects.filter(social_service_center__pk=self.request.user.id) \
-            .values('pk', 'name', 'status')
+        service_data = self.filter_public_service().values('pk', 'name', 'status')
         for data in service_data:
             service = PublicService.objects.get(pk=data['pk'])
             data['pair_count'] = service.pair_count

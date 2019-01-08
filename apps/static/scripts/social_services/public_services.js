@@ -69,7 +69,7 @@ const publicServices = new Vue({
   },
   methods: {
     getPublicServiceLightData() {
-      $.get('/social-service/public-services/?get_light_public_service_data', (res) => {
+      $.get('?get_light_public_service_data', (res) => {
         this.lightPublicServices = res.service_data;
         this.searchedPublicServices = this.lightPublicServices;
         this.publicServiceStatuses = res.public_service_statuses;
@@ -78,7 +78,7 @@ const publicServices = new Vue({
       })
     },
     getExtendedMentorData(mentorId) {
-      $.get(`/social-service/mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
+      $.get(`?get_extended_data&mentor_id=${mentorId}`, (res) => {
         this.extendedMentor = res.mentor_data;
 
         this.mentorModalDisplay = true;
@@ -86,7 +86,7 @@ const publicServices = new Vue({
     },
     getExtendedPublicServiceData(publicServicePk) {
       if (!this.publicServiceDetail) {
-        $.get(`/social-service/public-services/?get_extended_public_service_data&public_service_pk=${publicServicePk}`, (res) => {
+        $.get(`?get_extended_public_service_data&public_service_pk=${publicServicePk}`, (res) => {
           this.extendedPublicService = res.public_service_data;
           this.extendedPublicService.mentorPk = '';
           this.extendedPublicService.organizationPk = '';
@@ -162,7 +162,7 @@ const publicServices = new Vue({
       }
 
       $.ajax({
-        url: '/social-service/public-services/change_extended_data/',
+        url: 'change_extended_data/',
         data: formData,
         processData: false,
         contentType: false,
@@ -224,7 +224,7 @@ const publicServices = new Vue({
           }
 
           $.ajax({
-            url: '/social-service/public-services/change_light_data/',
+            url: 'change_light_data/',
             data: formData,
             processData: false,
             contentType: false,

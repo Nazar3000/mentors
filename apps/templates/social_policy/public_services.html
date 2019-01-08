@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% load static common %}
+
+{% block content %}
+  {% get_mentors_count_str as mentors_count_str %}
+  <div class="content gr-o-content" id="public-services" v-cloak>
+    <div class="container">
+      <section class="css-social">
+        <div class="css-social-main">
+          <div class="css-social-info gr-o-social-info">
+            <div class="css-social-info-wrapp gr-o-social-info-wrapp">
+              <div class="css-social-link gr-o-social-link">
+                <a href="{% url 'social_policy:main' %}">Головна</a>
+                <a href="{% url 'social_policy:mentors' %}">Наставники</a>
+                <a href="{% url 'social_policy:pairs' %}">Пари</a>
+                <a href="{% url 'social_policy:public_services' %}">Громадські організації</a>
+                <a href="{% url 'social_policy:material' %}">Матеріали</a>
+              </div>
+              <div class="css-social-title gr-o-social-title">
+                <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
+                <div class="css counter gr-o gr-o-counter">
+                  {% for digit in mentors_count_str %}
+                    <div class="counter-numb gr-o-counter-numb">{{ digit }}</div>
+                  {% endfor %}
+                </div><span>Дітей мають наставників<br>(активно взаємодіють)</span>
+              </div>
+            </div>
+            <div class="css-social-search">
+              <img src="{% static 'img/search.svg' %}">
+              <input type="text" placeholder="Почніть вводити дані тут" v-model="publicServiceSearchString">
+            </div>
+            <div class="css-social-add gr-o-social-add" @click="addPublicService">
+              <i class="fas fa-plus"></i><span>Додати організацію</span>
+            </div>
+            <div class="css-slip" v-if="publicServiceModalDisplay" :style="{'display': publicServiceModalDisplay ? 'block' : 'none'}">
+              <div class="css-slip-modal">
+                <div class="css-slip-close" @click="publicServiceModalDisplay=false">×</div>
+                <div class="css-slip-main">
+                  <div class="css-slip-image">
+                    <img :src="extendedPublicService.profile_image ? getImageUrl(extendedPublicService.profile_image) : defaultExtendedMentor.profile_image"
+                         alt=""
+                         :class="{'alert-border': errors['profile_image']}"
+                    >
+                    <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
+                  </div>
+                  <div class="css-slip-icon">
+                    <label class="add-img" for="new-public-service" title="Add image"><i class="fas fa-plus"></i></label>
+                    <input id="new-public-service" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
+                    <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage">
+                      <i class="fas fa-trash"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <p>Органзація</p>
+                    <textarea class="css-slip-input-name"
+                              rows="3"
+                              placeholder="Назва організації"
+                              v-model="extendedPublicService.name"
+                              :class="{'alert-border': errors['name']}"
+                    ></textarea>
+                    <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
+                    <span>Максимальна кількість пар:</span>
+                    <input class="css-slip-input-value"
+                           type="text"
+                           v-model="extendedPublicService.max_pair_count"
+                           :class="{'alert-border': errors['max_pair_count']}"
+                    >
+                    <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
+                  </div>
+                </div>
+                <div class="css-line-modal"></div>
+                <span class="error-form" v-for="err in errors.non_field_errors">[[ err ]]</span>
+                <div class="css-slip-choice gr-o-slip-choice">
+                  <div>
+                    <span>Статус:</span>
+                    <select class="triangle-green" v-model="extendedPublicService.status">
+                      <option v-for="key, value in publicServiceStatuses"
+                              :value="value"
+                      >
+                        [[ key ]]
+                      </option>
+                    </select>
+                    <span>Телефон:</span>
+                    <input type="text" v-model="extendedPublicService.phone_number" :class="{'alert-border': errors['phone_number']}">
+                    <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+                    <span>Email:</span>
+                    <input type="text" v-model="extendedPublicService.email" :class="{'alert-border': errors['email']}">
+                    <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+                    <span>Адреса:</span>
+                    <input type="text" v-model="extendedPublicService.address" :class="{'alert-border': errors['address']}">
+                    <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
+                    <span>Сайт:</span>
+                    <input type="text" v-model="extendedPublicService.website" :class="{'alert-border': errors['website']}">
+                    <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
+                  </div>
+                  <div>
+                    <span>Передати пару:</span>
+                    <select class="triangle-green gr-o-triangle-purple" v-model="extendedPublicService.mentorPk">
+                      <option></option>
+                      <option v-for="option in mentorList"
+                              :value="option.pk"
+                      >
+                        [[ option.full_name ]]
+                      </option>
+                    </select>
+                    <span>Передати всі пари інтерната:</span>
+                    <select class="triangle-green gr-o-triangle-purple" v-model="extendedPublicService.organizationPk">
+                      <option></option>
+                      <option v-for="option in organizationList"
+                              :value="option.organization__pk"
+                      >
+                        [[ option.organization__name ]]
+                      </option>
+                    </select>
+                    <span>№ Договору:</span>
+                    <input type="text" v-model="extendedPublicService.contract_number" :class="{'alert-border': errors['contract_number']}">
+                    <span class="error-form" v-for="err in errors.contract_number">[[ err ]]</span>
+                    <button @click="submitPublicService">Зберегти</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="css-social-img"><img src="{% static 'img/babby-sleep.jpg' %}"></div>
+        </div>
+        <div class="css-table gr-o-table">
+          <div class="css-header gr-o-header">
+            <div class="css-title-org">Організація
+              <span class="css-sort-mentor" @click="reverseSort('searchedPublicServices', 'name'); activeFilterElement = filterElements.ORG_NAME; ; activeFilterElement = filterElements.ORG_NAME">
+                <img :src="activeFilterElement === filterElements.ORG_NAME ? filterImgPath : filterImgPaths.ab">
+              </span>
+            </div>
+            <div class="css-line"></div>
+            <div class="css-title-stat">Статус</div>
+            <div class="css-line"></div>
+            <div class="css-title-license">Ліцензія ГО</div>
+            <div class="css-line"></div>
+            <div class="css-title-val">Кількість пар</div>
+          </div>
+          <template v-for="lightPublicService in searchedPublicServices">
+            <div class="css-table-block" @click="activeLightPublicServicePk=lightPublicService.pk">
+              <div class="css-block-org">
+                <div class="css-block-title" @click="getExtendedPublicServiceData(lightPublicService.pk)">
+                  [[ lightPublicService.name ]]
+                  <div class="help-info-org"><span>Переглянути інформацію<br>про організацію.</span></div>
+                </div>
+                <span class="css-block-phone">(063) 324 43 43</span><span class="css-block-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
+              </div>
+              <div class="css-block-stat">
+                <select class="triangle-green" v-model="lightPublicService.status">
+                  <option v-for="key, value in publicServiceStatuses"
+                          :value="value"
+                  >
+                    [[ key ]]
+                  </option>
+                </select>
+              </div>
+              <div class="css-block-license"><span>[[ lightPublicService.licence ]]</span></div>
+              <div class="css-block-val"><span>[[ lightPublicService.pair_count ]]</span></div>
+            </div>
+            <div class="css-big-card" v-if="publicServiceDetail && activeLightPublicServicePk === lightPublicService.pk">
+              <div class="css-org" v-if="publicServiceView">
+                <div class="css-org-img"><img :src="getImageUrl(extendedPublicService.profile_image)" alt=""></div>
+                <div class="css-org-title">
+                  <h3>го</h3>
+                  <p>[[ extendedPublicService.name ]]</p>
+                  <div class="css-org-title-wrapp">
+                    <div>
+                      <p>[[ extendedPublicService.max_pair_count ]]</p><span>пар<br>максимально</span>
+                    </div>
+                    <div>
+                      <p>[[ extendedPublicService.pair_count ]]</p><span>пар<br>всього</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="css-org-line"></div>
+                <div class="css-org-info">
+                  <span>Телефон:</span>
+                  <p>[[ extendedPublicService.phone_number ]]</p>
+                  <span>Email:</span>
+                  <p>[[ extendedPublicService.email ]]</p>
+                  <span>Адреса:</span>
+                  <p>[[ extendedPublicService.address ]]</p>
+                  <span>Сайт:</span>
+                  <a :href="extendedPublicService.website">[[ extendedPublicService.website ]]</a>
+                </div>
+                <div class="css-org-mentor">
+                  <span>Передати пару:</span>
+                  <select class="triangle-green" disabled>
+                    <option></option>
+                    <option v-for="option in mentorList"
+                            :value="option.pk"
+                    >
+                      [[ option.full_name ]]
+                    </option>
+                  </select>
+
+                  <span>Передати всі пари інтерната:</span>
+                  <select class="triangle-green" disabled>
+                    <option></option>
+                    <option v-for="option in organizationList"
+                            :value="option.organization__pk"
+                    >
+                      [[ option.organization__name ]]
+                    </option>
+                  </select>
+                  <div class="css-org-doc">
+                    <div><span>Номер договору:</span>
+                      <p>[[ extendedPublicService.contract_number ]]</p>
+                    </div>
+                    <div><span>Ліцензія:</span>
+                      <p>[[ extendedPublicService.licence ]]</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="css-org-edit">
+                  <a href="javascript: void(0)" title="Edit" @click="publicServiceView=false"><i class="fas fa-pencil-alt"></i></a>
+                </div>
+              </div>
+              <!-- start  edit card-->
+              <div class="css-org" v-else>
+                <div class="css-org-img-edit">
+                  <img :src="getImageUrl(extendedPublicService.profile_image)" alt="" :class="{'alert-border': errors['profile_image']}">
+                  <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
+                </div>
+                <div class="css-org-icon">
+                  <label class="add-img" :for="extendedPublicService.pk" title="Add image"><i class="fas fa-plus"></i></label>
+                  <input :id="extendedPublicService.pk" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
+                  <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage"><i class="fas fa-trash"></i></div>
+                </div>
+                <div class="css-org-title">
+                  <h3>го</h3>
+                  <textarea rows="3" placeholder="Назва організації" v-model="extendedPublicService.name" :class="{'alert-border': errors['name']}"></textarea>
+                  <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
+                  <div class="css-org-title-wrapp">
+                    <div>
+                      <input type="text" placeholder="00" v-model="extendedPublicService.max_pair_count" :class="{'alert-border': errors['max_pair_count']}">
+                      <span>пар<br>максимально</span>
+                      <span class="error-form" v-for="err in errors.max_pair_count">[[ err ]]</span>
+                    </div>
+                    <div>
+                      <p>[[ extendedPublicService.pair_count ]]</p><span>пар<br>всього</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="css-org-line"></div>
+                <div class="css-org-info">
+                  <span>Телефон:</span>
+                  <input type="text" v-model="extendedPublicService.phone_number" :class="{'alert-border': errors['phone_number']}">
+                  <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
+                  <span>Email:</span>
+                  <input type="text" v-model="extendedPublicService.email" :class="{'alert-border': errors['email']}">
+                  <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
+                  <span>Адреса:</span>
+                  <input type="text" v-model="extendedPublicService.address" :class="{'alert-border': errors['address']}">
+                  <span class="error-form" v-for="err in errors.address">[[ err ]]</span>
+                  <span>Сайт:</span>
+                  <input type="text" v-model="extendedPublicService.website" :class="{'alert-border': errors['website']}">
+                  <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
+                </div>
+                <div class="css-org-mentor">
+                  <span class="error-form" v-for="err in errors.non_field_errors">[[ err ]]</span>
+                  <span>Передати пару:</span>
+                  <select class="triangle-green" v-model="extendedPublicService.mentorPk">
+                    <option></option>
+                    <option v-for="option in mentorList"
+                            :value="option.pk"
+                    >
+                      [[ option.full_name ]]
+                    </option>
+                  </select>
+
+                  <span>Передати всі пари інтерната:</span>
+                  <select class="triangle-green" v-model="extendedPublicService.organizationPk">
+                    <option></option>
+                    <option v-for="option in organizationList"
+                            :value="option.organization__pk"
+                    >
+                      [[ option.organization__name ]]
+                    </option>
+                  </select>
+                  <div class="css-org-doc">
+                    <div><span>Номер договору:</span>
+                      <input type="text" v-model="extendedPublicService.contract_number" :class="{'alert-border': errors['contract_number']}">
+                      <span class="error-form" v-for="err in errors.contract_number">[[ err ]]</span>
+                    </div>
+                    <div><span>Ліцензія:</span>
+                      <input type="text" v-model="extendedPublicService.licence" :class="{'alert-border': errors['licence']}">
+                      <span class="error-form" v-for="err in errors.licence">[[ err ]]</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="css-org-edit">
+                  <a href="javascript: void(0)" title="Submit" @click="submitPublicService">
+                    <i class="fas fa-check"></i>
+                  </a>
+                </div>
+              </div>
+              <!-- end edit card-->
+              {% include 'social_services/public_service_mentors_table.html' %}
+            </div>
+          </template>
+          <div class="css-info">* Щоб переглянути історію взаємодії наставника та вихованця натисніть на ім’я вихованця в таблиці.</div>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+      const soc_service_id = '{{ user.id }}';
+  </script>
+  <script src="{% static 'scripts/social_services/public_services.js' %}"></script>
+{% endblock %}

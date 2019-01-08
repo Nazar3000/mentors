@@ -260,7 +260,10 @@ class SPPairsView(CheckIfUserIsSocialPolicyMixin, PairsView):
 
 
 class SPPublicServicesView(CheckIfUserIsSocialPolicyMixin, PublicServicesView):
-    pass
+    template_name = 'social_policy/public_services.html'
+
+    def filter_public_service(self):
+        return PublicService.objects.all()
 
 
 class SPMaterialView(CheckIfUserIsSocialPolicyMixin, MaterialView):

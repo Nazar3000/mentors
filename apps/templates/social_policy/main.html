@@ -29,9 +29,13 @@
         <div class="css-social-main">
           <div class="css-social-info gr-o-social-info">
             <div class="css-social-info-wrapp gr-o-social-info-wrapp">
-              <div class="css-social-link gr-o-social-link"><a href="css-main.html">Головна</a><a
-                  href="css-mentor.html">Наставники</a><a href="css-mentor.html">Пари</a><a href="css-social.html">Громадські
-                організації</a><a href="css-material.html">Матеріали</a></div>
+              <div class="css-social-link gr-o-social-link">
+                <a href="{% url 'social_policy:main' %}">Головна</a>
+                <a href="{% url 'social_policy:mentors' %}">Наставники</a>
+                <a href="{% url 'social_policy:pairs' %}">Пари</a>
+                <a href="{% url 'social_policy:public_services' %}">Громадські організації</a>
+                <a href="{% url 'social_policy:material' %}">Матеріали</a>
+              </div>
               <div class="css-social-title gr-o-social-title">
                 <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
                 <div class="css counter gr-o gr-o-counter">
