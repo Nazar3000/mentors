@@ -1,10 +1,13 @@
+import os
+
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, FormView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
+from xlsxwriter import Workbook
 
 from mentors.models import MentorSocialServiceCenterData
 from social_policy.models import ExtraRegionData
@@ -173,9 +176,79 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
                 service_data, SocialServiceCenter.objects.get(pk=request.GET['social_service_id']))
             return JsonResponse(service_data)
         elif 'regions_table' in request.GET.keys():
-            pass
+            regions_data = list(ExtraRegionData.objects.all().values('region', 'child_count'))
+            for region in regions_data:
+                if region['region'] == 'Київська':
+                    q_region = Q(region=region['region']) | Q(region='Київ')
+                else:
+                    q_region = Q(region=region['region'])
+
+                related_base_services = BaseSocialServiceCenter.objects.filter(q_region).select_related('service')
+                mentoree_count = 0
+                admitted_to_child_count = 0
+                passed_training_count = 0
+                for base_service in related_base_services:
+                    if base_service.service:
+                        related_coordinators = Coordinator.objects.filter(
+                            (Q(social_service_center=base_service.service)
+                             | Q(public_service__in=base_service.service.publicservice_set.all())
+                             & Q(mentors__isnull=False)
+                             & Q(mentors__mentoree__isnull=False)
+                             )
+                        )
+                        related_mentors = Mentor.objects.filter(coordinator__in=related_coordinators)
+
+                        mentoree_count += related_mentors.filter(meetings__isnull=False).count()
+                        admitted_to_child_count += related_mentors\
+                            .filter(social_service_center_data__admitted_to_child=True).count()
+                        passed_training_count += related_mentors\
+                            .filter(social_service_center_data__training_date__isnull=False).count()
+
+                region['mentoree_count'] = mentoree_count
+                region['admitted_to_child_count'] = admitted_to_child_count
+                region['passed_training_count'] = passed_training_count
+
+            if 'xlsx' in request.GET.keys():
+                ordered_list = ['region', 'child_count', 'mentoree_count',
+                                'admitted_to_child_count', 'passed_training_count']
+                header_list = ['Область', 'Дітей в закладах', 'Дітей з наставниками',
+                               'Наставників з висновками (за весь час)',
+                               'Наставників, які пройшли курс підготовки (за весь час)']
+                filename = 'зведена таблиця.xlsx'
+
+                return self.get_xlsx_response(filename, ordered_list, header_list, regions_data)
+
+            return JsonResponse(regions_data, safe=False)
 
         return super().get(request, *args, **kwargs)
+
+    @staticmethod
+    def get_xlsx_response(filename, ordered_list, header_list, data):
+        wb = Workbook(filename)
+        ws = wb.add_worksheet()
+
+        first_row = 0
+        for header in header_list:
+            col = header_list.index(header)  # we are keeping order.
+            ws.write(first_row, col, header)  # we have written first row which is the header of worksheet also.
+
+        row = 1
+        for data_dict in data:
+            for _key, _value in data_dict.items():
+                col = ordered_list.index(_key)
+                ws.write(row, col, _value)
+            row += 1  # enter the next row
+        wb.close()
+        with open(filename, 'rb') as f:
+            data = f.read()
+
+            response = HttpResponse(
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+            response.write(data)
+        os.remove(filename)
+
+        return response
 
 
 class SPMentorsView(CheckIfUserIsSocialPolicyMixin, MentorsView):

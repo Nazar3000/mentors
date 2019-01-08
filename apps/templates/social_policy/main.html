@@ -358,76 +358,48 @@
           <div class="col-lg-12">
             <h2 class="gr-o-subtitle-all_stats">Зведена таблиця по областям</h2>
           </div>
-          <div class="col-lg-12">
+          <div class="col-lg-12" id="regions-stats-table">
             <div class="page-form-education gr-o-page-form-stats">
               <div class="table-education gr-o-table-stats">
                 <div class="table-education-header gr-o-table-stats-header">
                   <div class="table-education-main gr-o-table-stats-main">Область</div>
                   <div class="table-line"></div>
                   <div class="table-education-start gr-o-table-stats-start">Дітей в <br> закладах<a
-                      href="javascript:void(0)"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a></div>
+                      href="javascript:void(0)" @click="reverseSort('child_count')"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a></div>
                   <div class="table-line"></div>
                   <div class="table-education-end gr-o-table-stats-end">Дітей з <br>наставниками<a
-                      href="javascript:void(0)"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a></div>
+                      href="javascript:void(0)" @click="reverseSort('mentoree_count')"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a></div>
                   <div class="table-line"></div>
-                  <div class="table-education-end gr-o-table-stats-end">Наставників з <br> висовками <br> (за весь
-                    час)<a href="javascript:void(0)"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a></div>
+                  <div class="table-education-end gr-o-table-stats-end">Наставників з <br> висновками <br> (за весь
+                    час)<a href="javascript:void(0)" @click="reverseSort('admitted_to_child_count')"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a></div>
                   <div class="table-line"></div>
                   <div class="table-education-special gr-o-table-stats-special">Наставників, які <br> пройшли курс <br>
-                    підготовки (за весь час)<a href="javascript:void(0)"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a>
+                    підготовки (за весь час)<a href="javascript:void(0)" @click="reverseSort('passed_training_count')"><img src="{% static 'img/exhange-arrow.svg' %}" alt=""></a>
                   </div>
                 </div>
-                <div class="table-education-line gr-o-table-stats-line">
-                  <div class="table-education-name gr-o-table-stats-name">Вінницька</div>
+                <div class="table-education-line gr-o-table-stats-line" v-for="region in regions_data.slice(0,sliceSize)">
+                  <div class="table-education-name gr-o-table-stats-name">[[ region.region ]]</div>
                   <div class="table-education-input gr-o-table-stats-input gr-o-table-one-input">
-                    <div>100</div>
+                    <div>[[ region.child_count ]]</div>
                   </div>
                   <div class="table-education-input gr-o-table-stats-input gr-o-table-two-input">
-                    <div>100 /<span class="gr-o-table-stats-input_prossent">0,3%</span></div>
+                    <div>[[ region.mentoree_count ]] /<span class="gr-o-table-stats-input_prossent">[[ getPercentage(region.mentoree_count, region.child_count) ]]%</span></div>
                   </div>
                   <div class="table-education-input gr-o-table-stats-input">
-                    <div>100</div>
+                    <div>[[ region.admitted_to_child_count ]]</div>
                   </div>
                   <div class="table-education-input gr-o-table-stats-inputlast">
-                    <div>100</div>
-                  </div>
-                </div>
-                <div class="table-education-line gr-o-table-stats-line">
-                  <div class="table-education-name gr-o-table-stats-name">Волинська</div>
-                  <div class="table-education-input gr-o-table-stats-input gr-o-table-one-input">
-                    <div>100</div>
-                  </div>
-                  <div class="table-education-input gr-o-table-stats-input gr-o-table-two-input">
-                    <div>100 /<span class="gr-o-table-stats-input_prossent">0,27%</span></div>
-                  </div>
-                  <div class="table-education-input gr-o-table-stats-input">
-                    <div>100</div>
-                  </div>
-                  <div class="table-education-input gr-o-table-stats-inputlast">
-                    <div>100</div>
-                  </div>
-                </div>
-                <div class="table-education-line gr-o-table-stats-line gr-o-table-stats-line-last">
-                  <div class="table-education-name gr-o-table-stats-name">Дніпровська</div>
-                  <div class="table-education-input gr-o-table-stats-input gr-o-table-one-input">
-                    <div>100</div>
-                  </div>
-                  <div class="table-education-input gr-o-table-stats-input gr-o-table-two-input">
-                    <div>100 /<span class="gr-o-table-stats-input_prossent">  0,32%</span></div>
-                  </div>
-                  <div class="table-education-input gr-o-table-stats-input">
-                    <div>100</div>
-                  </div>
-                  <div class="table-education-input gr-o-table-stats-inputlast">
-                    <div>100</div>
+                    <div>[[ region.passed_training_count ]]</div>
                   </div>
                 </div>
               </div>
             </div>
             <div class="gr-o-table-stats-links">
-              <div class="gr-o-table-stats-wrapper-all"><a href="javascript:void(0);">Дивитися всі</a></div>
-              <div class="gr-o-table-stats-wrapper-download"><img src="{% static 'img/download.svg' %}" alt=""><a href="#" download>Завантажити
-                в Excel</a></div>
+              <div class="gr-o-table-stats-wrapper-all"><a href="javascript:void(0);" @click="changeSliceSize">
+                [[ sliceSize === 3 ? 'Дивитися всі' : 'Згорнути' ]]
+              </a></div>
+              <div class="gr-o-table-stats-wrapper-download"><img src="{% static 'img/download.svg' %}" alt="">
+                <a href="?regions_table&xlsx">Завантажити в Excel</a></div>
             </div>
           </div>
           <div class="col-lg-7">
@@ -558,4 +530,5 @@
 
 {% block extra_js %}
   <script src="{% static 'scripts/social_policy/map.js' %}"></script>
+  <script src="{% static 'scripts/social_policy/regions_stats_table.js' %}"></script>
 {% endblock %}
