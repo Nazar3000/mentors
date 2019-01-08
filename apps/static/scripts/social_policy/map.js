@@ -33,6 +33,16 @@ new Vue({
       $.get(`?social_service_id=${this.selectedSocialService.pk}`, (res) => {
         this.districtData = res;
       });
+    },
+    getPercentage(val1, val2) {
+      if (val2 !== 0) {
+        let divideValue = (val1 / val2).toFixed(3);
+        if (divideValue === '0.000' && val1 > 0) {
+          divideValue = '0.001';
+        }
+        return divideValue
+      }
+      return 0
     }
   },
   watch: {

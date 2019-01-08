@@ -1,0 +1,146 @@
+[
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Закарпатська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Дніпропетровська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Луганська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Харківська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Миколаївська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Хмельницька"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Тернопільська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Черкаська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Сумська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Полтавська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Івано-Франківська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Херсонська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Київська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Чернівецька"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Волинська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Кіровоградська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Донецька"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Рівненська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Запорізька"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Чернігівський"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Вінницька"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Одеська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Житомирська"
+  }
+},
+{
+  "model": "social_policy.extraregiondata",
+  "fields": {
+    "region_name": "Львівська"
+  }
+}
+]

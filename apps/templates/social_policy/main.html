@@ -89,17 +89,17 @@
             </div>
             <div class="col-lg-4">
               <div class="gr-o-features-item"><img src="{% static 'img/enterprise.svg' %}"><span
-                  class="gr-o-features-item-number">346</span></div>
+                  class="gr-o-features-item-number">{{ organization_count }}</span></div>
               <div class="gr-o-features-item-name">Закладiв</div>
             </div>
             <div class="col-lg-4">
               <div class="gr-o-features-item"><img src="{% static 'img/hotel.svg' %}"><span
-                  class="gr-o-features-item-number">796</span></div>
+                  class="gr-o-features-item-number">{{ social_service_center_count }}</span></div>
               <div class="gr-o-features-item-name">ЦСССДМ</div>
             </div>
             <div class="col-lg-4">
               <div class="gr-o-features-item"><img src="{% static 'img/building.svg' %}"><span
-                  class="gr-o-features-item-number gr-o-spesnumber">33</span></div>
+                  class="gr-o-features-item-number gr-o-spesnumber">{{ public_service_count }}</span></div>
               <div class="gr-o-features-item-name">Громадські <br> організації</div>
             </div>
           </div>
@@ -116,25 +116,24 @@
                   <h2 class="gr-o-maps-item-infobox-title">[[ districtData.district_name ]]</h2>
                   <div class="gr-o-maps-item-closed"><img src="{% static 'img/maps-item-closed.svg' %}" alt=""></div>
                   <ul class="gr-o-maps-item-infobox-items_child">
-                    <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">16 000</span>дітей
-                      в установах<a class="gr-o-maps-item-infobox-item_child-link" href="javascript:void(0)">Оновити
-                        кількість дітей</a></li>
+                    <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.children_in_organizations_count ]]</span>дітей
+                      в установах</li>
                     <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.child_count ]]</span>дітей
-                      з Наставниками (активна взаимодія) / <span
-                          class="gr-o-maps-item-infobox-item_child-stats">0,005%</span></li>
+                      з Наставниками (активна взаємодія) / <span
+                          class="gr-o-maps-item-infobox-item_child-stats">[[ getPercentage(districtData.child_count, districtData.children_in_organizations_count) ]]%</span></li>
                     <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.licenced_mentor_count ]]</span>сертифікованих
-                      Наставників / <span class="gr-o-maps-item-infobox-item_child-stats">32%</span></li>
+                      Наставників / <span class="gr-o-maps-item-infobox-item_child-stats">[[ getPercentage(districtData.licenced_mentor_count, districtData.children_in_organizations_count) ]]%</span></li>
                   </ul>
                   <ul class="gr-o-maps-item-infobox-items_child">
                     <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.psychologist_mentor_count ]]</span>співбесід
-                      з психологом / <span class="gr-o-maps-item-infobox-item_child-stats">36%</span></li>
+                      з психологом / <span class="gr-o-maps-item-infobox-item_child-stats">[[ getPercentage(districtData.psychologist_mentor_count, districtData.children_in_organizations_count) ]]%</span></li>
                     <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.infomeeting_mentor_count ]]</span>інфо-зустрічей
-                      / <span class="gr-o-maps-item-infobox-item_child-stats">51%</span></li>
+                      / <span class="gr-o-maps-item-infobox-item_child-stats">[[ getPercentage(districtData.infomeeting_mentor_count, districtData.children_in_organizations_count) ]]%</span></li>
                     <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.applied_questionnaire_count ]]</span>подали
-                      заяву / <span class="gr-o-maps-item-infobox-item_child-stats">32%</span></li>
+                      заяву / <span class="gr-o-maps-item-infobox-item_child-stats">[[ getPercentage(districtData.applied_questionnaire_count, districtData.children_in_organizations_count) ]]%</span></li>
                   </ul>
                   <ul class="gr-o-maps-item-infobox-items_child">
-                    <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">46</span>установ
+                    <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.organization_count ]]</span>установ
                     </li>
                     <li class="gr-o-maps-item-infobox-item_child"><span class="gr-o-maps-item-infobox-item_child-count">[[ districtData.social_service_center_count ]]</span>ЦСССДМ-ів
                     </li>

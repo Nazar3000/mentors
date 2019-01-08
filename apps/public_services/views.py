@@ -19,8 +19,10 @@ from .models import PublicServiceVideo
 class CheckIfUserIsPublicServiceMixin(UserPassesTestMixin):
     def test_func(self):
         try:
-            PublicService.objects.get(user=self.request.user)
-            return self.request.user.user_type == UserTypes.PUBLIC_SERVICE
+            if self.request.user.is_authenticated:
+                PublicService.objects.get(user=self.request.user)
+                return self.request.user.user_type == UserTypes.PUBLIC_SERVICE
+            return False
         except (PublicService.DoesNotExist, TypeError):
             return False
 

@@ -1,15 +1,25 @@
-from django.db.models import Q, Count
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, FormView
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
 from mentors.models import MentorSocialServiceCenterData
-from social_services.models import SocialServiceVideo, BaseSocialServiceCenter
-from users.constants import MentorStatuses
-from users.models import Mentor, Coordinator, SocialServiceCenter
+from social_policy.models import ExtraRegionData
+from social_services.models import BaseSocialServiceCenter
+from social_services.views import MentorsView, PairsView, PublicServicesView, MaterialView
+from users.constants import MentorStatuses, UserTypes
+from users.models import Mentor, Coordinator, SocialServiceCenter, Organization, PublicService
 from .forms import SPAuthenticationForm
+
+
+class CheckIfUserIsSocialPolicyMixin(UserPassesTestMixin):
+    def test_func(self):
+        if self.request.user.is_authenticated:
+            return self.request.user.user_type == UserTypes.SOCIAL_POLICY_MINISTRY
+        return False
 
 
 class SPLoginView(FormView):
@@ -29,11 +39,15 @@ class SPLoginView(FormView):
         return redirect('social_policy:main')
 
 
-class MainPageView(TemplateView):
+class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
     template_name = 'social_policy/main.html'
 
     def get_context_data(self, **kwargs):
         context = super(MainPageView, self).get_context_data(**kwargs)
+
+        context['organization_count'] = Organization.objects.count()
+        context['social_service_center_count'] = BaseSocialServiceCenter.objects.count()
+        context['public_service_count'] = PublicService.objects.filter(contract_number__isnull=False).count()
 
         context['licenced'] = Mentor.objects.filter(licenced=True).count()
         context['psychologist_met'] = MentorSocialServiceCenterData.objects\
@@ -82,6 +96,8 @@ class MainPageView(TemplateView):
         district_data['child_count'] += related_coordinators.count()
 
         related_mentors = Mentor.objects.filter(coordinator__in=related_coordinators)
+        district_data['organization_count'] += related_mentors\
+            .exclude(mentoree__organization__isnull=True).count()
         district_data['licenced_mentor_count'] += related_mentors.filter(licenced=True).count()
         district_data['psychologist_mentor_count'] += related_mentors \
             .exclude(social_service_center_data__psychologist_meeting_date__isnull=True).count()
@@ -95,15 +111,18 @@ class MainPageView(TemplateView):
 
     def get_district_data(self, request):
         if request.GET['district_id'] == 'Київська':
-            base_centers = BaseSocialServiceCenter \
-                .objects.filter(Q(region=request.GET['district_id']) | Q(region='Київ'))
+            q_region = Q(region=request.GET['district_id']) | Q(region='Київ')
         else:
-            base_centers = BaseSocialServiceCenter.objects.filter(region=request.GET['district_id'])
+            q_region = Q(region=request.GET['district_id'])
+
+        base_centers = BaseSocialServiceCenter.objects.filter(q_region)
 
         services_related = base_centers.select_related('service').prefetch_related('service__publicservice_set')
 
         district_data = {
             'district_name': '{} область'.format(request.GET['district_id']),
+            'children_in_organizations_count': ExtraRegionData.objects.get(q_region).child_count,
+            'organization_count': 0,
             'social_service_center_count': 0,
             'public_service_count': 0,
             'child_count': 0,
@@ -153,5 +172,23 @@ class MainPageView(TemplateView):
             service_data = self.get_social_service_stats(
                 service_data, SocialServiceCenter.objects.get(pk=request.GET['social_service_id']))
             return JsonResponse(service_data)
+        elif 'regions_table' in request.GET.keys():
+            pass
 
         return super().get(request, *args, **kwargs)
+
+
+class SPMentorsView(CheckIfUserIsSocialPolicyMixin, MentorsView):
+    pass
+
+
+class SPPairsView(CheckIfUserIsSocialPolicyMixin, PairsView):
+    pass
+
+
+class SPPublicServicesView(CheckIfUserIsSocialPolicyMixin, PublicServicesView):
+    pass
+
+
+class SPMaterialView(CheckIfUserIsSocialPolicyMixin, MaterialView):
+    pass

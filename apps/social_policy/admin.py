@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from social_policy.models import ExtraRegionData
+
+admin.site.register(ExtraRegionData)

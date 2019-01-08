@@ -226,8 +226,10 @@ class RoadmapStep3(RoadmapStepMixin):
 class CheckIfUserIsMentorMixin(UserPassesTestMixin):
     def test_func(self):
         try:
-            mentor = Mentor.objects.get(user=self.request.user)
-            return self.request.user.user_type == UserTypes.MENTOR and mentor.licenced
+            if self.request.user.is_authenticated:
+                mentor = Mentor.objects.get(user=self.request.user)
+                return self.request.user.user_type == UserTypes.MENTOR and mentor.licenced
+            return False
         except Mentor.DoesNotExist:
             return False
 

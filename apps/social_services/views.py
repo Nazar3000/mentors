@@ -34,14 +34,18 @@ User = get_user_model()
 
 class CheckIfUserIsPreSocialServiceCenterMixin(UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
+        if self.request.user.is_authenticated:
+            return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
+        return False
 
 
 class CheckIfUserIsSocialServiceCenterMixin(UserPassesTestMixin):
     def test_func(self):
         try:
-            SocialServiceCenter.objects.get(user=self.request.user)
-            return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
+            if self.request.user.is_authenticated:
+                SocialServiceCenter.objects.get(user=self.request.user)
+                return self.request.user.user_type == UserTypes.SOCIAL_SERVICE_CENTER
+            return False
         except (SocialServiceCenter.DoesNotExist, TypeError):
             return False
 
