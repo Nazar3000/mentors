@@ -12,5 +12,5 @@ urlpatterns = [
     path('pairs/', views.SPPairsView.as_view(), name='pairs'),
     path('public-services/', views.SPPublicServicesView.as_view(), name='public_services'),
     path('public-services/<str:action>/', views.SPPublicServicesView.as_view(), name='public_services_post'),
-    path('material/', views.MaterialView.as_view(), name='material'),
+    path('material/', views.SPMaterialView.as_view(), name='material'),
 ]

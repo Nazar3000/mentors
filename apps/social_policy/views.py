@@ -10,7 +10,7 @@ from django.contrib import messages
 from xlsxwriter import Workbook
 
 from mentors.models import MentorSocialServiceCenterData
-from social_policy.models import ExtraRegionData
+from social_policy.models import ExtraRegionData, SPMaterial, SPMaterialCategory
 from social_services.models import BaseSocialServiceCenter
 from social_services.views import MentorsView, PairsView, PublicServicesView, MaterialView
 from users.constants import MentorStatuses, UserTypes
@@ -281,4 +281,11 @@ class SPPublicServicesView(CheckIfUserIsSocialPolicyMixin, PublicServicesView):
 
 
 class SPMaterialView(CheckIfUserIsSocialPolicyMixin, MaterialView):
-    pass
+    model = SPMaterial
+    template_name = 'social_policy/material.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MaterialView, self).get_context_data(**kwargs)
+        context['object_list'] = context['object_list'].order_by('id')
+        context['categories'] = SPMaterialCategory.objects.all()
+        return context

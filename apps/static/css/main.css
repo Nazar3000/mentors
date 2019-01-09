@@ -21679,3 +21679,56 @@ select.table-education-name {
 .gr-o-mentor .gr-o-social-card-wrapp > div > span {
   color: #7B57A0;
 }
+
+.gr-o-css-material-link a {
+  background-color: #7B57A0;
+}
+
+.gr-o-css-material-link a:hover {
+  -webkit-box-shadow: 2px 5px 10px 0 #7B57A0;
+          box-shadow: 2px 5px 10px 0 #7B57A0;
+}
+
+.gr-o-css-material-title p span {
+  color: #7B57A0;
+}
+
+.gr-o-css-material .gr-o-counter-numb {
+  color: #7B57A0;
+}
+
+.gr-o-css-block-one {
+  background: #7B57A0;
+}
+
+.gr-o-css-material-item a {
+  color: #7B57A0;
+}
+
+.gr-o-css-block-two {
+  background: #7B57A0;
+}
+
+.gr-o-css-block-three {
+  background: #7B57A0;
+}
+
+.gr-o-css-block-four {
+  background: #7B57A0;
+}
+
+.gr-o-css-block-five {
+  background: #7B57A0;
+}
+
+.gr-o-css-block-six {
+  background: #7B57A0;
+}
+
+.gr-o-css-block-seven {
+  background: #7B57A0;
+}
+
+.gr-o-css-material-video a {
+  color: #7B57A0;
+}
