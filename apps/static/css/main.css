@@ -21582,3 +21582,100 @@ select.table-education-name {
     -webkit-transition: all 300ms;
     transition: all 300ms;
 }
+
+.gr-o-mentor .gr-o-counter-numb {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-mentor-add > i {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-css-table-header {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-triangle-purple {
+  background-image: url(/static/img/triangle-purple.svg);
+}
+
+.gr-o-mentor .gr-o-card-title h2 {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-edit a {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-stat-wrapp > div > span {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-stat-wrapp > div > p > a i {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-stat-wrapp > div > a {
+  background-color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-right > span {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-check input[type=checkbox].css-font:checked ~ label:before {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-subtitle > div {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-right > label input[type="radio"]:checked:after {
+  background: #7B57A0 !important;
+}
+
+.gr-o-mentor .gr-o-card-right > label > span {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-right .access-yes button {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-right .contract-num span {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-card-right .contract-date span {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-css-card-all {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-mentor-phone {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-social-card-icon .add-img {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-social-card-icon .delete-img {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-social-card-title h2 {
+  color: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-social-card-edit,
+.gr-o-social-card-close {
+  background: #7B57A0;
+}
+
+.gr-o-mentor .gr-o-social-card-wrapp > div > span {
+  color: #7B57A0;
+}
