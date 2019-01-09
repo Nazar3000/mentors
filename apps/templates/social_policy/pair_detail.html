@@ -1,0 +1,200 @@
+{% extends 'social_services/base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content">
+    <div class="container">
+      <section class="team">
+        <div class="team-card gr-o-team-card">
+          <h2>Історія взаємодії</h2>
+          <div class="team-wrapp">
+            <div class="team-people">
+              <div class="team-people-item gr-o-team-people-item">
+                {% if mentor.profile_image %}
+                  <img src="{{ mentor.profile_image.url }}" alt="">
+                {% endif %}
+                <div>
+                  <h5>Наставник</h5>
+                  <p>{{ mentor.first_name }} {{ mentor.last_name }}</p><span>{{ mentor_age }} роки</span>
+                </div>
+              </div>
+              <div class="team-people-item gr-o-team-people-item">
+                {% if mentor.mentoree.profile_image %}
+                  <img src="{{ mentor.mentoree.profile_image.url }}" alt="">
+                {% endif %}
+                <div>
+                  <h5>Вихованець</h5>
+                  <p>{{ mentor.mentoree.first_name }} {{ mentor.mentoree.last_name }}</p><span>{{ mentoree_age }} років</span>
+                </div>
+              </div>
+            </div>
+            <div class="team-card-title gr-o-team-card-title" id="pair-card">
+              <template v-if="viewMode">
+                <div>
+                  <h4>Статус пари:</h4>
+                  <div class="team-card-wrapp gr-o-team-card-wrapp">
+                    <div>
+                      [[ statuses[pairData.status] ]]
+                      <span>Дата початку взаємодії:</span>
+                      <p>[[ startDate ]]</p>
+                      <span>Дата відомої останньої зустрічі:</span>
+                      <p>[[ endDate ]]</p>
+                    </div>
+                    <div><span>Відповідальний:</span>
+                      <p>[[ pairData.responsible === soc_service_id ? 'ЦСССДМ' : findPublicService() ]]</p>
+                      <span>№ Договору:</span>
+                      <p>[[ pairData.contract_number ]]</p>
+                      <span>Інтернат:</span>
+                      <p>[[ organizations.length ? organizations.find(o => o.pk === pairData.organization_pk).name : '' ]]</p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <a href="javascript: void(0)" title="Edit" @click="viewMode=false">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                </div>
+              </template>
+              <template v-else>
+                <div>
+                  <h4>Статус пари:</h4>
+                  <div class="team-card-wrapp">
+                    <div>
+                      <select class="triangle-green" v-model="pairData.status">
+                        <option v-for="key, value in mentorStatuses" :value="value">
+                          [[ key ]]
+                        </option>
+                      </select>
+                      <span>Дата початку взаємодії:</span>
+                      <p>[[ startDate ]]</p>
+                      <span>Дата відомої останньої зустрічі:</span>
+                      <p>[[ endDate ]]</p>
+                    </div>
+                    <div>
+                      <span>Відповідальний:</span>
+                      <select class="triangle-green" v-model="pairData.responsible">
+                        <option>ЦСССДМ</option>
+                        <option v-for="service in publicServices"
+                                :value="service.pk"
+                        >
+                          [[ service.name ]]
+                        </option>
+                      </select>
+                      <span>№ Договору:</span>
+                      <input type="text" v-model="pairData.contract_number">
+                      <span>Інтернат:</span>
+                      <select v-model="pairData.organization_pk">
+                        <option v-for="org in organizations" :value="org.pk">
+                          [[ org.name ]]
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <a href="javascript: void(0)" title="Edit" @click="viewMode=false">
+                    <i class="fas fa-pencil-alt"></i>
+                  </a>
+                </div>
+              </template>
+            </div>
+          </div>
+          <h3>{{ mentor.mentoree.first_name }} {{ mentor.mentoree.last_name }}</h3>
+          <div class="team-medium-line"></div>
+          <div class="team-dream-wrapp">
+            <div class="team-dream-item"><span>Мріє:</span>
+              <p>{{ mentor.mentoree.dream }}</p>
+            </div>
+            <div class="team-dream-item"><span>Хоче стати:</span>
+              <p>{{ mentor.mentoree.want_to_become }}</p>
+            </div>
+            <div class="team-dream-item"><span>Ненавидить:</span>
+              <p>{{ mentor.mentoree.hates }}</p>
+            </div>
+            <div class="team-dream-item"><span>Інше:</span>
+              <p>{{ mentor.mentoree.extra_data }}</p>
+            </div>
+            <div class="team-dream-item"><span>Боїться:</span>
+              <p>{{ mentor.mentoree.fears }}</p>
+            </div>
+            <div class="team-dream-item"><span>Любить:</span>
+              <p>{{ mentor.mentoree.loves }}</p>
+            </div>
+            <div class="team-dream-item"><span>Сильні сторони :</span>
+              <p>{{ mentor.mentoree.strengths }}</p>
+            </div>
+          </div>
+          <div class="team-long-line"></div>
+          <div class="team-local gr-o-team-local"><span>Установа:</span>
+            <p>{{ mentor.mentoree.organization.name }}</p>
+            <div>
+              <div><span>Адреса:</span>
+                <p>{{ mentor.mentoree.organization.address }}</p>
+              </div>
+              <div><span>Телефони установи:</span>
+                {% for phone_number in mentor.mentoree.organization.phone_numbers %}
+                  <p>{{ phone_number }}</p>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="team-medium-line"></div>
+          <div class="team-history">
+            <h3>Коротка історія дитини</h3>
+            <div class="team-history-line"></div>
+            <p>{{ mentor.mentoree.story }}</p>
+          </div>
+          <h2>Щоденник зустрічей</h2>
+          <div class="team-carousel gr-o-team-carousel">
+            <div class="owl-carousel">
+              {% for meeting_chunk in meetings %}
+                <div class="team-diary-wrapp">
+                  {% for meeting in meeting_chunk %}
+                    <div class="team-diary" data-id="{{ meeting.id }}">
+                      <div class="team-diary-title">
+                        <h3>{{ meeting.title }}</h3>
+                        <hr><span>{{ meeting.date|date:'d.m.Y' }}</span>
+                        <p>{{ meeting.description }}</p>
+                        <div class="team-diary-more gr-o-team-diary-more">Читати далі</div>
+                      </div>
+                      <div class="team-diary-img">
+                        <div class="owl-carousel">
+                          {% for image in meeting.meetingimage_set.all %}
+                            {% if image.image %}
+                              <div class="team-diary-carousel"><img class="w-100" src="{{ image.image.url }}"></div>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="team-diary-content" data-id="{{ meeting.id }}">
+                      <h3>{{ meeting.title }}</h3>
+                      <hr><span>{{ meeting.date|date:'d.m.Y' }}</span>
+                      <div><span>Опис:</span>
+                        <p>{{ meeting.description }}</p>
+                      </div>
+                      <div><span>Спостереження за вихованцем:</span>
+                        <p>{{ meeting.observation }}</p>
+                      </div>
+                      <div><span>Замітка для наступної зустрічі:</span>
+                        <p>{{ meeting.note_for_next_meeting }}</p>
+                      </div>
+                      <div class="team-diary-close">Згорнути</div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    const soc_service_id = '{{ user.id }}';
+  </script>
+  <script src="{% static 'scripts/social_services/pair_detail.js' %}"></script>
+{% endblock %}

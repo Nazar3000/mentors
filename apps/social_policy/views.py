@@ -12,7 +12,7 @@ from xlsxwriter import Workbook
 from mentors.models import MentorSocialServiceCenterData
 from social_policy.models import ExtraRegionData, SPMaterial, SPMaterialCategory
 from social_services.models import BaseSocialServiceCenter
-from social_services.views import MentorsView, PairsView, PublicServicesView, MaterialView
+from social_services.views import MentorsView, PairsView, PublicServicesView, MaterialView, PairDetailView
 from users.constants import MentorStatuses, UserTypes
 from users.models import Mentor, Coordinator, SocialServiceCenter, Organization, PublicService
 from .forms import SPAuthenticationForm
@@ -270,7 +270,25 @@ class SPMentorsView(CheckIfUserIsSocialPolicyMixin, MentorsView):
 
 
 class SPPairsView(CheckIfUserIsSocialPolicyMixin, PairsView):
-    pass
+    template_name = 'social_policy/pairs.html'
+
+    def get_public_service(self):
+        return PublicService.objects.all()
+
+    def get_mentors_query_data(self, fields_select_query):
+        mentors_query_data = Mentor.objects.raw("""
+            SELECT
+                users_mentor.user_id,
+                {fields_select_query}
+            FROM users_mentor
+                JOIN users_coordinator ON users_mentor.coordinator_id = users_coordinator.id
+                JOIN mentors_mentorlicencekey ON users_mentor.licence_key_id = mentors_mentorlicencekey.id
+        """.format(fields_select_query=fields_select_query))
+        return mentors_query_data
+
+
+class SPPairDetailView(CheckIfUserIsSocialPolicyMixin, PairDetailView):
+    template_name = 'social_policy/pair_detail.html'
 
 
 class SPPublicServicesView(CheckIfUserIsSocialPolicyMixin, PublicServicesView):

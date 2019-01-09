@@ -657,10 +657,12 @@ def send_email(request):
 class PairsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelatedMentors, TemplateView):
     template_name = 'social_services/pairs.html'
 
+    def get_public_service(self):
+        return PublicService.objects.filter(social_service_center__pk=self.request.user.pk)
+
     def get_light_data(self):
         mentor_statuses = dict(MentorStatuses.choices())
-        related_public_services = PublicService.objects.filter(
-            social_service_center__pk=self.request.user.pk).values('pk', 'name')
+        related_public_services = self.get_public_service().values('pk', 'name')
         mentors_query_data = self.get_mentors_query_data(
             """
                 users_mentor.first_name || ' ' || users_mentor.last_name as full_name,
