@@ -496,8 +496,7 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
         public_service_data['profile_image'] = public_service.profile_image.url if public_service.profile_image else ''
         public_service_data['pair_count'] = public_service.pair_count
 
-        coordinator_ids = PublicService.objects.filter(social_service_center__pk=self.request.user.pk)\
-            .values_list('coordinators', flat=True)
+        coordinator_ids = self.filter_public_service().values_list('coordinators', flat=True)
         mentor_pks = Coordinator.objects.filter(id__in=coordinator_ids).values_list('mentors__pk', flat=True)
         related_public_services = PublicService.objects.filter(
             social_service_center__pk=self.request.user.pk).values('pk', 'name')

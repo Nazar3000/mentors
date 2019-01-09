@@ -78,7 +78,9 @@ const publicServices = new Vue({
       })
     },
     getExtendedMentorData(mentorId) {
-      $.get(`?get_extended_data&mentor_id=${mentorId}`, (res) => {
+      const prefix = user_type == 7 ? '/social-policy/' : '/social-service/';
+
+      $.get(`${prefix}mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
         this.extendedMentor = res.mentor_data;
 
         this.mentorModalDisplay = true;

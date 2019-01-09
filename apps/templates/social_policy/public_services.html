@@ -74,7 +74,7 @@
                 <div class="css-slip-choice gr-o-slip-choice">
                   <div>
                     <span>Статус:</span>
-                    <select class="triangle-green" v-model="extendedPublicService.status">
+                    <select class="triangle-green gr-o-triangle-purple" v-model="extendedPublicService.status">
                       <option v-for="key, value in publicServiceStatuses"
                               :value="value"
                       >
@@ -145,10 +145,10 @@
                   [[ lightPublicService.name ]]
                   <div class="help-info-org"><span>Переглянути інформацію<br>про організацію.</span></div>
                 </div>
-                <span class="css-block-phone">(063) 324 43 43</span><span class="css-block-img"><img src="{% static 'img/blue-tel.svg' %}"></span>
+                <span class="css-block-phone">(063) 324 43 43</span><span class="css-block-img"><img src="{% static 'img/phone-purple.svg' %}"></span>
               </div>
               <div class="css-block-stat">
-                <select class="triangle-green" v-model="lightPublicService.status">
+                <select class="triangle-green gr-o-triangle-purple" v-model="lightPublicService.status">
                   <option v-for="key, value in publicServiceStatuses"
                           :value="value"
                   >
@@ -162,10 +162,10 @@
             <div class="css-big-card" v-if="publicServiceDetail && activeLightPublicServicePk === lightPublicService.pk">
               <div class="css-org" v-if="publicServiceView">
                 <div class="css-org-img"><img :src="getImageUrl(extendedPublicService.profile_image)" alt=""></div>
-                <div class="css-org-title">
+                <div class="css-org-title gr-o-org-title">
                   <h3>го</h3>
                   <p>[[ extendedPublicService.name ]]</p>
-                  <div class="css-org-title-wrapp">
+                  <div class="css-org-title-wrapp gr-o-org-title-wrapp">
                     <div>
                       <p>[[ extendedPublicService.max_pair_count ]]</p><span>пар<br>максимально</span>
                     </div>
@@ -175,7 +175,7 @@
                   </div>
                 </div>
                 <div class="css-org-line"></div>
-                <div class="css-org-info">
+                <div class="css-org-info gr-o-org-info">
                   <span>Телефон:</span>
                   <p>[[ extendedPublicService.phone_number ]]</p>
                   <span>Email:</span>
@@ -185,9 +185,9 @@
                   <span>Сайт:</span>
                   <a :href="extendedPublicService.website">[[ extendedPublicService.website ]]</a>
                 </div>
-                <div class="css-org-mentor">
+                <div class="css-org-mentor gr-o-org-mentor">
                   <span>Передати пару:</span>
-                  <select class="triangle-green" disabled>
+                  <select class="triangle-green gr-o-triangle-purple" disabled>
                     <option></option>
                     <option v-for="option in mentorList"
                             :value="option.pk"
@@ -197,7 +197,7 @@
                   </select>
 
                   <span>Передати всі пари інтерната:</span>
-                  <select class="triangle-green" disabled>
+                  <select class="triangle-green gr-o-triangle-purple" disabled>
                     <option></option>
                     <option v-for="option in organizationList"
                             :value="option.organization__pk"
@@ -214,7 +214,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="css-org-edit">
+                <div class="css-org-edit gr-o-org-edit">
                   <a href="javascript: void(0)" title="Edit" @click="publicServiceView=false"><i class="fas fa-pencil-alt"></i></a>
                 </div>
               </div>
@@ -298,7 +298,7 @@
                 </div>
               </div>
               <!-- end edit card-->
-              {% include 'social_services/public_service_mentors_table.html' %}
+              {% include 'social_policy/public_service_mentors_table.html' %}
             </div>
           </template>
           <div class="css-info">* Щоб переглянути історію взаємодії наставника та вихованця натисніть на ім’я вихованця в таблиці.</div>
@@ -311,6 +311,7 @@
 {% block extra_js %}
   <script>
       const soc_service_id = '{{ user.id }}';
+      const user_type = '{{ user.user_type }}';
   </script>
   <script src="{% static 'scripts/social_services/public_services.js' %}"></script>
 {% endblock %}

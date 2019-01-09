@@ -1,0 +1,42 @@
+{% load static %}
+
+<div class="css-org-search"><img src="{% static 'img/search.svg' %}">
+  <input type="text" placeholder="Почніть вводити дані тут" v-model="searchString">
+</div>
+<div class="css-org-table">
+  <div class="css-org-header gr-o-org-header">
+    <div class="css-org-mentors">Наставник
+      <span class="css-org-sort-mentor" @click="reverseSort('searchedMentors', 'full_name'); activeFilterElement = filterElements.MENTOR_NAME">
+        <img :src="activeFilterElement === filterElements.MENTOR_NAME ? filterImgPath : filterImgPaths.ab">
+      </span>
+    </div>
+    <div class="css-line"></div>
+    <div class="css-org-child">Вихованець
+      <span class="css-org-sort-child" @click="reverseSort('searchedMentors', 'mentoree_full_name'); activeFilterElement = filterElements.MENTOR_MENTOREE_NAME">
+        <img :src="activeFilterElement === filterElements.MENTOR_MENTOREE_NAME ? filterImgPath : filterImgPaths.ab">
+      </span>
+    </div>
+    <div class="css-line"></div>
+    <div class="css-org-place">Заклад</div>
+    <div class="css-line"></div>
+    <div class="css-org-contract">Номер<br>договору</div>
+    <div class="css-line"></div>
+    <div class="css-org-data">Дата початку<br>наставництва</div>
+  </div>
+  <div class="css-org-block" v-for="mentor in mentorsData.filter(m => m.public_service_pk === activeLightPublicServicePk)">
+    <div class="css-block-mentors">
+      <div class="css-block-mentor-link" @click="getExtendedMentorData(mentor.pk)">[[ mentor.full_name ]]
+        <div class="help-info-org"><span>Переглянути інформацію<br>про наставника</span></div>
+      </div><span class="css-block-mentors-phone">(063) 324 43 43</span><span class="css-block-sort-img"><img src="{% static 'img/phone-purple.svg' %}"></span>
+    </div>
+    <div class="css-block-child"><a :href="`/social-service/pair/${mentor.pk}/`">[[ mentor.mentoree_full_name ]]
+        <div class="help-info-org"><span>Переглянути історію<br> взаємодії</span></div></a></div>
+    <div class="css-block-place"><span>[[ mentor.organization_name ]]</span></div>
+    <div class="css-block-contract"><span>[[ mentor.contract_number ]]</span></div>
+    <div class="css-block-data"><span>[[ mentor.mentoring_start_date ]]</span></div>
+  </div>
+
+  <!-- start  modal mentor-->
+    {% include 'social_policy/mentor_modal.html' %}
+  <!-- end modal mentor-->
+</div>
