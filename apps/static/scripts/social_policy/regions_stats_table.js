@@ -38,6 +38,7 @@ new Vue({
       }
     },
     reverseSort(field) {
+      console.log('here');
       if (field !== this.currentSortField) {
         this.regions_data = this.regions_data.sort(this.dynamicSort(`-${field}`));
 
