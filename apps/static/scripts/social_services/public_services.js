@@ -61,11 +61,14 @@ const publicServices = new Vue({
       MENTOR_NAME: 1,
       MENTOR_MENTOREE_NAME: 2,
     },
-    activeFilterElement: 0
+    activeFilterElement: 0,
+    prefix: ''
   },
   created() {
     this.extendedMentor = this.defaultExtendedMentor;
     this.getPublicServiceLightData();
+
+    this.prefix = user_type == 7 ? '/social-policy/' : '/social-service/';
   },
   methods: {
     getPublicServiceLightData() {
@@ -78,9 +81,7 @@ const publicServices = new Vue({
       })
     },
     getExtendedMentorData(mentorId) {
-      const prefix = user_type == 7 ? '/social-policy/' : '/social-service/';
-
-      $.get(`${prefix}mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
+      $.get(`${this.prefix}mentors/?get_extended_data&mentor_id=${mentorId}`, (res) => {
         this.extendedMentor = res.mentor_data;
 
         this.mentorModalDisplay = true;
@@ -112,7 +113,7 @@ const publicServices = new Vue({
       }
 
       $.ajax({
-        url: '/social-service/mentors/change_extended_data/',
+        url: `${this.prefix}mentors/change_extended_data/`,
         data: formData,
         processData: false,
         contentType: false,
@@ -120,7 +121,7 @@ const publicServices = new Vue({
         enctype: 'multipart/form-data',
         type: 'POST',
         success: (res) => {
-          if (res.status === 'success') {
+          if (res.pk) {
             this.mentorModalDisplay = false;
           } else {
             this.errors = res;
@@ -190,9 +191,9 @@ const publicServices = new Vue({
       });
     },
     dynamicSort(property) {
-      let sortOrder = 1
+      let sortOrder = 1;
       if (property[0] === '-') {
-        sortOrder = -1
+        sortOrder = -1;
         property = property.substr(1)
       }
       return function (a, b) {

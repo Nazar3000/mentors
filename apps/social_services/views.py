@@ -329,7 +329,7 @@ class MentorsView(CheckIfUserIsSocialServiceCenterMixin, GetSocialServiceRelated
         mentor_data['email'] = mentor.user.email
         mentor_data['licence_key'] = mentor.licence_key.key
         mentor_data['responsible'] = self.get_responsible_pk(mentor.coordinator.pk)
-        mentor_data['date_of_birth'] = get_date_str_formatted(mentor.date_of_birth)
+        mentor_data['date_of_birth'] = mentor.date_of_birth
         mentor_data['profile_image'] = mentor.profile_image.url if mentor.profile_image else ''
         mentor_data['questionnaire_creation_date'] = get_date_str_formatted(mentor.questionnaire_creation_date)
 
@@ -544,7 +544,7 @@ class PublicServicesView(CheckIfUserIsSocialServiceCenterMixin, GetSocialService
                 public_service.save()
 
                 if 'pk' in request.POST.keys():
-                    coordinator = Coordinator.objects.get(public_service__pk=request.POST['pk'])
+                    coordinator = Coordinator.objects.filter(public_service__pk=request.POST['pk']).first()
                 else:
                     coordinator = Coordinator.objects.create(
                         full_name='Координатор',

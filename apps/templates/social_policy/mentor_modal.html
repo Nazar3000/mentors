@@ -22,8 +22,8 @@
         <input class="social-input-birth" type="date" placeholder="" v-model="extendedMentor.date_of_birth" :class="{'alert-border': errors['date_of_birth']}">
         <span class="error-form" v-for="err in errors.date_of_birth">[[ err ]]</span>
       </div>
-      <div class="social-card-edit gr-o-social-card-edit_close" @click="submitMentorCard"><i class="fas fa-check"></i></div>
-      <div class="social-card-close gr-o-social-card-edit_close" ref="closeAddMentorModal" @click="closeMentorCard"><i class="fas fa-times"></i></div>
+      <div class="social-card-edit gr-o-social-card-edit_close" @click="submitMentorCard" style="background: #7B57A0;"><i class="fas fa-check"></i></div>
+      <div class="social-card-close gr-o-social-card-edit_close" ref="closeAddMentorModal" @click="closeMentorCard" style="background: #7B57A0;"><i class="fas fa-times"></i></div>
     </div>
     <div class="social-card-line"></div>
     <div class="social-card-stat">

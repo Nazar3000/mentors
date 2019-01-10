@@ -46,14 +46,14 @@
                     <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
                   </div>
                   <div class="css-slip-icon">
-                    <label class="add-img" for="new-public-service" title="Add image"><i class="fas fa-plus"></i></label>
+                    <label class="add-img" for="new-public-service" title="Add image" style="background: #7B57A0;"><i class="fas fa-plus"></i></label>
                     <input id="new-public-service" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
                     <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage">
-                      <i class="fas fa-trash"></i>
+                      <i class="fas fa-trash" style="color: #7B57A0;"></i>
                     </div>
                   </div>
                   <div>
-                    <p>Органзація</p>
+                    <p style="color: #7B57A0;">Органзація</p>
                     <textarea class="css-slip-input-name"
                               rows="3"
                               placeholder="Назва організації"
@@ -226,17 +226,22 @@
                   <span class="error-form" v-for="err in errors.profile_image">[[ err ]]</span>
                 </div>
                 <div class="css-org-icon">
-                  <label class="add-img" :for="extendedPublicService.pk" title="Add image"><i class="fas fa-plus"></i></label>
+                  <label class="add-img" :for="extendedPublicService.pk" title="Add image" style="background: #7B57A0;"><i class="fas fa-plus"></i></label>
                   <input :id="extendedPublicService.pk" style="display:none;" type="file" @change="changePublicServiceProfileImage($event)">
-                  <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage"><i class="fas fa-trash"></i></div>
+                  <div class="css-del" title="Delete image" @click="deletePublicServiceProfileImage"><i class="fas fa-trash" style="color: #7B57A0;"></i></div>
                 </div>
-                <div class="css-org-title">
+                <div class="css-org-title gr-o-org-title">
                   <h3>го</h3>
                   <textarea rows="3" placeholder="Назва організації" v-model="extendedPublicService.name" :class="{'alert-border': errors['name']}"></textarea>
                   <span class="error-form" v-for="err in errors.name">[[ err ]]</span>
-                  <div class="css-org-title-wrapp">
+                  <div class="css-org-title-wrapp gr-o-org-title-wrapp">
                     <div>
-                      <input type="text" placeholder="00" v-model="extendedPublicService.max_pair_count" :class="{'alert-border': errors['max_pair_count']}">
+                      <input type="text"
+                             placeholder="00"
+                             v-model="extendedPublicService.max_pair_count"
+                             :class="{'alert-border': errors['max_pair_count']}"
+                             style="color: #7B57A0;"
+                      >
                       <span>пар<br>максимально</span>
                       <span class="error-form" v-for="err in errors.max_pair_count">[[ err ]]</span>
                     </div>
@@ -246,7 +251,7 @@
                   </div>
                 </div>
                 <div class="css-org-line"></div>
-                <div class="css-org-info">
+                <div class="css-org-info gr-o-org-info">
                   <span>Телефон:</span>
                   <input type="text" v-model="extendedPublicService.phone_number" :class="{'alert-border': errors['phone_number']}">
                   <span class="error-form" v-for="err in errors.phone_number">[[ err ]]</span>
@@ -260,10 +265,10 @@
                   <input type="text" v-model="extendedPublicService.website" :class="{'alert-border': errors['website']}">
                   <span class="error-form" v-for="err in errors.website">[[ err ]]</span>
                 </div>
-                <div class="css-org-mentor">
+                <div class="css-org-mentor gr-o-org-mentor">
                   <span class="error-form" v-for="err in errors.non_field_errors">[[ err ]]</span>
                   <span>Передати пару:</span>
-                  <select class="triangle-green" v-model="extendedPublicService.mentorPk">
+                  <select class="triangle-green gr-o-triangle-purple" v-model="extendedPublicService.mentorPk">
                     <option></option>
                     <option v-for="option in mentorList"
                             :value="option.pk"
@@ -273,7 +278,7 @@
                   </select>
 
                   <span>Передати всі пари інтерната:</span>
-                  <select class="triangle-green" v-model="extendedPublicService.organizationPk">
+                  <select class="triangle-green gr-o-triangle-purple" v-model="extendedPublicService.organizationPk">
                     <option></option>
                     <option v-for="option in organizationList"
                             :value="option.organization__pk"
@@ -293,7 +298,7 @@
                   </div>
                 </div>
                 <div class="css-org-edit">
-                  <a href="javascript: void(0)" title="Submit" @click="submitPublicService">
+                  <a href="javascript: void(0)" title="Submit" @click="submitPublicService" style="background: #7B57A0;">
                     <i class="fas fa-check"></i>
                   </a>
                 </div>
@@ -302,7 +307,7 @@
               {% include 'social_policy/public_service_mentors_table.html' %}
             </div>
           </template>
-          <div class="css-info">* Щоб переглянути історію взаємодії наставника та вихованця натисніть на ім’я вихованця в таблиці.</div>
+          <div class="css-info" style="color: #7B57A0;">* Щоб переглянути історію взаємодії наставника та вихованця натисніть на ім’я вихованця в таблиці.</div>
         </div>
       </section>
     </div>
