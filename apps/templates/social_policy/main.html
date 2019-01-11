@@ -422,24 +422,24 @@
                       <div class="table-line"></div>
                       <div class="table-education-end gr-o-table-stats-end gr-o-table-stats-end-csssdm">Бали</div>
                     </div>
-                    <div class="table-education-line gr-o-table-stats-line" v-for="service in social_services">
-                      <div class="table-education-name gr-o-table-stats-name gr-o-table-stats-name-csssdm">1</div>
+                    <div class="table-education-line gr-o-table-stats-line" v-for="service, index in social_services.slice(0, sliceSize)">
+                      <div class="table-education-name gr-o-table-stats-name gr-o-table-stats-name-csssdm">[[ index + 1 ]]</div>
                       <div
                           class="table-education-input gr-o-table-stats-input gr-o-table-one-input gr-o-table-one-input-csssdm">
-                        <div>[[ service ]]</div>
+                        <div>[[ service.name ]]</div>
                       </div>
                       <div
                           class="table-education-input gr-o-table-stats-input gr-o-table-two-input gr-o-table-two-input-csssdm">
-                        <div>[[ service ]]</div>
+                        <div>[[ service.value ]]</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="gr-o-table-stats-links">
-                  <div class="gr-o-table-stats-wrapper-all"><a href="javascript:void(0);">Дивитися всі</a></div>
-                  <div class="gr-o-table-stats-wrapper-download"><img src="{% static 'img/download.svg' %}" alt=""><a href="#"
-                                                                                                       download>Завантажити
-                    в Excel</a></div>
+                  <div class="gr-o-table-stats-wrapper-all"><a href="javascript:void(0);" @click="changeSliceSize">
+                    [[ sliceSize === 3 ? 'Дивитися всі' : 'Згорнути' ]]</a></div>
+                  <div class="gr-o-table-stats-wrapper-download"><img src="{% static 'img/download.svg' %}" alt="">
+                    <a href="?social_service_grade&xlsx">Завантажити в Excel</a></div>
                 </div>
               </div>
             </div>

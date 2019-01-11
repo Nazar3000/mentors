@@ -2,7 +2,8 @@ new Vue({
   el: '#social-service-center-table',
   delimiters: ['[[', ']]'],
   data: {
-    social_services: []
+    social_services: [],
+    sliceSize: 3
   },
   created() {
     $.get('?social_service_grade', (res) => {
@@ -10,5 +11,8 @@ new Vue({
     })
   },
   methods: {
+    changeSliceSize() {
+      this.sliceSize = this.sliceSize === 3 ? this.social_services.length : 3;
+    },
   },
 });

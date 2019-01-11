@@ -145,8 +145,7 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
         return district_data
 
     def get_social_service_center_grade(self):
-        services_related = BaseSocialServiceCenter.objects.all().select_related('service')
-        grades_dict = {}
+        grades_list = []
 
         def safe_divide(val1, val2):
             if val2 == 0:
@@ -157,11 +156,11 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
 
         for region in ExtraRegionData.objects.all():
             region_child_count = 0
-            if region == 'Київська':
-                q_region = Q(basesocialservicecenter__region=region) \
+            if region.region == 'Київська':
+                q_region = Q(basesocialservicecenter__region=region.region) \
                            | Q(basesocialservicecenter__region='Київ')
             else:
-                q_region = Q(basesocialservicecenter__region=region)
+                q_region = Q(basesocialservicecenter__region=region.region)
             services = SocialServiceCenter.objects.filter(q_region)
 
             for service in services:
@@ -174,7 +173,15 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
                 )
                 region_child_count += related_coordinators.count()
 
+            if region.region == 'Київська':
+                q_region = Q(region=region.region) \
+                           | Q(region='Київ')
+            else:
+                q_region = Q(region=region.region)
+            services_related = BaseSocialServiceCenter.objects.filter(q_region).select_related('service')
+
             for base_service in services_related:
+                grades_dict = {}
                 if base_service.service:
                     related_coordinators = Coordinator.objects.filter(
                         (Q(social_service_center=base_service.service)
@@ -184,28 +191,29 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
                          )
                     )
                     related_mentors = Mentor.objects.filter(coordinator__in=related_coordinators)
-                    grades_dict[base_service.service.name] = 0.00
+                    grades_dict['name'] = base_service.service.name
+                    grades_dict['value'] = 0.00
 
-                    grades_dict[base_service.service.name] += safe_divide(region_child_count, region.child_count) * 0.2
-                    grades_dict[base_service.service.name] += safe_divide(
+                    grades_dict['value'] += safe_divide(region_child_count, region.child_count) * 0.2
+                    grades_dict['value'] += safe_divide(
                         SocialServiceCenterAssessment.objects
                         .filter(ssc=base_service.service)
                         .aggregate(Sum('grade'))['grade__sum'], 5) * 0.2
-                    grades_dict[base_service.service.name] += \
+                    grades_dict['value'] += \
                         safe_divide(
                             related_mentors.exclude(social_service_center_data__infomeeting_date__isnull=True).count(),
                             MentorSocialServiceCenterData.objects.all().count()) * 0.1
-                    grades_dict[base_service.service.name] += \
+                    grades_dict['value'] += \
                         safe_divide(
                             MentorSocialServiceCenterData.objects.all().count(),
                             related_mentors.exclude(
                                 social_service_center_data__psychologist_meeting_date__isnull=True).count()) * 0.1
-                    grades_dict[base_service.service.name] += \
+                    grades_dict['value'] += \
                         safe_divide(related_mentors.exclude(
                             social_service_center_data__psychologist_meeting_date__isnull=True).count(),
                                     related_mentors.exclude(
                                         social_service_center_data__training_date__isnull=True).count()) * 0.1
-                    grades_dict[base_service.service.name] += \
+                    grades_dict['value'] += \
                         safe_divide(related_mentors.exclude(
                             social_service_center_data__training_date__isnull=True).count(),
                                     related_mentors.filter(social_service_center_data__admitted_to_child=True).count()) * 0.1
@@ -219,19 +227,31 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
                                 has_related_pub_service = 1 * 0.05
                             if mentors_count > 1:
                                 has_filled_related_pub_service = 1 * 0.15
-                    grades_dict[base_service.service.name] += has_related_pub_service
-                    grades_dict[base_service.service.name] += has_filled_related_pub_service
+                    grades_dict['value'] += has_related_pub_service
+                    grades_dict['value'] += has_filled_related_pub_service
 
-                    grades_dict[base_service.service.name] -= safe_divide(
+                    grades_dict['value'] -= safe_divide(
                         related_mentors.count(),
                         related_mentors.filter(status=MentorStatuses.REJECTED_TO_BE_MENTOR.name).count())
-                    grades_dict[base_service.service.name] -= safe_divide(
+                    grades_dict['value'] -= safe_divide(
                         related_mentors.count(),
                         related_mentors.filter(status=MentorStatuses.PAIR_DISBANDED.name).count())
+
+                    grades_dict['value'] = round(grades_dict['value'], 2)
                 else:
-                    grades_dict[base_service.name] = 0.00
-        print(grades_dict)
-        return JsonResponse(grades_dict)
+                    grades_dict['name'] = base_service.name
+                    grades_dict['value'] = 0.00
+                grades_list.append(grades_dict)
+
+        grades_list.sort(key=lambda e: e['value'], reverse=True)
+
+        if 'xlsx' in self.request.GET.keys():
+            ordered_list = ['name', 'value']
+            header_list = ['Місце', 'ЦСССДМ', 'Бали']
+            filename = 'рейтинг цсссдм.xlsx'
+
+            return self.get_xlsx_response(filename, ordered_list, header_list, grades_list)
+        return JsonResponse(grades_list, safe=False)
 
     def get(self, request, *args, **kwargs):
         if 'district_id' in request.GET.keys() and 'search_value' not in request.GET.keys():
