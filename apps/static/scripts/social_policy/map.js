@@ -7,21 +7,44 @@ new Vue({
 
     searchValue: '',
     selectedSocialService: {},
-    searchedSocialServices: []
+    searchedSocialServices: [],
+    regions: {
+      UKR283: 'Сімферополь',
+      UKR284: 'Миколаївська',
+      UKR285: 'Чернігівський',
+      UKR286: 'Рівненська',
+      UKR288: 'Чернівецька',
+      UKR289: 'Івано-Франківська',
+      UKR290: 'Хмельницька',
+      UKR291: 'Львівська',
+      UKR292: 'Тернопільська',
+      UKR293: 'Закарпатська',
+      UKR318: 'Волинська',
+      UKR319: 'Черкаська',
+      UKR320: 'Кіровоградська',
+      UKR321: 'Київська',
+      UKR322: 'Одеська',
+      UKR323: 'Вінницька',
+      UKR324: 'Житомирська',
+      UKR325: 'Сумська',
+      UKR326: 'Дніпропетровська',
+      UKR327: 'Донецька',
+      UKR328: 'Харківська',
+      UKR329: 'Луганська',
+      UKR330: 'Полтавська',
+      UKR331: 'Запорізька',
+      UKR4827: 'Херсонська',
+      UKR5482: 'Сімферополь'
+    }
   },
   methods: {
     showInfo(districtId) {
       console.log(districtId);
     },
     handleStateClick() {
-      $.get(`?district_id=${this.selectedDistrictId}`, (res) => {
+      $.get(`?district_id=${this.regions[regionId]}`, (res) => {
         this.districtData = res;
       })
-    },
-    handleStateHover(e) {
-      if (e.target.tagName === 'path' && e.target.dataset.id) {
-        this.selectedDistrictId = e.target.dataset.id;
-      }
     },
     selectSocialService(socService) {
       this.selectedSocialService=socService;

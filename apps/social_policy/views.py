@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from xlsxwriter import Workbook
 
-from mentors.models import MentorSocialServiceCenterData
+from mentors.models import MentorSocialServiceCenterData, Mentoree
 from social_policy.models import ExtraRegionData, SPMaterial, SPMaterialCategory
 from social_services.models import BaseSocialServiceCenter
 from social_services.views import MentorsView, PairsView, PublicServicesView, MaterialView, PairDetailView
@@ -125,7 +125,7 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
 
         district_data = {
             'district_name': '{} область'.format(request.GET['district_id']),
-            'children_in_organizations_count': ExtraRegionData.objects.get(q_region).child_count,
+            'children_in_organizations_count': ExtraRegionData.objects.filter(q_region).first().child_count if ExtraRegionData.objects.filter(q_region).first() else 0,
             'organization_count': 0,
             'social_service_center_count': 0,
             'public_service_count': 0,
@@ -253,6 +253,22 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
             return self.get_xlsx_response(filename, ordered_list, header_list, grades_list)
         return JsonResponse(grades_list, safe=False)
 
+    def get_organization_grade(self):
+        grades_list = []
+        for organization in Organization.objects.all():
+            grades_list.append({
+                'name': organization.name,
+                'value': round((Mentoree.objects.filter(organization=organization).count() / 100) * 0.7, 2)
+            })
+
+        if 'xlsx' in self.request.GET.keys():
+            ordered_list = ['name', 'value']
+            header_list = ['Місце', 'Установа', 'Бали']
+            filename = 'рейтинг установ.xlsx'
+            return self.get_xlsx_response(filename, ordered_list, header_list, grades_list)
+
+        return JsonResponse(grades_list, safe=False)
+
     def get(self, request, *args, **kwargs):
         if 'district_id' in request.GET.keys() and 'search_value' not in request.GET.keys():
             return JsonResponse(self.get_district_data(request))
@@ -274,6 +290,8 @@ class MainPageView(CheckIfUserIsSocialPolicyMixin, TemplateView):
             return JsonResponse(list(filtered_base_soc_centers), safe=False)
         elif 'social_service_grade' in request.GET.keys():
             return self.get_social_service_center_grade()
+        elif 'organization_grade' in request.GET.keys():
+            return self.get_organization_grade()
         elif 'social_service_id' in request.GET.keys():
             service_data = {
                 'public_service_count': 0,

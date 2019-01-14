@@ -446,10 +446,11 @@ $(document).ready(function () {
     });
 
     // svg script
-    var allRegions = $("#ua > polygon, path#UKR322,path#UKR284,path#UKR4827,path#UKR321");
+    var allRegions = $("#ua > polygon, path#UKR283,path#UKR284,path#UKR285,path#UKR286,path#UKR288,path#UKR289,path#UKR290,path#UKR291,path#UKR292,path#UKR293,path#UKR318,path#UKR319,path#UKR320,path#UKR321,path#UKR322,path#UKR323,path#UKR324,path#UKR325,path#UKR326,path#UKR327,path#UKR328,path#UKR329,path#UKR330,path#UKR331,path#UKR4827,path#UKR5482");
     var mapsItem = $('.gr-o-maps-item');
 
     allRegions.on("click", function() {
+      regionId = this.id;
       allRegions.removeClass("on");
       $(this).addClass("on");
       mapsItem.toggle();

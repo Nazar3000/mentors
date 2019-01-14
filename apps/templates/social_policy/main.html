@@ -178,7 +178,7 @@
               </div>
               <?xml version="1.0" encoding="UTF-8"?>
               <svg width="1104px" height="740px" viewBox="0 0 1104 740" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                   xmlns:xlink="http://www.w3.org/1999/xlink" style="pointer-events: fill;" @click="handleStateClick" @mouseover="handleStateHover">
+                   xmlns:xlink="http://www.w3.org/1999/xlink" style="pointer-events: fill;" @click="handleStateClick">
                 <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
                 <title>ua</title>
                 <desc>Created with Sketch.</desc>
@@ -449,7 +449,7 @@
               <div class="col-lg-12">
                 <h2 class="gr-o-subtitle-all_stats">Рейтинг установ по наставництву</h2>
               </div>
-              <div class="col-lg-12">
+              <div class="col-lg-12" id="organization-table">
                 <div class="page-form-education gr-o-page-form-stats">
                   <div class="table-education gr-o-table-stats">
                     <div class="table-education-header gr-o-table-stats-header gr-o-table-stats-header-csssdm">
@@ -460,46 +460,23 @@
                       <div class="table-line"></div>
                       <div class="table-education-end gr-o-table-stats-end gr-o-table-stats-end-csssdm">Бали</div>
                     </div>
-                    <div class="table-education-line gr-o-table-stats-line">
-                      <div class="table-education-name gr-o-table-stats-name gr-o-table-stats-name-csssdm">1</div>
+                    <div class="table-education-line gr-o-table-stats-line" v-for="org, index in social_services.slice(0, sliceSize)">
+                      <div class="table-education-name gr-o-table-stats-name gr-o-table-stats-name-csssdm">[[ index + 1 ]]</div>
                       <div
                           class="table-education-input gr-o-table-stats-input gr-o-table-one-input gr-o-table-one-input-csssdm">
-                        <div>Смілянський РЦСССДМ</div>
+                        <div>[[ org.name ]]</div>
                       </div>
                       <div
                           class="table-education-input gr-o-table-stats-input gr-o-table-two-input gr-o-table-two-input-csssdm">
-                        <div>20,21</div>
-                      </div>
-                    </div>
-                    <div class="table-education-line gr-o-table-stats-line">
-                      <div class="table-education-name gr-o-table-stats-name gr-o-table-stats-name-csssdm">2</div>
-                      <div
-                          class="table-education-input gr-o-table-stats-input gr-o-table-one-input gr-o-table-one-input-csssdm">
-                        <div>Київський РЦСССДМ Голосіївський</div>
-                      </div>
-                      <div
-                          class="table-education-input gr-o-table-stats-input gr-o-table-two-input gr-o-table-two-input-csssdm">
-                        <div>20,21</div>
-                      </div>
-                    </div>
-                    <div class="table-education-line gr-o-table-stats-line gr-o-table-stats-line-last">
-                      <div class="table-education-name gr-o-table-stats-name gr-o-table-stats-name-csssdm">3</div>
-                      <div
-                          class="table-education-input gr-o-table-stats-input gr-o-table-one-input gr-o-table-one-input-csssdm">
-                        <div>Житомирський МЦСССДМ</div>
-                      </div>
-                      <div
-                          class="table-education-input gr-o-table-stats-input gr-o-table-two-input gr-o-table-two-input-csssdm">
-                        <div>20,21</div>
+                        <div>[[ org.value ]]</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="gr-o-table-stats-links">
-                  <div class="gr-o-table-stats-wrapper-all"><a href="javascript:void(0);">Дивитися всі</a></div>
-                  <div class="gr-o-table-stats-wrapper-download"><img src="{% static 'img/download.svg' %}" alt=""><a href="#"
-                                                                                                       download>Завантажити
-                    в Excel</a></div>
+                  <div class="gr-o-table-stats-wrapper-all"><a href="javascript:void(0);" @click="changeSliceSize">[[ sliceSize === 3 ? 'Дивитися всі' : 'Згорнути' ]]</a></div>
+                  <div class="gr-o-table-stats-wrapper-download">
+                    <img src="{% static 'img/download.svg' %}" alt=""><a href="?organization_grade&xlsx" download>Завантажити в Excel</a></div>
                 </div>
               </div>
             </div>
@@ -511,7 +488,11 @@
 {% endblock %}
 
 {% block extra_js %}
+  <script>
+    var regionId = '';
+  </script>
   <script src="{% static 'scripts/social_policy/map.js' %}"></script>
   <script src="{% static 'scripts/social_policy/regions_stats_table.js' %}"></script>
   <script src="{% static 'scripts/social_policy/social_service_center_table.js' %}"></script>
+  <script src="{% static 'scripts/social_policy/organization_table.js' %}"></script>
 {% endblock %}

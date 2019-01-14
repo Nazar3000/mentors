@@ -28,6 +28,8 @@ class CheckIfUserIsPublicServiceMixin(UserPassesTestMixin):
 
 
 class PublicServiceLoginView(LoginView):
+    template_name = 'public_services/login.html'
+
     def form_valid(self, form):
         email = form.cleaned_data['email']
         password = form.cleaned_data['password']
