@@ -4,6 +4,7 @@ from datetime import datetime
 
 from django.contrib.auth import login
 from django.contrib.auth.mixins import UserPassesTestMixin, AccessMixin
+from django.contrib.auth.views import PasswordResetView
 from django.forms import model_to_dict
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -165,6 +166,10 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
 
 class SignUpStep3View(SignUpStepsAccessMixin, TemplateView):
     template_name = 'mentors/signup_step3.html'
+
+
+class MentorPasswordResetView(PasswordResetView):
+    template_name = 'registration/password_reset_form_mentors.html'
 
 
 class Roadmap(SignUpStepsAccessMixin, TemplateView):

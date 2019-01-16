@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
+from django.contrib.auth import views as auth_views
 
 from . import views
 
@@ -11,6 +12,7 @@ urlpatterns = [
     path('register-step2/', views.SignUpStep2View.as_view(), name='signup_step2'),
     path('register-step3/', views.SignUpStep3View.as_view(), name='signup_step3'),
     path('roadmap/', login_required(views.Roadmap.as_view()), name='mentor_roadmap'),
+    path('password_reset/', views.MentorPasswordResetView.as_view(), name='password_reset'),
     path('roadmap/step1/', login_required(views.RoadmapStep1.as_view()), name='mentor_roadmap_step1'),
     path('roadmap/step2/', login_required(views.RoadmapStep2.as_view()), name='mentor_roadmap_step2'),
     path('roadmap/step3/', login_required(views.RoadmapStep3.as_view()), name='mentor_roadmap_step3'),

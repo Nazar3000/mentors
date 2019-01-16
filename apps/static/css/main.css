@@ -2065,7 +2065,7 @@ input[type="radio"]:checked:after {
   font-size: 20px;
   letter-spacing: 0.2px;
   color: #368CCA;
-  font-weight: 600;
+  font-weight: 100;
   line-height: 1.2;
   position: relative;
   left: 90px;
@@ -2075,7 +2075,7 @@ input[type="radio"]:checked:after {
   font-size: 20px;
   letter-spacing: 0.2px;
   color: #368CCA;
-  font-weight: 600;
+  font-weight: 100;
   line-height: 1.2;
   position: relative;
   right: 58px;
