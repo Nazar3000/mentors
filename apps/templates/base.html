@@ -9,6 +9,7 @@
     <title>Mentors</title>
     <link href="{% static 'css/libs.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/sweetalert2.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     {% block extra_css %}{% endblock %}
   </head>
@@ -17,6 +18,15 @@
   <script src="{% static 'js/main.js' %}"></script>
   <script src="{% static 'js/ajax_setup.js' %}"></script>
   <script src="{% static 'js/vue.js' %}"></script>
+  <script src="{% static 'js/sweetalert2.min.js' %}"></script>
+
+  <script>
+    Swal(
+      'Роботу ресурсу призупинено',
+      '',
+      'info'
+    )
+  </script>
   <div class="wrapper">
     {% if user.is_authenticated and user.user_type == 1 %}
       {% include 'mentor_header.html' %}

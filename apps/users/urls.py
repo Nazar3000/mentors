@@ -16,4 +16,5 @@ urlpatterns = [
     path('organization-material/', views.OrganizationMaterialView.as_view(), name='organization_material'),
     path('ssd-material/', views.SSDMaterialView.as_view(), name='ssd_material'),
     path('offer-improvement/', views.offer_improvement, name='offer_improvement'),
+    path('about/', views.About.as_view(), name='about'),
 ]

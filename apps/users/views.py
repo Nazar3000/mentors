@@ -81,3 +81,7 @@ def offer_improvement(request):
     if request.method == 'POST':
         Improvement.objects.create(content=request.POST.get('content'))
     return JsonResponse({'status': 'success'})
+
+
+class About(TemplateView):
+    template_name = 'users/about.html'
