@@ -20,13 +20,6 @@
   <script src="{% static 'js/vue.js' %}"></script>
   <script src="{% static 'js/sweetalert2.min.js' %}"></script>
 
-  <script>
-    Swal(
-      'Роботу ресурсу призупинено',
-      '',
-      'info'
-    )
-  </script>
   <div class="wrapper">
     {% if user.is_authenticated and user.user_type == 1 %}
       {% include 'mentor_header.html' %}
