@@ -7,7 +7,10 @@ register = template.Library()
 
 @register.simple_tag
 def get_social_service(user):
-    return user.socialservicecenter
+    try:
+        return user.socialservicecenter
+    except:
+        return ''
 
 
 @register.simple_tag

@@ -92,7 +92,7 @@ class Mentor(models.Model):
     status = models.CharField(
         max_length=64,
         choices=MentorStatuses.choices(),
-        default=MentorStatuses.NOT_SPECIFIED
+        default=MentorStatuses.NOT_SPECIFIED.name
     )
     first_name = models.CharField(
         max_length=32)

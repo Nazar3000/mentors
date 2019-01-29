@@ -25,16 +25,22 @@
             <h2>Статистика вашого ЦСССДМ</h2>
             <div>
               <div class="css-main-item">
-                <p>{{ licenced }}</p><span>Наставників<br> отримали висновок</span>
-                <div class="css-main-circle"><span>{{ licenced_percentage }}%</span></div>
+                <div class="css-main-item_results">
+                  <p>{{ licenced }}</p>
+                  <div class="css-main-circle"><span>{{ licenced_percentage }}%</span></div>
+                </div><span>Наставників<br> отримали висновок</span>
               </div>
               <div class="css-main-item">
-                <p>{{ psychologist_met }}</p><span>Наставників пройшли<br> консультацію<br> у психолога</span>
-                <div class="css-main-circle"><span>{{ psychologist_percentage }}%</span></div>
+                <div class="css-main-item_results">
+                  <p>{{ psychologist_met }}</p>
+                  <div class="css-main-circle"><span>{{ psychologist_percentage }}%</span></div>
+                </div><span>Наставників пройшли<br> консультацію<br> у психолога</span>
               </div>
               <div class="css-main-item">
-                <p>{{ infomeeting_made }}</p><span>Наставників<br> пройшли інфо-зустріч</span>
-                <div class="css-main-circle"><span>{{ infomeeting_percentage }}%</span></div>
+                <div class="css-main-item_results">
+                  <p>{{ infomeeting_made }}</p>
+                  <div class="css-main-circle"><span>{{ infomeeting_percentage }}%</span></div>
+                </div><span>Наставників<br> пройшли інфо-зустріч</span>
               </div>
               <div class="css-main-item">
                 <p>{{ total }}</p><span>Виявили бажання<br> стати наставниками</span>
