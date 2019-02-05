@@ -434,16 +434,16 @@ $(document).ready(function () {
     });
 
     // form-search-box
-    $('.form-dating-search').click(function(event) {
-        $('.form-dating-box-items').toggle();
-    });
-    $('.form-dating-item').click(function(event) {
-        var form_dating_info = $(this).html();
-        $('.form-dating-search').attr({
-            value: form_dating_info
-        });
-        $('.form-dating-box-items').toggle();
-    });
+    // $('.form-dating-search').click(function(event) {
+    //     $('.form-dating-box-items').toggle();
+    // });
+    // $('.form-dating-item').click(function(event) {
+    //     var form_dating_info = $(this).html();
+    //     $('.form-dating-search').attr({
+    //         value: form_dating_info
+    //     });
+    //     $('.form-dating-box-items').toggle();
+    // });
 
     // svg script
     var allRegions = $("#ua > polygon, path#UKR283,path#UKR284,path#UKR285,path#UKR286,path#UKR288,path#UKR289,path#UKR290,path#UKR291,path#UKR292,path#UKR293,path#UKR318,path#UKR319,path#UKR320,path#UKR321,path#UKR322,path#UKR323,path#UKR324,path#UKR325,path#UKR326,path#UKR327,path#UKR328,path#UKR329,path#UKR330,path#UKR331,path#UKR4827,path#UKR5482");
@@ -472,4 +472,72 @@ $(document).ready(function () {
       allRegions.removeClass('on');
     }
     });
+
+    function getTopOffset (e) {
+        var y = 0;
+        do {
+            y += e.offsetTop;
+        } while (e = e.offsetParent);
+        return y;
+    }
+
+    var block = document.getElementById('stage'); /* fixblock - значение атрибута id блока */
+    if (null != block) {
+        var topPos = getTopOffset(block);
+
+        window.onscroll = function () {
+            var scrollHeight = Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight),
+
+              // определяем высоту рекламного блока
+              blockHeight = block.offsetHeight,
+
+              // вычисляем высоту подвала, footer заменить на значение атрибута id подвала
+              footerHeight = document.getElementById('footer').offsetHeight,
+
+              // считаем позицию, до которой блок будет зафиксирован
+              stopPos = scrollHeight - blockHeight - footerHeight;
+
+            var newcss = (topPos < window.pageYOffset) ?
+              'top:20px; position: sticky; ' : 'position:static;';
+
+            if (window.pageYOffset > stopPos)
+                newcss = 'top: 20px; position: sticky;';
+
+            block.setAttribute('style', newcss);
+        };
+    }
+    // page-second-stage-active-scroll
+
+    //highlight the correct menu item
+    $(window).scroll(function () {
+        //define line on screen, which the item has to cross to activate the respective menu   item, the intersecting line will be 32 pixels from the top of the scren
+        var intersectingLine = $(window).scrollTop() + 32;
+
+
+        //loop through all text items and see which of them crosses the intersecting line
+        if (!$('.container').hasClass('animating-scroll')) {
+            //remove active class from all menu items
+            $('.stage-active').removeClass('active');
+
+            $('.text-item').each(function () {
+                //how far is each text from top
+                var top = $(this).offset().top;
+
+                //how tall is each text
+                var bottom = $(this)[0].clientHeight + top;
+
+                //check if this text item crosses the intersecting line
+                if (top < intersectingLine && bottom > intersectingLine) {
+                    //the active item is found
+                    var activeName = $(this).attr('data-name');
+                    $('.stage-active[data-name="' + activeName + '"]').addClass('active');
+                }
+            });
+        }
+
+    });
+
+    var heightTableFamily = $('.table-family').height();
+    var heightBorderTable = parseInt(heightTableFamily * 0.87);
+    $('head').append('<style> .table-family-title::before{ height:' + heightBorderTable + 'px' + ' }</style>');
 });

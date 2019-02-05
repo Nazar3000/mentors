@@ -11,28 +11,28 @@
       </div>
       <div class="header-notification" id="notifications">
         <a class="header-notification-title" href="{% url 'mentors:question' %}">Питання?</a>
-        <div class="message"
-             v-if="currentMode === modes.nonEmptySwallowed || currentMode === modes.nonEmptyExpanded"
-        >
-          <a class="message-link" href="javascript: void(0)" @click="changeMode">
-            <i class="fas fa-bell"></i>
-            <div class="message-new"><span>[[ notifications.length ]]</span></div>
-          </a>
-          <div class="message-item" v-if="currentMode === modes.nonEmptyExpanded"
-               v-for="item in notifications"
-          >
-            <template v-if="item.tip_of_the_day">
-              <span>Порада дня</span>
-              [[ item.tip_of_the_day.content ]]
-              <div class="message-wrapp">
-                <div class="message-check" @click="markAsRead(item.tip_of_the_day.id)">
-                  <input class="css-font" :id="item.tip_of_the_day.id" type="checkbox">
-                  <label :for="item.tip_of_the_day.id">Відмітити<br>прочитаним</label>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
+{#        <div class="message"#}
+{#             v-if="currentMode === modes.nonEmptySwallowed || currentMode === modes.nonEmptyExpanded"#}
+{#        >#}
+{#          <a class="message-link" href="javascript: void(0)" @click="changeMode">#}
+{#            <i class="fas fa-bell"></i>#}
+{#            <div class="message-new"><span>[[ notifications.length ]]</span></div>#}
+{#          </a>#}
+{#          <div class="message-item" v-if="currentMode === modes.nonEmptyExpanded"#}
+{#               v-for="item in notifications"#}
+{#          >#}
+{#            <template v-if="item.tip_of_the_day">#}
+{#              <span>Порада дня</span>#}
+{#              [[ item.tip_of_the_day.content ]]#}
+{#              <div class="message-wrapp">#}
+{#                <div class="message-check" @click="markAsRead(item.tip_of_the_day.id)">#}
+{#                  <input class="css-font" :id="item.tip_of_the_day.id" type="checkbox">#}
+{#                  <label :for="item.tip_of_the_day.id">Відмітити<br>прочитаним</label>#}
+{#                </div>#}
+{#              </div>#}
+{#            </template>#}
+{#          </div>#}
+{#        </div>#}
         <a class="header-notification-icon"
            href="javascript: void(0)"
            v-else-if="currentMode === modes.empty"

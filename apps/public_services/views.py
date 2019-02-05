@@ -82,7 +82,7 @@ class PublicServiceDatingView(DatingView):
             data = {
                 'phone_numbers': self.request.POST.get('coordinator_phone_numbers'),
                 'email': self.request.POST.get('email'),
-                'full_name': self.request.POST.get('coordinator_phone_numbers')
+                'full_name': self.request.POST.get('full_name')
             }
             coordinator_form = self.coordinator_form_class(data)
 
