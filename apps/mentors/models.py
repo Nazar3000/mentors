@@ -484,21 +484,36 @@ class MentorQuestionnaireChildrenWorkExperience(models.Model):
     )
 
     organization_name = models.CharField(
-        max_length=256
+        max_length=256,
+        null=True,
+        blank=True
     )
-    date_since = MonthYearField()
-    date_till = MonthYearField()
+    date_since = MonthYearField(
+        null=True,
+        blank=True)
+    date_till = MonthYearField(
+        null=True,
+        blank=True
+    )
     contact_info = models.CharField(
-        max_length=512
+        max_length=512,
+        null=True,
+        blank=True
     )
     position = models.CharField(
-        max_length=512
+        max_length=512,
+        null=True,
+        blank=True
     )
     duties = models.CharField(
-        max_length=512
+        max_length=512,
+        null=True,
+        blank=True
     )
     children_age_group = models.CharField(
-        max_length=64
+        max_length=64,
+        null=True,
+        blank=True
     )
 
 

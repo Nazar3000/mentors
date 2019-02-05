@@ -476,10 +476,22 @@ input[type="radio"]:checked:after {
   background: #7B57A0;
 }
 
+.header-log-wrapp_logout{
+  font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+  color:#7B57A0;
+}
+
 .gr-o-header-log {
   z-index: 2;
 }
 
+.gr-o-header-notification{
+  flex-direction: column;
+}
 .gr-o-header-notification .gr-o-notification-icon {
   margin: 0px 10px;
   color: #7B57A0;
@@ -21790,4 +21802,35 @@ select.table-education-name {
 
 .link-wrapp-face, .link-wrapp-tweet, .link-wrapp-google {
   cursor: pointer;
+}
+/**/
+.css-table-title-stat > span{
+  margin: 0 -50px 0 30px;
+}
+.css-table-title-doc{
+  display:flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.css-table-title-respon{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+@media screen and (max-width: 992px){
+  .css-material-left{
+    display: none;
+  }
+  .css-material-info-wrapp{
+    flex-direction: column;
+  }
+  .css-material-right{
+    width: 100%;
+  }
+  .css-material-right, .css-material-item, .css-material-item, iframe{
+    width: 100%;
+  }
+  .css-material-video, .css-material-video iframe{
+    width: 100%;
+  }
 }
