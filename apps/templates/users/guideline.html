@@ -176,45 +176,89 @@
     <section class="main-be-mentor">
       <div class="container">
         <h2>перевір, чи можеш ти<br>стати наставником</h2>
-        <div class="main-be-mentor-wrapp">
-          <div class="main-be-mentor-line">
-            <p class="block-left">нi</p>
-            <p class="block-center">Тобі є 18 років?</p>
-            <p class="block-right">так</p>
-          </div>
-          <div class="main-be-mentor-line-top">
-            <p class="block-left">Ти готовий<br> допомогати не<br> конкретній дитині,<br> а наставництву<br> вцілому</p>
-            <p class="block-center">так</p>
-            <div>
-              <p class="block-right">Ти був засуджений?</p>
-              <p class="block-right-bottom">нi</p>
+{#        <div class="main-be-mentor-wrapp">#}
+{#          <div class="main-be-mentor-line">#}
+{#            <p class="block-left">нi</p>#}
+{#            <p class="block-center">Тобі є 18 років?</p>#}
+{#            <p class="block-right">так</p>#}
+{#          </div>#}
+{#          <div class="main-be-mentor-line-top">#}
+{#            <p class="block-left">Ти готовий<br> допомогати не<br> конкретній дитині,<br> а наставництву<br> вцілому</p>#}
+{#            <p class="block-center">так</p>#}
+{#            <div>#}
+{#              <p class="block-right">Ти був засуджений?</p>#}
+{#              <p class="block-right-bottom">нi</p>#}
+{#            </div>#}
+{#          </div>#}
+{#          <div class="main-be-mentor-line-bottom">#}
+{#            <div>#}
+{#              <p class="block-left">так</p>#}
+{#              <p class="block-left-bottom">нi</p>#}
+{#            </div>#}
+{#            <p class="block-center">Ти можешь бути<br> корисним дітям<br> не будучи<br>наставником</p>#}
+{#            <p class="block-middle">нi</p>#}
+{#            <p class="block-right">Ти готовий<br> приділяти дитині<br> принаймні 3-4<br> години на<br> тиждень?</p>#}
+{#          </div>#}
+{#          <div class="main-be-mentor-line-text">#}
+{#            <p class="block-left">Нажаль, ти не можеш<br> стати наставником,<br> але ти можеш<br>розповісти про<br> наставництво іншим<br>прямо зараз!</p>#}
+{#            <p class="block-middle">так</p>#}
+{#            <p class="block-right">Вітаємо! наразі<br> немає перепон для<br> того, щоб ти став<br> наставником!</p>#}
+{#          </div>#}
+{#          <div class="main-be-mentor-line-btn">#}
+{#            <div class="link-wrapp">#}
+{#              <a class="link-wrapp-face" onclick="share('http://www.facebook.com/sharer/sharer.php?u=')"><i class="fab fa-facebook-f"></i></a>#}
+{#              <a class="link-wrapp-tweet" onclick="share('https://twitter.com/intent/tweet?url=')"><i class="fab fa-twitter"></i></a>#}
+{#              <a class="link-wrapp-google" onclick="share('https://plus.google.com/share?url=')"><i#}
+{#                  class="fab fa-google-plus-g"></i></a></div>#}
+{#              <a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a>#}
+{#              <a class="link-wrapp-btn-yellow" href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати#}
+{#              наставником</a>#}
+{#          </div>#}
+{#        </div>#}
+          <div class="main-be-mentor-wrapp">
+            <div class="main-be-mentor-line">
+              <p class="block-left">нi</p>
+              <p class="block-center">Тобі є 18 років?</p>
+              <p class="block-right">так</p>
             </div>
-          </div>
-          <div class="main-be-mentor-line-bottom">
-            <div>
-              <p class="block-left">так</p>
-              <p class="block-left-bottom">нi</p>
+            <div class="main-be-mentor-line-top">
+              <p class="block-left">Ти готовий<br> допомогати не<br> конкретній дитині,<br> а наставництву<br> вцілому</p>
+              <p class="test">Так<span class="test-span"></span></p>
+              <p class="block-center">так</p>
+              <div>
+                <p class="block-right">Ти був засуджений?</p>
+                <p class="block-right-bottom">нi</p>
+              </div>
             </div>
-            <p class="block-center">Ти можешь бути<br> корисним дітям<br> не будучи<br>наставником</p>
-            <p class="block-middle">нi</p>
-            <p class="block-right">Ти готовий<br> приділяти дитині<br> принаймні 3-4<br> години на<br> тиждень?</p>
-          </div>
-          <div class="main-be-mentor-line-text">
-            <p class="block-left">Нажаль, ти не можеш<br> стати наставником,<br> але ти можеш<br>розповісти про<br> наставництво іншим<br>прямо зараз!</p>
-            <p class="block-middle">так</p>
-            <p class="block-right">Вітаємо! наразі<br> немає перепон для<br> того, щоб ти став<br> наставником!</p>
-          </div>
-          <div class="main-be-mentor-line-btn">
-            <div class="link-wrapp">
-              <a class="link-wrapp-face" onclick="share('http://www.facebook.com/sharer/sharer.php?u=')"><i class="fab fa-facebook-f"></i></a>
-              <a class="link-wrapp-tweet" onclick="share('https://twitter.com/intent/tweet?url=')"><i class="fab fa-twitter"></i></a>
-              <a class="link-wrapp-google" onclick="share('https://plus.google.com/share?url=')"><i
-                  class="fab fa-google-plus-g"></i></a></div>
-              <a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a>
-              <a class="link-wrapp-btn-yellow" href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати
-              наставником</a>
-          </div>
-        </div>
+            <div class="main-be-mentor-line-bottom">
+              <div>
+                <p class="block-left">ні</p>
+                <p class="block-left-bottom">нi</p>
+              </div>
+              <p class="block-center">Бажаєш провести майстер-клас для дітей, або допомогти їм профорієнтуватися?</p>
+              <p class="block-middle">нi</p>
+              <p class="block-right">Ти готовий вiдвiдувати дитину щотижня i витрачати на це близько 3 годин?</p>
+            </div>
+            <div class="main-be-mentor-line-text">
+              <p class="block-left">Нажаль, ти не можеш<br> стати наставником,<br> але ти можеш<br>розповісти про<br> наставництво іншим<br>прямо зараз!</p>
+              <div class="test-two">
+                <p>Так</p>
+                <p>Ти можеш допомогти дітям іншим способом</p>
+              </div>
+              <p class="block-middle">так</p>
+              <p class="block-right">Вітаємо! наразі<br> немає перепон для<br> того, щоб ти став<br> наставником!</p>
+            </div>
+            <div class="main-be-mentor-line-btn">
+              <div class="link-wrapp">
+                <a class="link-wrapp-face" onclick="share('http://www.facebook.com/sharer/sharer.php?u=')"><i class="fab fa-facebook-f"></i></a>
+                <a class="link-wrapp-tweet" onclick="share('https://twitter.com/intent/tweet?url=')"><i class="fab fa-twitter"></i></a>
+                <a class="link-wrapp-google" onclick="share('https://plus.google.com/share?url=')"><i
+                    class="fab fa-google-plus-g"></i></a></div>
+                <a class="link-wrapp-btn-blue" href="{% url 'volunteers:volunteer_signup' %}">Допомогти<br>наставництву</a>
+                <a class="link-wrapp-btn-yellow" href="{% if user.is_authenticated and user.user_type == 1 %}{% url 'mentors:mentor_office' %}{% else %}{% url 'mentors:signup_step0' %}{% endif %}">Стати
+                наставником</a>
+            </div>
+            </div>
       </div>
     </section>
     <section class="main-mentor-issues">
