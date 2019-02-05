@@ -21787,3 +21787,7 @@ select.table-education-name {
 .gr-o-team-diary-close {
   color: #7B57A0;
 }
+
+.link-wrapp-face, .link-wrapp-tweet, .link-wrapp-google {
+  cursor: pointer;
+}

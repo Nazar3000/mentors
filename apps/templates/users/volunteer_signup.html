@@ -82,14 +82,14 @@
             <div class="volunteer-form-left">
               <p>Обери, що ти можеш робити:</p>
               <div class="video-all-check">
-                <input class="with-font" id="box1" type="checkbox" checked="checked" name="{{ form.mentoring_popularization.html_name }}">
+                <input class="with-font" id="box1" type="checkbox" name="{{ form.mentoring_popularization.html_name }}">
                 <label class="video-all-check-name" for="box1">Займатись популяризацією Наставництва</label>
                 {% for err in form.mentoring_popularization.errors %}
                   <span class="error-form">{{ err }}</span>
                 {% endfor %}
               </div>
               <div class="video-all-check">
-                <input class="with-font" id="box2" type="checkbox" checked="checked" name="{{ form.make_master_classes.html_name }}">
+                <input class="with-font" id="box2" type="checkbox" name="{{ form.make_master_classes.html_name }}">
                 <label class="video-all-check-name" for="box2">Проводити майстер-класи</label>
               </div>
               <input type="text" placeholder="Вкажи які саме" name="{{ form.master_classes_names.html_name }}">
@@ -97,7 +97,7 @@
                 <span class="error-form">{{ err }}</span>
               {% endfor %}
               <div class="video-all-check">
-                <input class="with-font" id="box3" type="checkbox" checked="checked" name="{{ form.talk_about_profession.html_name }}">
+                <input class="with-font" id="box3" type="checkbox" name="{{ form.talk_about_profession.html_name }}">
                 <label class="video-all-check-name" for="box3">Познайомити дитину зі своєю професією</label>
               </div>
               <input type="text" placeholder="Вкажи яка професія" name="{{ form.profession_name.html_name }}">
@@ -113,11 +113,11 @@
                 <span class="error-form">{{ err }}</span>
               {% endfor %}
               <div class="video-all-check">
-                <input class="with-font" id="box4" type="checkbox" checked="checked" name="{{ form.financial_support.html_name }}">
+                <input class="with-font" id="box4" type="checkbox" name="{{ form.financial_support.html_name }}">
                 <label class="video-all-check-name" for="box4">Фінансово підтримати Наставництво</label>
               </div>
               <div class="video-all-check">
-                <input class="with-font" id="box5" type="checkbox" checked="checked" name="{{ form.financial_support.html_name }}">
+                <input class="with-font" id="box5" type="checkbox" name="{{ form.financial_support.html_name }}">
                 <label class="video-all-check-name" for="box5" name="{{ form.another_assistance_ways.html_name }}">Допомогти по іншому</label>
               </div>
               <input type="text" placeholder="Вкажи як саме" name="{{ form.another_assistance_ways_names.html_name }}">
