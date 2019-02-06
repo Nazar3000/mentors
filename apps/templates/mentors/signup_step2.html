@@ -47,6 +47,13 @@
               <input type="email" v-model="email" :class="{'alert-border': errors['email']}">
               <span class="error-form" v-for="err in errors.email">[[ err ]]</span>
               </div>
+              <div class="page-form_box-addfilename">
+                <label for="add_photoname">
+                  Додати фото
+                  <img src="{% static 'img/page-form_add-file-name.png' %}" alt="">
+                  <input id="add_photoname" name="add_photoname" class="page-form_add-file-name" type="file" @change="changeProfileImage($event)">
+                </label>
+              </div>
             </div>
             <div class="page-form-register-right">
               <div>

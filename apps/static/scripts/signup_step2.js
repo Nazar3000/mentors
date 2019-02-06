@@ -13,6 +13,7 @@ const step2Form = new Vue({
       religions: {},
     },
 
+    profile_image: '',
     full_name: '',
     date_of_birth: '',
     phone_number: '',
@@ -148,6 +149,23 @@ const step2Form = new Vue({
     });
   },
   methods: {
+    changeProfileImage(event) {
+      this.profile_image = event.target.files[0];
+      this.uploadedImageUrl = URL.createObjectURL(this.profile_image);
+
+      let formData = new FormData();
+      formData.append('profile_image', this.profile_image);
+      formData.append('add_profile_image', 'true');
+      $.ajax({
+        url: '',
+        data: formData,
+        processData: false,
+        contentType: false,
+        cache: false,
+        enctype: 'multipart/form-data',
+        type: 'POST',
+      });
+    },
     getInstitutionName(educationType) {
       return this.choices.education_types[educationType];
     },

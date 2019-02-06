@@ -22307,3 +22307,26 @@ select.table-education-name {
 .active {
   opacity: 1 !important;
 }
+/**/
+.page-form_add-file-name{
+  display: none;
+}
+.page-form_box-addfilename{
+  margin-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.page-form_box-addfilename img{
+  width: 32px;
+  height: 26px;
+  object-fit: cover;
+  order:-1;
+  margin-bottom: 10px;
+}
+.page-form_box-addfilename label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

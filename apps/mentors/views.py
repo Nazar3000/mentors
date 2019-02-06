@@ -117,6 +117,12 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
         return render(request, self.template_name, {'forms': self.forms_class.forms})
 
     def post(self, request, *args, **kwargs):
+        mentor = Mentor.objects.get(pk=request.user.pk)
+        if 'add_profile_image' in request.POST.keys():
+            mentor.profile_image = request.FILES['profile_image']
+            mentor.save()
+            return JsonResponse({})
+
         request_body = json.loads(request.body.decode('utf-8'))
 
         errors = {}
@@ -126,7 +132,6 @@ class SignUpStep2View(SignUpStepsAccessMixin, View):
         has_errors = False
         if main_form.is_valid():
             questionnaire = main_form.save(commit=False)
-            mentor = Mentor.objects.get(pk=request.user.pk)
             questionnaire.mentor = mentor
             questionnaire.save()
             mentor.questionnaire_creation_date = questionnaire.creation_date
