@@ -4,17 +4,18 @@
 
 {% block content %}
   <div class="content">
-    <section class="third-stage">
+    <section class="second-stage">
       <div class="container">
-        <h2> Дякую за бажання стати Наставником для дитини</h2>
+        <h2>Дякую за бажання стати Наставником для дитини</h2>
         <div class="first-stage-wrapp">
-          <div class="stage-panel-two"><img src="{% static 'img/family.svg' %}" alt=""><span class="stage-panel-start">Зареєструватися<br> в ЦССССДМ</span><span class="stage-panel-next">Зібрати пакет<br>документів</span><span class="stage-panel-last">Пройти навчання</span>
-            <div class="stage-panel-active">До наступного кроку</div><span class="stage-panel-finish">Знайомство з дитиною,<br> підписання договору</span>
-          </div>
-          <div class="first-stage-info">
-            <form method="post">
-              {% csrf_token %}
-              <div class="first-stage-license">
+          <div class="stage-panel-two" id="stage">
+            <span class="stage-panel-last stage-active" data-name="3">1. Пройти навчання</span><span class="stage-panel-finish stage-active" data-name="4">2. Знайомство з дитиною,<br> підписання договору</span></div>
+          <div class="first-stage-info" id="soc-service-block">
+            <section class="text-item" data-name="3" id="section3">
+              <p class="text-item" data-name="3" id="section3">Пройди тренінг для наставників.<br>Його тривалість 4 дня</p>
+              <form method="post">
+                {% csrf_token %}
+                <div class="first-stage-license text-item" data-name="3" id="section3">
                 <p>Підтвердіть що ви пройшли тренінг</p>
                 <div class="first-stage-line-license"></div>
                 <span>Для цього введить свій ліцензійний номер<br> виданий Центром соціальних Служб:</span>
@@ -24,7 +25,8 @@
                   {% endif %}
                   <button type="submit">Підтвердити</button>
               </div>
-            </form>
+              </form>
+
             <div class="first-stage-star"><span>Оціни роботу центру соціальних служб:</span></div>
             <div class="rating-widget">
               <div class="rating-stars">
@@ -37,17 +39,40 @@
                 </ul>
               </div>
             </div>
-            <p class="mb-3">1. Знайомство з дитиною
-              <p>2. Підписання договору.<br>Ознайомся попередньо з договором</p>
-              <div class="first-stage-doc">
-                <a href="{{ contract.file.url }}" target="_blank"><img src="{% static 'img/download.svg' %}" alt="">
-                  <span>Завантажити</span>
-                </a>
-              </div>
-            </p>
+            </section>
+            <section class="text-item" data-name="4" id="section4">
+              <div class="first-stage-btn text-item" data-name="4" id="section4">Зустріч</div>
+              <p class="mb-3 text-item" data-name="4" id="section4">1. Знайомство з дитиною</p>
+              <p class="text-item" data-name="4" id="section4">2. Підписання договору.<br>Ознайомся попередньо з договором</p>
+              <div class="first-stage-doc text-item" data-name="4" id="section4"><a href="{{ contract.file.url }}" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a></div>
+            </section>
           </div>
         </div>
       </div>
     </section>
   </div>
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    #map {
+      height: 300px;
+      margin-bottom: 45px;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+{% endblock %}
+
+{% block extra_js %}
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNMxEA9L4ZhEvydiG_sczKhTX68mAHOSY&callback=initMap">
+  </script>
+
+  <script src="{% static 'scripts/roadmap_soc_service.js' %}"></script>
+  <script src="{% static 'scripts/google_map.js' %}"></script>
 {% endblock %}

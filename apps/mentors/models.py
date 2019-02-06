@@ -709,3 +709,9 @@ class Question(models.Model):
         on_delete=models.CASCADE
     )
     body = models.TextField()
+
+
+class CommonQuestion(models.Model):
+    title = models.CharField(max_length=512)
+    body = models.TextField()
+

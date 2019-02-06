@@ -22,7 +22,7 @@ from users.templatetags.date_tags import get_age
 from .forms import SignUpStep0Form, AuthenticationForm, MentorSocialServiceCenterDataEditForm, PublicServiceEditForm, \
     DatingCoordinatorForm, DatingSocialServiceCenterForm, DatingBaseSocialServiceCenterForm, QuestionForm, \
     SettingsSocialServiceCenterForm
-from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter
+from .models import SocialServiceVideo, Material, MaterialCategory, BaseSocialServiceCenter, CommonQuestion
 from users.models import Mentor, SocialServiceCenter, Organization
 from mentors.models import MentorSocialServiceCenterData, MentorLicenceKey, Mentoree
 from social_services.forms import MentorEditForm
@@ -635,6 +635,12 @@ class QuestionView(CreateView):
     template_name = 'mentors/question.html'
     form_class = QuestionForm
     success_url = reverse_lazy('social_services:question')
+
+    def get(self, request, *args, **kwargs):
+        if 'get_common_questions' in request.GET.keys():
+            questions = list(CommonQuestion.objects.all().values('title', 'body'))
+            return JsonResponse(questions, safe=False)
+        return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         question = form.save(commit=False)

@@ -539,5 +539,5 @@ $(document).ready(function () {
 
     var heightTableFamily = $('.table-family').height();
     var heightBorderTable = parseInt(heightTableFamily * 0.87);
-    $('head').append('<style> .table-family-title::before{ height:' + heightBorderTable + 'px' + ' }</style>');
+    // $('head').append('<style> .table-family-title::before{ height:' + heightBorderTable + 'px' + ' }</style>');
 });

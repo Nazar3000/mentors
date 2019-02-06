@@ -2,9 +2,22 @@
 
 {% load static %}
 
+{% block extra_css %}
+  <style>
+    .table-family-input > input, select {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      height: 55px;
+      padding: 10px;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   <div class="content">
     <section class="page-form" id="step2-form">
+      <a id="go-top" style="display: inline;"><i class="fas fa-arrow-alt-circle-up"></i></a>
       <div class="container">
         <div class="page-form-title">
           <h2>Давай знайомитися!</h2>
@@ -169,9 +182,6 @@
           </div>
           <div class="page-form-work">
             <h3>3. Освіта:</h3>
-            <a href="javascript: void(0)" @click="addEducationObject">
-              <i class="fas fa-plus"></i><span>Додати рядок</span>
-            </a>
           </div>
           <div class="page-form-education">
             <div class="table-education">
@@ -211,8 +221,13 @@
             </div>
           </div>
           <div class="page-form-work">
+            <h3></h3>
+            <a href="javascript: void(0)" @click="addEducationObject">
+              <i class="fas fa-plus"></i><span>Додати рядок</span>
+            </a>
+          </div>
+          <div class="page-form-work">
             <h3>4. Працевлаштування:</h3>
-            <a href="javascript: void(0)" @click="addJobObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a>
           </div>
           <div class="table-work" v-for="job, index in jobs">
             <div class="table-work-header">
@@ -265,6 +280,10 @@
               </div>
             </div>
           </div>
+          <div class="page-form-work">
+            <h3></h3>
+            <a href="javascript: void(0)" @click="addJobObject"><i class="fas fa-plus"></i><span>Додати рядок</span></a>
+          </div>
         </form>
         <h3>5. Інтереси, хобі</h3>
         <div class="page-form-hobby">
@@ -283,7 +302,7 @@
         </div>
         <div class="page-form-family-main">
           <span>* Будь ласка, вкажіть членів вашої сім’ї</span>
-          <a href="javascript: void(0)" @click="addFamilyMemberObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
+        </div>
         <div class="table-family">
           <div class="table-family-header">
             <div class="table-family-title">Ім’я</div>
@@ -317,6 +336,10 @@
             </div>
           </div>
         </div>
+        <div class="page-form-family-main">
+          <span></span>
+          <a href="javascript: void(0)" @click="addFamilyMemberObject"><i class="fas fa-plus"></i><span>Додати рядок</span></a>
+        </div>
         <h3>7. Житлово-побутові умови:</h3>
         <div class="page-form-home">
           <p>* Заповніть пункт 7, якщо передбачається відвідування вихованцем вашої домівки</p><span>Вкажіть, де Ви проживаєте на цей момент</span>
@@ -346,7 +369,7 @@
         <h3>8. Досвід роботи з дітьми:</h3>
         <div class="page-form-child-main">
           <span>* Будь ласка, вкажіть ваш поточний і попередній досвід роботи з дітьми<br>(оплачувана робота, волонтерська діяльність тощо)</span>
-          <a href="javascript: void(0)" @click="addChildrenWorkExperienceObject"><i class="fas fa-plus"></i><span>Додати таблицю</span></a></div>
+        </div>
         <div class="table-child" v-for="exp, index in children_work_experiences">
           <div class="table-child-header">
             <div class="table-child-main">Назва організації</div>
@@ -396,6 +419,10 @@
               <span class="error-form" v-for="err in errors.children_work_experiences[index].children_age_group">[[ err ]]</span>
             </div>
           </div>
+        </div>
+        <div class="page-form-child-main">
+          <span></span>
+          <a href="javascript: void(0)" @click="addChildrenWorkExperienceObject"><i class="fas fa-plus"></i><span>Додати рядок</span></a>
         </div>
         <h3>9. Чому ви хочете стати наставником?</h3>
         <textarea class="page-form-input" rows="3" v-model="join_reason" :class="{'alert-border': errors['join_reason']}"></textarea>

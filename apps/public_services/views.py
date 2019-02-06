@@ -13,7 +13,7 @@ from users.constants import UserTypes
 from users.models import SocialServiceCenter, PublicService, Mentor
 from .forms import PublicServiceSignUpStep0Form, PublicServiceForm, QuestionForm
 from django.views.generic import TemplateView, CreateView
-from .models import PublicServiceVideo
+from .models import PublicServiceVideo, CommonQuestion
 
 
 class CheckIfUserIsPublicServiceMixin(UserPassesTestMixin):
@@ -139,6 +139,12 @@ class QuestionView(CreateView):
     template_name = 'mentors/question.html'
     form_class = QuestionForm
     success_url = reverse_lazy('public_services:question')
+
+    def get(self, request, *args, **kwargs):
+        if 'get_common_questions' in request.GET.keys():
+            questions = list(CommonQuestion.objects.all().values('title', 'body'))
+            return JsonResponse(questions, safe=False)
+        return super().get(request, *args, **kwargs)
 
     def form_valid(self, form):
         question = form.save(commit=False)

@@ -16,7 +16,7 @@ from .models import (
     MentorQuestionnaireChildrenWorkExperience,
     Proforientation,
     MentorSocialServiceCenterData,
-    RoadmapDoc, Question)
+    RoadmapDoc, Question, CommonQuestion)
 
 
 @admin.register(MentorLicenceKey)
@@ -110,5 +110,10 @@ class MaterialCategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CommonQuestion)
 class MaterialAdmin(admin.ModelAdmin):
     pass

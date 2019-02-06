@@ -4,50 +4,44 @@
 
 {% block content %}
   <div class="content">
-    <section class="first-stage">
+    <section class="second-stage">
       <div class="container">
-        <h2> Дякую за бажання стати Наставником для дитини</h2>
+        <h2>Дякую за бажання стати Наставником для дитини</h2>
         <div class="first-stage-wrapp">
-          <div class="stage-panel-two"><img src="img/family.svg" alt=""><span
-              class="stage-panel-start">Зареєструватися<br> в ЦССССДМ</span><span class="stage-panel-next">Зібрати пакет<br>документів</span>
-            <div class="stage-panel-active">До наступного кроку</div>
-            <span class="stage-panel-last">Пройти навчання</span><span
-                class="stage-panel-finish">Знайомство з дитиною,<br> підписання договору</span>
-          </div>
-          <div class="first-stage-info">
-            <div class="first-stage-btn">Збери пакет документів</div>
-            <p>1. Звернися в твоє регіональне відділення Міністерства<br> внутрішніх справ для отримання довідки про несудимість<br> або<a href="https://dpvs.hsc.gov.ua/"> замов її Online.</a>  Знайди контактні дані на карті:</p>
-            <input type="text" placeholder="Введіть вашу адресу, щоб знайти відділення поблизу" id="map-input">
-            <div class="first-stage-map" id="map"></div>
-            <p>2. Пройди медогляд. Якщо тобі не дали форму для<br>огляду, то ти можеш її завантажити тут:</p>
-            <div class="first-stage-doc">
-              <a href="{{ medical_exam.file.url }}" target="_blank">
-                <img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span>
-              </a>
-            </div>
-            <p>3. Віднеси зібрані документи в Центр соціальних служб:</p>
-            <div class="first-stage-subt"><span>1. Довідка про несудимість</span><span>2. Висновок про стан здоров'я</span></div>
-            <div class="first-stage-btn">Пройди навчання</div>
-            <p>1. Пройди співбесіду з психологом Центру<br>соціальних служб</p>
-            <div class="first-stage-social">
-              <p>Запишися на співбесіду з психологом, а також, дізнайся<br> коли ти зможеш пройти тренінг для наставників</p>
-              <div class="first-stage-line"></div>
-              <div class="first-stage-social-wrapp"><img src="{% static 'img/old-phone.svg' %}" alt="">
-                <div class="first-stage-social-info">
-                  <p>Контакти</p>
-                  {% for number in soc_service.phone_numbers %}
-                    <p>{{ number }}</p>
-                  {% endfor %}
-                  <div class="first-stage-social-mail">
-                    <span>{{ soc_service.user.email }}</span>
+          <div class="stage-panel-two" id="stage">
+            <span class="stage-panel-next stage-active" data-name="2">1. Зібрати пакет<br>документів</span><span class="stage-panel-last stage-active" data-name="3">2. Пройти навчання</span><span class="stage-panel-finish stage-active" data-name="4">3. Знайомство з дитиною,<br> підписання договору</span></div>
+          <div class="first-stage-info" id="soc-service-block">
+            <section class="text-item" data-name="2" id="section2">
+              <div class="first-stage-btn text-item" data-name="2" id="section2">Збери пакет документів</div>
+              <p class="text-item" data-name="2" id="section2">1. Звернися в твоє регіональне відділення Міністерства<br> внутрішніх справ для отримання довідки про несудимість<br> або<a href="https://dpvs.hsc.gov.ua/" target="_blank"> замов її Online.</a>  Знайди контактні дані на карті:</p>
+              <input type="text" placeholder="Введіть вашу адресу, щоб знайти відділення поблизу" id="map-input">
+              <div class="first-stage-map" id="map"></div>
+              <p class="text-item" data-name="2" id="section2">2. Пройди медогляд. Якщо тобі не дали форму для<br>огляду, то ти можеш її завантажити тут:</p>
+              <div class="first-stage-doc text-item" data-name="2" id="section2"><a class="text-item" data-name="2" id="section2" href="{{ medical_exam.file.url }}" target="_blank"><img class="text-item" data-name="2" id="section2" src="{% static 'img/download.svg' %}" alt=""><span class="text-item" data-name="2" id="section2">Завантажити</span></a></div>
+              <p class="text-item" data-name="2" id="section2">3. Віднеси зібрані документи в Центр соціальних служб:</p>
+              <div class="first-stage-subt text-item" data-name="2" id="section2"><span class="text-item" data-name="2" id="section2">1. Довідка про несудимість</span><span class="text-item" data-name="2" id="section2">2. Висновок про стан здоров'я</span><span class="text-item" data-name="2" id="section2">3. Копiя паспорта</span></div>
+            </section>
+            <section class="text-item" data-name="3" id="section3">
+              <div class="first-stage-btn text-item" data-name="3" id="section3">Підготовка до зустрічі</div>
+              <p class="text-item" data-name="3" id="section3">1. Пройди співбесіду з психологом Центру<br>соціальних служб</p>
+              <div class="first-stage-social text-item" data-name="3" id="section3">
+                <p>Запишися на співбесіду з психологом, а також, дізнайся<br> коли ти зможеш пройти тренінг для наставників</p>
+                <div class="first-stage-line"></div>
+                <div class="first-stage-social-wrapp"><img src="{% static 'img/old-phone.svg' %}" alt="">
+                  <div class="first-stage-social-info">
+                    <p>Контакти</p>
+                    <p v-for="number in selectedSocialService.phone_numbers">[[ number ]]</p>
+                    <div class="first-stage-social-mail">
+                      <span>[[ selectedSocialService.service__user__email ]]</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <p>2. Пройди тренінг для наставників.<br>Його тривалість 4 дня</p>
-            <form method="post">
-              {% csrf_token %}
-              <div class="first-stage-license">
+
+              <p class="text-item" data-name="3" id="section3">2. Пройди тренінг для наставників.<br>Його тривалість 4 дня</p>
+              <form method="post">
+                {% csrf_token %}
+                <div class="first-stage-license text-item" data-name="3" id="section3">
                 <p>Підтвердіть що ви пройшли тренінг</p>
                 <div class="first-stage-line-license"></div>
                 <span>Для цього введить свій ліцензійний номер<br> виданий Центром соціальних Служб:</span>
@@ -57,15 +51,14 @@
                   {% endif %}
                   <button type="submit">Підтвердити</button>
               </div>
-            </form>
-            <div class="first-stage-btn">Познайомся з дитиною, підпиши договір</div>
-            <p class="mb-3">1. Знайомство з дитиною</p>
-            <p>2. Підписання договору.<br>Ознайомся попередньо з договором</p>
-            <div class="first-stage-doc">
-              <a href="{{ contract.file.url }}" target="_blank"><img src="{% static 'img/download.svg' %}" alt="">
-                <span>Завантажити</span>
-              </a>
-            </div>
+              </form>
+            </section>
+            <section class="text-item" data-name="4" id="section4">
+              <div class="first-stage-btn text-item" data-name="4" id="section4">Зустріч</div>
+              <p class="mb-3 text-item" data-name="4" id="section4">1. Знайомство з дитиною</p>
+              <p class="text-item" data-name="4" id="section4">2. Підписання договору.<br>Ознайомся попередньо з договором</p>
+              <div class="first-stage-doc text-item" data-name="4" id="section4"><a href="{{ contract.file.url }}" target="_blank"><img src="{% static 'img/download.svg' %}" alt=""><span>Завантажити</span></a></div>
+            </section>
           </div>
         </div>
       </div>
@@ -93,5 +86,6 @@
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNMxEA9L4ZhEvydiG_sczKhTX68mAHOSY&callback=initMap">
   </script>
 
+  <script src="{% static 'scripts/roadmap_soc_service.js' %}"></script>
   <script src="{% static 'scripts/google_map.js' %}"></script>
 {% endblock %}

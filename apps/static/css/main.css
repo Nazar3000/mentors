@@ -7801,7 +7801,7 @@ input[type="radio"]:checked:after {
 }
 
 .page-form-education {
-  margin-bottom: 50px;
+  margin-bottom: 15px;
 }
 
 .page-form-work {
@@ -8202,7 +8202,7 @@ input[type="radio"]:checked:after {
 }
 
 .table-work {
-  margin-bottom: 75px;
+  margin-bottom: 15px;
 }
 
 .table-work-left {
@@ -8489,7 +8489,7 @@ input[type="radio"]:checked:after {
 }
 
 .table-family {
-  margin-bottom: 75px;
+  margin-bottom: 15px;
 }
 
 .table-family-line {
@@ -8539,7 +8539,7 @@ input[type="radio"]:checked:after {
   position: absolute;
   content: '';
   width: 1px;
-  height: 250px;
+  height: 70px;
   background: url(../img/form-line-y.png);
   background-repeat: repeat;
   z-index: -1;
@@ -8574,7 +8574,7 @@ input[type="radio"]:checked:after {
 }
 
 .table-child {
-  margin-bottom: 75px;
+  margin-bottom: 15px;
 }
 
 .table-child-left {
@@ -12843,6 +12843,7 @@ select.table-education-name {
   letter-spacing: 0.33px;
   color: #3F4C55;
   display: block;
+  margin-bottom: 15px;
 }
 
 .pre-footer-share > button {
