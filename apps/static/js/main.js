@@ -434,16 +434,16 @@ $(document).ready(function () {
     });
 
     // form-search-box
-    // $('.form-dating-search').click(function(event) {
-    //     $('.form-dating-box-items').toggle();
-    // });
-    // $('.form-dating-item').click(function(event) {
-    //     var form_dating_info = $(this).html();
-    //     $('.form-dating-search').attr({
-    //         value: form_dating_info
-    //     });
-    //     $('.form-dating-box-items').toggle();
-    // });
+    $('.form-dating-search').click(function(event) {
+        $('.form-dating-box-items').toggle();
+    });
+    $('.form-dating-item').click(function(event) {
+        var form_dating_info = $(this).html();
+        $('.form-dating-search').attr({
+            value: form_dating_info
+        });
+        $('.form-dating-box-items').toggle();
+    });
 
     // svg script
     var allRegions = $("#ua > polygon, path#UKR283,path#UKR284,path#UKR285,path#UKR286,path#UKR288,path#UKR289,path#UKR290,path#UKR291,path#UKR292,path#UKR293,path#UKR318,path#UKR319,path#UKR320,path#UKR321,path#UKR322,path#UKR323,path#UKR324,path#UKR325,path#UKR326,path#UKR327,path#UKR328,path#UKR329,path#UKR330,path#UKR331,path#UKR4827,path#UKR5482");
