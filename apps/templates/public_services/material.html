@@ -16,7 +16,7 @@
                 <a href="{% url 'public_services:material' %}">Матеріали</a>
               </div>
               <div class="css-material-title">
-                <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
+                <p>в інтернатних закладах<br>україни перебуває<span> {% mentorees_count %} дітей</span></p>
                 <div class="css counter">
                   {% for digit in mentors_count_str %}
                     <div class="counter-numb">{{ digit }}</div>
@@ -69,10 +69,10 @@
                 <p>{{ category.title }}</p>
               </div>
             </div>
-            <div class="css-material-right">
+            <div class="css-material-right css-material-page">
               {% for material in object_list %}
                 {% if material.category == category %}
-                  <div class="css-material-video">
+                  <div class="css-material-video css-material-item">
                     {% if material.video_link %}
                       <iframe width="640" height="420" src="{{ material.video_link }}" frameborder="0"
                               allow="autoplay; encrypted-media" allowfullscreen=""></iframe>

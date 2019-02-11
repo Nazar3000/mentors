@@ -18,7 +18,7 @@
                 <a href="{% url 'social_services:material' %}">Матеріали</a>
               </div>
               <div class="css-social-title">
-                <p>в інтернатних закладах<br>україни перебуває<span> 105 703 дітей</span></p>
+                <p>в інтернатних закладах<br>україни перебуває<span> {% mentorees_count %} дітей</span></p>
                 <div class="css counter">
                   {% for digit in mentors_count_str %}
                     <div class="counter-numb">{{ digit }}</div>

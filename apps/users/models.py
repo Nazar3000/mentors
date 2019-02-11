@@ -137,6 +137,9 @@ class Mentor(models.Model):
         on_delete=models.SET_NULL
     )
 
+    def __str__(self):
+        return self.user.email
+
 
 class SocialServiceCenter(models.Model):
     user = models.OneToOneField(
@@ -160,6 +163,9 @@ class SocialServiceCenter(models.Model):
     )
     profile_image = models.ImageField(
         upload_to='social_services/profile_images')
+
+    def __str__(self):
+        return self.name
 
 
 class SocialServiceCenterReport(models.Model):
@@ -251,6 +257,9 @@ class PublicService(models.Model):
             self.licence = rstr.xeger(self.licence_validator.regex)
         super().save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
+
 
 class Organization(models.Model):
     name = models.CharField(
@@ -265,6 +274,9 @@ class Organization(models.Model):
             validators=[phone_regex]
         )
     )
+
+    def __str__(self):
+        return self.name
 
 
 class ChildService(models.Model):
@@ -371,6 +383,9 @@ class Coordinator(models.Model):
 
         return coordinator
 
+    def __str__(self):
+        return self.full_name
+
 
 class UsefulContact(models.Model):
     name = models.CharField(max_length=256)
@@ -389,7 +404,7 @@ class MaterialCategory(models.Model):
     title = models.CharField(max_length=256)
     icon = models.ImageField(upload_to='icons', blank=True, null=True)
     material_type = models.CharField(
-        max_length=10,
+        max_length=48,
         choices=MaterialTypes.choices()
     )
 
@@ -407,10 +422,14 @@ class Material(models.Model):
     video_link = models.URLField(blank=True, null=True)
     category = models.ForeignKey(MaterialCategory, blank=True, null=True, on_delete=models.SET_NULL)
     material_type = models.CharField(
-        max_length=10,
+        max_length=48,
         choices=MaterialTypes.choices()
     )
 
 
 class Improvement(models.Model):
     content = models.TextField()
+
+
+class MentoreesCount(models.Model):
+    count = models.PositiveIntegerField(default=0)
